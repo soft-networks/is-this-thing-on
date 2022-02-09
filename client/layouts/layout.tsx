@@ -1,17 +1,17 @@
 import IsThisThingOnFooter from "../components/isThisThingOnFooter";
-import { StreamNameProvider } from "../lib/streamNameProvider"
+import { StreamNamesProvider } from "../useHooks/useStreamNames"
 
 
 const Layout : React.FunctionComponent = ({children}) => { 
   return (
-    <StreamNameProvider>
-      <div className="stack:large">
+    <StreamNamesProvider>
+      <div className="stack:large full-bleed padded">
         <main>
           {children}
         </main>
         <IsThisThingOnFooter />
       </div>
-    </StreamNameProvider>
+    </StreamNamesProvider>
   )
 }
 

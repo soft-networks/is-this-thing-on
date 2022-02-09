@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { disableStreamSync, syncStreamPlaybackID, syncStreamStatus } from "../lib/firebase";
 import { generateStreamLink } from "../lib/server-api";
+import useCurrentStreamName from "../useHooks/useCurrentStreamName";
 
-interface StreamPageInternalProps {
-  id: string;
-}
 
-const StreamStatus: React.FunctionComponent<StreamPageInternalProps> = ({ id }) => {
+const StreamStatus: React.FunctionComponent = () => {
+  const id = useCurrentStreamName();
   const [streamStatus, setStreamStatus] = useState<string>("loading");
   const [playbackID, setPlaybackID] = useState<string | undefined>();
 

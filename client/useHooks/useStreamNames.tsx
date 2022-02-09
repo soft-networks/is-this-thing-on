@@ -1,7 +1,7 @@
 //Create a provider that provides stream names
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getStreamNames } from "./server-api";
+import { getStreamNames } from "../lib/server-api";
 
 interface StreamNames {
   names?: string[];
@@ -9,7 +9,7 @@ interface StreamNames {
 
 export const StreamNameContext = createContext<StreamNames>({});
 
-export const StreamNameProvider: React.FunctionComponent = ({ children }) => {
+export const StreamNamesProvider: React.FunctionComponent = ({ children }) => {
   const [streamNames, setStreamNames] = useState<string[]>([]);
   useEffect(() => {
     getStreamNames().then((data) => {

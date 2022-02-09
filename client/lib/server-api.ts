@@ -1,3 +1,4 @@
+import STREAM_NAMES from "../../common/streamData";
 export const SERVER_URL = "http://localhost:4000";
 
 export const STREAM_NAME_ENDPOINT = `${SERVER_URL}/stream-names`;
@@ -5,6 +6,7 @@ export const STREAM_NAME_ENDPOINT = `${SERVER_URL}/stream-names`;
 export const STREAMS_ENDPOINT = `${SERVER_URL}/stream`;
 
 export const STREAMS_KEY_ENDPOINT = `${SERVER_URL}/stream-key`;
+
 
 export const generateStreamLink = (playbackID: string) => {
   //https://stream.mux.com/{PLAYBACK_ID}.m3u8
@@ -21,14 +23,7 @@ const fetchResponse = async (endpoint: string) => {
 
 //Fetch stream names from server and cache them
 export const getStreamNames = async () => {
-  try {
-    const streamNamesResponse = await fetchResponse(STREAM_NAME_ENDPOINT);
-    const streamNames = await streamNamesResponse.json();
-    return streamNames;
-  } catch (e) {
-    console.log("Error getting stream names", (e as Error).message);
-    return undefined;
-  }
+  return STREAM_NAMES
 };
 
 export const getStreamKey = async (streamName: string) => {

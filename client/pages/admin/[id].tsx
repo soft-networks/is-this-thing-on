@@ -4,12 +4,12 @@ import { useCallback, useEffect, useState } from "react";
 import StreamNameGate from "../../components/streamNameGate";
 import StreamStatus from "../../components/streamStatusViewer";
 import { getStreamKey } from "../../lib/server-api";
-import { StreamNameProvider } from "../../lib/streamNameProvider";
+import useCurrentStreamName from "../../useHooks/useCurrentStreamName";
+import { StreamNamesProvider } from "../../useHooks/useStreamNames";
 
 const AdminPage: NextPage = () => {
-  const router = useRouter();
-  const { id } = router.query;
-  console.log(id);
+  
+  const id = useCurrentStreamName();
   const [streamKey, setStreamKey] = useState<string | undefined>();
 
   const acquireKey = useCallback(async () => {
@@ -19,18 +19,18 @@ const AdminPage: NextPage = () => {
       }
   }, [id])
   return (
-    <StreamNameProvider>
-      <StreamNameGate id={id as string}>
+    <StreamNamesProvider>
+      <StreamNameGate >
         <div className="stack">
           <h3> {id} admin page </h3>
           <div>
             {streamKey && streamKey !== "" ? streamKey : <div onClick={(e) => acquireKey()} className="button">get key</div>}
           </div>
           <hr/>
-          <StreamStatus id={id as string} />
+          <StreamStatus />
         </div>
       </StreamNameGate>
-    </StreamNameProvider>
+    </StreamNamesProvider>
   );
 };
 

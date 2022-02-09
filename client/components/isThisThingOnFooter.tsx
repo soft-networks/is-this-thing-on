@@ -1,14 +1,17 @@
 import Link from "next/link";
-import { useStreamNames } from "../lib/streamNameProvider";
+import { useRouter } from "next/router";
+import { useStreamNames } from "../useHooks/useStreamNames";
 
 const IsThisThingOnFooter: React.FunctionComponent = () => {
   const streamNames = useStreamNames();
+  const router = useRouter();
+  const {id} = router.query;
   return (
     <footer>
       <em> is this thing on </em>
       <ul>
         {streamNames.map((name) => (
-          <li key={`isto-status-${name}`}> <Link href={`/streams/${name}`}>{name}</Link> </li>
+          name !== (id as string) ? <li key={`isto-status-${name}`}> <Link href={`/streams/${name}`}>{name}</Link> </li> : null
         ))}
       </ul>
     </footer>
