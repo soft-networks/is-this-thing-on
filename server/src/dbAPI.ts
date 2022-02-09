@@ -1,4 +1,5 @@
 
+import e from 'express';
 import { initializeApp } from 'firebase/app';
 import { getDatabase , ref, get, set} from "firebase/database";
 
@@ -13,10 +14,11 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const DB_ROOT = "streamKeys"
+const KEY_ROOT = "streamKeys"
+const ID_ROOT = "muxIDs"
 
 export const getStreamKey = async (streamName: string) => {
-  const snapshot = await get(ref(db, DB_ROOT + "/" + streamName));
+  const snapshot = await get(ref(db, KEY_ROOT + "/" + streamName));
   if (snapshot.exists()) {
     return snapshot.val()['key']
   } else {
@@ -25,11 +27,30 @@ export const getStreamKey = async (streamName: string) => {
 }
 
 const getStreamRoot = (streamName: string) => {
- return DB_ROOT + "/" + streamName;
+ return KEY_ROOT + "/" + streamName;
 }
+const getMuxIDRoot = (streamID: string) => {
+  return ID_ROOT + "/" + streamID;
+}
+
 export const writeStreamKeyToDB = async (streamName: string, streamKey: string) => {
   const streamKeyRef = ref(db, getStreamRoot(streamName) + "/key");
   set(streamKeyRef, streamKey);
+}
+
+
+export const writeStreamIDToDB = async (streamName: string, streamID: string) => {
+  const streamKeyReverseRef = ref(db, getMuxIDRoot(streamID));
+  set(streamKeyReverseRef, streamName);
+}
+
+export const getStreamNameForID = async (streamID: string) => {
+  const snapshot = await get(ref(db, getMuxIDRoot(streamID)));
+  if (snapshot.exists()) {
+    return snapshot.val();
+  } else {
+    return undefined;
+  }
 }
 
 export const writeStreamStateToDB = async (streamName: string, streamStatus: string) => {

@@ -2,4 +2,49 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+
+  font-family: monospace;
+
+  --ratio: 1.6;
+  --s0: 1rem;
+  --s1: calc(var(--s0) * var(--ratio));
+  --s2: calc(var(--s1) * var(--ratio));
+  --s3: calc(var(--s2) * var(--ratio));
+  --s4: calc(var(--s3) * var(--ratio));
+  --s5: calc(var(--s4) * var(--ratio));
+}
+
+ul > li {
+  margin-left: var(--s1);
+  list-style: none;
+}
+
+ul > li:before {
+  content: "-";
+  margin-left: -1rem;
+}
+
+
+body {
+  padding: var(--s0);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s0);
+}
+
+.stack\:large {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+}
+
+
+.button {
+  border: 1px solid black;
+  display: inline-block;
+  padding: var(--s0);
+  cursor: pointer;
 }

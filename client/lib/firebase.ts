@@ -22,13 +22,18 @@ const DB_ROOT = "streamKeys"
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+const DEFAULT_STREAM_STATUS = "un-initialized";
+
 // Create function to sync stream state from DB with Firebase v9
 export const syncStreamStatus = (streamName: string, setActiveCallback: ( streamStatus: string) => void) => { 
   const streamStatusRef = ref(db, `${DB_ROOT}/${streamName}/status`);
+  
   onValue(streamStatusRef, (snapshot) => {
     let val = snapshot.val()
     if (val) {
-        setActiveCallback(val);
+      setActiveCallback(val);
+    } else {
+      setActiveCallback(DEFAULT_STREAM_STATUS);
     }
   });
 }
@@ -40,7 +45,7 @@ export const syncStreamPlaybackID = (streamName: string, setPlaybackIDCallback: 
     let val = snapshot.val()
     if (val) {
         setPlaybackIDCallback(val);
-    }
+    } 
   });
 }
 
