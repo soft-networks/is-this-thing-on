@@ -88,3 +88,41 @@ export const disableMagicPiecesSync = (streamname: string) => {
   const magicPiecesRef = ref(db, `${DB_ROOT}/${streamname}/magicPieces`);
   off(magicPiecesRef);
 }
+
+
+const USER_ROOT = "users";
+
+export const syncUser = (username: string, setRewards: (userRewards: number) => void) => {
+  const usernameref = ref(db, `${USER_ROOT}/${username}`);
+  onValue(usernameref, (snapshot) => {
+    console.log("received user snapshot", snapshot.exists());
+    //Create user now..
+    if (!snapshot.exists()) {
+      updateUserRewards(username, 0);
+    }
+    else if (snapshot.val() !== undefined) 
+      setRewards(snapshot.val());
+  });
+}
+export const disableUserSync = (username: string) => {
+  const usernameref = ref(db, `${USER_ROOT}/${username}`);
+  off(usernameref);
+}
+
+export const updateUserRewards = (username: string, newRewards: number) => {
+  const usernameref = ref(db, `${USER_ROOT}/${username}`);
+  set(usernameref, newRewards);
+}
+
+export const syncAllUsers = (setUserList : ( userList: {[key:string]: number}) => void) => {
+  const userListRef = ref(db, `${USER_ROOT}`);
+  onValue(userListRef, (snapshot) => {
+    if (snapshot.val() !== undefined) 
+      setUserList(snapshot.val());
+  });
+}
+
+export const disableAllUserSync = () => {
+  const userListRef = ref(db, `${USER_ROOT}`);
+  off(userListRef);
+}

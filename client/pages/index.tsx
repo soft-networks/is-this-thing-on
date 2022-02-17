@@ -7,10 +7,10 @@ const Home: NextPage = () => {
     <Layout>
       <div >
         <Head>
-          <title>Empty page</title>
+          <title>is this thing on</title>
         </Head>
         <main>
-          Hello there is nothing here!
+          this page eventually... wont exist (you only visit via a stream)
         </main>
       </div>
     </Layout>

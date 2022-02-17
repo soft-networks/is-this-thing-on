@@ -1,21 +1,71 @@
+import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { useCollective } from "../useHooks/useCollective";
 import { useStreamNames } from "../useHooks/useStreamNames";
 
 const IsThisThingOnFooter: React.FunctionComponent = () => {
   const streamNames = useStreamNames();
   const router = useRouter();
-  const {id} = router.query;
+  const { id } = router.query;
+
   return (
-    <footer>
-      <em> is this thing on </em>
-      <ul>
+    <footer className="align-end padded">
+      <div className="full-width">
+        <div className="marquee"> is this thing on </div>
+      </div>
+      <div className="stack:horizontal full-width">
+        <div className="stack:horizontal">
         {streamNames.map((name) => (
-          name !== (id as string) ? <li key={`isto-status-${name}`}> <Link href={`/streams/${name}`}>{name}</Link> </li> : null
+          <div key={`isto-status-${name}`} className={classNames({ blue: name === (id as string) })}>
+            <Link href={`/streams/${name}`}>{name}</Link>
+          </div>
         ))}
-      </ul>
+        </div>
+        <div className="align-end stack:horizontal">
+          <div className="link"> 
+            <Link href={`/energy`}>energy</Link>
+          </div>
+          <UserDisplay />
+        </div>
+      </div>
     </footer>
   );
 };
 
+const UserDisplay: React.FunctionComponent = () => {
+  const { rewards, user } = useCollective();
+  return user ? (
+    <span>
+      {user} : {rewards}
+    </span>
+  ) : (
+    <UserInput />
+  );
+};
+
+const UserInput: React.FunctionComponent = ({}) => {
+  const [tempUser, setTempUser] = useState<string>("");
+  const { createUser } = useCollective();
+  const [submitted, setIsSubmitted] = useState<boolean>(false);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTempUser(e.target.value);
+  };
+  const onSubmit = () => {
+    createUser(tempUser);
+    setIsSubmitted(true);
+  };
+  return !submitted ? (
+    <span>
+      <input type="text" value={tempUser} onChange={onChange} placeholder="Enter name" />
+      <span className="clickable" onClick={onSubmit}>
+        submit
+      </span>
+    </span>
+  ) : (
+    <span> loading account.. </span>
+  );
+};
 export default IsThisThingOnFooter;

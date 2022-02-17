@@ -22,8 +22,7 @@ const StreamStatus: React.FunctionComponent = () => {
   return (
     <div>
       <h3>
-        {" "}
-        {id} is .. {streamStatus}{" "}
+        {id} is .. {streamStatus}
       </h3>
       <div>{streamStatus == "active" && playbackID && <ReactPlayer url={generateStreamLink(playbackID)} />}</div>
     </div>
