@@ -26,9 +26,8 @@ interface StreamNames {
   names?: string[];
 }
 
-interface StreamRoom {
-  streamID: string,
-  chat: string[],
-  magicPices: MagicPiece[]
+interface RoomInfo {
+  streamStatus: string,
+  streamOwner: string,
+  streamPlaybackID: string
 }
-

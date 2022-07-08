@@ -1,36 +1,53 @@
-import { DocumentReference, Unsubscribe } from "firebase/firestore";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { app } from "../lib/firebase-init";
-import { addChatMessageDB, setRoom, setUserHeartbeat, detachUserHeartbeat } from "../lib/firestore";
-import useCurrentStreamName from "../stores/useCurrentStreamName";
+import { Unsubscribe } from "firebase/firestore";
+import { useCallback, useEffect,  useRef, useState } from "react";
+import { addChatMessageDB, syncChat, setUserHeartbeat, detachUserHeartbeat } from "../lib/firestore";
+import { useRoomStore } from "../stores/roomStore";
+import { useUserStore } from "../stores/userStore";
 
 export const Chat: React.FC = () => {
-  let streamName = useCurrentStreamName();
+  let roomID = useRoomStore(state => state.currentRoomID);
   let unsubRef = useRef<Unsubscribe>();
-  let [chatList, setChatList] = useState<ChatMessage[]>([]);
-
+  let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
   useEffect(() => {
     async function setupDB() {
-      unsubRef.current = await setRoom(streamName, (c) => setChatList((p) => [c, ...p]));
+      if (unsubRef.current) {
+        setChatList({});
+        unsubRef.current();
+      }
+      unsubRef.current = await syncChat(
+        roomID,
+        (cID, chat) =>
+          setChatList((pc) => {
+            let npc = { ...pc };
+            npc[cID] = chat;
+            return npc;
+          }),
+        (cID) =>
+          setChatList((pc) => {
+            let npc = { ...pc };
+            delete npc[cID];
+            return npc;
+          })
+      );
     }
     setupDB();
-    setUserHeartbeat("bhavik", streamName);
     return () => {
       if (unsubRef.current) unsubRef.current();
-      detachUserHeartbeat("bhavik", streamName)
     };
-  }, [streamName]);
+  }, [roomID]);
 
   const addMessage = (s: string) => {
-    addChatMessageDB(streamName, { message: s, userID: "bhavik", timestamp: Date.now() });
+    addChatMessageDB(roomID, { message: s, userID: "bhavik", timestamp: Date.now() });
   };
 
   return (
     <div>
       <ChatInput onSubmit={addMessage} />
       <ul>
-        {chatList.map((chatmessage, i) => (
-          <li key={"message" + i}> {chatmessage.message} </li>
+        {Object.entries(chatList).map(([id, chat]) => (
+          <li key={id}>
+            {chat.userID}:{chat.message}
+          </li>
         ))}
       </ul>
     </div>
@@ -38,6 +55,8 @@ export const Chat: React.FC = () => {
 };
 
 const ChatInput: React.FC<{ onSubmit: (message: string) => void }> = ({ onSubmit }) => {
+  const currentUser = useUserStore((state) => state.currentUser);
+
   const [currentMessage, setCurrentMessage] = useState<string>("");
   const submitMessage = useCallback(() => {
     if (currentMessage) {
@@ -47,16 +66,22 @@ const ChatInput: React.FC<{ onSubmit: (message: string) => void }> = ({ onSubmit
   }, [currentMessage, onSubmit]);
   return (
     <div>
-      <input
-        value={currentMessage}
-        onChange={(e) => {
-          setCurrentMessage(e.target.value);
-        }}
-      />
-      <div onClick={submitMessage} className="clickable">
-        {" "}
-        submit{" "}
-      </div>
+      {currentUser ? (
+        <div className="stack:smaller narrow" >
+          <div> send message as {currentUser.email} </div>
+          <input
+            value={currentMessage}
+            onChange={(e) => {
+              setCurrentMessage(e.target.value);
+            }}
+          />
+          <button onClick={submitMessage} className="clickable">
+            submit
+          </button>
+        </div>
+      ) : (
+        <div> login to chat </div>
+      )}
     </div>
   );
 };

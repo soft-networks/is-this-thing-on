@@ -91,6 +91,11 @@ td {
   flex-direction: column;
   gap: var(--s1);
 }
+.stack\:smaller {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
 
 .flex-1 {
   flex: 1;

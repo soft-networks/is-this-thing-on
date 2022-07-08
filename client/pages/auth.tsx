@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useUserStore } from "../stores/userStore";
 
 const Auth: NextPage = () => {
-  const { currentUser } = useUserStore();
+  const currentUser  = useUserStore(useCallback(state => state.currentUser,[]));
 
   return (
     <Layout>
@@ -26,10 +26,10 @@ const Auth: NextPage = () => {
 };
 
 const SignOut = () => {
-  const { signOut } = useUserStore();
+  const signOut  = useUserStore(useCallback(state => state.signOut,[]));
 
   return (
-    <button onClick={() => signOut} className="clickable">
+    <button onClick={() => signOut()} className="clickable">
       sign out
     </button>
   );
@@ -38,7 +38,7 @@ const SignOut = () => {
 const SignUp: React.FC = () => {
   const [usernameValue, setUsernameValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
-  const { signUp } = useUserStore();
+  const signUp  = useUserStore(useCallback(state => state.signUp,[]));
 
   const onSubmit = () => {
     if (usernameValue == "" || passwordValue == "") {
@@ -68,7 +68,7 @@ const SignUp: React.FC = () => {
 const SignIn: React.FC = () => {
   const [usernameValue, setUsernameValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
-  const { signIn } = useUserStore();
+  const signIn  = useUserStore(useCallback(state => state.signIn, []));
 
   const onSubmit = () => {
     if (usernameValue == "" || passwordValue == "") {

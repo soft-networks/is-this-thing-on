@@ -1,34 +1,25 @@
-import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
-import { disableStreamSync, syncStreamPlaybackID, syncStreamStatus } from "../lib/firebase";
 import { generateStreamLink } from "../lib/server-api";
-import useCurrentStreamName from "../stores/useCurrentStreamName";
+import { useRoomStore } from "../stores/roomStore";
 
 
 const StreamStatus: React.FunctionComponent = () => {
-  const id = useCurrentStreamName();
-  const [streamStatus, setStreamStatus] = useState<string>("loading");
-  const [playbackID, setPlaybackID] = useState<string | undefined>();
-
-  useEffect(() => {
-    console.log("Starting to sync with player ID as: ", id);
-    if (id) {
-      syncStreamStatus(id as string, (status) => setStreamStatus(status));
-      syncStreamPlaybackID(id as string, (playbackID) => setPlaybackID(playbackID));
-    }
-    return () => disableStreamSync(id as string);
-  }, [id]);
-
+  const roomInfo = useRoomStore(state => state.roomInfo);
+  const roomName = useRoomStore(state => state.currentRoomID);
   return (
     <div>
       <h1>
-        {id} is .. {streamStatus}
+        {roomName} is .. {roomInfo?.streamStatus}
       </h1>
       <h2 style={{ width: "40ch" }}>
         This is a prototype of IS THIS THING ON.
-        <br/> Watch the live stream below. Interact with elements on the page to gain energy
+        <br /> Watch the live stream below. Interact with elements on the page to gain energy
       </h2>
-      <div>{streamStatus == "active" && playbackID && <ReactPlayer url={generateStreamLink(playbackID)} controls={true} />}</div>
+      <div>
+        {roomInfo && roomInfo.streamStatus == "active" && roomInfo.streamPlaybackID && (
+          <ReactPlayer url={generateStreamLink(roomInfo.streamPlaybackID)} controls={true} />
+        )}
+      </div>
     </div>
   );
 };
