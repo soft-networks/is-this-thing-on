@@ -1,4 +1,4 @@
-import STREAM_NAMES from "../../common/streamData";
+import STREAM_NAMES from "../../../common/streamData";
 export const SERVER_URL = "http://localhost:4000";
 
 export const STREAM_NAME_ENDPOINT = `${SERVER_URL}/stream-names`;

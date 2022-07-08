@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useUserStore } from "../stores/userStore";
-import streamNames from "../../common/streamData";
+import streamNames from "../../../common/streamData";
 
 const Footer: React.FunctionComponent = () => {
   return (

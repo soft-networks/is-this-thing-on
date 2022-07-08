@@ -1,6 +1,6 @@
 interface MagicPiece {
   id: string;
-  triggerType?: MagicPieceTriggerTypes;
+  triggerType?: any;
   pos: { x: number; y: number };
   asset?: string;
   reward?: number;
@@ -8,9 +8,8 @@ interface MagicPiece {
 
 type UserID = string; 
 
-
 interface ChatMessage {
-  userID: User,
+  userID: UserID,
   timestamp: number,
   message: string
 }
