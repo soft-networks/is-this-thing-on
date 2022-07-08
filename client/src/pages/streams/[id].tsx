@@ -6,29 +6,40 @@ import RoomInfoViewer from "../../components/roomInfoViewer";
 import { Chat } from "../../components/chat";
 import { useCallback, useEffect, useRef } from "react";
 import { useRoomStore } from "../../stores/roomStore";
-import { syncRoomInfoDB } from "../../lib/firestore";
+import {  setUserHeartbeat, syncRoomInfoDB } from "../../lib/firestore";
 import { Unsubscribe } from "firebase/auth";
+import { useUserStore } from "../../stores/userStore";
 
 
 const StreamPage: NextPage = () => {
 
   const changeRoom = useRoomStore(state => state.changeRoom);
-  const listenerRef = useRef<Unsubscribe>();
+  const unsubscribeFromRoomInfo = useRef<Unsubscribe>();
+  const currentUser = useUserStore(useCallback(state => state.currentUser, []));
   const router = useRouter();
   const { id } = router.query;
 
   useEffect(() => {
-    async function setupListener(){
-      //TODO: Actual edge cases here
+    //TODO: This is slightly innefficient, doesnt have to detach to reattach
+    if (currentUser && id && (typeof id === 'string')) {
+      setUserHeartbeat(currentUser.uid, id);
+    } 
+  }, [currentUser, id])
+  useEffect(() => {
+    //TODO: Actual edge cases here
+    async function subscribeToRoomInfo(){
       if (id && (typeof id === 'string' )) {
-        if (listenerRef.current) {
-          listenerRef.current();
+        if (unsubscribeFromRoomInfo.current) {
+          unsubscribeFromRoomInfo.current();
         }
-        listenerRef.current = await syncRoomInfoDB(id, (r) => changeRoom(id, r));
+        unsubscribeFromRoomInfo.current = await syncRoomInfoDB(id, (r) => changeRoom(id, r));
       }
+      
     }
-    setupListener();
-    return () => { if (listenerRef.current) listenerRef.current();}
+    subscribeToRoomInfo();
+    return () => {
+      if (unsubscribeFromRoomInfo.current) unsubscribeFromRoomInfo.current();
+    };
   }, [changeRoom, id])
   return (
     <Layout>

@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express, { Application, RequestHandler } from "express";
 import { createServer } from "http";
-import { getRoomIDFromMUXID, getStreamKey,  writeNewStreamToDB, writePlaybackIDToDB, writeStreamStateToDB } from "./dbAPI.js";
+import { getRoomIDFromMUXID, getStreamKey,  managePresenceInDB,  resetMuxFirestoreRelationship,  writeNewStreamToDB, writePlaybackIDToDB, writeStreamStateToDB } from "./firestore-api.js";
 
 import bodyParser from "body-parser"
 import STREAM_NAMES from "../../common/streamData.js";
@@ -52,6 +52,16 @@ app.get("/stream-key/:id", async (req, res) => {
   res.send({key: key})
  
 });
+app.get("/reset-room/:id", async (req,res) => {
+  try {
+    const roomID = req.params.id;
+    await resetMuxFirestoreRelationship(roomID);
+    res.status(200).send("Reset");
+  } catch (e) {
+    console.log((e as Error).message)
+    res.status(500).send("Error resetting room")
+  } 
+})
 
 //Listening for hooks
 app.post("/mux-hook", muxAuthHelper, async (req, res) => {
@@ -88,3 +98,7 @@ app.post("/mux-hook", muxAuthHelper, async (req, res) => {
 httpServer.listen(port, () => {
   logUpdate(`Server is LIVE on port ${port}`);
 });
+
+managePresenceInDB();
+
+

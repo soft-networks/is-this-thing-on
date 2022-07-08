@@ -1,6 +1,6 @@
 import { Unsubscribe } from "firebase/firestore";
 import { useCallback, useEffect,  useRef, useState } from "react";
-import { addChatMessageDB, syncChat, setUserHeartbeat, detachUserHeartbeat } from "../lib/firestore";
+import { addChatMessageDB, syncChat } from "../lib/firestore";
 import { useRoomStore } from "../stores/roomStore";
 import { useUserStore } from "../stores/userStore";
 
@@ -8,41 +8,45 @@ export const Chat: React.FC = () => {
   let roomID = useRoomStore(state => state.currentRoomID);
   let unsubRef = useRef<Unsubscribe>();
   let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
+
+  const addChat = useCallback(
+    (cID, chat) => {
+      setChatList((pc) => {
+        let npc = { ...pc };
+        npc[cID] = chat;
+        return npc;
+      });
+    },
+    [setChatList]
+  );
+  const removeChat = useCallback(
+    (cID) =>
+      setChatList((pc) => {
+        let npc = { ...pc };
+        delete npc[cID];
+        return npc;
+      }),
+    [setChatList]
+  );
+  const sendNewMessage = useCallback((s: string) => {
+    addChatMessageDB(roomID, { message: s, userID: "bhavik", timestamp: Date.now() });
+  }, [roomID]);
   useEffect(() => {
     async function setupDB() {
       if (unsubRef.current) {
         setChatList({});
         unsubRef.current();
       }
-      unsubRef.current = await syncChat(
-        roomID,
-        (cID, chat) =>
-          setChatList((pc) => {
-            let npc = { ...pc };
-            npc[cID] = chat;
-            return npc;
-          }),
-        (cID) =>
-          setChatList((pc) => {
-            let npc = { ...pc };
-            delete npc[cID];
-            return npc;
-          })
-      );
+      unsubRef.current = await syncChat(roomID, addChat, removeChat);
     }
     setupDB();
     return () => {
       if (unsubRef.current) unsubRef.current();
     };
-  }, [roomID]);
-
-  const addMessage = (s: string) => {
-    addChatMessageDB(roomID, { message: s, userID: "bhavik", timestamp: Date.now() });
-  };
-
+  }, [addChat, removeChat, roomID]);
   return (
     <div>
-      <ChatInput onSubmit={addMessage} />
+      <ChatInput onSubmit={sendNewMessage} />
       <ul>
         {Object.entries(chatList).map(([id, chat]) => (
           <li key={id}>

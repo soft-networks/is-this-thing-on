@@ -1,6 +1,7 @@
 
 import { app } from "./firebase-init";
 import {getFirestore,  collection, doc, setDoc, addDoc, onSnapshot, DocumentReference} from "firebase/firestore";
+import { PRESENCE_LENGTH } from "../../../common/streamData";
 
 const db = getFirestore(app);
 
@@ -37,6 +38,7 @@ export async function syncRoomInfoDB(roomName: string, callback: (roomInfo: Room
         streamPlaybackID: data["stream_playback_id"] || "",
         streamOwner: "bhavik",
         streamStatus: data["stream_status"] || "disconnected",
+        numOnline: data["num_online"] || 0
       });
     }
 });
@@ -78,19 +80,14 @@ export async function addChatMessageDB(roomName: string, chat: ChatMessage) {
 let activeTimeout: NodeJS.Timeout | undefined;
 async function setPresenceDB(userID: string, roomName: string) {
   const newpresence = doc(presenceCollection(), userID);
+  
   await setDoc(newpresence, {
-    room: roomName,
-    time: Date.now(),
-    userid: userID
+    room_id: roomName,
+    timestamp: Date.now()
   });
 }
 export async function setUserHeartbeat(userID: string, roomName: string) {
+  if (activeTimeout) {clearTimeout(activeTimeout)};
   await setPresenceDB(userID, roomName);
-  activeTimeout = setTimeout(() => setUserHeartbeat(userID, roomName), 10000);
-}
-export async function detachUserHeartbeat(userID: string, roomName: string) {
-  if (activeTimeout) {
-    clearTimeout(activeTimeout);
-  }
-  setPresenceDB(userID, 'null');
+  activeTimeout = setTimeout(() => setUserHeartbeat(userID, roomName), PRESENCE_LENGTH);
 }

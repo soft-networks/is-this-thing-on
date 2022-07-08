@@ -29,4 +29,5 @@ interface RoomInfo {
   streamStatus: string,
   streamOwner: string,
   streamPlaybackID: string
+  numOnline: number
 }

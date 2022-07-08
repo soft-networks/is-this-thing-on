@@ -1,33 +1,22 @@
 
-import { initializeApp } from 'firebase/app';
-import { getDatabase , ref, get, set} from "firebase/database";
-import { doc, documentId, getDoc, getFirestore, setDoc} from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, query, where, getDocs, deleteDoc, updateDoc, deleteField} from "firebase/firestore";
+import { firestore } from './firebase-init.js';
 import { logError, logInfo, logUpdate } from './logger.js';
+import STREAM_NAMES, { PRESENCE_LENGTH } from "../../common/streamData.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDEELIQs6LfHdFCnqUUNluk7tXKodeHIwE",
-  authDomain: "is-this-thing-on-320a7.firebaseapp.com",
-  databaseURL: "https://is-this-thing-on-320a7-default-rtdb.firebaseio.com",
-  projectId: "is-this-thing-on-320a7",
-  storageBucket: "is-this-thing-on-320a7.appspot.com",
-  messagingSenderId: "895037288643",
-  appId: "1:895037288643:web:77cdcfd1981d449fc6b276"
-};
-const app = initializeApp(firebaseConfig);
-const firestore = getFirestore(app);
-const db = getDatabase(app);
-const KEY_ROOT = "streamKeys"
-const ID_ROOT = "muxIDs"
-
+//Helpers
+function roomDoc(roomID: string) {
+  return doc(firestore, "rooms", roomID);
+}
 
 /**
  * gets all room data from firestore 
- * @param roomName 
+ * @param roomID 
  * @returns dictionary of room data 
  * @throws Error if room doesnt exist
  */
-const getRoom = async (roomName: string) => {
-  const roomRef = doc(firestore, "rooms", roomName);
+const getRoom = async (roomID: string) => {
+  const roomRef = roomDoc(roomID);
   const room = await getDoc(roomRef);
 
   if (room.exists()) {
@@ -39,7 +28,7 @@ const getRoom = async (roomName: string) => {
 
 /**
  * gets stream key from firestore, given a room name. 
- * @param roomName 
+ * @param roomID 
  * @returns string | undefined
  */
 export const getStreamKey = async (roomID: string) => {
@@ -70,14 +59,7 @@ const writeRoomIDToMUXID = async (roomID: string, muxID: string) => {
 }
 
 const writeStreamKeyToDB = async (roomID: string, streamKey: string) => {
-  let docRef = await setDoc(doc(firestore, "rooms", roomID), {stream_key: streamKey}, {merge: true});
-}
-
-const getStreamRoot = (streamName: string) => {
- return KEY_ROOT + "/" + streamName;
-}
-const getMuxIDRoot = (streamID: string) => {
-  return ID_ROOT + "/" + streamID;
+  let docRef = await setDoc(roomDoc(roomID), {stream_key: streamKey}, {merge: true});
 }
 
 
@@ -100,15 +82,44 @@ export const getRoomIDFromMUXID = async (muxID: string) => {
 }
 
 export const writeStreamStateToDB = async (roomID: string, streamStatus: string) => {
-  let docRef = await setDoc(doc(firestore, "rooms", roomID), {stream_status: streamStatus}, {merge: true});
+  let docRef = await setDoc(roomDoc(roomID), {stream_status: streamStatus}, {merge: true});
 
 }
 
 export const writePlaybackIDToDB = async (roomID: string, playbackID: string) => {
-  let docRef = await setDoc(doc(firestore, "rooms", roomID), {stream_playback_id:  playbackID}, {merge: true});
+  let docRef = await setDoc(roomDoc(roomID), {stream_playback_id:  playbackID}, {merge: true});
 }
 
-// export const writeAssetIDToDB = async (streamName: string, assetID: string) => {
-//   const assetIDRef = ref(db, getStreamRoot(streamName) + "/asset");
-//   set(assetIDRef, assetID);
-// }
+export const resetMuxFirestoreRelationship = async (roomID: string) => {  
+  
+  let roomRef = roomDoc(roomID);
+  await updateDoc(roomRef, {
+    stream_playback_id: deleteField(),
+    stream_status: deleteField(),
+    stream_key: deleteField()
+  })
+
+  let muxQuery = query(collection(firestore, "mux_id"), where("room_id", "==", roomID));
+  const muxSnapshot = await getDocs(muxQuery);
+  muxSnapshot.forEach(async (muxDoc) => {
+    deleteDoc( doc( firestore, "mux_id", muxDoc.id))
+  });
+  
+}
+
+
+/**  */
+export async function managePresenceInDB() {
+  const presenceRef = collection(firestore, "presence");
+  const currentlyOnline = await Promise.all(STREAM_NAMES.map(async (streamName) => {
+    let q = query(presenceRef, where("room_id", "==", streamName), where("timestamp", ">=",  Date.now() - (1.2  * PRESENCE_LENGTH) ));
+    const querySnapshot = await getDocs(q);
+    let numResults = querySnapshot.size;
+    
+    return {roomID: streamName, numOnline: numResults}
+  }));
+  currentlyOnline.forEach(({roomID, numOnline}) => {
+    setDoc(roomDoc(roomID), {num_online: numOnline}, {merge: true});
+  })
+  setTimeout(managePresenceInDB, PRESENCE_LENGTH);
+} 

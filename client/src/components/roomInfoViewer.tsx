@@ -10,9 +10,10 @@ const RoomInfoViewer: React.FunctionComponent = () => {
     <div>
       <h1>
         {roomName} is .. {roomInfo?.streamStatus}
+        
       </h1>
       <h2 style={{ width: "40ch" }}>
-        This is a prototype of IS THIS THING ON.
+        {roomInfo?.numOnline} people online.
         <br /> Watch the live stream below. Interact with elements on the page to gain energy
       </h2>
       <div>
