@@ -7,17 +7,29 @@ const db = getFirestore(app);
 //Helpers
 //Invariant: Room exists with chat subcollection for now. But TODO if it doesnt.
 function roomDoc(roomName:string) {
+  // console.log("Room doc reference", roomName);
   return doc(db, "rooms", roomName);
 }
 function chatCollection(roomDoc: DocumentReference) {
+  // console.log("Room chat doc reference", roomDoc);
   return collection(roomDoc, "chats");
 }
 function presenceCollection() {
+  // console.log("Presence reference");
   return collection(db, "presence");
+}
+function validateRoomName(roomName: string) {
+  if (!roomName || roomName == "") {
+    return false;
+  }
+  return true;
 }
 
 //Room info
 export async function syncRoomInfoDB(roomName: string, callback: (roomInfo: RoomInfo) => void) {
+  if (!validateRoomName(roomName)) {
+    return;
+  }
   const unsub = onSnapshot(roomDoc(roomName), (doc) => {
     let data = doc.data();
     if (data) {
@@ -34,6 +46,9 @@ return unsub;
 
 //Chat
 export async function syncChat(roomName: string, addChat: (id: string, chat: ChatMessage) => void, removeChat: (id:string)=>void) {
+  if (!validateRoomName(roomName)) {
+    return;
+  }
   const chats = chatCollection(roomDoc(roomName));
   const unsub = onSnapshot(chats, (docs) => { 
     docs.docChanges().forEach((change) => {

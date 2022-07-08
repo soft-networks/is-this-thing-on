@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useUserStore } from "../stores/userStore";
 import streamNames from "../../common/streamData";
 
-const IsThisThingOnFooter: React.FunctionComponent = () => {
+const Footer: React.FunctionComponent = () => {
   return (
     <footer className="align-end padded">
       <div className="full-width">
@@ -35,4 +35,4 @@ const UserDisplay: React.FunctionComponent = () => {
       <Link href="/auth">{currentUser ? currentUser.email :  "login"}</Link> {currentUser && ": energy" }
     </span>)
 };
-export default IsThisThingOnFooter;
+export default Footer;

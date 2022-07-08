@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Layout from "../../layouts/layout";
 import StreamNameGate from "../../components/streamNameGate";
-import StreamStatus from "../../components/streamStatusViewer";
+import RoomInfoViewer from "../../components/roomInfoViewer";
 import { Chat } from "../../components/chat";
 import { useCallback, useEffect, useRef } from "react";
 import { useRoomStore } from "../../stores/roomStore";
@@ -34,7 +34,7 @@ const StreamPage: NextPage = () => {
     <Layout>
       <StreamNameGate id={id as string} >
         <Chat/>
-        <StreamStatus  />
+        <RoomInfoViewer  />
       </StreamNameGate>
     </Layout>
   );

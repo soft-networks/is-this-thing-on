@@ -3,7 +3,7 @@ import { generateStreamLink } from "../lib/server-api";
 import { useRoomStore } from "../stores/roomStore";
 
 
-const StreamStatus: React.FunctionComponent = () => {
+const RoomInfoViewer: React.FunctionComponent = () => {
   const roomInfo = useRoomStore(state => state.roomInfo);
   const roomName = useRoomStore(state => state.currentRoomID);
   return (
@@ -25,4 +25,4 @@ const StreamStatus: React.FunctionComponent = () => {
 };
 
 
-export default StreamStatus;
+export default RoomInfoViewer;

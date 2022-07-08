@@ -1,7 +1,6 @@
 import { NextPage } from "next";
 import Layout from "../layouts/layout";
-import { getAuth, createUserWithEmailAndPassword, User, signInWithEmailAndPassword } from "firebase/auth";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback,  useState } from "react";
 import { useUserStore } from "../stores/userStore";
 
 const Auth: NextPage = () => {
