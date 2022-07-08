@@ -1,25 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
 import classNames from "classnames";
-import { posix } from "path/posix";
 import { useEffect, useRef, useState } from "react";
 import { DraggableCore, DraggableEventHandler } from "react-draggable"; // <DraggableCore>
 import { disableMagicPiecesSync, syncMagicPieces } from "../lib/firebase";
-import {useCollective}  from "../useHooks/useCollective";
-import useCurrentStreamName from "../useHooks/useCurrentStreamName";
-import useMagicPieces from "../useHooks/useMagicPieces";
-import useWindowDimensions from "../useHooks/useWindowDimensions";
+import {useCollective}  from "../stores/useEnergy";
+import useCurrentStreamName from "../stores/useCurrentStreamName";
+import useMagicPieces from "../stores/useMagicPieces";
+import useWindowDimensions from "../stores/useWindowDimensions";
 
 //Types
 //TODO: Move these types to a separate file
 type MagicPieceTriggerTypes = "click" | "drag" | "follow";
 
-export interface MagicPiece {
-  id: string;
-  triggerType?: MagicPieceTriggerTypes;
-  pos: { x: number; y: number };
-  asset?: string;
-  reward?: number;
-}
+
 
 //Many Viewer
 export const MagicPiecesViewer: React.FunctionComponent = () => {

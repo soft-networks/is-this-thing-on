@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { MagicPiece } from "../components/magicPieces";
 import { syncMagicPieces, updateMagicPiecePos } from "../lib/firebase";
 import useCurrentStreamName from "./useCurrentStreamName";
 

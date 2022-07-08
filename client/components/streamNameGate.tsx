@@ -1,5 +1,5 @@
-import useCurrentStreamName from "../useHooks/useCurrentStreamName";
-import { useStreamNames } from "../useHooks/useStreamNames";
+import useCurrentStreamName from "../stores/useCurrentStreamName";
+import { useStreamNames } from "../stores/useStreamNames";
 
 
 const StreamNameGate: React.FunctionComponent = ({ children }) => {

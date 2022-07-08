@@ -20,6 +20,12 @@
   --s-5: calc(var(--s-4) / var(--ratio));
 }
 
+h1 {
+  color: green;
+}
+h2 {
+  margin-top: var(--s0);
+}
 a, a:visited {
   color: white;
 }
@@ -121,6 +127,9 @@ td {
 }
 .placeholder > img, .circle > img , .square > img {
   margin: var(--s-1);
+}
+.narrow {
+  width: 45ch;
 }
 .draggable {
   cursor: move; /* fallback if grab cursor is unsupported */

@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { CollectiveProvider } from "../useHooks/useCollective";
-import { StreamNamesProvider } from "../useHooks/useStreamNames";
+import { CollectiveProvider } from "../stores/useEnergy";
+import { StreamNamesProvider } from "../stores/useStreamNames";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

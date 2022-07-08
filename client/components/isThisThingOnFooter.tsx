@@ -2,8 +2,9 @@ import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { useCollective } from "../useHooks/useCollective";
-import { useStreamNames } from "../useHooks/useStreamNames";
+import { useCollective } from "../stores/useEnergy";
+import { useUserStore } from "../stores/userStore";
+import { useStreamNames } from "../stores/useStreamNames";
 
 const IsThisThingOnFooter: React.FunctionComponent = () => {
   const streamNames = useStreamNames();
@@ -22,11 +23,12 @@ const IsThisThingOnFooter: React.FunctionComponent = () => {
             <Link href={`/streams/${name}`}>{name}</Link>
           </div>
         ))}
-        </div>
-        <div className="align-end stack:horizontal">
-          <div className="link"> 
+        <div className="link"> 
             <Link href={`/energy`}>energy</Link>
           </div>
+        </div>
+        <div className="align-end stack:horizontal">
+          
           <UserDisplay />
         </div>
       </div>
@@ -36,13 +38,12 @@ const IsThisThingOnFooter: React.FunctionComponent = () => {
 
 const UserDisplay: React.FunctionComponent = () => {
   const { rewards, user } = useCollective();
-  return user ? (
+  const {currentUser} = useUserStore();
+
+  return (
     <span>
-      {user} : {rewards}
-    </span>
-  ) : (
-    <UserInput />
-  );
+      <Link href="/auth">{currentUser ? currentUser.email :  "login"}</Link> {currentUser && ":" + rewards}
+    </span>)
 };
 
 const UserInput: React.FunctionComponent = ({}) => {

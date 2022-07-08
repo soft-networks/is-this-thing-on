@@ -3,10 +3,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { getStreamNames } from "../lib/server-api";
 
-interface StreamNames {
-  names?: string[];
-}
-
 export const StreamNameContext = createContext<StreamNames>({});
 
 export const StreamNamesProvider: React.FunctionComponent = ({ children }) => {

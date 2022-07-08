@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { disableStreamSync, syncStreamPlaybackID, syncStreamStatus } from "../lib/firebase";
 import { generateStreamLink } from "../lib/server-api";
-import useCurrentStreamName from "../useHooks/useCurrentStreamName";
+import useCurrentStreamName from "../stores/useCurrentStreamName";
 
 
 const StreamStatus: React.FunctionComponent = () => {
@@ -21,10 +21,14 @@ const StreamStatus: React.FunctionComponent = () => {
 
   return (
     <div>
-      <h3>
+      <h1>
         {id} is .. {streamStatus}
-      </h3>
-      <div>{streamStatus == "active" && playbackID && <ReactPlayer url={generateStreamLink(playbackID)} />}</div>
+      </h1>
+      <h2 style={{ width: "40ch" }}>
+        This is a prototype of IS THIS THING ON.
+        <br/> Watch the live stream below. Interact with elements on the page to gain energy
+      </h2>
+      <div>{streamStatus == "active" && playbackID && <ReactPlayer url={generateStreamLink(playbackID)} controls={true} />}</div>
     </div>
   );
 };

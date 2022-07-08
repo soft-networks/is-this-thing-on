@@ -1,12 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { disableUserSync, syncUser, updateUserRewards } from "../lib/firebase";
 
-interface Collective {
-  rewards: number;
-  addReward: (amt: number) => void;
-  user: string | undefined;
-  createUser: (str: string) => void;
-}
 
 export const CollectiveContext = createContext<Collective>({
   rewards: 0,

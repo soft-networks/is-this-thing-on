@@ -4,8 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import StreamNameGate from "../../components/streamNameGate";
 import StreamStatus from "../../components/streamStatusViewer";
 import { getStreamKey } from "../../lib/server-api";
-import useCurrentStreamName from "../../useHooks/useCurrentStreamName";
-import { StreamNamesProvider } from "../../useHooks/useStreamNames";
+import useCurrentStreamName from "../../stores/useCurrentStreamName";
+import { StreamNamesProvider } from "../../stores/useStreamNames";
 
 const AdminPage: NextPage = () => {
   

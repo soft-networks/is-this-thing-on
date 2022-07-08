@@ -1,20 +1,8 @@
-import { initializeApp } from "firebase/app";
-import { getDatabase, ref, onValue, off, set } from "firebase/database";
-import { MagicPiece } from "../components/magicPieces";
-import { MAGIC_PIECE_TEST_STUBS } from "./testingStubs";
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDEELIQs6LfHdFCnqUUNluk7tXKodeHIwE",
-  authDomain: "is-this-thing-on-320a7.firebaseapp.com",
-  databaseURL: "https://is-this-thing-on-320a7-default-rtdb.firebaseio.com",
-  projectId: "is-this-thing-on-320a7",
-  storageBucket: "is-this-thing-on-320a7.appspot.com",
-  messagingSenderId: "895037288643",
-  appId: "1:895037288643:web:4da7f037a77603eac6b276",
-};
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+import { getDatabase, ref, onValue, off, set } from "firebase/database";
+import { app } from "./firebase-init";
+import { MAGIC_PIECE_TEST_STUBS } from "./testingStubs";
+
 const db = getDatabase(app);
 
 // Constants
