@@ -8,6 +8,7 @@ export const STREAMS_ENDPOINT = `${SERVER_URL}/stream`;
 export const STREAMS_KEY_ENDPOINT = `${SERVER_URL}/stream-key`;
 
 
+
 export const generateStreamLink = (playbackID: string) => {
   //https://stream.mux.com/{PLAYBACK_ID}.m3u8
   return `https://stream.mux.com/${playbackID}.m3u8`;
@@ -21,15 +22,9 @@ const fetchResponse = async (endpoint: string) => {
   return response
 }
 
-//Fetch stream names from server and cache them
-export const getStreamNames = async () => {
-  return STREAM_NAMES
-};
-
 export const getStreamKey = async (streamName: string) => {
   try {
     const streamKeyResponse = await fetchResponse(`${STREAMS_KEY_ENDPOINT}/${streamName}`);
-    console.log(streamKeyResponse);
     const streamKeys = await streamKeyResponse.json();
     if (streamKeys["key"]){
       return streamKeys["key"];
@@ -40,3 +35,7 @@ export const getStreamKey = async (streamName: string) => {
     return undefined;
   }
 };
+
+export const resetRoom = async (roomID: string) => {
+  await fetch(SERVER_URL + "/reset-room/" + roomID);
+}

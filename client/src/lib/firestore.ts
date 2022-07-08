@@ -1,6 +1,6 @@
 
 import { app } from "./firebase-init";
-import {getFirestore,  collection, doc, setDoc, addDoc, onSnapshot, DocumentReference} from "firebase/firestore";
+import {getFirestore,  collection, doc, setDoc, addDoc, onSnapshot, DocumentReference, getDoc} from "firebase/firestore";
 import { PRESENCE_LENGTH } from "../../../common/streamData";
 
 const db = getFirestore(app);
@@ -44,6 +44,12 @@ export async function syncRoomInfoDB(roomName: string, callback: (roomInfo: Room
 });
 return unsub;
 }
+export async function getRoomAdmins(roomID: string) {
+  let roomRef = roomDoc(roomID);
+  let roomDocument = await getDoc(roomRef);
+  let data = roomDocument.data();
+  return data && data["admins"] ? data["admins"] : [];
+}
 
 
 //Chat
@@ -74,6 +80,7 @@ export async function addChatMessageDB(roomName: string, chat: ChatMessage) {
   const chats = chatCollection(roomDoc(roomName));
   await addDoc(chats, chat);
 }
+
 
 
 //Presence
