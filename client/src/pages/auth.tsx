@@ -55,6 +55,7 @@ const SignUp: React.FC = () => {
       console.error("Need username and password");
       return;
     }
+    console.log("signing up with password" , passwordValue)
     signUp(usernameValue, passwordValue, signUpComplete);
   };
   const generatePassword = () => {
@@ -71,7 +72,7 @@ const SignUp: React.FC = () => {
         ) : (
           <div>
             your unique password is below. copy this somewhere safe. if you lose it your account will be lost : <br/>
-            {passwordValue})
+            {passwordValue}
           </div>
         )}
       </div>
@@ -94,7 +95,7 @@ const SignIn: React.FC = () => {
       setUsernameValue("");
       setPasswordValue("");
     } else {
-      setError(error || "There was an error signing up sorry");
+      setError(error || "There was an unknown error signing in sorry");
     }
   }, [setUsernameValue, setPasswordValue, setError]);
 
@@ -104,14 +105,12 @@ const SignIn: React.FC = () => {
       return;
     }
     signIn(usernameValue, passwordValue, signInComplete);
-    setUsernameValue("");
-    setPasswordValue("");
   };
 
   return (
     <div className="stack narrow">
       <div> sign in </div>
-      <input value={usernameValue} placeholder="username" onChange={(e) => setUsernameValue(e.target.value)} />
+      <input value={usernameValue} placeholder="email" type="email" onChange={(e) => setUsernameValue(e.target.value)} />
       <input
         value={passwordValue}
         placeholder="password"
@@ -119,6 +118,9 @@ const SignIn: React.FC = () => {
         onChange={(e) => setPasswordValue(e.target.value)}
       />
       <button onClick={() => onSubmit()}> sign in </button>
+      <div className="red">
+        {error}
+      </div>
     </div>
   );
 };
