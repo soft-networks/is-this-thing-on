@@ -1,4 +1,4 @@
-import { useUserStore } from "../../stores/userStore"
+import { useUserStore } from "../../stores/userStore";
 
 import { useCallback, useEffect, useState } from "react";
 import { NextPage } from "next";
@@ -8,13 +8,11 @@ import { getRoomAdmins } from "../../lib/firestore";
 import { getStreamKey, resetRoom } from "../../lib/server-api";
 import StreamNameGate from "../../components/streamNameGate";
 
-
 const Admin: NextPage = () => {
-
-  let currentUser = useUserStore(useCallback(state => state.currentUser, []));
+  let currentUser = useUserStore(useCallback((state) => state.currentUser, []));
   const router = useRouter();
   const { id } = router.query;
-  
+
   return (
     <Layout>
       <StreamNameGate id={id as string}>
@@ -22,12 +20,10 @@ const Admin: NextPage = () => {
       </StreamNameGate>
     </Layout>
   );
+};
 
-}
-
-const AdminInternal : NextPage<{roomID: string}> = ({roomID}) => {
-
-  let currentUser = useUserStore(useCallback(state => state.currentUser, [])); 
+const AdminInternal: NextPage<{ roomID: string }> = ({ roomID }) => {
+  let currentUser = useUserStore(useCallback((state) => state.currentUser, []));
   let [admins, setAdmins] = useState<string[]>();
   let [isAdmin, setIsAdmin] = useState<boolean>(false);
   let [streamKey, setStreamKey] = useState<string>();
@@ -38,7 +34,7 @@ const AdminInternal : NextPage<{roomID: string}> = ({roomID}) => {
       setAdmins(roomAdmins);
     }
     fetchAdmins();
-  }, [roomID])
+  }, [roomID]);
 
   useEffect(() => {
     if (admins && currentUser && admins.includes(currentUser.uid)) {
@@ -46,18 +42,18 @@ const AdminInternal : NextPage<{roomID: string}> = ({roomID}) => {
     } else {
       setIsAdmin(false);
     }
-  }, [admins, currentUser])
+  }, [admins, currentUser]);
 
-  useEffect(()=>{
-    if (isAdmin) {
-      async function getSK() {
+  useEffect(() => {
+    async function getSK() {
+      if (isAdmin) {
         let sk = await getStreamKey(roomID);
         setStreamKey(sk);
+      } else {
+        setStreamKey("");
       }
-      getSK();
-    } else {
-      setStreamKey("");
     }
+    getSK();
   }, [isAdmin, roomID]);
 
   return isAdmin ? (
@@ -68,15 +64,13 @@ const AdminInternal : NextPage<{roomID: string}> = ({roomID}) => {
           resetRoom(roomID);
           setStreamKey("");
         }}
-      >        
+      >
         reset stream key
       </button>
     </div>
   ) : (
     <div> hmmm doesnt seem like your admin for this room</div>
   );
-
-    
-}
+};
 
 export default Admin;
