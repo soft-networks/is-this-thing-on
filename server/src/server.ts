@@ -56,6 +56,7 @@ app.get("/reset-room/:id", async (req,res) => {
   try {
     const roomID = req.params.id;
     await resetMuxFirestoreRelationship(roomID);
+    // TODO: Delete MUX Livestream asset as well.
     res.status(200).send("Reset");
   } catch (e) {
     console.log((e as Error).message)

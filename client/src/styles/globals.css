@@ -134,7 +134,7 @@ td {
   margin: var(--s-1);
 }
 .narrow {
-  width: 45ch;
+  width: 56ch;
 }
 .draggable {
   cursor: move; /* fallback if grab cursor is unsupported */
