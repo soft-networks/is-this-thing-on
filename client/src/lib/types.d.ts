@@ -29,5 +29,28 @@ interface RoomInfo {
   streamStatus: string,
   streamOwner: string,
   streamPlaybackID: string
-  numOnline: number
+  numOnline: number,
+  roomName: string
+}
+
+interface EnergyAccount {
+  userID: UserID,
+  energy:  number
+}
+
+interface EnergyTransaction {
+  from: UserID,
+  to: UserID,
+  amount: number,
+  timestamp: number
+}
+
+interface TransactionStatus {
+  type: "ERROR" | "SUCCESS",
+  code?: string
+}
+
+interface TransactionError extends TransactionStatus {
+  type: "ERROR",
+  code: "INSUFFICIENT_BALANCE" | "NETWORK_ERROR"
 }

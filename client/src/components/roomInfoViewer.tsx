@@ -5,12 +5,10 @@ import { useRoomStore } from "../stores/roomStore";
 
 const RoomInfoViewer: React.FunctionComponent = () => {
   const roomInfo = useRoomStore(state => state.roomInfo);
-  const roomName = useRoomStore(state => state.currentRoomID);
   return (
     <div>
       <h1>
-        {roomName} is .. {roomInfo?.streamStatus}
-        
+        {roomInfo?.roomName} is .. {roomInfo?.streamStatus}
       </h1>
       <h2 style={{ width: "40ch" }}>
         {roomInfo?.numOnline} people online.

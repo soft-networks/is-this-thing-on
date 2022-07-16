@@ -8,8 +8,7 @@ const firebaseConfig = {
   projectId: "is-this-thing-on-320a7",
   storageBucket: "is-this-thing-on-320a7.appspot.com",
   messagingSenderId: "895037288643",
-  appId: "1:895037288643:web:4da7f037a77603eac6b276",
+  appId: "1:895037288643:web:1ded98acc61ff158c6b276"
 };
-
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);

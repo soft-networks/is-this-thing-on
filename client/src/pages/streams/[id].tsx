@@ -41,6 +41,8 @@ const StreamPage: NextPage = () => {
       if (unsubscribeFromRoomInfo.current) unsubscribeFromRoomInfo.current();
     };
   }, [changeRoom, id])
+
+
   return (
     <Layout>
       <StreamNameGate id={id as string} >

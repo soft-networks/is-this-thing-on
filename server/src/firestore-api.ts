@@ -1,7 +1,7 @@
 
-import { doc, getDoc, setDoc, collection, query, where, getDocs, deleteDoc, updateDoc, deleteField} from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, query, where, getDocs, deleteDoc, updateDoc, deleteField, onSnapshot} from "firebase/firestore";
 import { firestore } from './firebase-init.js';
-import { logError, logInfo, logUpdate } from './logger.js';
+import { logError, logInfo, logUpdate, logWarning } from './logger.js';
 import STREAM_NAMES, { PRESENCE_LENGTH } from "../../common/streamData.js";
 
 //Helpers
@@ -123,3 +123,64 @@ export async function managePresenceInDB() {
   })
   setTimeout(managePresenceInDB, PRESENCE_LENGTH);
 } 
+
+async function failtransaction(id: string) {
+  await setDoc(doc(firestore, "energy_transactions", id), {status: 'FAILED'}, {merge: true});
+}
+async function transact(transaction: any, id: string ) {
+  let {status} = transaction;
+
+  if (status == "SUCCESS" || status == "FAILED") {
+    // TODO: Update this so its less reads mannnn
+    logInfo("skipping since its already processed");
+    return;
+  }
+  let { from, to, amount, timestamp} = transaction;
+  if (! from || !to || ! amount || !timestamp) {
+    logWarning("Transaction failing because the transaction doesnt have what it needs ", transaction);
+    await failtransaction(id);
+    return;
+  } 
+  const fromAccountRef = doc(firestore, "energy_accounts", from)
+  const fromAccount = await getDoc(fromAccountRef);
+
+  const toAccountRef = doc(firestore, "energy_accounts", to);
+  const toAccount = await getDoc(toAccountRef);
+  if (!fromAccount.exists() || !toAccount.exists() || fromAccount.data()['energy'] == undefined || toAccount.data()['energy'] == undefined ) {
+    logWarning("Transaction failing because account doesnt exist", fromAccount.data(), toAccount.data());
+    await failtransaction(id);
+    return;
+  };
+
+  const newFromAccountEnergy = fromAccount.data()['energy'] - transaction.amount; 
+  const newToAccountEnergy = toAccount.data()['energy']  + transaction.amount;
+
+  await setDoc(fromAccountRef, {energy: newFromAccountEnergy}, {merge: true});
+  await setDoc(toAccountRef, {energy: newToAccountEnergy}, {merge: true});
+  await setDoc(doc(firestore, "energy_transactions", id), {status: "SUCCESS"}, {merge: true});
+
+  logUpdate("Transaction succeeded");
+}
+
+
+//Maybe run this on a schedule too? That way actually i can retry as well lol jesus
+export async function manageEnergyTxInDB() {
+  const transactionRef = collection(firestore, "energy_transactions");
+  const unsub = onSnapshot(transactionRef, (docs) => {
+    docs.docChanges().forEach((change) => {
+      let transaction = change.doc;
+      if (change.type === "added") {
+        try {
+          console.log("Processing transaction" , transaction.id);
+          transact(transaction.data(), transaction.id);
+        } catch (e) {
+          logError("Error with transaction " + transaction.id, (e as Error).message);
+        }
+      }
+      if (change.type === "modified") {
+        //UMM? lol. 
+      }
+    });
+  });
+
+}

@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express, { Application, RequestHandler } from "express";
 import { createServer } from "http";
-import { getRoomIDFromMUXID, getStreamKey,  managePresenceInDB,  resetMuxFirestoreRelationship,  writeNewStreamToDB, writePlaybackIDToDB, writeStreamStateToDB } from "./firestore-api.js";
+import { getRoomIDFromMUXID, getStreamKey,  manageEnergyTxInDB,  managePresenceInDB,  resetMuxFirestoreRelationship,  writeNewStreamToDB, writePlaybackIDToDB, writeStreamStateToDB } from "./firestore-api.js";
 
 import bodyParser from "body-parser"
 import STREAM_NAMES from "../../common/streamData.js";
@@ -101,5 +101,5 @@ httpServer.listen(port, () => {
 });
 
 managePresenceInDB();
-
+manageEnergyTxInDB();
 

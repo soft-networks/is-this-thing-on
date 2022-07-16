@@ -9,7 +9,7 @@
     "start": "node build/server/src/server.js",
     "build": "rm -rf build && tsc",
     "prod": "npm run build && node build/server/src/server.js",
-    "dev": "tsc -w & nodemon --watch build build/server/src/server.js",
+    "dev": " tsc -w & nodemon --watch build build/server/src/server.js",
     "heroku-go": "git add . && git commit -m 'heroku' && git push heroku main",
     "tunnel": "ssh -R istomux.lhr.rocks:80:localhost:4000 localhost.run"
   },
