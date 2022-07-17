@@ -1,11 +1,11 @@
 import { Unsubscribe } from "firebase/firestore";
-import { useCallback, useEffect,  useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { addChatMessageDB, syncChat } from "../lib/firestore";
 import { useRoomStore } from "../stores/roomStore";
 import { useUserStore } from "../stores/userStore";
 
 export const Chat: React.FC = () => {
-  let roomID = useRoomStore(state => state.currentRoomID);
+  let roomID = useRoomStore((state) => state.currentRoomID);
   let unsubRef = useRef<Unsubscribe>();
   let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
 
@@ -28,9 +28,12 @@ export const Chat: React.FC = () => {
       }),
     [setChatList]
   );
-  const sendNewMessage = useCallback((s: string) => {
-    addChatMessageDB(roomID, { message: s, userID: "bhavik", timestamp: Date.now() });
-  }, [roomID]);
+  const sendNewMessage = useCallback(
+    (s: string) => {
+      addChatMessageDB(roomID, { message: s, userID: "bhavik", timestamp: Date.now() });
+    },
+    [roomID]
+  );
   useEffect(() => {
     async function setupDB() {
       if (unsubRef.current) {
@@ -45,15 +48,16 @@ export const Chat: React.FC = () => {
     };
   }, [addChat, removeChat, roomID]);
   return (
-    <div>
+    <div className="stack:s-1 border quarterWidth">
       <ChatInput onSubmit={sendNewMessage} />
-      <ul>
+      <div className="stack:s-1 padded">
         {Object.entries(chatList).map(([id, chat]) => (
-          <li key={id}>
-            {chat.userID}:{chat.message}
-          </li>
+          <div key={id} className="stack:s-2 whiteFill padded:s-2">
+            <div className="caption">{chat.userID || "unknown"}</div>
+            <div>{chat.message}</div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
@@ -68,24 +72,20 @@ const ChatInput: React.FC<{ onSubmit: (message: string) => void }> = ({ onSubmit
     }
     setCurrentMessage("");
   }, [currentMessage, onSubmit]);
-  return (
-    <div>
-      {currentUser ? (
-        <div className="stack:smaller narrow" >
-          <div> send message as {currentUser.email} </div>
-          <input
-            value={currentMessage}
-            onChange={(e) => {
-              setCurrentMessage(e.target.value);
-            }}
-          />
-          <button onClick={submitMessage} className="clickable">
-            submit
-          </button>
-        </div>
-      ) : (
-        <div> login to chat </div>
-      )}
+  return currentUser ? (
+    <div className="stack:s-1 border-bottom padded">
+      <div> send message as {currentUser.email} </div>
+      <input
+        value={currentMessage}
+        onChange={(e) => {
+          setCurrentMessage(e.target.value);
+        }}
+      />
+      <span onClick={submitMessage} className="button align-start">
+        submit
+      </span>
     </div>
+  ) : (
+    <div> login to chat </div>
   );
 };

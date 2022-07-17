@@ -6,14 +6,11 @@ import { useRoomStore } from "../stores/roomStore";
 const RoomInfoViewer: React.FunctionComponent = () => {
   const roomInfo = useRoomStore(state => state.roomInfo);
   return (
-    <div>
-      <h1>
-        {roomInfo?.roomName} is .. {roomInfo?.streamStatus}
-      </h1>
-      <h2 style={{ width: "40ch" }}>
-        {roomInfo?.numOnline} people online.
-        <br /> Watch the live stream below. Interact with elements on the page to gain energy
-      </h2>
+    <div className="stack padded quarterWidth">
+      <div>
+        <p>{roomInfo?.roomName} is .. {roomInfo?.streamStatus} </p>
+        <p> {roomInfo?.numOnline} people online.</p>
+      </div>
       <div>
         {roomInfo && roomInfo.streamStatus == "active" && roomInfo.streamPlaybackID && (
           <ReactPlayer url={generateStreamLink(roomInfo.streamPlaybackID)} controls={true} />

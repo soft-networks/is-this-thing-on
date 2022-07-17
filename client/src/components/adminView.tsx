@@ -45,14 +45,15 @@ const RoomAdmin: React.FC<{ roomID: string; uid: string }> = ({ roomID, uid }) =
     <div className="stack">
       <div> admin view for room : {roomID} </div>
       <div>stream key: {streamKey }</div>
-      <button
+      <div
         onClick={() => {
           resetRoom(roomID);
           setStreamKey("");
         }}
+        className="button"
       >
         reset stream key
-      </button>
+      </div>
     </div>
   );
 };

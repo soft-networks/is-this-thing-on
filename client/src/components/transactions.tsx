@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import useEnergyStore from "../stores/energyStore";
 import { useUserStore } from "../stores/userStore";
-import { Transaction, Unsubscribe } from "firebase/firestore";
+import {  Unsubscribe } from "firebase/firestore";
 import { syncEnergyAccount, syncTransactionStatus } from "../lib/firestore";
-import { prependListener } from "process";
 import classnames from "classnames";
 
 const Transactions: React.FC = ({}) => {
@@ -43,17 +42,17 @@ const Transactions: React.FC = ({}) => {
     }
   }
   return userID == undefined ? null : (
-    <div className="stack padded" style={{ position: "fixed", top: 0, right: 0, zIndex: 5 }}>
-      <div className="stack:horizontal align-end">
+    <div className="stack padded:s-1" style={{ position: "fixed", top: 0, right: 0, zIndex: 5 }}>
+      <div className="horizontal-stack align-end">
         <div> test! </div>
         <div
-          className="clickable"
+          className="button"
           onClick={() => testTransaction({ from: "CENTRAL_BANK", to: userID, timestamp: Date.now(), amount: 1 })}
         >
           gimme 1
         </div>
         <div
-          className="clickable"
+          className="button"
           onClick={() => testTransaction({ to: "CENTRAL_BANK", from: userID, timestamp: Date.now(), amount: 1 })}
         >
           send 1

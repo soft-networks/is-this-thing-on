@@ -36,7 +36,7 @@ const SignUp: React.FC = () => {
       <input value={usernameValue} placeholder="email" type="email" onChange={(e) => setUsernameValue(e.target.value)} />
       <div>
         {passwordValue == "" ? (
-          <button onClick={generatePassword}> Generate unique password </button>
+          <div onClick={generatePassword} className="button"> Generate unique password </div>
         ) : (
           <div>
             your unique password is below. copy this somewhere safe. if you lose it your account will be lost : <br/>
@@ -44,7 +44,7 @@ const SignUp: React.FC = () => {
           </div>
         )}
       </div>
-      <button onClick={() => onSubmit()}> create account </button>
+      <div onClick={() => onSubmit()} className="button"> create account </div>
       <div className="red">
         {error}
       </div>
@@ -85,7 +85,7 @@ const SignIn: React.FC = () => {
         type="password"
         onChange={(e) => setPasswordValue(e.target.value)}
       />
-      <button onClick={() => onSubmit()}> sign in </button>
+      <div onClick={() => onSubmit()} className="button"> sign in </div>
       <div className="red">
         {error}
       </div>
@@ -97,9 +97,9 @@ const SignOut = () => {
   const signOut  = useUserStore(useCallback(state => state.signOut,[]));
 
   return (
-    <button onClick={() => signOut()} className="clickable">
+    <div onClick={() => signOut()} className="button">
       sign out
-    </button>
+    </div>
   );
 };
 
