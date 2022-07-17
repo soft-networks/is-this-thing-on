@@ -25,6 +25,14 @@
 
 }
 
+.red {
+  background: orangered;
+}
+.green {
+  background: greenyellow;
+}
+
+
 html, #__next, body {
   width: 100%; height: 100%;
 }
@@ -302,6 +310,9 @@ p {
   margin-top: auto;
 }
 
+.stack .justify-end {
+  justify-self: flex-end;
+}
 .stack .align-start {
   align-items: flex-start;
 }

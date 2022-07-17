@@ -43,7 +43,7 @@ const Transactions: React.FC = ({}) => {
   }
   return userID == undefined ? null : (
     <div className="stack padded:s-1" style={{ position: "fixed", top: 0, right: 0, zIndex: 5 }}>
-      <div className="horizontal-stack align-end">
+      <div className="horizontal-stack justify-end">
         <div> test! </div>
         <div
           className="button"
