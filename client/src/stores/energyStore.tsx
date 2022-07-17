@@ -13,14 +13,6 @@ const useEnergyStore = create<EnergyStoreState>((set) => ({
   setCurrentUserEnergy: energy => set({currentUserEnergy: energy}),
   transact: async (transaction) => {
     try {
-      const canSendAmount = await verifyBalanceGreaterThanAmount(transaction.from, transaction.amount);
-      if (!canSendAmount) {
-        return {
-          ...transaction,
-          id: "null",
-          status: { type: "ERROR", code: "INSUFFICIENT_BALANCE" },
-        } as EnergyTransactionPosted;
-      }
       let transactionPosted = await performTransaction(transaction);      
       return transactionPosted;
     } catch (e) {

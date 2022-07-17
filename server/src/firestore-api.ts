@@ -124,8 +124,8 @@ export async function managePresenceInDB() {
   setTimeout(managePresenceInDB, PRESENCE_LENGTH);
 } 
 
-async function failtransaction(id: string) {
-  await setDoc(doc(firestore, "energy_transactions", id), {status: 'FAILED'}, {merge: true});
+async function setTransaction(id: string, status: string) {
+  await setDoc(doc(firestore, "energy_transactions", id), {status: status}, {merge: true});
 }
 async function transact(transaction: any, id: string ) {
   let {status} = transaction;
@@ -138,9 +138,10 @@ async function transact(transaction: any, id: string ) {
   let { from, to, amount, timestamp} = transaction;
   if (! from || !to || ! amount || !timestamp) {
     logWarning("Transaction failing because the transaction doesnt have what it needs ", transaction);
-    await failtransaction(id);
+    await setTransaction(id, 'FAILED');
     return;
   } 
+
   const fromAccountRef = doc(firestore, "energy_accounts", from)
   const fromAccount = await getDoc(fromAccountRef);
 
@@ -148,22 +149,27 @@ async function transact(transaction: any, id: string ) {
   const toAccount = await getDoc(toAccountRef);
   if (!fromAccount.exists() || !toAccount.exists() || fromAccount.data()['energy'] == undefined || toAccount.data()['energy'] == undefined ) {
     logWarning("Transaction failing because account doesnt exist", fromAccount.data(), toAccount.data());
-    await failtransaction(id);
+    await setTransaction(id, 'FAILED');
     return;
   };
 
+  if (fromAccount.data()['energy'] < amount) {
+    await setTransaction(id, 'INSUFFICIENT_FUNDS');
+    return;
+  }
   const newFromAccountEnergy = fromAccount.data()['energy'] - transaction.amount; 
   const newToAccountEnergy = toAccount.data()['energy']  + transaction.amount;
 
   await setDoc(fromAccountRef, {energy: newFromAccountEnergy}, {merge: true});
   await setDoc(toAccountRef, {energy: newToAccountEnergy}, {merge: true});
-  await setDoc(doc(firestore, "energy_transactions", id), {status: "SUCCESS"}, {merge: true});
+  setTransaction(id, 'SUCCESS');
 
   logUpdate("Transaction succeeded");
 }
 
 
 //Maybe run this on a schedule too? That way actually i can retry as well lol jesus
+
 export async function manageEnergyTxInDB() {
   const transactionRef = collection(firestore, "energy_transactions");
   const unsub = onSnapshot(transactionRef, (docs) => {

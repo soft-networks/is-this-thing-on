@@ -2,7 +2,8 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useUserStore } from "../stores/userStore";
 import streamNames from "../../../common/streamData";
-import EnergyViewer from "./energyViewer";
+import Transactions from "./transactions";
+import useEnergyStore from "../stores/energyStore";
 
 const Footer: React.FunctionComponent = () => {
   return (
@@ -17,9 +18,6 @@ const Footer: React.FunctionComponent = () => {
             <Link href={`/streams/${name}`}>{name}</Link>
           </div>
         ))}
-        <div className="link"> 
-            <Link href={`/energy`}>energy</Link>
-          </div>
         </div>
         <div className="align-end stack:horizontal">
           <UserDisplay />
@@ -30,10 +28,11 @@ const Footer: React.FunctionComponent = () => {
 };
 const UserDisplay: React.FunctionComponent = () => {
   const currentUser = useUserStore(state => state.currentUser);
+  const currentUserEnergy = useEnergyStore(state => state.currentUserEnergy)
   return (
     <div className="stack:horizontal">
       <Link href="/auth">{currentUser ? currentUser.email :  "login"}</Link>
-      {currentUser ?  <EnergyViewer/> : null}
+      <div> {currentUserEnergy !== undefined ? `${currentUserEnergy} NRG` : null} </div>
     </div>)
 };
 export default Footer;
