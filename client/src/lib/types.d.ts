@@ -45,8 +45,13 @@ interface EnergyTransaction {
   timestamp: number
 }
 
+interface EnergyTransactionPosted extends EnergyTransaction {
+  status: TransactionStatus,
+  id: string
+}
+
 interface TransactionStatus {
-  type: "ERROR" | "SUCCESS",
+  type: "ERROR" | "SUCCESS" | "PENDING",
   code?: string
 }
 

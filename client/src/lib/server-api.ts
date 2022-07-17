@@ -24,6 +24,9 @@ const fetchResponse = async (endpoint: string) => {
 
 export const getStreamKey = async (streamName: string) => {
   try {
+   // Imagine that this getStreamKey has a secret key like 
+    // let secretKey = hash(process.env.secretKey)
+    //Then fetchResponse(/streamName, )
     const streamKeyResponse = await fetchResponse(`${STREAMS_KEY_ENDPOINT}/${streamName}`);
     const streamKeys = await streamKeyResponse.json();
     if (streamKeys["key"]){

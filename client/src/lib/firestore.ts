@@ -159,8 +159,15 @@ export async function verifyBalanceGreaterThanAmount (userID: string, amount: nu
   const account = await getOrCreateEnergyAccount(userID);
   return account.energy > amount;
 }
-export async function performTransaction(transaction: EnergyTransaction) {
-  await addDoc(collection(db, "energy_transactions"), transaction);
+export async function performTransaction(transaction: EnergyTransaction): Promise<EnergyTransactionPosted> {
+    const transactionRef = await addDoc(collection(db, "energy_transactions"), transaction);
+    return {
+      ...transaction,
+      id: transactionRef.id,
+      status: {
+        type: "PENDING"
+      }
+    }  
 }
 export async function syncEnergyAccount(userID: string, callback: (energyAccount: EnergyAccount) => void) {
   
@@ -171,5 +178,13 @@ export async function syncEnergyAccount(userID: string, callback: (energyAccount
     let data = doc.data();
     data && callback(sanitizeEnergyAccount(data['energy'], doc.id));
   });
+  return unsub;
+}
+export async function syncTransactionStatus(transactionID: string, callback: (status: TransactionStatus) => void) {
+
+  const unsub = onSnapshot(doc(db, "energy_transactions", transactionID), (doc) => {
+    let data = doc.data();
+    data && callback({type: data.status});
+  })
   return unsub;
 }
