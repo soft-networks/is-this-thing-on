@@ -5,7 +5,7 @@ import { performTransaction } from "../lib/firestore";
 type TransactionCompleteCallback =  (status: TransactionStatus) => void
 interface TransactionStoreState {
   pendingTransactions: EnergyTransactionPosted[];
-  transactionCallbacks: {[key: string] : TransactionCompleteCallback }
+  transactionCompleteActionCallback: {[key: string] : TransactionCompleteCallback }
   removeTransaction: (transactionID: string) => void;
   postTransaction: (
     transactionToPost: EnergyTransaction,
@@ -16,7 +16,7 @@ interface TransactionStoreState {
 
 const useTransactionStore = create<TransactionStoreState>(set => ({
   pendingTransactions: [],
-  transactionCallbacks: {},
+  transactionCompleteActionCallback: {},
   removeTransaction: (transactionID:string) => {
     set(s => {
       let p = s.pendingTransactions;
@@ -35,9 +35,9 @@ const useTransactionStore = create<TransactionStoreState>(set => ({
     set((s) => {
       let newState: Partial<TransactionStoreState> = { pendingTransactions: [...s.pendingTransactions, transactionPosted] };
       if (onTransactionCompleteCallback && transactionPosted['id'] !== "null") {
-        let newCallbacks = s.transactionCallbacks;
+        let newCallbacks = s.transactionCompleteActionCallback;
         newCallbacks[transactionPosted['id']] = onTransactionCompleteCallback;
-        newState.transactionCallbacks = newCallbacks;
+        newState.transactionCompleteActionCallback = newCallbacks;
       }
       return newState;
     });

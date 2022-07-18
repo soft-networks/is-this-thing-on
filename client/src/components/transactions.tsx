@@ -8,10 +8,6 @@ import useTransactionStore from "../stores/transactionStore";
 
 const Transactions: React.FC = ({}) => {
   const pendingTransactions = useTransactionStore(useCallback(state => ([...state.pendingTransactions]), []));
-
-  useEffect(() => {
-    console.log("PENDING TRANSACTIONS UPDATED!");
-  }, [pendingTransactions])
   return  (
     <div className="stack padded:s-1" style={{ position: "fixed", top: 0, right: 0, zIndex: 5 }}>
       <TransactionTester />
@@ -33,13 +29,13 @@ const TransactionTester: React.FC = () => {
     <div> energy test </div>
     <div
       className="button"
-      onClick={() => postTransaction({ from: "CENTRAL_BANK", to: userID, timestamp: Date.now(), amount: 1 })}
+      onClick={() => postTransaction({ from: "CENTRAL_BANK", to: userID, timestamp: Date.now(), amount: 1 }, () => console.log("YAYYYy"))}
     >
       gimme 1
     </div>
     <div
       className="button"
-      onClick={() => postTransaction({ to: "CENTRAL_BANK", from: userID, timestamp: Date.now(), amount: 1 })}
+      onClick={() => postTransaction({ to: "CENTRAL_BANK", from: userID, timestamp: Date.now(), amount: 1 }, () => console.log("NOOOOOO"))}
     >
       send 1
     </div>
@@ -53,7 +49,7 @@ const PendingTransaction: React.FC<{
   const unsub = useRef<Unsubscribe>();
   const timeoutHandler = useRef<NodeJS.Timeout>();
   const updateTransactionStatusLocal = useTransactionStore(useCallback(state => state.updateTransactionStatusLocal, []));
-  const transactionCallback = useTransactionStore(useCallback(state => state.transactionCallbacks[transaction.id], [transaction.id]));
+  const transactionCompleteCallback = useTransactionStore(useCallback(state => state.transactionCompleteActionCallback[transaction.id], [transaction.id]));
   const removeTransaction = useTransactionStore(useCallback(state => state.removeTransaction,[]));
   
   const timeoutTransaction = useCallback( () => {
@@ -69,13 +65,13 @@ const PendingTransaction: React.FC<{
           unsub.current();
           unsub.current = undefined;
         }
-        if (transactionCallback) {
-          transactionCallback(newStatus);
+        if (transactionCompleteCallback) {
+          transactionCompleteCallback(newStatus);
         };
         setTimeout(() => removeTransaction(transaction.id), 1000);
       }
     },
-    [removeTransaction, transaction.id, transactionCallback, updateTransactionStatusLocal]
+    [removeTransaction, transaction.id, transactionCompleteCallback, updateTransactionStatusLocal]
   );
   useEffect(() => {
     console.log("Transaction mounted");
