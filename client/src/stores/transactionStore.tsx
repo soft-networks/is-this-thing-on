@@ -25,7 +25,7 @@ const useTransactionStore = create<TransactionStoreState>(set => ({
     })
   },
   postTransaction: async (transactionToPost, onTransactionCompleteCallback) => {
-    let transactionPosted; 
+    let transactionPosted: EnergyTransactionPosted; 
     try {
       transactionPosted = await performTransaction(transactionToPost);      
     } catch (e) {
@@ -39,12 +39,10 @@ const useTransactionStore = create<TransactionStoreState>(set => ({
         newCallbacks[transactionPosted['id']] = onTransactionCompleteCallback;
         newState.transactionCallbacks = newCallbacks;
       }
-      console.log("returning transaction state" , newState);
       return newState;
     });
   },
   updateTransactionStatusLocal: (id, transactionStatus) => {
-    console.log("Updating" , id, transactionStatus);
     set(s => {
       let pending = s.pendingTransactions;
       let index = pending.findIndex( t => t.id == id);
@@ -53,7 +51,6 @@ const useTransactionStore = create<TransactionStoreState>(set => ({
         let ntx = {...tx, status: transactionStatus};
         pending[index] = ntx;
       } 
-      console.log("new tranascations are " , pending);
       return {pendingTransactions: pending};
     })
   }

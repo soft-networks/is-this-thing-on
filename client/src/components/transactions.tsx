@@ -54,18 +54,15 @@ const PendingTransaction: React.FC<{
   const timeoutHandler = useRef<NodeJS.Timeout>();
   const updateTransactionStatusLocal = useTransactionStore(useCallback(state => state.updateTransactionStatusLocal, []));
   const transactionCallback = useTransactionStore(useCallback(state => state.transactionCallbacks[transaction.id], [transaction.id]));
-  const [hide, setHide] = useState<boolean>(false);
+  const removeTransaction = useTransactionStore(useCallback(state => state.removeTransaction,[]));
   
   const timeoutTransaction = useCallback( () => {
-    console.log("Transaction timed out");
     updateTransactionStatusLocal(transaction.id, {type: "ERROR", code: "TIMEOUT"})
   }
   ,[transaction.id, updateTransactionStatusLocal])
   const handleServerSideStatusChange = useCallback(
     (newStatus: TransactionStatus) => {
-      console.log("Received update from server!", newStatus);
       if (newStatus.type == "SUCCESS") {
-        console.log("update was a success");
         updateTransactionStatusLocal(transaction.id, newStatus);
         timeoutHandler.current && clearTimeout(timeoutHandler.current);
         if (unsub.current) {
@@ -75,10 +72,10 @@ const PendingTransaction: React.FC<{
         if (transactionCallback) {
           transactionCallback(newStatus);
         };
-        setTimeout(() => setHide(true), 1000);
+        setTimeout(() => removeTransaction(transaction.id), 1000);
       }
     },
-    [transaction.id, transactionCallback, updateTransactionStatusLocal]
+    [removeTransaction, transaction.id, transactionCallback, updateTransactionStatusLocal]
   );
   useEffect(() => {
     console.log("Transaction mounted");
@@ -100,8 +97,7 @@ const PendingTransaction: React.FC<{
         red: transaction.status.type == "ERROR",
         green: transaction.status.type == "SUCCESS",
         fadeOut: transaction.status.type == "SUCCESS",
-        grayFill: transaction.status.type == "PENDING",
-        hide: hide
+        grayFill: transaction.status.type == "PENDING"
       })}
     >
       transaction: {transaction.amount} at {transaction.timestamp} <br />

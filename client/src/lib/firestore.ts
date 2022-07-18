@@ -185,7 +185,9 @@ export async function syncTransactionStatus(transactionID: string, callback: (st
   const unsub = onSnapshot(doc(db, "energy_transactions", transactionID), (doc) => {
     let data = doc.data();
     //TODO: why this check? 
-    console.log("UPDATING STATUS FROM SERVER!" ,data);
+    if (!data || !data.status) {
+      console.warn("Edge case: transaction posted without pending status", data);
+    }
     data && data.status && callback({type: data.status});
   })
   return unsub;
