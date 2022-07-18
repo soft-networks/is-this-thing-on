@@ -20,7 +20,6 @@ const Coins: React.FC = () => {
   
   const addCoin: MouseEventHandler<HTMLDivElement> = (e) => {
     if (containerRef.current && userID) {
-      console.log("Coin added!");
       let bounds = containerRef.current.getBoundingClientRect();
       let x = e.pageX / bounds.width;
       let y = e.pageY / bounds.height;
@@ -62,7 +61,6 @@ const NewCoin: React.FC<{ pos: Pos; userID: UserID; roomID: string }> = ({ pos, 
   );
 
   useEffect(() => {
-    console.log("coin mounted");
     if (userID && !transactionPosted.current) {
       const coinTransaction: EnergyTransaction = {
         from: userID,
@@ -111,7 +109,6 @@ const ServerCoins: React.FC<{ roomID: string }> = ({ roomID }) => {
     [setServerSideCoins]
   );
   useEffect(() => {
-    console.log("Server coins mounted");
     async function setupServerSync() {
       unsub.current = syncInteractiveElements(roomID, "COIN", addCoin, removeCoin);
     }

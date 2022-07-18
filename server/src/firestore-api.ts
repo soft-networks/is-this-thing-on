@@ -1,8 +1,9 @@
 
-import { doc, getDoc, setDoc, collection, query, where, getDocs, deleteDoc, updateDoc, deleteField, onSnapshot} from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, query, where, getDocs, deleteDoc, updateDoc, deleteField, onSnapshot, orderBy, QueryDocumentSnapshot, DocumentData} from "firebase/firestore";
 import { firestore } from './firebase-init.js';
 import { logError, logInfo, logUpdate, logWarning } from './logger.js';
 import STREAM_NAMES, { PRESENCE_LENGTH } from "../../common/streamData.js";
+import { PerformanceObserver } from "perf_hooks";
 
 //Helpers
 function roomDoc(roomID: string) {
@@ -130,6 +131,8 @@ async function setTransaction(id: string, status: string) {
 async function transact(transaction: any, id: string ) {
   let {status} = transaction;
 
+  console.log("PROCESSING NEW TX");
+
   if (status == "SUCCESS" || status == "FAILED") {
     // TODO: Update this so its less reads mannnn
     logInfo("skipping since its already processed");
@@ -154,6 +157,7 @@ async function transact(transaction: any, id: string ) {
   };
 
   if (fromAccount.data()['energy'] < amount) {
+    logInfo("Transaction failing because account doesnt have enough funds");
     await setTransaction(id, 'INSUFFICIENT_FUNDS');
     return;
   }
@@ -189,4 +193,26 @@ export async function manageEnergyTxInDB() {
     });
   });
 
+}
+
+export async function transactionProcessor() {
+
+  const transactionRef = collection(firestore, "energy_transactions");
+  const q = query(transactionRef, where("status", "==", "PENDING"), orderBy("timestamp", "asc"));
+
+  const newTransactions = await getDocs(q);
+
+  if (newTransactions.size > 0) {
+    console.log("Processing ...  new transactions #: ",  newTransactions.size);
+    let processArray:QueryDocumentSnapshot<DocumentData>[] = []; 
+    newTransactions.forEach((transactionDoc) => {
+        processArray.push(transactionDoc);
+    });
+    
+    await Promise.all(processArray.map(async (transactionDoc) => {
+      await transact(transactionDoc.data(), transactionDoc.id);
+    }))
+  }
+
+  setTimeout(transactionProcessor, 3000);
 }
