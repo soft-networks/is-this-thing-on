@@ -17,10 +17,9 @@ const VideoPlayer: React.FunctionComponent<RoomUIProps> = ({
         <ReactPlayer url={generateStreamLink(roomInfo.streamPlaybackID)} />
       ) : (
         <ReactPlayer
-          playing={true}
           muted={true}
           controls={false}
-          url="https://www.youtube.com/watch?v=q55qNEKQLG0"
+          url={true ? undefined : "https://www.youtube.com/watch?v=q55qNEKQLG0"}
           width="100%"
           height="100%"
         />

@@ -1,6 +1,7 @@
 import React from "react";
 import { Chat } from "../chat";
 import VideoPlayer from "../videoPlayer";
+import Coins from "./coins";
 
 
 const Chris: React.FC = () => {
@@ -11,27 +12,21 @@ const Chris: React.FC = () => {
         style={{
           width: "calc(2 * 100vw)",
           height: "calc(2 *56vw)",
-          position: "absolute",
-          top: 0,
-          left: 0,
-          zIndex: "0",
+          zIndex: 0
         }}
-        className="noEvents"
+        className="noEvents absoluteOrigin"
       />
-      <Chat
-        className="quarterWidth"
+      {/* <Chat
+        className="quarterWidth absoluteOrigin"
         style={
           {
             "--chatAuthorColor": "hotpink",
             "--chatContainerBackground": "rgba(0,0,0,0.6)",
             "--chatMessageColor": "var(--white)",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            zIndex: 1,
           } as React.CSSProperties
         }
-      />
+      /> */}
+      <Coins/>
     </div>
   );
 }

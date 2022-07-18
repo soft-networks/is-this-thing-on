@@ -18,6 +18,9 @@ import { create } from "domain";
 
 const db = getFirestore(app);
 
+export const TRANSACTION_TIMEOUT  = 30 * 1000;
+
+
 //Helpers
 //Invariant: Room exists with chat subcollection for now. But TODO if it doesnt.
 function roomDoc(roomName: string) {
@@ -31,6 +34,9 @@ function energyAccountDoc(userID: string) {
 function chatCollection(roomDoc: DocumentReference) {
   // console.log("Room chat doc reference", roomDoc);
   return collection(roomDoc, "chats");
+}
+function elementCollection(roomDoc: DocumentReference) {
+  return collection(roomDoc, "interactive_elements");
 }
 function presenceCollection() {
   // console.log("Presence reference");
@@ -121,6 +127,41 @@ export async function addChatMessageDB(roomName: string, chat: ChatMessage) {
   const chats = chatCollection(roomDoc(roomName));
   await addDoc(chats, chat);
 }
+
+//Interactive elements 
+export function syncInteractiveElements(
+  roomName: string,
+  behaviorType: string,
+  addInteractiveElement: (id: string, element: InteractiveElement) => void,
+  removeInteractiveElement: (id: string) => void
+) {
+  if (!validateRoomName(roomName)) {
+    return;
+  }
+  const elements = elementCollection(roomDoc(roomName));
+  const q = query(elements, where("behaviorType", "==", behaviorType));
+
+  const unsub = onSnapshot(q, (docs) => {
+    docs.docChanges().forEach((change) => {
+      let element = change.doc;
+      if (change.type === "added") {
+        addInteractiveElement(element.id, change.doc.data() as InteractiveElement);
+      }
+      if (change.type === "modified") {
+      }
+      if (change.type === "removed") {
+        removeInteractiveElement(element.id);
+      }
+    });
+  });
+  return unsub;
+}
+
+export async function addInteractiveElement(roomName: string, element: InteractiveElement) {
+  const chats = elementCollection(roomDoc(roomName));
+  await addDoc(chats, element);
+}
+
 
 //Presence
 let activeTimeout: NodeJS.Timeout | undefined;

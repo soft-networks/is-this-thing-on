@@ -228,6 +228,12 @@ p {
   margin-block: auto ;
 }
 
+.absoluteOrigin {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
 
 .center\:absolute {
   position: absolute;

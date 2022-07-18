@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import useEnergyStore from "../stores/energyStore";
+import { useCallback, useEffect, useRef } from "react";
 import { useUserStore } from "../stores/userStore";
 import {  Unsubscribe } from "firebase/firestore";
-import { syncEnergyAccount, syncTransactionStatus } from "../lib/firestore";
+import {  syncTransactionStatus, TRANSACTION_TIMEOUT } from "../lib/firestore";
 import classnames from "classnames";
 import useTransactionStore from "../stores/transactionStore";
 
@@ -52,40 +51,54 @@ const PendingTransaction: React.FC<{
   const transactionCompleteCallback = useTransactionStore(useCallback(state => state.transactionCompleteActionCallback[transaction.id], [transaction.id]));
   const removeTransaction = useTransactionStore(useCallback(state => state.removeTransaction,[]));
   
+  //Helper: remove server status listener
+  const clearServerStatusSync = useCallback(() => {
+    if (unsub.current) {
+      unsub.current();
+      unsub.current = undefined;
+    }
+  }, [])
+  
+  //Helper: Transaction has timed out, should error
   const timeoutTransaction = useCallback( () => {
     updateTransactionStatusLocal(transaction.id, {type: "ERROR", code: "TIMEOUT"})
+    clearServerStatusSync();
   }
-  ,[transaction.id, updateTransactionStatusLocal])
+  ,[clearServerStatusSync, transaction.id, updateTransactionStatusLocal]);
+
+  //Receives updates for transaction from server
   const handleServerSideStatusChange = useCallback(
     (newStatus: TransactionStatus) => {
-      if (newStatus.type == "SUCCESS") {
-        updateTransactionStatusLocal(transaction.id, newStatus);
+      if (newStatus.type && newStatus.type !== "PENDING") {
         timeoutHandler.current && clearTimeout(timeoutHandler.current);
-        if (unsub.current) {
-          unsub.current();
-          unsub.current = undefined;
-        }
-        if (transactionCompleteCallback) {
-          transactionCompleteCallback(newStatus);
-        };
+        updateTransactionStatusLocal(transaction.id, newStatus);
+        clearServerStatusSync();
         setTimeout(() => removeTransaction(transaction.id), 1000);
       }
     },
-    [removeTransaction, transaction.id, transactionCompleteCallback, updateTransactionStatusLocal]
+    [clearServerStatusSync, removeTransaction, transaction.id, updateTransactionStatusLocal]
   );
+
+  //Initial mount: start sync with server
   useEffect(() => {
-    console.log("Transaction mounted");
     async function setupTransactionSync() {
       unsub.current && unsub.current();
       unsub.current = await syncTransactionStatus(transaction.id, handleServerSideStatusChange);
-
       timeoutHandler.current && clearTimeout(timeoutHandler.current);
-      timeoutHandler.current = setTimeout(timeoutTransaction, 5 * 1000);
+      timeoutHandler.current = setTimeout(timeoutTransaction, TRANSACTION_TIMEOUT);
     }
     setupTransactionSync();
     return () => unsub.current && unsub.current();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  //When transaction status changes, call callback 
+  useEffect(() => {
+    if (transactionCompleteCallback) {
+      transactionCompleteCallback(transaction.status);
+    };
+  }, [transaction.status, transactionCompleteCallback]);
+  
 
   return (
     <div

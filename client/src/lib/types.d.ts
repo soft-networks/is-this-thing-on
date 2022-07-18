@@ -34,6 +34,15 @@ interface RoomInfo {
   roomName: string
 }
 
+type Pos = [number, number];
+
+type BehaviorTypes = "COIN";
+interface InteractiveElement {
+  position: Pos,
+  behaviorType: string,
+  cdnID: string,
+  timestamp: number
+}
 interface EnergyAccount {
   userID: UserID,
   energy:  number
@@ -51,8 +60,9 @@ interface EnergyTransactionPosted extends EnergyTransaction {
   id: string
 }
 
+type TransactionStatusTypes = "ERROR" | "SUCCESS" | "PENDING"
 interface TransactionStatus {
-  type: "ERROR" | "SUCCESS" | "PENDING",
+  type: TransactionStatusTypes ,
   code?: string
 }
 
