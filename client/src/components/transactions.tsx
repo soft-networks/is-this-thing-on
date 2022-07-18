@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useUserStore } from "../stores/userStore";
 import {  Unsubscribe } from "firebase/firestore";
-import {  syncTransactionStatus, TRANSACTION_TIMEOUT } from "../lib/firestore";
+import {  syncTransactionStatus, TRANSACTION_TIMEOUT } from "../lib/firestore/";
 import classnames from "classnames";
 import useTransactionStore from "../stores/transactionStore";
 

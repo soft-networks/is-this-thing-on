@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { Unsubscribe } from "firebase/firestore";
 import { MouseEventHandler, useEffect, useRef, useState, useCallback } from "react";
-import { addInteractiveElement, syncInteractiveElements } from "../../lib/firestore";
+import { addInteractiveElement, syncInteractiveElements } from "../../lib/firestore/";
 import { useRoomStore } from "../../stores/roomStore";
 import useTransactionStore from "../../stores/transactionStore";
 import { useUserStore } from "../../stores/userStore";

@@ -1,8 +1,8 @@
 import create from "zustand";
 import { persist } from "zustand/middleware";
 import { getAuth, createUserWithEmailAndPassword, User, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { app } from "../lib/firebase-init";
 
+import { app } from "../lib/firestore/init";
 const auth = getAuth(app);
 
 interface UserState {

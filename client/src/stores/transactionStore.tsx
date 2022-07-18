@@ -1,5 +1,5 @@
 import create from "zustand";
-import { performTransaction } from "../lib/firestore";
+import { performTransaction } from "../lib/firestore/";
 
 
 type TransactionCompleteCallback =  (status: TransactionStatus) => void

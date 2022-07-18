@@ -40,7 +40,7 @@ type BehaviorTypes = "COIN";
 interface InteractiveElement {
   position: Pos,
   behaviorType: string,
-  cdnID: string,
+  cdnID?: string,
   timestamp: number
 }
 interface EnergyAccount {

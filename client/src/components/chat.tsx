@@ -1,6 +1,6 @@
 import { Unsubscribe } from "firebase/firestore";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { addChatMessageDB, syncChat } from "../lib/firestore";
+import { addChatMessageDB, syncChat } from "../lib/firestore/";
 import { useRoomStore } from "../stores/roomStore";
 import { useUserStore } from "../stores/userStore";
 
