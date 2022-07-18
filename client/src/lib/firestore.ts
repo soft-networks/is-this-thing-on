@@ -160,7 +160,7 @@ export async function verifyBalanceGreaterThanAmount (userID: string, amount: nu
   return account.energy > amount;
 }
 export async function performTransaction(transaction: EnergyTransaction): Promise<EnergyTransactionPosted> {
-    const transactionRef = await addDoc(collection(db, "energy_transactions"), transaction);
+    const transactionRef = await addDoc(collection(db, "energy_transactions"), { ...transaction, status: "PENDING" });
     return {
       ...transaction,
       id: transactionRef.id,
@@ -184,7 +184,9 @@ export async function syncTransactionStatus(transactionID: string, callback: (st
 
   const unsub = onSnapshot(doc(db, "energy_transactions", transactionID), (doc) => {
     let data = doc.data();
-    data && callback({type: data.status});
+    //TODO: why this check? 
+    console.log("UPDATING STATUS FROM SERVER!" ,data);
+    data && data.status && callback({type: data.status});
   })
   return unsub;
 }

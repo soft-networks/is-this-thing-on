@@ -4,23 +4,12 @@ import { performTransaction, verifyBalanceGreaterThanAmount } from "../lib/fires
 
 interface EnergyStoreState {
   currentUserEnergy: number,
-  setCurrentUserEnergy: (energy: number) => void,
-  transact: (transaction: EnergyTransaction) => Promise<EnergyTransactionPosted>
+  setCurrentUserEnergy: (energy: number) => void
 }
 
 const useEnergyStore = create<EnergyStoreState>((set) => ({
   currentUserEnergy: 0,
   setCurrentUserEnergy: energy => set({currentUserEnergy: energy}),
-  transact: async (transaction) => {
-    try {
-      let transactionPosted = await performTransaction(transaction);      
-      return transactionPosted;
-    } catch (e) {
-      console.error(" There was an error in transacting " , (e as Error).message);
-      return { ...transaction, id: "null", status: { type: "ERROR", code: "NETWORK_ERROR" } } as EnergyTransactionPosted  ;
-    } 
-
-  }
 }))
 
 export default useEnergyStore;

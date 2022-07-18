@@ -82,6 +82,16 @@ footer {
   100% { left: 100%; }
 }
 
+.fadeOut {
+  opacity: 1;
+  animation: fadeOut forwards 1s; 
+}
+@keyframes fadeOut {
+  0% { opacity: 1;}
+  100% {opacity: 0;}
+}
+
+
 
 
 * {
@@ -169,7 +179,9 @@ p {
 .padded\:s-2 {
   padding: var(--s-2);
 }
-
+.padded\:custom {
+  padding: var(--spacing);
+}
 
 
 /* layout */
@@ -186,6 +198,9 @@ p {
   overflow: hidden;
 }
 
+.overflowScroll {
+  overflow: scroll;
+}
 .hide {
   display: none;
 }
@@ -425,7 +440,39 @@ a:hover,
   font-size: var(--s-1);
 }
 
+/* Specific */
 
+.chat {
+  background: var(--chatContainerBackground);
+  color: var(--chatMessageColor);
+}
+
+.chat {
+  border-color:  var(--chatBorderColor);
+}
+
+.chatMessage {
+  background: var(--chatMessageBackground);
+}
+
+.chatMessage .caption {
+  color: var(--chatAuthorColor)
+}
+
+/* React player */
+
+.player-wrapper {
+  width: auto;
+  height: auto; 
+}
+.react-player {
+  padding-top: 56.25%;
+  position: relative; 
+}
+
+.react-player > div {
+  position: absolute; 
+}
 
 @media screen and (min-width: 1300px)  {
 

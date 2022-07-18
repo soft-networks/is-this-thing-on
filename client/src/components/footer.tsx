@@ -1,15 +1,16 @@
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useRef} from "react";
 import { useUserStore } from "../stores/userStore";
 import streamNames from "../../../common/streamData";
-import Transactions from "./transactions";
 import useEnergyStore from "../stores/energyStore";
+import { Unsubscribe } from "firebase/firestore";
+import { syncEnergyAccount } from "../lib/firestore";
 
 const Footer: React.FunctionComponent = () => {
   return (
     <footer className="align-end padded">
       <div className="fullWidth">
-        <div className="marquee"> is this thing on </div>
+        <div> is this thing on </div>
       </div>
       <div className="horizontal-stack fullWidth">
         <div className="horizontal-stack">
@@ -20,7 +21,7 @@ const Footer: React.FunctionComponent = () => {
         ))}
         </div>
         <div className="align-end horizontal-stack">
-          <UserDisplay />
+          <UserDisplay /><EnergyDisplay/>
         </div>
       </div>
     </footer>
@@ -28,11 +29,33 @@ const Footer: React.FunctionComponent = () => {
 };
 const UserDisplay: React.FunctionComponent = () => {
   const currentUser = useUserStore(state => state.currentUser);
-  const currentUserEnergy = useEnergyStore(state => state.currentUserEnergy)
   return (
-    <div className="horizontal-stack">
       <Link href="/auth">{currentUser ? currentUser.email :  "login"}</Link>
-      <div> {currentUserEnergy !== undefined ? `${currentUserEnergy} NRG` : null} </div>
-    </div>)
+  )
 };
+
+const EnergyDisplay : React.FunctionComponent = () => {
+  const currentUserEnergy = useEnergyStore(state => state.currentUserEnergy)
+  const setCurrentUserEnergy = useEnergyStore(useCallback((state) => state.setCurrentUserEnergy, []));
+  const unsub = useRef<Unsubscribe>();
+  const userID = useUserStore(useCallback(state => state.currentUser?.uid, []));
+
+  useEffect(() => {
+    async function setupEnergySync() {
+      if (userID) {
+        if (unsub.current) {
+          unsub.current();
+        }
+        unsub.current = await syncEnergyAccount(userID, (account) => setCurrentUserEnergy(account.energy));
+      }
+    }
+    setupEnergySync();
+    return () => unsub.current && unsub.current();
+  }, [setCurrentUserEnergy, userID]);
+
+  return (
+    <div> {currentUserEnergy !== undefined ? `${currentUserEnergy} NRG` : null} </div>
+  )
+}
+
 export default Footer;

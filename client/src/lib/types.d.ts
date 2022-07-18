@@ -11,7 +11,8 @@ type UserID = string;
 interface ChatMessage {
   userID: UserID,
   timestamp: number,
-  message: string
+  message: string,
+  username: string
 }
 
 interface Collective {
@@ -57,5 +58,10 @@ interface TransactionStatus {
 
 interface TransactionError extends TransactionStatus {
   type: "ERROR",
-  code: "INSUFFICIENT_BALANCE" | "NETWORK_ERROR"
+  code: "INSUFFICIENT_BALANCE" | "NETWORK_ERROR" | "TIMEOUT"
+}
+
+interface RoomUIProps {
+  className?: string
+  style?: React.CSSProperties
 }

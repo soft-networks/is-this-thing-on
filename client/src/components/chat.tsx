@@ -1,10 +1,21 @@
 import { Unsubscribe } from "firebase/firestore";
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { addChatMessageDB, syncChat } from "../lib/firestore";
 import { useRoomStore } from "../stores/roomStore";
 import { useUserStore } from "../stores/userStore";
 
-export const Chat: React.FC = () => {
+
+const DEFAULT_CLASSNAME = "stack:s-1 border fullWidth";
+const DEFAULT_VARIABLES = {
+  "--chatContainerBackground": "none",
+  "--chatMessageBackground": "var(--white)",
+  "--chatAuthorColor": "var(--contrast)",
+  "--chatMessageColor": "var(--black)",
+  "--chatBorderColor": "var(--gray)",
+  "--spacing": "var(--s-2)"
+};
+
+export const Chat: React.FC<RoomUIProps> = ({className = DEFAULT_CLASSNAME, style = DEFAULT_VARIABLES}) => {
   let roomID = useRoomStore((state) => state.currentRoomID);
   let unsubRef = useRef<Unsubscribe>();
   let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
@@ -29,8 +40,8 @@ export const Chat: React.FC = () => {
     [setChatList]
   );
   const sendNewMessage = useCallback(
-    (s: string) => {
-      addChatMessageDB(roomID, { message: s, userID: "bhavik", timestamp: Date.now() });
+    (c: ChatMessage) => {
+      addChatMessageDB(roomID, c);
     },
     [roomID]
   );
@@ -48,12 +59,12 @@ export const Chat: React.FC = () => {
     };
   }, [addChat, removeChat, roomID]);
   return (
-    <div className="stack:s-1 border quarterWidth">
+    <div className={className + " chat"} style={style as React.CSSProperties}>
       <ChatInput onSubmit={sendNewMessage} />
-      <div className="stack:s-1 padded">
+      <div className="stack:custom padded:custom" >
         {Object.entries(chatList).map(([id, chat]) => (
-          <div key={id} className="stack:s-2 whiteFill padded:s-2">
-            <div className="caption">{chat.userID || "unknown"}</div>
+          <div key={id} className="stack:s-2  padded:s-2 chatMessage">
+            <div className="caption">{chat.username || "unknown"}</div>
             <div>{chat.message}</div>
           </div>
         ))}
@@ -62,18 +73,23 @@ export const Chat: React.FC = () => {
   );
 };
 
-const ChatInput: React.FC<{ onSubmit: (message: string) => void }> = ({ onSubmit }) => {
+const ChatInput: React.FC<{ onSubmit: (chat: ChatMessage) => void }> = ({ onSubmit }) => {
   const currentUser = useUserStore((state) => state.currentUser);
 
   const [currentMessage, setCurrentMessage] = useState<string>("");
   const submitMessage = useCallback(() => {
-    if (currentMessage) {
-      onSubmit(currentMessage);
+    if (currentMessage && currentUser) {
+      onSubmit({
+        message: currentMessage,
+        timestamp: Date.now(),
+        username: currentUser.displayName || currentUser.email || "anon",
+        userID: currentUser.uid,
+      });
     }
     setCurrentMessage("");
-  }, [currentMessage, onSubmit]);
+  }, [currentMessage, currentUser, onSubmit]);
   return currentUser ? (
-    <div className="stack:s-1 border-bottom padded">
+    <div className="stack:s-1 border-bottom padded chatInputContainer">
       <div> send message as {currentUser.email} </div>
       <input
         value={currentMessage}

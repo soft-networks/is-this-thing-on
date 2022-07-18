@@ -8,6 +8,7 @@ import { setUserHeartbeat, syncRoomInfoDB } from "../lib/firestore";
 import { Unsubscribe } from "firebase/auth";
 import { useUserStore } from "../stores/userStore";
 import Chris from "./rooms.tsx/chris";
+import VideoPlayer from "./videoPlayer";
 
 const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
   const changeRoom = useRoomStore((state) => state.changeRoom);
@@ -42,10 +43,11 @@ const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
         return <Chris />;
       default:
         return (
-          <>
+          <div className="stack quarterWidth">
             <RoomInfoViewer />
+            <VideoPlayer/>
             <Chat />
-          </>
+          </div>
         );
     }
   }, [roomID]);

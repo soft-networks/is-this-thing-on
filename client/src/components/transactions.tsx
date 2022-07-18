@@ -4,105 +4,108 @@ import { useUserStore } from "../stores/userStore";
 import {  Unsubscribe } from "firebase/firestore";
 import { syncEnergyAccount, syncTransactionStatus } from "../lib/firestore";
 import classnames from "classnames";
+import useTransactionStore from "../stores/transactionStore";
 
 const Transactions: React.FC = ({}) => {
-  const userID = useUserStore(useCallback((state) => state.currentUser?.uid, []));
-  const setCurrentUserEnergy = useEnergyStore(useCallback((state) => state.setCurrentUserEnergy, []));
-  const transact = useEnergyStore(useCallback((state) => state.transact, []));
-  const unsub = useRef<Unsubscribe>();
-  const [pendingTransactions, setPendingTransactions] = useState<EnergyTransactionPosted[]>([]);
+  const pendingTransactions = useTransactionStore(useCallback(state => ([...state.pendingTransactions]), []));
 
   useEffect(() => {
-    async function setupEnergySync() {
-      if (userID) {
-        if (unsub.current) {
-          unsub.current();
-        }
-        unsub.current = await syncEnergyAccount(userID, (account) => setCurrentUserEnergy(account.energy));
-      }
-    }
-    setupEnergySync();
-    return () => unsub.current && unsub.current();
-  }, [setCurrentUserEnergy, userID]);
-  const removeTransactionFromPending = (id: string) => {
-    setPendingTransactions((p) => {
-      let newP = p.filter((t) => t.id !== id);
-      return newP;
-    });
-  };
-  const testTransaction = async (transaction: EnergyTransaction) => {
-    if (userID) {
-      console.log("Sending transaction");
-      let result = await transact(transaction);
-      if (result.status.type == "PENDING") {
-        setPendingTransactions((p) => [...p, result]);
-      } else {
-        console.error(" posting a transaction failed", result);
-      }
-    }
-  }
-  return userID == undefined ? null : (
+    console.log("PENDING TRANSACTIONS UPDATED!");
+  }, [pendingTransactions])
+  return  (
     <div className="stack padded:s-1" style={{ position: "fixed", top: 0, right: 0, zIndex: 5 }}>
-      <div className="horizontal-stack justify-end">
-        <div> test! </div>
-        <div
-          className="button"
-          onClick={() => testTransaction({ from: "CENTRAL_BANK", to: userID, timestamp: Date.now(), amount: 1 })}
-        >
-          gimme 1
-        </div>
-        <div
-          className="button"
-          onClick={() => testTransaction({ to: "CENTRAL_BANK", from: userID, timestamp: Date.now(), amount: 1 })}
-        >
-          send 1
-        </div>
-      </div>
+      <TransactionTester />
       {pendingTransactions.map((t, i) => (
         <PendingTransaction
-          key={`transaction-${i}`}
+          key={`transaction-${t.id}`}
           transaction={t}
-          onTransactionCompleted={removeTransactionFromPending}
         />
       ))}
     </div>
   );
 };
 
+const TransactionTester: React.FC = () => {
+  const postTransaction = useTransactionStore(useCallback((state) => state.postTransaction, []));
+  const userID = useUserStore(useCallback(state => state.currentUser?.uid ,[]));
+  return userID == undefined ? null : (
+    <div className="horizontal-stack justify-end lightFill">
+    <div> energy test </div>
+    <div
+      className="button"
+      onClick={() => postTransaction({ from: "CENTRAL_BANK", to: userID, timestamp: Date.now(), amount: 1 })}
+    >
+      gimme 1
+    </div>
+    <div
+      className="button"
+      onClick={() => postTransaction({ to: "CENTRAL_BANK", from: userID, timestamp: Date.now(), amount: 1 })}
+    >
+      send 1
+    </div>
+  </div>
+  )
+}
 const PendingTransaction: React.FC<{
   transaction: EnergyTransactionPosted;
-  onTransactionCompleted: (id: string) => void;
-}> = ({ transaction, onTransactionCompleted }) => {
-  const [status, setStatus] = useState<TransactionStatus>(transaction.status);
-
+}> = ({ transaction }) => {
+  
   const unsub = useRef<Unsubscribe>();
-
-  const handleStatusChange = useCallback(
+  const timeoutHandler = useRef<NodeJS.Timeout>();
+  const updateTransactionStatusLocal = useTransactionStore(useCallback(state => state.updateTransactionStatusLocal, []));
+  const transactionCallback = useTransactionStore(useCallback(state => state.transactionCallbacks[transaction.id], [transaction.id]));
+  const [hide, setHide] = useState<boolean>(false);
+  
+  const timeoutTransaction = useCallback( () => {
+    console.log("Transaction timed out");
+    updateTransactionStatusLocal(transaction.id, {type: "ERROR", code: "TIMEOUT"})
+  }
+  ,[transaction.id, updateTransactionStatusLocal])
+  const handleServerSideStatusChange = useCallback(
     (newStatus: TransactionStatus) => {
-      setStatus(newStatus);
+      console.log("Received update from server!", newStatus);
       if (newStatus.type == "SUCCESS") {
+        console.log("update was a success");
+        updateTransactionStatusLocal(transaction.id, newStatus);
+        timeoutHandler.current && clearTimeout(timeoutHandler.current);
         if (unsub.current) {
           unsub.current();
           unsub.current = undefined;
         }
-        setTimeout(() => onTransactionCompleted(transaction.id), 1000);
+        if (transactionCallback) {
+          transactionCallback(newStatus);
+        };
+        setTimeout(() => setHide(true), 1000);
       }
     },
-    [onTransactionCompleted, transaction.id]
+    [transaction.id, transactionCallback, updateTransactionStatusLocal]
   );
-
   useEffect(() => {
+    console.log("Transaction mounted");
     async function setupTransactionSync() {
-      unsub.current = await syncTransactionStatus(transaction.id, handleStatusChange);
+      unsub.current && unsub.current();
+      unsub.current = await syncTransactionStatus(transaction.id, handleServerSideStatusChange);
+
+      timeoutHandler.current && clearTimeout(timeoutHandler.current);
+      timeoutHandler.current = setTimeout(timeoutTransaction, 5 * 1000);
     }
     setupTransactionSync();
     return () => unsub.current && unsub.current();
-  }, [transaction.id, handleStatusChange]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <div className={classnames({ red: status.type !== "SUCCESS", green: status.type == "SUCCESS" })}>
+    <div
+      className={classnames({
+        red: transaction.status.type == "ERROR",
+        green: transaction.status.type == "SUCCESS",
+        fadeOut: transaction.status.type == "SUCCESS",
+        grayFill: transaction.status.type == "PENDING",
+        hide: hide
+      })}
+    >
       transaction: {transaction.amount} at {transaction.timestamp} <br />
-      status: {status.type}
+      status: {transaction.status.type} {transaction.status.code || ""}
     </div>
   );
 };
