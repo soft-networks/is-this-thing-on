@@ -2,7 +2,6 @@ import create from "zustand";
 import { performTransaction } from "../lib/firestore/";
 
 
-type TransactionCompleteCallback =  (status: TransactionStatus) => void
 interface TransactionStoreState {
   pendingTransactions: EnergyTransactionPosted[];
   transactionCompleteActionCallback: {[key: string] : TransactionCompleteCallback }

@@ -60,6 +60,8 @@ interface EnergyTransactionPosted extends EnergyTransaction {
   id: string
 }
 
+type TransactionCompleteCallback =  (status: TransactionStatus) => void
+
 type TransactionStatusTypes = "ERROR" | "SUCCESS" | "PENDING"
 interface TransactionStatus {
   type: TransactionStatusTypes ,

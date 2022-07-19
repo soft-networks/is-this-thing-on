@@ -19,7 +19,6 @@ export function syncInteractiveElements(
       let element = change.doc;
       if (change.type === "added") {
         const sanitizedElement =  sanitizeElementFromDB(change.doc.data());
-        console.log("eyyy element" , sanitizedElement);
         addInteractiveElement(element.id, sanitizedElement);
       }
       if (change.type === "modified") {

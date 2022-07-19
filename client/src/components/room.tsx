@@ -9,6 +9,7 @@ import { Unsubscribe } from "firebase/auth";
 import { useUserStore } from "../stores/userStore";
 import Chris from "./rooms.tsx/chris";
 import VideoPlayer from "./videoPlayer";
+import Molly from "./rooms.tsx/molly";
 
 const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
   const changeRoom = useRoomStore((state) => state.changeRoom);
@@ -41,6 +42,8 @@ const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
     switch (roomID) {
       case "chris":
         return <Chris />;
+      case "molly":
+        return <Molly/>;
       default:
         return (
           <div className="stack quarterWidth">

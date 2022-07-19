@@ -16,16 +16,17 @@ const Chris: React.FC = () => {
         }}
         className="noEvents absoluteOrigin"
       />
-      {/* <Chat
+      <Chat
         className="quarterWidth absoluteOrigin"
         style={
           {
             "--chatAuthorColor": "hotpink",
             "--chatContainerBackground": "rgba(0,0,0,0.6)",
             "--chatMessageColor": "var(--white)",
+            zIndex: 3,
           } as React.CSSProperties
         }
-      /> */}
+      />
       <Coins/>
     </div>
   );
