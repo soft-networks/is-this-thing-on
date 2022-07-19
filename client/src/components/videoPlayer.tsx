@@ -19,7 +19,8 @@ const VideoPlayer: React.FunctionComponent<RoomUIProps> = ({
         <ReactPlayer
           muted={true}
           controls={false}
-          url={true ? undefined : "https://www.youtube.com/watch?v=q55qNEKQLG0"}
+          playing={true}
+          url={"https://www.youtube.com/watch?v=q55qNEKQLG0"}
           width="100%"
           height="100%"
         />
