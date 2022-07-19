@@ -1,5 +1,5 @@
 import create from "zustand";
-import { performTransaction, verifyBalanceGreaterThanAmount } from "../lib/firestore";
+import { performTransaction } from "../lib/firestore";
 
 
 interface EnergyStoreState {

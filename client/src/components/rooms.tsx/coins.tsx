@@ -126,7 +126,7 @@ const ServerCoins: React.FC<{ roomID: string }> = ({ roomID }) => {
   );
 };
 
-const CoinRenderer = ({ className, pos }) => {
+const CoinRenderer = ({ className, pos}: {className: string, pos: Pos}) => {
   return ( pos ? 
     <div style={{ left: `${pos[0] * 100}%`, top: `${pos[1] * 100}%` }} className={className + " absoluteOrigin"}>
       c
