@@ -1,5 +1,3 @@
-import ReactPlayer from "react-player";
-import { generateStreamLink } from "../lib/server-api";
 import { useRoomStore } from "../stores/roomStore";
 
 const RoomInfoViewer: React.FunctionComponent = () => {

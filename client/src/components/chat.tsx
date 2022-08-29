@@ -20,7 +20,7 @@ export const Chat: React.FC<RoomUIProps> = ({className = DEFAULT_CLASSNAME, styl
   let unsubRef = useRef<Unsubscribe>();
   let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
 
-  const addChat = useCallback(
+  const chatWasAdded = useCallback(
     (cID, chat) => {
       setChatList((pc) => {
         let npc = { ...pc };
@@ -30,7 +30,7 @@ export const Chat: React.FC<RoomUIProps> = ({className = DEFAULT_CLASSNAME, styl
     },
     [setChatList]
   );
-  const removeChat = useCallback(
+  const chatWasRemoved = useCallback(
     (cID) =>
       setChatList((pc) => {
         let npc = { ...pc };
@@ -51,13 +51,13 @@ export const Chat: React.FC<RoomUIProps> = ({className = DEFAULT_CLASSNAME, styl
         setChatList({});
         unsubRef.current();
       }
-      unsubRef.current = await syncChat(roomID, addChat, removeChat);
+      unsubRef.current = await syncChat(roomID, chatWasAdded, chatWasRemoved);
     }
     setupDB();
     return () => {
       if (unsubRef.current) unsubRef.current();
     };
-  }, [addChat, removeChat, roomID]);
+  }, [chatWasAdded, chatWasRemoved, roomID]);
   return (
     <div className={className + " chat"} style={style as React.CSSProperties}>
       <ChatInput onSubmit={sendNewMessage} />

@@ -1,15 +1,15 @@
 import Layout from "../layouts/layout";
-import StreamNameGate from "./streamNameGate";
-import RoomInfoViewer from "./roomInfoViewer";
+import RoomInfoViewer from "./roomInfo";
 import { Chat } from "./chat";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useRoomStore } from "../stores/roomStore";
 import { setUserHeartbeat, syncRoomInfoDB } from "../lib/firestore";
 import { Unsubscribe } from "firebase/auth";
 import { useUserStore } from "../stores/userStore";
-import Chris from "./rooms.tsx/chris";
-import VideoPlayer from "./videoPlayer";
-import Molly from "./rooms.tsx/molly";
+import Chris from "./rooms/chris";
+import Stream from "./stream";
+import Molly from "./rooms/molly";
+import RoomGate from "./roomGate";
 
 const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
   const changeRoom = useRoomStore((state) => state.changeRoom);
@@ -48,7 +48,7 @@ const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
         return (
           <div className="stack quarterWidth">
             <RoomInfoViewer />
-            <VideoPlayer/>
+            <Stream/>
             <Chat />
           </div>
         );
@@ -57,7 +57,7 @@ const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
 
   return (
     <Layout>
-      <StreamNameGate id={roomID as string}>{RoomLayout}</StreamNameGate>
+      <RoomGate id={roomID as string}>{RoomLayout}</RoomGate>
     </Layout>
   );
 };

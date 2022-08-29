@@ -1,6 +1,6 @@
 import { doc, setDoc } from "firebase/firestore";
 import { presenceCollection } from "./locations";
-import { PRESENCE_LENGTH } from "../../../../common/streamData";
+import { PRESENCE_LENGTH } from "../../../../common/commonData";
 
 let activeTimeout: NodeJS.Timeout | undefined;
 async function setPresenceDB(userID: string, roomName: string) {

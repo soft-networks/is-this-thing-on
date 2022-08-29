@@ -4,7 +4,7 @@ import { syncEnergyAccount } from "../lib/firestore";
 import useEnergyStore from "../stores/energyStore";
 import { useUserStore } from "../stores/userStore";
 
-const EnergyDisplay : React.FunctionComponent = () => {
+const Energy : React.FunctionComponent = () => {
   const currentUserEnergy = useEnergyStore(state => state.currentUserEnergy)
   const setCurrentUserEnergy = useEnergyStore(useCallback((state) => state.setCurrentUserEnergy, []));
   const unsub = useRef<Unsubscribe>();
@@ -28,4 +28,4 @@ const EnergyDisplay : React.FunctionComponent = () => {
   )
 }
 
-export default EnergyDisplay;
+export default Energy;

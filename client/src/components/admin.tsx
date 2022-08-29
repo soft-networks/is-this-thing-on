@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import { getRoomsWhereUserISAdmin } from "../lib/firestore";
 import { getStreamKey, resetRoom } from "../lib/server-api";
 
-interface AdminViewProps {
+/**
+ * AdminView renders RoomAdminUI for each room that a user id admin for
+ */
+ interface AdminViewProps {
   uid: string;
 }
-
-const AdminView: React.FC<AdminViewProps> = ({ uid }) => {
+const Admin: React.FC<AdminViewProps> = ({ uid }) => {
   const [rooms, setRooms] = useState<undefined | RoomInfo[]>(undefined);
-
   useEffect(() => {
     async function getRooms() {
       let rooms = await getRoomsWhereUserISAdmin(uid);
@@ -21,7 +22,7 @@ const AdminView: React.FC<AdminViewProps> = ({ uid }) => {
   return rooms ? (
     <div className="stack">
       {rooms.map((r) => (
-        <RoomAdmin roomID={r.roomName} key={r.roomName + "-adminView"} uid={uid} />
+        <RoomAdminUI roomID={r.roomName} key={r.roomName + "-adminView"} uid={uid} />
       ))}
     </div>
   ) : (
@@ -29,7 +30,7 @@ const AdminView: React.FC<AdminViewProps> = ({ uid }) => {
   );
 };
 
-const RoomAdmin: React.FC<{ roomID: string; uid: string }> = ({ roomID, uid }) => {
+const RoomAdminUI: React.FC<{ roomID: string; uid: string }> = ({ roomID, uid }) => {
   let [streamKey, setStreamKey] = useState<string>();
 
   useEffect(() => {
@@ -58,4 +59,4 @@ const RoomAdmin: React.FC<{ roomID: string; uid: string }> = ({ roomID, uid }) =
   );
 };
 
-export default AdminView;
+export default Admin;

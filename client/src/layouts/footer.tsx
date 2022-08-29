@@ -1,8 +1,8 @@
 import Link from "next/link";
 import React from "react";
-import streamNames from "../../../common/streamData";
-import EnergyDisplay from "./energyDisplay";
-import UserDisplay from "./userDisplay";
+import roomNames from "../../../common/commonData";
+import Energy from "../components/energy";
+import Account from "../components/account";
 
 const Footer: React.FunctionComponent = () => {
   return (
@@ -12,14 +12,14 @@ const Footer: React.FunctionComponent = () => {
       </div>
       <div className="horizontal-stack fullWidth">
         <div className="horizontal-stack">
-        {streamNames.map((name) => (
+        {roomNames.map((name) => (
           <div key={`isto-status-${name}`}>
             <Link href={`/streams/${name}`}>{name}</Link>
           </div>
         ))}
         </div>
         <div className="align-end horizontal-stack">
-          <UserDisplay /><EnergyDisplay/>
+          <Account /><Energy/>
         </div>
       </div>
     </footer>

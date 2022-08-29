@@ -2,7 +2,7 @@
 import { doc, getDoc, setDoc, collection, query, where, getDocs, deleteDoc, updateDoc, deleteField, onSnapshot, orderBy, QueryDocumentSnapshot, DocumentData} from "firebase/firestore";
 import { firestore } from './firebase-init.js';
 import { logError, logInfo, logUpdate, logWarning } from './logger.js';
-import STREAM_NAMES, { PRESENCE_LENGTH } from "../../common/streamData.js";
+import ROOM_NAMES, { PRESENCE_LENGTH } from "../../common/commonData.js";
 import { PerformanceObserver } from "perf_hooks";
 
 //Helpers
@@ -112,7 +112,7 @@ export const resetMuxFirestoreRelationship = async (roomID: string) => {
 /**  */
 export async function managePresenceInDB() {
   const presenceRef = collection(firestore, "presence");
-  const currentlyOnline = await Promise.all(STREAM_NAMES.map(async (streamName) => {
+  const currentlyOnline = await Promise.all(ROOM_NAMES.map(async (streamName) => {
     let q = query(presenceRef, where("room_id", "==", streamName), where("timestamp", ">=",  Date.now() - (1.2  * PRESENCE_LENGTH) ));
     const querySnapshot = await getDocs(q);
     let numResults = querySnapshot.size;

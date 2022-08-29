@@ -1,16 +1,9 @@
-import STREAM_NAMES from "../../../common/streamData";
 export const SERVER_URL = "http://localhost:4000";
-
 export const STREAM_NAME_ENDPOINT = `${SERVER_URL}/stream-names`;
-
 export const STREAMS_ENDPOINT = `${SERVER_URL}/stream`;
-
 export const STREAMS_KEY_ENDPOINT = `${SERVER_URL}/stream-key`;
 
-
-
 export const generateStreamLink = (playbackID: string) => {
-  //https://stream.mux.com/{PLAYBACK_ID}.m3u8
   return `https://stream.mux.com/${playbackID}.m3u8`;
 };
 

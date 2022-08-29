@@ -4,7 +4,7 @@ import { createServer } from "http";
 import { getRoomIDFromMUXID, getStreamKey,  manageEnergyTxInDB,  managePresenceInDB,  resetMuxFirestoreRelationship,  transactionProcessor,  writeNewStreamToDB, writePlaybackIDToDB, writeStreamStateToDB } from "./firestore-api.js";
 
 import bodyParser from "body-parser"
-import STREAM_NAMES from "../../common/streamData.js";
+import STREAM_NAMES from "../../common/commonData.js";
 import { logError, logInfo, logUpdate } from "./logger.js";
 import { muxCreateStream, getPlaybackIDFromMuxData, muxAuthHelper } from "./muxAPI.js";
 

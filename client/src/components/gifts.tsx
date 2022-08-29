@@ -1,14 +1,12 @@
-import useTransactionStore from "../../stores/transactionStore";
+import useTransactionStore from "../stores/transactionStore";
 import { useCallback } from "react";
-import { useUserStore } from "../../stores/userStore";
-import { addInteractiveElement } from "../../lib/firestore";
-import { useRoomStore } from "../../stores/roomStore";
+import { useUserStore } from "../stores/userStore";
+import { addInteractiveElement } from "../lib/firestore";
+import { useRoomStore } from "../stores/roomStore";
 
 
 const Gifts : React.FC  = () => {
-
   const roomID = useRoomStore(useCallback(state => state.currentRoomID,[]));
-
   return (<div > <GiftChooser roomID={roomID} /> </div>)
 }
 

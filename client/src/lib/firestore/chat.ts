@@ -21,7 +21,6 @@ export async function syncChat(
       if (change.type === "modified") {
       }
       if (change.type === "removed") {
-        console.log("chat removed");
         removeChat(chat.id);
       }
     });

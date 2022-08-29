@@ -1,4 +1,4 @@
-import Footer from "../components/footer";
+import Footer from "./footer";
 import Transactions from "../components/transactions";
 
 const Layout: React.FunctionComponent = ({ children }) => (
