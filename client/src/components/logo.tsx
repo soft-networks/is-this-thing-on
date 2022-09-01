@@ -1,35 +1,36 @@
-import React, { useCallback, useMemo, useState } from "react";
-import ROOM_NAMES, {ROOM_COLORS} from "../../../common/commonData";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import ROOM_NAMES, { ROOM_COLORS } from "../../../common/commonData";
 
 const ELLIPSE_PATH =
   "M71.25,84.27L177.31,22.66,297.1,3.07l100.91,27.55,55.04,66.55-4.58,87.99-63.6,86.7-106.07,61.62-119.79,19.59-100.91-27.55L3.06,258.97l4.58-87.99,63.61-86.7Z";
 
-
 const Logo: React.FC = () => {
-
   const [currentStream, setCurrentStream] = useState<number>(0);
 
   const decCurrentStream = useCallback(() => {
-    setCurrentStream(c => c == 0 ? ROOM_NAMES.length - 1 : c - 1);
+    setCurrentStream((c) => (c == 0 ? ROOM_NAMES.length - 1 : c - 1));
   }, []);
   const incCurrentStream = useCallback(() => {
-    setCurrentStream(c => (c+1) % ROOM_NAMES.length);
+    setCurrentStream((c) => (c + 1) % ROOM_NAMES.length);
   }, []);
 
-  const nodes = useMemo(()=> {
+  const nodes = useMemo(() => {
     let nodeDom = [];
-    for (let i =0; i< ROOM_NAMES.length; i++) {
-      nodeDom.push( <LogoNode offset={i * 1} myColor={ROOM_COLORS[i]} showColor={currentStream == i} />)
+    let offsetStep = 1/ROOM_NAMES.length;
+    
+    for (let i = 0; i < ROOM_NAMES.length; i++) {
+      nodeDom.push(<LogoNode offset={offsetStep * i} myColor={ROOM_COLORS[i]} showColor={currentStream == i} key={`node-${i}`} />);
     }
     return nodeDom;
-  }, [currentStream])
+  }, [currentStream]);
 
   return (
     <div
       className="fullWidth stack:custom relative"
-      style={{ "--stackSpacing": "calc(-1 * var(--s-1))", marginTop: "calc(-1 * var(--s3))"  } as React.CSSProperties}
+      style={{ "--stackSpacing": "calc(-1 * var(--s-1))", marginTop: "calc(-1 * var(--s2))" } as React.CSSProperties}
     >
-      <svg xmlns="http://www.w3.org/2000/svg" width="50%" className="centerh" viewBox="-50 -50 550 450">
+      <span className="center:absolute grow-text padded" style={{marginTop: "calc(-1 * var(--s-2)"}}><i>THING</i></span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="50%" className="centerh higher" viewBox="-50 -50 550 450">
         <defs>
           <style>{`.stroke{stroke:#000;stroke-width:5px}`}</style>
         </defs>
@@ -53,20 +54,51 @@ const Logo: React.FC = () => {
   );
 };
 
-const LogoNode = ({ offset, myColor, showColor }: { offset: number , myColor: string, showColor: boolean}) => {
+interface LogoNodeProps {
+  offset: number;
+  myColor: string;
+  showColor: boolean;
+}
+const LogoNode: React.FC<LogoNodeProps> = ({ offset, myColor, showColor }) => {
+
+  const [pos, setMyPos] = useState<Pos>([0,0]);
+  const off = useRef<number>(offset);
+
+  const animate = useCallback(() => {
+    const pathRef = document.getElementById("ellipsePath") as unknown as SVGGeometryElement ;
+    if (!pathRef) {
+      return
+    }
+    const totalLength = pathRef.getTotalLength();
+    const myPos = pathRef.getPointAtLength(off.current * totalLength);
+    let rx = Math.round((myPos.x + Number.EPSILON) * 100) / 100
+    let ry = Math.round((myPos.y + Number.EPSILON) * 100) / 100
+    setMyPos([rx, ry]);
+
+    off.current = (off.current + 0.005) % 1;
+  },[off])
+
+  useEffect(() => {
+
+    let animateInterval = setInterval(animate, 100);
+    return () => clearInterval(animateInterval);
+  }, [animate]);
+
+
+
   return (
-    <rect
-      className="stroke"
-      width="40"
-      height="40"
-      fill={showColor ? myColor : "#fff"}
-      transform="rotate(45) translate(-20, -20)"
-      key={`node-${offset}`}
-    >
-      <animateMotion dur="100s" begin={`${offset * 2}s`} repeatCount="indefinite" >
+    <g key={`node-${offset}`} transform={`translate(${pos[0]} ${pos[1]}) `}>
+      <rect
+        className="stroke"
+        width="40"
+        height="40"
+        fill={showColor ? myColor : "#fff"}
+        transform={`rotate(45) translate(-20,-20)`}
+      ></rect>
+      {/* <animateMotion dur="100s" begin={`${offset * 2}s`} repeatCount="indefinite" rotate={"auto"}>
         <mpath xlinkHref="#ellipsePath" />
-      </animateMotion>
-    </rect>
+      </animateMotion> */}
+    </g>
   );
 };
 

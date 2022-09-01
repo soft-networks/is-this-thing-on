@@ -1,14 +1,18 @@
 import { NextPage } from "next";
+import Auth from "../components/auth";
 import Layout from "../layouts/layout";
 
 
-const Auth: NextPage = () => {
+
+const Account: NextPage = () => {
 
   return (
     <Layout>
-     <Auth/>
+      <Auth/>
     </Layout>
   );
 };
 
-export default Auth;
+export default Account;
+
+

@@ -77,7 +77,7 @@ body {
   letter-spacing: -1px;
 }
 
-a, a:visited {
+a, a:visited, .clickable {
   color: blue;
   text-decoration: underline;
 }
@@ -276,6 +276,9 @@ p {
 }
 .higher {
   z-index: 1
+}
+.highest {
+  z-index: 99;
 }
 
 
