@@ -526,6 +526,10 @@ a:hover,
   position: absolute; 
 }
 
+.homeLogoWidth {
+  width: 50%;
+}
+
 @media screen and (min-width: 1300px)  {
 
 
@@ -543,6 +547,9 @@ a:hover,
   .border, .border-bottom {
     border-width: 2px;
   }
+  .homeLogoWidth {
+    width: 75%;
+  }
 
   .halfWidth, .quarterWidth {
     max-inline-size: 90%;
@@ -554,6 +561,10 @@ a:hover,
 
   .stack\:s2>*+* {
     margin-top: var(--s1);
+  }
+
+  .mobileHide {
+    display: none;
   }
 
   .center div.dontOverflow {

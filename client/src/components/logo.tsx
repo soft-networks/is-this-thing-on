@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import ROOM_NAMES from "../../../common/commonData";
+
+const ROOM_NAMES = [
+  'molly', 'chris', 'semi anonymous friend', 'soft networks'
+];
 
 const ROOM_COLORS = [
   '#FFA4F0', '#DBF707', '#A379B8', '#DAF4FF'
@@ -33,11 +36,11 @@ const Logo: React.FC = () => {
       className="fullWidth stack:custom relative"
       style={{ "--stackSpacing": "calc(-1 * var(--s-1))", marginTop: "calc(-1 * var(--s2))" } as React.CSSProperties}
     >
-      <span className="center:absolute grow-text padded" style={{marginTop: "calc(-1 * var(--s-2)"}}><i>THING</i></span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="50%" className="centerh higher" viewBox="-50 -50 550 450">
+      <svg xmlns="http://www.w3.org/2000/svg" className="centerh higher homeLogoWidth" viewBox="-50 -50 550 450">
         <defs>
           <style>{`.stroke{stroke:#000;stroke-width:5px}`}</style>
         </defs>
+        <text  x={150} y={210} style={{fontSize: "55px", fontStyle: "italic"}}> THING </text>
         <path className="stroke" fill={"none"} d={ELLIPSE_PATH} id="ellipsePath" />
         {nodes}
       </svg>
@@ -46,7 +49,7 @@ const Logo: React.FC = () => {
           {" "}
           prev{" "}
         </div>
-        <div className="border padded:s-2" style={{ backgroundColor: ROOM_COLORS[currentStream] }}>
+        <div className="border padded:s-2 center-text" style={{ backgroundColor: ROOM_COLORS[currentStream] }}>
           {ROOM_NAMES[currentStream]} is offline{" "}
         </div>
         <div className="clickable border padded:s-2" onClick={incCurrentStream}>
