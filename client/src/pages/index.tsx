@@ -47,8 +47,7 @@ const Home: NextPage = () => {
         </div>
         <p className="grow-text wide">
           THING is a cooperative project by Molly Soda, Christopher Clary, soft networks, Semi Anonymous Friend and
-          you?. It is supported by the Next Web Grant and c/change. If you&apos;re still hoping to learn more, you can read
-          our grant application. Thanks for stopping by and see you soon!
+          you?. It is supported by the Next Web Grant and c/change. If you&apos;d like to learn even more, read an overview <a href="https://docs.google.com/document/d/1LYbNjOPkyk5NPZ__YnLu-rk9UJHF-KYRwWzL61K66x0/edit">here</a>. Thanks for stopping by and see you soon!
         </p>
       </main>
     </div>
