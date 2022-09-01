@@ -1,20 +1,58 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Layout from "../layouts/layout"
-
+import type { NextPage } from "next";
+import Head from "next/head";
+import Logo from "../components/logo";
+ 
 const Home: NextPage = () => {
   return (
-    <Layout>
-      <div >
-        <Head>
-          <title>is this thing on</title>
-        </Head>
-        <main>
-          this page eventually... wont exist (you only visit via a stream)
-        </main>
-      </div>
-    </Layout>
-  )
-}
+    <div className="padded">
+      <Head>
+        <title>is this thing on</title>
+      </Head>
+      <main className="stack">
+        <p className="grow-text wide">
+          <i className="contrastFill">is this THING on?</i> is a live streaming network for artists. It begins as a
+          centralized network on corporate clouds. It will then be slowly decentralized, across 3 seasons, guided by
+          public discussion and performance. Will THING resolve to a web 1.0 inspired web-ring, a blockchain streaming
+          platform, or something else entirely?
+        </p>
+        <div className="halfWidth centerh h1 stack:s-1">
+          <Logo/>
+          <p className="contrastFill border padded:s-2">
+            UPCOMING: Season 0 performances, exploring existing streaming platforms, on Sept 5, 7PM EST at this page.{" "}
+            <a
+              href="https://calendar.google.com/calendar/render?action=TEMPLATE&dates=20220906T000000Z%2F20220906T020000Z&details=&location=http%3A%2F%2Fthing.tube&text=Season%200%3A%20is%20this%20THING%20on%3F"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Set a reminder
+            </a>
+            .
+          </p>
+          <p className="contrastFill border padded:s-2">
+            UPCOMING: Workshop on live streaming and Season 1 co-designing on Oct 22, 2022 at Gray Area in San
+            Francisco.{" "}
+            <a href="https://grayarea.org/course/ga-festival-is-this-thing-on/" target="_blank" rel="noreferrer">
+              {" "}
+              Sign up
+            </a>
+            .
+          </p>
+          <p className="contrastFill border padded:s-2">
+            JOIN US: If you’re an artist or developer interested in performing, giving feedback, or helping develop the
+            platform,{" "}
+            <a href="mailto:hello@softnet.works" target="_blank" rel="noreferrer">
+              reach out.
+            </a>
+          </p>
+        </div>
+        <p className="grow-text wide">
+          THING is a cooperative project by Molly Soda, Christopher Clary, soft networks, Semi Anonymous Friend and
+          you?. It is supported by the Next Web Grant and c/change. If you&apos;re still hoping to learn more, you can read
+          our grant application. Thanks for stopping by and see you soon!
+        </p>
+      </main>
+    </div>
+  );
+};
 
-export default Home
+export default Home;

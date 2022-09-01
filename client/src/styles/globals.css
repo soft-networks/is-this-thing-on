@@ -1,3 +1,5 @@
+
+
 :root {
   --ratio: 1.4;
   --s0: 1em;
@@ -15,21 +17,31 @@
   --spacing: var(--s0);
   --stackSpacing: var(--s0);
 
-  --gray: gray;
+  --gray: rgb(175, 175, 175);
   --light: #ececec;
   --black: rgb(10, 38, 42);
   --white: white;
-  --contrast: pink;
+  --contrast: #FCFF54;
 
   --textWidth: 48ch; 
 
 }
-
-.red {
-  background: orangered;
+@font-face {
+  font-family: "Manifont Grotesk";
+  src: url("/fonts/ManifontGroteskBook-webfont.woff") format('woff');
 }
-.green {
-  background: greenyellow;
+
+@font-face {
+  font-family: "Manifont Grotesk";
+  src: url("/fonts/ManifontGroteskBookItalic-webfont.woff") format('woff');
+  font-style: italic;
+}
+
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 
@@ -38,11 +50,35 @@ html, #__next, body {
 }
 
 body {
-  font-family: monospace;
+  font-family: "Manifont Grotesk", monospace;
+
+}
+::selection {
+ background: var(--contrast)
+}
+
+
+
+.red {
+  background: orangered;
+}
+.green {
+  background: greenyellow;
+}
+
+.grow-text {
+  font-size: max(min(3.2vw, 56px), 32px); 
+  word-break:normal;
+  letter-spacing: -1px;
+  line-height: 1.05;
+}
+.h1 {
+  font-size: max(2.1vw, 24px);
+  letter-spacing: -1px;
 }
 
 a, a:visited {
-  color: inherit;
+  color: blue;
   text-decoration: underline;
 }
 
@@ -95,27 +131,7 @@ footer {
 
 
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
 
-html,
-body,
-main,
-#__next {
-  width: 100%;
-  height: 100%;
-}
-
-body {
-  background: var(--gray);
-  line-height: 1.2;
-  color: var(--light);
-  font-family: 'Share Tech Mono', monospace;
-
-}
 
 
 
@@ -153,6 +169,7 @@ p {
 .narrow {
   --textWidth: 32ch;
   width: var(--textWidth);
+  max-width: 100%;
 }
 
 .medium {
@@ -329,7 +346,7 @@ p {
   margin-block-start: var(--s2);
 }
 
-.horizontal-stack {
+.horizontal-stack , .horizontal-stack\:s-1,  .horizontal-stack\:s-2 {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -338,6 +355,12 @@ p {
 
 .horizontal-stack>*+* {
   margin-left: var(--s0);
+}
+.horizontal-stack\:s-1 >*+* {
+  margin-left: var(--s-1);
+}
+.horizontal-stack\:s-2 >*+* {
+  margin-left: var(--s-2);
 }
 
 .stack .align-end {
@@ -368,10 +391,10 @@ pre {
 
 
 .border {
-  border: 1px solid var(--gray);
+  border: 3px solid var(--black);
 }
 .border-bottom {
-  border-bottom: 1px solid var(--gray);
+  border-bottom: 3px solid var(--black);
 }
 
 
@@ -382,8 +405,7 @@ pre {
 
 a:hover,
 .button:hover {
-  background: var(--contrast);
-  color: var(--black);
+  color: blue;
   cursor: pointer;
 }
 
@@ -434,6 +456,7 @@ a:hover,
 
 .clickable {
   cursor: pointer;
+  text-decoration: underline;
 }
 
 
@@ -456,9 +479,11 @@ a:hover,
 
 .contrastFill {
   background: var(--contrast);
-  color: var(--gray)
 }
 
+.contrastFill::selection {
+  background: var(--gray);
+}
 
 .caption {
   font-size: var(--s-1);
@@ -510,6 +535,10 @@ a:hover,
 @media screen and (max-width: 600px) {
   ::root {
     --textWidth: 60vw;
+  }
+
+  .border, .border-bottom {
+    border-width: 2px;
   }
 
   .halfWidth, .quarterWidth {
