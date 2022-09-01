@@ -1,5 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import ROOM_NAMES, { ROOM_COLORS } from "../../../common/commonData";
+import ROOM_NAMES from "../../../common/commonData";
+
+const ROOM_COLORS = [
+  '#FFA4F0', '#DBF707', '#A379B8', '#DAF4FF'
+]
 
 const ELLIPSE_PATH =
   "M71.25,84.27L177.31,22.66,297.1,3.07l100.91,27.55,55.04,66.55-4.58,87.99-63.6,86.7-106.07,61.62-119.79,19.59-100.91-27.55L3.06,258.97l4.58-87.99,63.61-86.7Z";
