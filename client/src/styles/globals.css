@@ -480,7 +480,7 @@ a:hover,
   background: var(--black);
 }
 
-.contrastFill {
+.contrastFill, .contrastFill\:hover:hover {
   background: var(--contrast);
 }
 
