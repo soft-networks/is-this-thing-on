@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import ROOM_NAMES, { ONLINE_URLS } from "../../../common/commonData";
 import Logo from "../components/logo";
  
 const Home: NextPage = () => {
@@ -18,18 +19,9 @@ const Home: NextPage = () => {
         <div className="halfWidth centerh h1 stack:s-1">
           <Logo />
           <p className="contrastFill border padded:s-2">
-            UPCOMING: Live performances for Season 0, exploring existing streaming platforms, on labor day (Sept 5,
-            2022) at 7PM EST at this website.{" "}
-            <a
-              href="https://calendar.google.com/calendar/render?action=TEMPLATE&dates=20220906T000000Z%2F20220906T020000Z&details=&location=http%3A%2F%2Fthing.tube&text=Season%200%3A%20is%20this%20THING%20on%3F"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Set a reminder
-            </a>
-            .
+            LIVE: Season 0 is now live. Watch streams now, click the links above! 
           </p>
-          <p className="contrastFill border padded:s-2">
+          <p className=" border padded:s-2">
             UPCOMING: Co-design alternative futures for live streaming with us, at our workshop on Oct 22, 2022 at Gray
             Area in San Francisco.{" "}
             <a href="https://grayarea.org/course/ga-festival-is-this-thing-on/" target="_blank" rel="noreferrer">
@@ -38,7 +30,7 @@ const Home: NextPage = () => {
             </a>
             .
           </p>
-          <p className="contrastFill border padded:s-2">
+          <p className=" border padded:s-2">
             JOIN US: If you’re an artist or developer interested in performing, giving feedback, or helping develop the
             platform,{" "}
             <a href="mailto:hello@softnet.works" target="_blank" rel="noreferrer">
