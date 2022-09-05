@@ -11,7 +11,7 @@ const ROOM_COLORS = [
 const ONLINE_URLS = [
   "https://www.amazon.com/live/bloatedandalone4evr1993",
   "https://chaturbate.com/the_chrisy_show",
-  "https://youtu.be/nEqGc_gmGN4",
+  "https://www.youtube.com/watch?v=wvMc9QDKMuc&ab_channel=CHANNELWHATEVER",
   "https://www.twitch.tv/soft_networks",
 ];
 
