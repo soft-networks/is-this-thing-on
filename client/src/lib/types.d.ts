@@ -8,6 +8,7 @@ interface MagicPiece {
 
 type UserID = string; 
 
+
 interface ChatMessage {
   userID: UserID,
   timestamp: number,
@@ -26,12 +27,16 @@ interface StreamNames {
   names?: string[];
 }
 
-interface RoomInfo {
-  streamStatus: string,
+type STREAM_STATUS_TYPE = "active" | "disconnected"
+interface RoomLinkInfo {
+  roomName: string,
+  roomColor?: string,
+  streamStatus: STREAM_STATUS_TYPE
+}
+type RoomInfo = RoomLinkInfo & {
   streamOwner: string,
   streamPlaybackID: string
   numOnline: number,
-  roomName: string
 }
 
 type Pos = [number, number];

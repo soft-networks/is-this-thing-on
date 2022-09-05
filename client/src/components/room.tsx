@@ -10,6 +10,7 @@ import Chris from "./rooms/chris";
 import Stream from "./stream";
 import Molly from "./rooms/molly";
 import RoomGate from "./roomGate";
+import Footer from "../layouts/footer";
 
 const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
   const changeRoom = useRoomStore((state) => state.changeRoom);
@@ -47,6 +48,7 @@ const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
       default:
         return (
           <div className="stack quarterWidth">
+            <Footer/>
             <RoomInfoViewer />
             <Stream/>
             <Chat />

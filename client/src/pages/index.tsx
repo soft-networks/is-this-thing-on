@@ -1,9 +1,23 @@
 import type { NextPage } from "next";
+import { useCallback, useEffect } from "react";
 import Head from "next/head";
 import ROOM_NAMES, { ONLINE_URLS } from "../../../common/commonData";
 import Logo from "../components/logo";
+import useRingStore from "../stores/ringStore";
  
 const Home: NextPage = () => {
+
+  const links = useRingStore(useCallback(s => s.links, []));;
+  const updateStatus = useRingStore(useCallback(s => s.updateStatus, []));
+
+  useEffect(()=> {
+
+    //Season 0 is live right now! 
+    Object.keys(links).map( name => updateStatus(name, "active"));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <div className="padded">
       <Head>
@@ -17,7 +31,7 @@ const Home: NextPage = () => {
           streaming platform, or something else entirely?
         </p>
         <div className="halfWidth centerh h1 stack:s-1">
-          <Logo />
+          {links ? <Logo linkList={Object.values(links)}/> : "huh" }
           <p className="contrastFill border padded:s-2">
             LIVE: Season 0 is now live. Watch streams now for{" "}
             {ROOM_NAMES.map((name, index) => (

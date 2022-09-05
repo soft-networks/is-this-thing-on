@@ -7,9 +7,11 @@ const ELLIPSE_PATH =
 const ANIM_LENGTH = 100;
 const ANIM_OFFSET = ANIM_LENGTH/ ROOM_NAMES.length;
 
+interface LogoProps {
+  linkList: RoomLinkInfo[];
+}
 
-
-const Logo: React.FC = () => {
+const Logo: React.FC<LogoProps> = ({linkList}) => {
   const [currentStream, setCurrentStream] = useState<number>(0);
   const animInterval = useRef<NodeJS.Timeout>();
   const incCurrentStream = useCallback(() => {
@@ -54,9 +56,9 @@ const Logo: React.FC = () => {
           prev
         </div>
         <RoomLink
-          roomName={ROOM_NAMES[currentStream]}
-          roomColor={ROOM_COLORS[currentStream]}
-          roomLink={ONLINE_URLS[currentStream]}
+          roomName={linkList[currentStream].roomName}
+          roomColor={linkList[currentStream].roomColor || "gray"}
+          roomLink={linkList[currentStream].streamStatus == "active" ? ONLINE_URLS[currentStream] : undefined}
         />
         <div className="clickable border padded:s-2 contrastFill:hover" onClick={incCurrentStream}>
           next
