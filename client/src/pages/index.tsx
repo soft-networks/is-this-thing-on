@@ -19,7 +19,16 @@ const Home: NextPage = () => {
         <div className="halfWidth centerh h1 stack:s-1">
           <Logo />
           <p className="contrastFill border padded:s-2">
-            LIVE: Season 0 is now live. Watch streams now, click the links above! 
+            LIVE: Season 0 is now live. Watch streams now for{" "}
+            {ROOM_NAMES.map((name, index) => (
+              <span key={`stream-${name}`}>
+              {index == ROOM_NAMES.length - 1 ? " and " : " "}
+              <a href={ONLINE_URLS[index]} target="_blank" rel="noreferrer" >               
+                {name}
+              </a>
+              {index == ROOM_NAMES.length - 1 ? "." : ","}
+              </span>
+            ))}
           </p>
           <p className=" border padded:s-2">
             UPCOMING: Co-design alternative futures for live streaming with us, at our workshop on Oct 22, 2022 at Gray
