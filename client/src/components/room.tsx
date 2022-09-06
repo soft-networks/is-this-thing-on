@@ -48,7 +48,6 @@ const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
       default:
         return (
           <div className="stack quarterWidth">
-            <Footer/>
             <RoomInfoViewer />
             <Stream/>
             <Chat />

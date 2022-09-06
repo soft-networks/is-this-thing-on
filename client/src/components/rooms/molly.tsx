@@ -4,6 +4,7 @@ import RoomInfoViewer from "../roomInfo";
 import Stream from "../stream";
 import Coins from "../coins";
 import Gifts from "../gifts";
+import Footer from "../../layouts/footer";
 
 
 const Molly: React.FC = () => {

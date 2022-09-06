@@ -9,6 +9,7 @@ const ANIM_OFFSET = ANIM_LENGTH/ ROOM_NAMES.length;
 
 interface LogoProps {
   linkList: RoomLinkInfo[];
+  collapsed?: boolean
 }
 
 const Logo: React.FC<LogoProps> = ({linkList}) => {
@@ -55,7 +56,7 @@ const Logo: React.FC<LogoProps> = ({linkList}) => {
         <div className="clickable border padded:s-2 contrastFill:hover" onClick={decCurrentStream}>
           prev
         </div>
-        <RoomLink
+        <NodeLink
           roomName={linkList[currentStream].roomName}
           roomColor={linkList[currentStream].roomColor || "gray"}
           roomLink={linkList[currentStream].streamStatus == "active" ? ONLINE_URLS[currentStream] : undefined}
@@ -68,6 +69,9 @@ const Logo: React.FC<LogoProps> = ({linkList}) => {
   );
 };
 
+const LogoSVG = () => {
+  
+}
 
 interface LogoNodeProps {
   offset: number;
@@ -91,8 +95,7 @@ const LogoNode: React.FC<LogoNodeProps> = ({ offset, myColor, showColor }) => {
   );
 };
 
-const RoomLink = ({roomLink, roomName, roomColor} : {roomLink?: string, roomName: string, roomColor: string}) => {
-
+const NodeLink = ({roomLink, roomName, roomColor} : {roomLink?: string, roomName: string, roomColor: string}) => {
   return (
     <div className="border padded:s-2 center-text" style={{ backgroundColor: roomColor }}>
       {roomLink ? (

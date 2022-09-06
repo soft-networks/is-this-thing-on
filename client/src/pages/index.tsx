@@ -8,15 +8,6 @@ import useRingStore from "../stores/ringStore";
 const Home: NextPage = () => {
 
   const links = useRingStore(useCallback(s => s.links, []));;
-  const updateStatus = useRingStore(useCallback(s => s.updateStatus, []));
-
-  useEffect(()=> {
-
-    //Season 0 is live right now! 
-    Object.keys(links).map( name => updateStatus(name, "active"));
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return (
     <div className="padded">
@@ -31,8 +22,8 @@ const Home: NextPage = () => {
           streaming platform, or something else entirely?
         </p>
         <div className="halfWidth centerh h1 stack:s-1">
-          {links ? <Logo linkList={Object.values(links)}/> : "huh" }
-          <p className="contrastFill border padded:s-2">
+          {links ? <Logo linkList={Object.values(links)}/> : "" }
+          {/* <p className="contrastFill border padded:s-2">
             LIVE: Season 0 is now live. Watch streams now for{" "}
             {ROOM_NAMES.map((name, index) => (
               <span key={`stream-${name}`}>
@@ -43,8 +34,8 @@ const Home: NextPage = () => {
               {index == ROOM_NAMES.length - 1 ? "." : ","}
               </span>
             ))}
-          </p>
-          <p className=" border padded:s-2">
+          </p> */}
+          <p className="contrastFill border padded:s-2">
             UPCOMING: Co-design alternative futures for live streaming with us, at our workshop on Oct 22, 2022 at Gray
             Area in San Francisco.{" "}
             <a href="https://grayarea.org/course/ga-festival-is-this-thing-on/" target="_blank" rel="noreferrer">
@@ -53,7 +44,7 @@ const Home: NextPage = () => {
             </a>
             .
           </p>
-          <p className=" border padded:s-2">
+          <p className="contrastFill border padded:s-2">
             JOIN US: If you’re an artist or developer interested in performing, giving feedback, or helping develop the
             platform,{" "}
             <a href="mailto:hello@softnet.works" target="_blank" rel="noreferrer">
