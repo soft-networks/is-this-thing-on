@@ -1,4 +1,6 @@
-import { getDoc, getDocs, onSnapshot, query, where } from "firebase/firestore";
+
+import { getDoc, getDocs, onSnapshot, query, Unsubscribe, where } from "firebase/firestore";
+import { ROOM_COLORS } from "../../../../common/commonData";
 import { sanitizeRoomInfo, validateRoomName } from "./converters";
 import { roomDoc, roomsCollection } from "./locations";
 
@@ -31,4 +33,33 @@ export async function getRoomAdmins(roomID: string) {
   let roomDocument = await getDoc(roomRef);
   let data = roomDocument.data();
   return data && data["admins"] ? data["admins"] : [];
+}
+
+export async function syncWebRing(initRing: (ring: WebRing) => void, linkUpdate: (roomName: string, update: RoomLinkInfo) => void) {
+
+  let collectionRef = roomsCollection();
+  let docs = await getDocs(collectionRef);
+  const unsubUpdates: Unsubscribe[] = [];
+  const ring : WebRing= {};
+
+  docs.forEach((doc) => {
+    let data = doc.data();
+    
+    ring[doc.id] = {
+      roomName: doc.id,
+      roomColor: "white",
+      streamStatus: "disconnected"
+    }
+    let unsub = onSnapshot(doc.ref, (doc) => {
+      let data = doc.data();
+      if (data) {
+        let sanitized = sanitizeRoomInfo(data, data.id);
+        linkUpdate(doc.id, sanitized);
+      }
+    })
+    unsubUpdates.push(unsub);
+  })
+  initRing(ring);
+  return unsubUpdates;
+  
 }

@@ -1,4 +1,3 @@
-import Layout from "../layouts/layout";
 import RoomInfoViewer from "./roomInfo";
 import { Chat } from "./chat";
 import { useCallback, useEffect, useMemo, useRef } from "react";
@@ -10,12 +9,13 @@ import Chris from "./rooms/chris";
 import Stream from "./stream";
 import Molly from "./rooms/molly";
 import RoomGate from "./roomGate";
-import Footer from "../layouts/footer";
+import useRingStore from "../stores/ringStore";
 
 const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
   const changeRoom = useRoomStore((state) => state.changeRoom);
   const unsubscribeFromRoomInfo = useRef<Unsubscribe>();
   const currentUser = useUserStore(useCallback((state) => state.currentUser, []));
+  const links = useRingStore(useCallback((state) => state.links, []));
 
   useEffect(() => {
     //TODO: This is slightly innefficient, doesnt have to detach to reattach
@@ -26,30 +26,30 @@ const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
   useEffect(() => {
     //TODO: Actual edge cases here
     async function subscribeToRoomInfo() {
-      if (roomID && typeof roomID === "string") {
+      if (roomID !== undefined) {
         if (unsubscribeFromRoomInfo.current) {
           unsubscribeFromRoomInfo.current();
         }
-        unsubscribeFromRoomInfo.current = await syncRoomInfoDB(roomID, (r) => changeRoom(roomID, r));
+        unsubscribeFromRoomInfo.current = await syncRoomInfoDB(roomID, (r) => changeRoom(roomID as string, r));
       }
     }
     subscribeToRoomInfo();
     return () => {
       if (unsubscribeFromRoomInfo.current) unsubscribeFromRoomInfo.current();
     };
-  }, [changeRoom, roomID]);
+  }, [changeRoom, links, roomID]);
 
-  const RoomLayout = useMemo(() => {
+  const RoomLayoutSeason1 = useMemo(() => {
     switch (roomID) {
       case "chris":
         return <Chris />;
       case "molly":
-        return <Molly/>;
+        return <Molly />;
       default:
         return (
           <div className="stack quarterWidth">
             <RoomInfoViewer />
-            <Stream/>
+            <Stream />
             <Chat />
           </div>
         );
@@ -57,9 +57,21 @@ const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
   }, [roomID]);
 
   return (
-    <Layout>
-      <RoomGate id={roomID as string}>{RoomLayout}</RoomGate>
-    </Layout>
+    <RoomGate id={roomID as string}>
+      <SeasonZero />
+    </RoomGate>
+  );
+};
+
+const SeasonZero: React.FC = () => {
+  const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
+
+  return roomInfo?.streamStatus == "active" ? (
+    <div className="fullBleed">
+      <iframe className="fullBleed" src={roomInfo?.streamPlaybackID || "http://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&origin=http://example.com"} />{" "}
+    </div>
+  ) : (
+    <div> offline </div>
   );
 };
 

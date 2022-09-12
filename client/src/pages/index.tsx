@@ -4,10 +4,10 @@ import Head from "next/head";
 import ROOM_NAMES, { ONLINE_URLS } from "../../../common/commonData";
 import Logo from "../components/logo";
 import useRingStore from "../stores/ringStore";
+import Ring from "../components/ring";
  
 const Home: NextPage = () => {
 
-  const links = useRingStore(useCallback(s => s.links, []));;
 
   return (
     <div className="padded">
@@ -22,19 +22,7 @@ const Home: NextPage = () => {
           streaming platform, or something else entirely?
         </p>
         <div className="halfWidth centerh h1 stack:s-1">
-          {links ? <Logo linkList={Object.values(links)}/> : "" }
-          {/* <p className="contrastFill border padded:s-2">
-            LIVE: Season 0 is now live. Watch streams now for{" "}
-            {ROOM_NAMES.map((name, index) => (
-              <span key={`stream-${name}`}>
-              {index == ROOM_NAMES.length - 1 ? " and " : " "}
-              <a href={ONLINE_URLS[index]} target="_blank" rel="noreferrer" >               
-                {name}
-              </a>
-              {index == ROOM_NAMES.length - 1 ? "." : ","}
-              </span>
-            ))}
-          </p> */}
+          <Ring/>
           <p className="contrastFill border padded:s-2">
             UPCOMING: Co-design alternative futures for live streaming with us, at our workshop on Oct 22, 2022 at Gray
             Area in San Francisco.{" "}

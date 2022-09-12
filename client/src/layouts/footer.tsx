@@ -2,6 +2,7 @@ import useRingStore from "../stores/ringStore"
 import Logo from "../components/logo"
 
 import { useCallback } from "react";
+import Ring from "../components/ring";
 
 
 const Footer: React.FC = () => {
@@ -10,7 +11,7 @@ const Footer: React.FC = () => {
     return (
       <div className="fullWidth align-end padded" style={{bottom: 0, left: 0}}>
         <div className="centerh" style={{width: "30%"}}>
-          <Logo linkList={Object.values(links)} />  
+          <Ring collapsed/>
         </div>
       </div>
     )

@@ -1,41 +1,77 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import ROOM_NAMES, {ONLINE_URLS, ROOM_COLORS} from "../../../common/commonData";
+
+import { roomIDToHREF } from "../stores/ringStore";
 
 const ELLIPSE_PATH =
   "M71.25,84.27L177.31,22.66,297.1,3.07l100.91,27.55,55.04,66.55-4.58,87.99-63.6,86.7-106.07,61.62-119.79,19.59-100.91-27.55L3.06,258.97l4.58-87.99,63.61-86.7Z";
 
 const ANIM_LENGTH = 100;
-const ANIM_OFFSET = ANIM_LENGTH/ ROOM_NAMES.length;
+
 
 interface LogoProps {
-  linkList: RoomLinkInfo[];
-  collapsed?: boolean
+  ring: WebRing;
+  collapsed?: boolean;
 }
 
-const Logo: React.FC<LogoProps> = ({linkList}) => {
+const Logo: React.FC<LogoProps> = ({ ring, collapsed }) => {
+  const ringKeys = Object.keys(ring);
+  const numKeys = ringKeys.length;
+
+  const ANIM_OFFSET = ANIM_LENGTH / ringKeys.length;
   const [currentStream, setCurrentStream] = useState<number>(0);
   const animInterval = useRef<NodeJS.Timeout>();
   const incCurrentStream = useCallback(() => {
-    setCurrentStream((c) => (c + 1) % ROOM_NAMES.length);
-    animInterval.current && clearTimeout(animInterval.current)
+    setCurrentStream((c) => (c + 1) % numKeys);
+    animInterval.current && clearTimeout(animInterval.current);
     animInterval.current = setTimeout(incCurrentStream, 5000);
-  }, []);
+  }, [numKeys]);
   const decCurrentStream = useCallback(() => {
-    setCurrentStream((c) => (c == 0 ? ROOM_NAMES.length - 1 : c - 1));
-    animInterval.current && clearTimeout(animInterval.current)
+    setCurrentStream((c) => (c == 0 ? numKeys - 1 : c - 1));
+    animInterval.current && clearTimeout(animInterval.current);
     animInterval.current = setTimeout(incCurrentStream, 5000);
-  }, [incCurrentStream]);
+  }, [incCurrentStream, numKeys]);
   useEffect(() => {
     animInterval.current = setTimeout(incCurrentStream, 5000);
-    return () => animInterval.current && clearTimeout(animInterval.current)
-  }, [incCurrentStream])
+    return () => animInterval.current && clearTimeout(animInterval.current);
+  }, [incCurrentStream]);
   const nodes = useMemo(() => {
     let nodeDom = [];
-    for (let i = 0; i < ROOM_NAMES.length; i++) {
-      nodeDom.push(<LogoNode offset={i} myColor={ROOM_COLORS[i]} showColor={currentStream == i} key={`node-${i}`} />);
+    let keys = Object.keys(ring);
+    for (let i = 0; i < numKeys; i++) {
+      let iLink = ring[keys[i]];
+      nodeDom.push(
+        <LogoNode
+          offset={i}
+          myColor={iLink.roomColor || "gray"}
+          showColor={currentStream == i || iLink.streamStatus == "active"}
+          key={`node-${i}`}
+          ANIM_OFFSET={ANIM_OFFSET}
+        />
+      );
     }
     return nodeDom;
-  }, [currentStream]);
+  }, [ANIM_OFFSET, currentStream, numKeys, ring]);
+
+  const nodeNav = useMemo(() => {
+    let activeKey = Object.keys(ring)[currentStream];
+    let link = ring[activeKey];
+    if (!link) return <div className="centerh"> loading... </div>;
+    return (
+      <div className="horizontal-stack:s-1 centerh">
+        <div className="clickable border padded:s-2 contrastFill:hover" onClick={decCurrentStream}>
+          prev
+        </div>
+        <NodeLink
+          roomName={link.roomName}
+          roomColor={link.roomColor || "gray"}
+          roomLink={link.streamStatus == "active" ? roomIDToHREF(activeKey) : undefined}
+        />
+        <div className="clickable border padded:s-2 contrastFill:hover" onClick={incCurrentStream}>
+          next
+        </div>
+      </div>
+    );
+  }, [currentStream, decCurrentStream, incCurrentStream, ring]);
 
   return (
     <div
@@ -52,35 +88,22 @@ const Logo: React.FC<LogoProps> = ({linkList}) => {
         <path className="stroke" fill={"none"} d={ELLIPSE_PATH} id="ellipsePath" />
         {nodes}
       </svg>
-      <div className="horizontal-stack:s-1 centerh">
-        <div className="clickable border padded:s-2 contrastFill:hover" onClick={decCurrentStream}>
-          prev
-        </div>
-        <NodeLink
-          roomName={linkList[currentStream].roomName}
-          roomColor={linkList[currentStream].roomColor || "gray"}
-          roomLink={linkList[currentStream].streamStatus == "active" ? ONLINE_URLS[currentStream] : undefined}
-        />
-        <div className="clickable border padded:s-2 contrastFill:hover" onClick={incCurrentStream}>
-          next
-        </div>
-      </div>
+      {nodeNav}
     </div>
   );
 };
 
-const LogoSVG = () => {
-  
-}
+const LogoSVG = () => {};
 
 interface LogoNodeProps {
   offset: number;
   myColor: string;
   showColor: boolean;
+  ANIM_OFFSET: number;
 }
-const LogoNode: React.FC<LogoNodeProps> = ({ offset, myColor, showColor }) => {
+const LogoNode: React.FC<LogoNodeProps> = ({ offset, myColor, showColor, ANIM_OFFSET }) => {
   return (
-    <g key={`node-${offset}`} >
+    <g key={`node-${offset}`}>
       <rect
         className="stroke"
         width="40"
@@ -95,7 +118,7 @@ const LogoNode: React.FC<LogoNodeProps> = ({ offset, myColor, showColor }) => {
   );
 };
 
-const NodeLink = ({roomLink, roomName, roomColor} : {roomLink?: string, roomName: string, roomColor: string}) => {
+const NodeLink = ({ roomLink, roomName, roomColor }: { roomLink?: string; roomName: string; roomColor: string }) => {
   return (
     <div className="border padded:s-2 center-text" style={{ backgroundColor: roomColor }}>
       {roomLink ? (
@@ -107,7 +130,6 @@ const NodeLink = ({roomLink, roomName, roomColor} : {roomLink?: string, roomName
       )}
     </div>
   );
-}
+};
 
 export default Logo;
-

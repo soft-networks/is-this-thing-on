@@ -33,11 +33,15 @@ interface RoomLinkInfo {
   roomColor?: string,
   streamStatus: STREAM_STATUS_TYPE
 }
+type WebRing = {[key:string] : RoomLinkInfo};
+
 type RoomInfo = RoomLinkInfo & {
   streamOwner: string,
   streamPlaybackID: string
   numOnline: number,
 }
+
+
 
 type Pos = [number, number];
 

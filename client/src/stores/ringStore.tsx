@@ -1,12 +1,14 @@
+import slugify from "slugify";
 import create from "zustand";
 import ROOM_NAMES, { ONLINE_URLS, ROOM_COLORS } from "../../../common/commonData";
 
 interface RingState {
-  links: { [key: string]: RoomLinkInfo };
-  updateStatus: (roomName: string, status: STREAM_STATUS_TYPE) => void;
+  links: WebRing;
+  updateStatus: (roomName: string, update: RoomLinkInfo) => void;
+  initializeRing: (ring: WebRing) => void;
 }
 
-const generateInitialNodes = () => {
+const generatePlaceholderLinks = () => {
   let roomDict: { [key: string]: RoomLinkInfo } = {};
   for (let i = 0; i < ROOM_NAMES.length; i++) {
     roomDict[ROOM_NAMES[i]] = {
@@ -15,18 +17,25 @@ const generateInitialNodes = () => {
       streamStatus: "disconnected",
     };
   }
+  console.log()
   return roomDict;
 };
 
 const useRingStore = create<RingState>((set) => ({
-  links: generateInitialNodes(),
-  updateStatus: (roomName, status) => {
+  links: {},
+  initializeRing: (ring) => { set({links: ring})},
+  updateStatus: (roomName, updatedLink) => {
     set((s) => {
       let ns = { ...s.links };
-      ns[roomName] = { ...ns[roomName], streamStatus: status };
+      ns[roomName] = updatedLink;
       return { links: ns };
     });
   },
 }));
+
+export const roomIDToHREF = (id: string) => {
+  return `/streams/${slugify(id)}`;
+}
+
 
 export default useRingStore;
