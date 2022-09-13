@@ -1,9 +1,5 @@
 import type { NextPage } from "next";
-import { useCallback, useEffect } from "react";
 import Head from "next/head";
-import ROOM_NAMES, { ONLINE_URLS } from "../../../common/commonData";
-import Logo from "../components/logo";
-import useRingStore from "../stores/ringStore";
 import Ring from "../components/ring";
  
 const Home: NextPage = () => {

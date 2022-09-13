@@ -21,7 +21,7 @@ const Ring: React.FC<RingProps> = ({collapsed}) => {
     setupSync();
     return () => unsubs.current && unsubs.current.forEach((u)=> u());
   }, [initializeRing, updateStatus]); 
-  return links ? <Logo ring={links} collapsed/> : <div> no links </div>
+  return links ? <Logo ring={links} collapsed={collapsed}/> : <div> no links </div>
 };
 
 

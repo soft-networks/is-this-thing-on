@@ -1,6 +1,5 @@
 
 import { getDoc, getDocs, onSnapshot, query, Unsubscribe, where } from "firebase/firestore";
-import { ROOM_COLORS } from "../../../../common/commonData";
 import { sanitizeRoomInfo, validateRoomName } from "./converters";
 import { roomDoc, roomsCollection } from "./locations";
 

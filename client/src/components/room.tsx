@@ -66,12 +66,24 @@ const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
 const SeasonZero: React.FC = () => {
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
 
-  return roomInfo?.streamStatus == "active" ? (
-    <div className="fullBleed">
-      <iframe className="fullBleed" src={roomInfo?.streamPlaybackID || "http://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&origin=http://example.com"} />{" "}
-    </div>
+  return roomInfo ? (
+    roomInfo.streamStatus == "active" ? (
+      <div className="fullBleed">
+        <iframe
+          className="fullBleed"
+          src={
+            roomInfo?.streamPlaybackID ||
+            "http://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&origin=http://example.com"
+          }
+        />{" "}
+      </div>
+    ) : (
+      <div className="fullBleed">
+        <div className="center:absolute higher"> ... </div>
+      </div>
+    )
   ) : (
-    <div> offline </div>
+    <div> </div>
   );
 };
 

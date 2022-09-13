@@ -30,7 +30,7 @@ interface StreamNames {
 type STREAM_STATUS_TYPE = "active" | "disconnected"
 interface RoomLinkInfo {
   roomName: string,
-  roomColor?: string,
+  roomColor: string,
   streamStatus: STREAM_STATUS_TYPE
 }
 type WebRing = {[key:string] : RoomLinkInfo};

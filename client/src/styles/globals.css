@@ -57,6 +57,19 @@ body {
  background: var(--contrast)
 }
 
+.selected {
+  border-color: blue !important;
+}
+.stroke {
+  stroke: black;
+  stroke-width: 5px;
+}
+.stroke.selected {
+  stroke: blue;
+}
+.stroke.clickable:hover {
+  stroke:blue;
+}
 
 
 .red {
@@ -222,6 +235,9 @@ p {
 .hide {
   display: none;
 }
+.overflowVisible {
+  overflow: visible;
+}
 
 .centerh {
   max-inline-size: var(--textWidth);
@@ -272,7 +288,10 @@ p {
   
   transform: translate(-50%, -50%);
   z-index: -1;
-  overflow: hidden;
+}
+.align-end\:absolute {
+  bottom: 0;
+  top: unset;
 }
 .higher {
   z-index: 1
@@ -458,6 +477,7 @@ a:hover,
 }
 
 .clickable {
+  background: var(--light);
   cursor: pointer;
   text-decoration: underline;
 }
@@ -528,6 +548,27 @@ a:hover,
 
 .homeLogoWidth {
   width: 50%;
+}
+.footer {
+  margin-bottom: 32px;
+}
+.footer .homeLogoWidth {
+  width: auto;
+  height: 96px;
+}
+.footer .stroke {
+  stroke-width: 10px;
+  filter: drop-shadow( 0px 0px 20px var(--light));
+}
+.footer .border {
+  border-width: 2px;
+}
+.footer .clickable {
+  background: var(--light);
+  box-shadow: 0px 0px 5px var(--light);
+}
+.footer .clickable:hover{
+  background: var(--contrast);
 }
 
 @media screen and (min-width: 1300px)  {
