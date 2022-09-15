@@ -10,12 +10,13 @@ import Stream from "./stream";
 import Molly from "./rooms/molly";
 import RoomGate from "./roomGate";
 import useRingStore from "../stores/ringStore";
+import useStickerCDNStore from "../stores/stickerStore";
 
 const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
-  const changeRoom = useRoomStore((state) => state.changeRoom);
+  const changeRoom = useRoomStore(useCallback((state) => state.changeRoom, []));
+  const changeRoomStickers = useStickerCDNStore(useCallback((state) => state.changeRoomStickers, []));
   const unsubscribeFromRoomInfo = useRef<Unsubscribe>();
   const currentUser = useUserStore(useCallback((state) => state.currentUser, []));
-  const links = useRingStore(useCallback((state) => state.links, []));
 
   useEffect(() => {
     //TODO: This is slightly innefficient, doesnt have to detach to reattach
@@ -31,38 +32,39 @@ const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
           unsubscribeFromRoomInfo.current();
         }
         unsubscribeFromRoomInfo.current = await syncRoomInfoDB(roomID, (r) => changeRoom(roomID as string, r));
+        changeRoomStickers(roomID);
       }
     }
     subscribeToRoomInfo();
     return () => {
       if (unsubscribeFromRoomInfo.current) unsubscribeFromRoomInfo.current();
     };
-  }, [changeRoom, links, roomID]);
+  }, [changeRoom, changeRoomStickers, roomID]);
 
-  const RoomLayoutSeason1 = useMemo(() => {
-    switch (roomID) {
-      case "chris":
-        return <Chris />;
-      case "molly":
-        return <Molly />;
-      default:
-        return (
-          <div className="stack quarterWidth">
-            <RoomInfoViewer />
-            <Stream />
-            <Chat />
-          </div>
-        );
-    }
-  }, [roomID]);
 
   return (
     <RoomGate id={roomID as string}>
-      <SeasonZero />
+      <SeasonOne roomID={roomID}/>
     </RoomGate>
   );
 };
 
+const SeasonOne = ({roomID}: {roomID: string}) => {
+  switch (roomID) {
+    case "chris":
+      return <Chris />;
+    case "molly":
+      return <Molly />;
+    default:
+      return (
+        <div className="stack quarterWidth">
+          <RoomInfoViewer />
+          <Stream />
+          <Chat />
+        </div>
+      );
+  }
+}
 const SeasonZero: React.FC = () => {
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
 

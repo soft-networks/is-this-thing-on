@@ -1,7 +1,7 @@
 import React from "react";
 import { Chat } from "../chat";
 import Stream from "../stream";
-import Coins from "../coins";
+import Stickers from "../stickers"; 
 
 
 const Chris: React.FC = () => {
@@ -27,7 +27,7 @@ const Chris: React.FC = () => {
           } as React.CSSProperties
         }
       />
-      <Coins/>
+      <Stickers/>
     </div>
   );
 }

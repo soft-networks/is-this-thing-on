@@ -56,20 +56,27 @@ export function sanitizeTransactionForDB(transaction: EnergyTransaction) {
   return { ...transaction, status: "PENDING" };
 }
 
-export function sanitizeElementForDB(element: InteractiveElement) {
+export function sanitizeStickerInstanceForDB(stickerInstance: StickerInstance) {
   return {
-    position: element.position,
-    behavior_type: element.behaviorType,
-    cdn_id: element.cdnID,
-    timestamp: element.timestamp,
+    position: stickerInstance.position,
+    cdn_id: stickerInstance.cdnID,
+    timestamp: stickerInstance.timestamp,
   };
 }
 
-export function sanitizeElementFromDB(element: any): InteractiveElement {
+export function sanitizeStickerInstanceFromDB(stickerInstance: any): StickerInstance {
   return {
-    position: element.position || [0, 0],
-    behaviorType: element["behavior_type"] || "UNKNOWN",
-    cdnID: element["cdn_id"] || undefined,
-    timestamp: element["timestamp"] || 0,
+    position: stickerInstance.position || [0, 0],
+    cdnID: stickerInstance["cdn_id"] || undefined,
+    timestamp: stickerInstance["timestamp"] || 0
   };
+}
+
+export function sanitizeStickerCDNFromDB(sticker: any, id:string): Sticker {
+  console.log(sticker);
+  return {
+    cdnID: id ,
+    behaviorType: sticker["behavior_type"] || "NORMAL",
+    imageURL: sticker["url"]
+  }
 }

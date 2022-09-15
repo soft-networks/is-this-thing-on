@@ -99,6 +99,9 @@ footer {
   background: var(--black);
   color: var(--light);
 }
+.addCursor {
+  cursor: crosshair;
+}
 
 .draggable {
   cursor: move; /* fallback if grab cursor is unsupported */

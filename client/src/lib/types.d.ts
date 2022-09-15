@@ -45,12 +45,16 @@ type RoomInfo = RoomLinkInfo & {
 
 type Pos = [number, number];
 
-type BehaviorTypes = "COIN";
-interface InteractiveElement {
+type BEHAVIOR_TYPES = "MOVE" | "DELETE" | "NORMAL";
+interface Sticker {
+  behaviorType: BEHAVIOR_TYPES,
+  cdnID: string,
+  imageURL: string
+}
+interface StickerInstance {
   position: Pos,
-  behaviorType: string,
-  cdnID?: string,
   timestamp: number
+  cdnID: string
 }
 interface EnergyAccount {
   userID: UserID,
