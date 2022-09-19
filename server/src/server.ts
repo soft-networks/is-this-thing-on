@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express, { Application } from "express";
 import { createServer } from "http";
-import { managePresenceInDB,  resetMuxFirestoreRelationship,  transactionProcessor } from "./firestore-api.js";
+import { managePresenceInDB,  presenceProcessor,  resetMuxFirestoreRelationship,  transactionProcessor } from "./firestore-api.js";
 import bodyParser from "body-parser"
 import { logUpdate } from "./logger.js";
 import { muxAuthHelper, createAndReturnStreamKey } from "./muxAPI.js";
@@ -41,6 +41,6 @@ httpServer.listen(port, () => {
   logUpdate(`Server is LIVE on port ${port}`);
 });
 
-managePresenceInDB();
+presenceProcessor();
 transactionProcessor();
 

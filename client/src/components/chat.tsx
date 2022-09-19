@@ -41,12 +41,13 @@ export const Chat: React.FC<RoomUIProps> = ({className = DEFAULT_CLASSNAME, styl
   );
   const sendNewMessage = useCallback(
     (c: ChatMessage) => {
-      addChatMessageDB(roomID, c);
+      roomID && addChatMessageDB(roomID, c);
     },
     [roomID]
   );
   useEffect(() => {
     async function setupDB() {
+      if (!roomID) return;
       if (unsubRef.current) {
         setChatList({});
         unsubRef.current();

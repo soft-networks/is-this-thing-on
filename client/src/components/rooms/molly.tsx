@@ -1,7 +1,7 @@
 import React from "react";
 import { Chat } from "../chat";
 import RoomInfoViewer from "../roomInfo";
-import Stream from "../stream";
+import VideoPlayer from "../videoPlayer";
 import Stickers from "../stickers";
 import Footer from "../../layouts/footer";
 

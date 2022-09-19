@@ -5,7 +5,7 @@ import { useRoomStore } from "../stores/roomStore";
 const DEFAULT_CLASSNAME = "fullWidth";
 const DEFAULT_STYLE = {};
 
-const Stream: React.FunctionComponent<RoomUIProps> = ({
+const VideoPlayer: React.FunctionComponent<RoomUIProps> = ({
   className = DEFAULT_CLASSNAME,
   style = DEFAULT_STYLE,
 }) => {
@@ -29,4 +29,4 @@ const Stream: React.FunctionComponent<RoomUIProps> = ({
   );
 };
 
-export default Stream;
+export default VideoPlayer;

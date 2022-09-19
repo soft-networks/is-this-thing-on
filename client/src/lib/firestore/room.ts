@@ -42,10 +42,11 @@ export async function syncWebRing(initRing: (ring: WebRing) => void, linkUpdate:
   const ring : WebRing= {};
 
   docs.forEach((doc) => {
-    let data = doc.data();
-    
+    let data = sanitizeRoomInfo(doc.data(), doc.id);
+
     ring[doc.id] = {
-      roomName: doc.id,
+      roomID: data.roomID,
+      roomName: data.roomName,
       roomColor: "white",
       streamStatus: "disconnected"
     }

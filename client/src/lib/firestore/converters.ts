@@ -8,12 +8,14 @@ export function validateRoomName(roomName: string) {
 }
 export function sanitizeRoomInfo(data: DocumentData, id: string): RoomInfo {
   return {
+    roomID: id,
     streamPlaybackID: data["stream_playback_id"] || undefined,
     streamOwner: "bhavik",
     streamStatus: data["stream_status"] || "disconnected",
     numOnline: data["num_online"] || 0,
     roomName: data['room_name'] || id,
-    roomColor: data["room_color"] || "#FCFF54"
+    roomColor: data["room_color"] || "#FCFF54",
+    energy: data["energy"] || 0
   };
 }
 export function sanitizeEnergyAccount(amount: number, id: string): EnergyAccount {

@@ -22,7 +22,7 @@ const Admin: React.FC<AdminViewProps> = ({ uid }) => {
   return rooms ? (
     <div className="stack">
       {rooms.map((r) => (
-        <RoomAdminUI roomID={r.roomName} key={r.roomName + "-adminView"} uid={uid} />
+        <RoomAdminUI roomID={r.roomID} key={r.roomName + "-adminView"} uid={uid} />
       ))}
     </div>
   ) : (

@@ -6,7 +6,7 @@ import { setUserHeartbeat, syncRoomInfoDB } from "../lib/firestore";
 import { Unsubscribe } from "firebase/auth";
 import { useUserStore } from "../stores/userStore";
 import Chris from "./rooms/chris";
-import Stream from "./stream";
+import VideoPlayer from "./videoPlayer";
 import Molly from "./rooms/molly";
 import RoomGate from "./roomGate";
 import useRingStore from "../stores/ringStore";
@@ -58,8 +58,9 @@ const SeasonOne = ({roomID}: {roomID: string}) => {
     default:
       return (
         <div className="stack quarterWidth">
+
           <RoomInfoViewer />
-          <Stream />
+          <VideoPlayer />
           <Chat />
         </div>
       );

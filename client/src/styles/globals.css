@@ -103,6 +103,7 @@ footer {
   cursor: crosshair;
 }
 
+
 .draggable {
   cursor: move; /* fallback if grab cursor is unsupported */
   cursor: grab;
@@ -292,6 +293,12 @@ p {
   transform: translate(-50%, -50%);
   z-index: -1;
 }
+.centerh\:absolute {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -0%);
+  
+}
 .align-end\:absolute {
   bottom: 0;
   top: unset;
@@ -422,6 +429,9 @@ pre {
   border-bottom: 3px solid var(--black);
 }
 
+.border-radius {
+  border-radius: var(--s-3);
+}
 
 
 .active a {
@@ -484,6 +494,15 @@ a:hover,
   cursor: pointer;
   text-decoration: underline;
 }
+.clickable\:opacity {
+  opacity: 0.8;
+  scale: 1;
+  transition: 100ms opacity, 50ms scale;
+}
+.clickable\:opacity:hover {
+  opacity: 1;
+  scale: 1.2;
+}
 
 
 .whiteFill {
@@ -506,6 +525,26 @@ a:hover,
 .contrastFill, .contrastFill\:hover:hover {
   background: var(--contrast);
 }
+.skrimFill {
+  background: rgba(0,0,0,0.5);
+}
+
+
+.fadeContrast  {
+  --fadeFrom: var(--contrast);
+  --fadeTo: var(--light);
+  animation: 1s fadeColor forwards ;
+}
+
+@keyframes fadeColor {
+  0% {
+    background: var(--fadeFrom);
+  }
+  100% {
+    background: var(--fadeTo);
+  }
+}
+
 
 .contrastFill::selection {
   background: var(--gray);
@@ -551,9 +590,6 @@ a:hover,
 
 .homeLogoWidth {
   width: 50%;
-}
-.footer {
-  margin-bottom: 32px;
 }
 .footer .homeLogoWidth {
   width: auto;

@@ -29,6 +29,7 @@ interface StreamNames {
 
 type STREAM_STATUS_TYPE = "active" | "disconnected"
 interface RoomLinkInfo {
+  roomID: string,
   roomName: string,
   roomColor: string,
   streamStatus: STREAM_STATUS_TYPE
@@ -39,6 +40,7 @@ type RoomInfo = RoomLinkInfo & {
   streamOwner: string,
   streamPlaybackID: string
   numOnline: number,
+  energy: number
 }
 
 
@@ -72,8 +74,6 @@ interface EnergyTransactionPosted extends EnergyTransaction {
   status: TransactionStatus,
   id: string
 }
-
-type TransactionCompleteCallback =  (status: TransactionStatus) => void
 
 type TransactionStatusTypes = "ERROR" | "SUCCESS" | "PENDING"
 interface TransactionStatus {
