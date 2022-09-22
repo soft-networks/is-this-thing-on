@@ -2,8 +2,7 @@ import classnames from "classnames";
 import { useCallback, useEffect, useState } from "react";
 import { useRoomStore } from "../stores/roomStore";
 
-const RoomEnergy: React.FC = () => {
-  const roomID = useRoomStore(useCallback(state => state.currentRoomID, []));
+const RoomEnergy: React.FC<{roomID: string}> = ({roomID}) => {
   const roomEnergy = useRoomStore(useCallback( state => state.roomInfo?.energy,[]));
   const [justUpdated, setJustUpdated] = useState<boolean>();
   useEffect(() => {

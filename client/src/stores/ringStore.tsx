@@ -36,7 +36,7 @@ const generatePlaceholderLinks = () => {
 
 const useRingStore = create<RingState>((set) => ({
   links: {},
-  initializeRing: (ring) => { set({links: ring})},
+  initializeRing: (ring) => { console.log("Ring initialized"); set({links: ring})},
   updateStatus: (roomName, updatedLink) => {
     set((s) => {
       let ns = { ...s.links };

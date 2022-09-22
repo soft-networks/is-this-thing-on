@@ -1,12 +1,13 @@
-import { User } from "firebase/auth";
-import { useEffect, useState } from "react";
+import { updateProfile, User} from "firebase/auth";
+import { useCallback, useEffect, useState } from "react";
 import { getRoomsWhereUserISAdmin } from "../lib/firestore";
 import { getStreamKey, resetRoom } from "../lib/server-api";
+import { useUserStore } from "../stores/userStore";
 
 /**
  * AdminView renders RoomAdminUI for each room that a user id admin for
  */
- interface AdminViewProps {
+interface AdminViewProps {
   uid: string;
 }
 const Admin: React.FC<AdminViewProps> = ({ uid }) => {
@@ -20,7 +21,10 @@ const Admin: React.FC<AdminViewProps> = ({ uid }) => {
   }, [uid]);
 
   return rooms ? (
-    <div className="stack">
+    <div className="stack padded border-thin lightFill">
+      <em>
+        Rooms you manage
+      </em>
       {rooms.map((r) => (
         <RoomAdminUI roomID={r.roomID} key={r.roomName + "-adminView"} uid={uid} />
       ))}
@@ -29,6 +33,7 @@ const Admin: React.FC<AdminViewProps> = ({ uid }) => {
     <div> you are not the admin for any rooms</div>
   );
 };
+
 
 const RoomAdminUI: React.FC<{ roomID: string; uid: string }> = ({ roomID, uid }) => {
   let [streamKey, setStreamKey] = useState<string>();
@@ -43,9 +48,9 @@ const RoomAdminUI: React.FC<{ roomID: string; uid: string }> = ({ roomID, uid })
   }, [roomID]);
 
   return (
-    <div className="stack">
-      <div> admin view for room : {roomID} </div>
-      <div>stream key: {streamKey }</div>
+    <div className="stack padded border-thin whiteFill">
+      <div> <span className="contrastFill">{roomID}</span> </div>
+      <div>stream key: <br/>{streamKey}</div>
       <div
         onClick={() => {
           resetRoom(roomID);

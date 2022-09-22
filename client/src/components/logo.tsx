@@ -9,17 +9,9 @@ const ELLIPSE_PATH =
 
 const ANIM_LENGTH = 100;
 
-interface LogoProps {
-  ring: WebRing;
-  collapsed?: boolean;
-}
-const Logo: React.FC<LogoProps> = ({ ring, collapsed }) => {
-  return collapsed ? <FooterLogo ring={ring} /> : <HomeLogo ring={ring} />;
-};
 
-const FooterLogo: React.FC<{ ring: WebRing }> = ({ ring }) => {
+export const FooterLogo: React.FC<{ ring: WebRing, roomID: string}> = ({ ring, roomID}) => {
   const {push} = useRouter();
-  const roomID = useRoomStore(useCallback((s) => s.currentRoomID, []));
   const indexSelected = useMemo(() => {
     if (!roomID) return;
     let i = Object.keys(ring).indexOf(roomID);
@@ -32,30 +24,30 @@ const FooterLogo: React.FC<{ ring: WebRing }> = ({ ring }) => {
     push(roomIDToHREF(nextKey));
   }, [push, ring]);
   const ringParts = useMemo(() => SVGRingSeparate({ring, currentlySelected: indexSelected}), [indexSelected, ring]);
-  return roomID ? (
+  return (
     <div className="centerh relative">
-      <div className="center:absolute " >
-        {ringParts[0]}
-      </div>
-      <div className="horizontal-stack:s-1">
-        <div className="clickable border padded:s-2 contrastFill:hover" onClick={() => indexSelected !== undefined && navStream(indexSelected -  1)}>
-          prev
+      <div className="center:absolute ">{ringParts[0]}</div>
+        <div className="horizontal-stack:s-1">
+          <div
+            className="clickable border padded:s-2 contrastFill:hover"
+            onClick={() => indexSelected !== undefined && navStream(indexSelected - 1)}
+          >
+            prev
+          </div>
+          <NodeLink link={ring[roomID]} id={roomID} noNav />
+          <div
+            className="clickable border padded:s-2 contrastFill:hover"
+            onClick={() => indexSelected !== undefined && navStream(indexSelected + 1)}
+          >
+            next
+          </div>
         </div>
-        <NodeLink link={ring[roomID]} id={roomID} noNav />
-        <div className="clickable border padded:s-2 contrastFill:hover" onClick={() => indexSelected !== undefined && navStream(indexSelected + 1)}>
-          next
-        </div>
-      </div>
-      <div className="center:absolute highest noEvents" >
-        {ringParts[1]}
-      </div>
+      <div className="center:absolute highest noEvents">{ringParts[1]}</div>
     </div>
-  ) : (
-    null
   );
 };
 
-const HomeLogo: React.FC<{ ring: WebRing }> = ({ ring }) => {
+export const HomeLogo: React.FC<{ ring: WebRing }> = ({ ring }) => {
   const numKeys = useMemo(() => Object.keys(ring).length, [ring]);
   const [selectedRoom, setSelectedRoom] = useState<number>(0);
   const animInterval = useRef<NodeJS.Timeout>();
@@ -182,5 +174,3 @@ const NodeLink: React.FC<NodeLinkProps> = ({ link, className, noNav, id}) => {
     </div>
   );
 };
-
-export default Logo;

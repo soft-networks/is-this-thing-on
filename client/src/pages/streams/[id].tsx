@@ -13,9 +13,7 @@ const RoomPage: NextPage = () => {
 
   return (
     <Layout>
-      <RoomGate id={id}>
         <Room roomID={id as string} />
-      </RoomGate>
     </Layout>
   );
 };

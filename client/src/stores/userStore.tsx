@@ -1,6 +1,6 @@
 import create from "zustand";
 import { persist } from "zustand/middleware";
-import { getAuth, createUserWithEmailAndPassword, User, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, User, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 
 import { app } from "../lib/firestore/init";
 const auth = getAuth(app);
@@ -10,12 +10,38 @@ interface UserState {
   signIn: (username: string, password: string, signInComplete: (complete: boolean, error?: string)=> void) => void;
   signUp: (username: string, password: string, signUpCompete: (complete: boolean, error?: string) => void) => void;
   signOut: () => void;
+  updateDisplayname: (displayName: string, callback: (success: boolean, e?: Error) => void) => void,
 }
 
 
 export const useUserStore = create<UserState>()(
   persist((set) => ({
     currentUser: undefined,
+    updateDisplayname: (displayName, callback) => {
+      let currentUser = auth.currentUser;
+      if (!currentUser) {
+        callback(false, new Error("there wasn't a user"));
+        return;
+      }
+      console.log("lets go" , currentUser);
+      updateProfile(currentUser, {
+        displayName: displayName
+      }).then(() => {
+        // Profile updated!
+        // ...
+        console.log("Name updated!", displayName);
+        if (auth.currentUser) {
+          set({currentUser: auth.currentUser});
+        }
+        callback(true);    
+      }).catch((error) => {
+        // An error occurred
+        // ...
+        console.log(error);
+        callback(false, error);
+      });
+    
+    },
     signIn: (username: string, password: string, onSignIn) => {
       signInWithEmailAndPassword(auth, username, password)
         .then((userCredential) => {
@@ -54,9 +80,11 @@ export const useUserStore = create<UserState>()(
       signOut(auth)
         .then(() => {
           // Sign-out successful.
+          console.log("Signed out");
           set((s) => ({ currentUser: undefined }));
         })
         .catch((error) => {
+          console.log("Error signing out" , error);
           // An error happened.
         });
     },

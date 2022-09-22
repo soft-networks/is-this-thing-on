@@ -25,6 +25,8 @@
 
   --textWidth: 48ch; 
 
+  --stickerSize: 5ch;
+
 }
 @font-face {
   font-family: "Manifont Grotesk";
@@ -53,6 +55,8 @@ body {
   font-family: "Manifont Grotesk", monospace;
 
 }
+
+
 ::selection {
  background: var(--contrast)
 }
@@ -323,11 +327,17 @@ p {
   text-align: center;
 }
 
-.grid {
+.grid, .grid\:s-1, .grid\:s-2 {
   display: flex;
   flex-wrap: wrap;
   gap: var(--s0);
   justify-content: center;
+}
+.grid\:s-1 {
+  gap: var(--s-1);
+}
+.grid\:s-2 {
+  gap: var(--s-2);
 }
 
 .flex-1 {
@@ -424,6 +434,10 @@ pre {
 .border {
   border: 3px solid var(--black);
 }
+.border-thin{
+  border: 1px solid var(--black);
+}
+
 .border-bottom {
   border-bottom: 3px solid var(--black);
 }
@@ -488,19 +502,22 @@ a:hover,
   cursor: pointer;
 }
 
+
 .clickable {
-  background: var(--light);
+  
   cursor: pointer;
   text-decoration: underline;
+  background: var(--light);
 }
 .clickable\:opacity {
+  cursor: pointer;
   opacity: 0.8;
   scale: 1;
-  transition: 100ms opacity, 50ms scale;
+  transition: opacity 100ms, scale 100ms;
 }
 .clickable\:opacity:hover {
   opacity: 1;
-  scale: 1.2;
+  scale: 1.4;
 }
 
 
@@ -558,6 +575,7 @@ a:hover,
 .chat {
   --chatAuthorcolor: var(--contrast);
   --chatMessageColor: var(--light);
+  --chatContainerBackground: rgba(0,0,0,0.8);
   background: var(--chatContainerBackground);
   color: var(--chatMessageColor);
 }

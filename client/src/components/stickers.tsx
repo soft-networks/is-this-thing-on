@@ -102,7 +102,7 @@ const DefaultChooseStickerType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: 
   return (
     <>
       
-      <div className="horizontal-stack:s-2 skrimFill border-radius">
+      <div className="grid:s-2 skrimFill border-radius padded" style={{maxWidth: "calc(4 * (var(--stickerSize) + 2 * var(--s2))"}}>
         <div
           className="lightFill border contrastFill:hover padded:s-2 clickable highest"
           style={{ position: "absolute", top: "calc(-1 * var(--s1)", left: "calc(-1 * var(--s1)" }}
@@ -179,7 +179,7 @@ const StickerRenderer = ({ pos, url }: { pos: Pos; url: string }) => {
 };
 
 const StickerImage = ({ url }: { url: string }) => (
-  <img src={url} alt={"Sticker"} style={{ width: "72px", height: "72px" }} />
+  <img src={url} alt={"Sticker"} style={{ width: "var(--stickerSize)"}} />
 );
 
 export default Stickers;
