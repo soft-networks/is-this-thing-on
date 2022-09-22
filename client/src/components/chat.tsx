@@ -5,17 +5,9 @@ import { useRoomStore } from "../stores/roomStore";
 import { useUserStore } from "../stores/userStore";
 
 
-const DEFAULT_CLASSNAME = "stack:s-1 border fullWidth";
-const DEFAULT_VARIABLES = {
-  "--chatContainerBackground": "none",
-  "--chatMessageBackground": "var(--white)",
-  "--chatAuthorColor": "var(--contrast)",
-  "--chatMessageColor": "var(--black)",
-  "--chatBorderColor": "var(--gray)",
-  "--spacing": "var(--s-2)"
-};
 
-export const Chat: React.FC<RoomUIProps> = ({className = DEFAULT_CLASSNAME, style = DEFAULT_VARIABLES}) => {
+
+export const Chat: React.FC<RoomUIProps> = ({className, style}) => {
   let roomID = useRoomStore((state) => state.currentRoomID);
   let unsubRef = useRef<Unsubscribe>();
   let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
@@ -60,7 +52,7 @@ export const Chat: React.FC<RoomUIProps> = ({className = DEFAULT_CLASSNAME, styl
     };
   }, [chatWasAdded, chatWasRemoved, roomID]);
   return (
-    <div className={className + " chat"} style={style as React.CSSProperties}>
+    <div className={(className || "") + " chat"} style={style as React.CSSProperties}>
       <ChatInput onSubmit={sendNewMessage} />
       <div className="stack:custom padded:custom" >
         {Object.entries(chatList).map(([id, chat]) => (

@@ -14,7 +14,14 @@ const VideoPlayer: React.FunctionComponent<RoomUIProps> = ({
   return (
     <div className={className} style={style}>
       {roomInfo && roomInfo.streamStatus == "active" && roomInfo.streamPlaybackID ? (
-        <ReactPlayer url={generateStreamLink(roomInfo.streamPlaybackID)} />
+        <ReactPlayer
+          url={generateStreamLink(roomInfo.streamPlaybackID)}
+          muted={true}
+          controls={false}
+          playing={true}
+          width="100%"
+          height="100%"
+        />
       ) : (
         <ReactPlayer
           muted={true}

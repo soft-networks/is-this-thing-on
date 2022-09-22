@@ -99,7 +99,7 @@ interface SVGRingProps {
 }
 const SVGRingSeparate = (props: SVGRingProps) => {
   const wrapSVG = (child: JSX.Element) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="centerh higher homeLogoWidth" viewBox="-50 -50 550 450">
+    <svg xmlns="http://www.w3.org/2000/svg" className="centerh high homeLogoWidth" viewBox="-50 -50 550 450">
       {child}
     </svg>
   )
@@ -107,7 +107,7 @@ const SVGRingSeparate = (props: SVGRingProps) => {
 }
 const SVGRingCombined = (props: SVGRingProps) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" className="centerh higher homeLogoWidth" viewBox="-50 -50 550 450">
+    <svg xmlns="http://www.w3.org/2000/svg" className="centerh homeLogoWidth" viewBox="-50 -50 550 450">
       <text x={150} y={210} style={{ fontSize: "55px", fontStyle: "italic" }}>
         THING
       </text>

@@ -95,10 +95,6 @@ a, a:visited, .clickable {
   text-decoration: underline;
 }
 
-footer {
-  background: var(--black);
-  color: var(--light);
-}
 .addCursor {
   cursor: crosshair;
 }
@@ -274,7 +270,7 @@ p {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 1;
+
 }
 
 .absoluteCaption {
@@ -303,8 +299,11 @@ p {
   bottom: 0;
   top: unset;
 }
-.higher {
+.high {
   z-index: 1
+}
+.higgher {
+  z-index: 50;
 }
 .highest {
   z-index: 99;
@@ -557,6 +556,8 @@ a:hover,
 /* Specific */
 
 .chat {
+  --chatAuthorcolor: var(--contrast);
+  --chatMessageColor: var(--light);
   background: var(--chatContainerBackground);
   color: var(--chatMessageColor);
 }
@@ -591,22 +592,23 @@ a:hover,
 .homeLogoWidth {
   width: 50%;
 }
-.footer .homeLogoWidth {
+
+footer .homeLogoWidth {
   width: auto;
   height: 96px;
 }
-.footer .stroke {
+footer .stroke {
   stroke-width: 10px;
   filter: drop-shadow( 0px 0px 20px var(--light));
 }
-.footer .border {
+footer .border {
   border-width: 2px;
 }
-.footer .clickable {
+footer .clickable {
   background: var(--light);
   box-shadow: 0px 0px 5px var(--light);
 }
-.footer .clickable:hover{
+footer .clickable:hover{
   background: var(--contrast);
 }
 

@@ -12,8 +12,9 @@ type StickerCDN = { [key: string]: Sticker };
 interface StickersProps {
   StickerChooser?: React.FC<StickerAdderProps>;
   style?: React.CSSProperties;
+  className?: string;
 }
-const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdder, style }) => {
+const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdder, style, className }) => {
   const user = useUserStore(useCallback((state) => state.currentUser, []));
   const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));
   const stickerCDN = useStickerCDNStore(useCallback((state) => state.stickerCDN, []));
@@ -38,7 +39,7 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
     });
   };
   return roomID ? (
-    <div className="fullBleed absoluteOrigin" style={style}>
+    <div className={className || "fullBleed absoluteOrigin"} style={style}>
       {stickerCDN && (
         <>
           {user && <StickerChooser addSticker={addSticker} cdn={stickerCDN} />}
@@ -79,7 +80,7 @@ const DefaultStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn }) =
     }
   };
   return (
-    <div className="fullBleed absoluteOrigin higher addCursor" onClick={clicked} ref={containerRef}>
+    <div className="fullBleed absoluteOrigin high addCursor" onClick={clicked} ref={containerRef}>
       {showStickerTypePicker ? (
         <div
           className="absoluteOrigin "
