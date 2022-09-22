@@ -2,8 +2,10 @@
 import { doc, getDoc, setDoc, collection, query, where, getDocs, deleteDoc, updateDoc, deleteField, onSnapshot, orderBy, QueryDocumentSnapshot, DocumentData} from "firebase/firestore";
 import { firestore } from './firebase-init.js';
 import { logError, logInfo, logUpdate, logWarning } from './logger.js';
-import ROOM_NAMES, { PRESENCE_LENGTH } from "../../common/commonData.js";
-import { PerformanceObserver } from "perf_hooks";
+
+
+const PRESENCE_LENGTH =  5 * 1000;
+
 
 //Helpers
 function roomDoc(roomID: string) {

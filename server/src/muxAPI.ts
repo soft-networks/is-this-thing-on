@@ -4,7 +4,6 @@ import { Request, RequestHandler } from "express";
 import { logError, logInfo } from "./logger.js";
 
 const { Video } = new Mux(process.env.MUX_TOKEN_ID, process.env.MUX_TOKEN_SECRET);
-import STREAM_NAMES from "../../common/commonData.js";
 import { getStreamKey, writeNewStreamToDB } from "./firestore-api.js";
 
 export const createAndReturnStreamKey : RequestHandler = async (req, res) => {

@@ -1,12 +1,13 @@
 import slugify from "slugify";
 import create from "zustand";
-import ROOM_NAMES from "../../../common/commonData";
 
 interface RingState {
   links: WebRing;
   updateStatus: (roomName: string, update: RoomLinkInfo) => void;
   initializeRing: (ring: WebRing) => void;
 }
+
+// import ROOM_NAMES from "../../../common/commonData";
 
 /** Default case, not used for now 
 const ROOM_COLORS = [

@@ -2,14 +2,14 @@
   "name": "isto-server",
   "version": "1.0.0",
   "description": "",
-  "main": "build/server/src/server.js",
+  "main": "build/server.js",
   "type": "module",
   "scripts": {
     "postinstall": "tsc",
-    "start": "node build/server/src/server.js",
+    "start": "node build/server.js",
     "build": "rm -rf build && tsc",
-    "prod": "npm run build && node build/server/src/server.js",
-    "dev": " tsc -w & nodemon --watch build build/server/src/server.js",
+    "prod": "npm run build && node build/server.js",
+    "dev": " tsc -w & nodemon --watch build build/server.js",
     "heroku-go": "git add . && git commit -m 'heroku' && git push heroku main",
     "tunnel": "ssh -R istomux.lhr.rocks:80:localhost:4000 localhost.run"
   },
