@@ -2,8 +2,10 @@
 import { doc, getDoc, setDoc, collection, query, where, getDocs, deleteDoc, updateDoc, deleteField, onSnapshot, orderBy, QueryDocumentSnapshot, DocumentData} from "firebase/firestore";
 import { firestore } from './firebase-init.js';
 import { logError, logInfo, logUpdate, logWarning } from './logger.js';
-import ROOM_NAMES, { PRESENCE_LENGTH } from "../../common/commonData.js";
-import { PerformanceObserver } from "perf_hooks";
+
+
+const PRESENCE_LENGTH =  5 * 1000;
+
 
 //Helpers
 function roomDoc(roomID: string) {
@@ -110,9 +112,10 @@ export const resetMuxFirestoreRelationship = async (roomID: string) => {
 
 
 /**  */
-export async function managePresenceInDB() {
+export async function managePresenceInDB(allRoomNames: string[]) {
   const presenceRef = collection(firestore, "presence");
-  const currentlyOnline = await Promise.all(ROOM_NAMES.map(async (streamName) => {
+  
+  const currentlyOnline = await Promise.all(allRoomNames.map(async (streamName) => {
     let q = query(presenceRef, where("room_id", "==", streamName), where("timestamp", ">=",  Date.now() - (1.2  * PRESENCE_LENGTH) ));
     const querySnapshot = await getDocs(q);
     let numResults = querySnapshot.size;
@@ -122,7 +125,7 @@ export async function managePresenceInDB() {
   currentlyOnline.forEach(({roomID, numOnline}) => {
     setDoc(roomDoc(roomID), {num_online: numOnline}, {merge: true});
   })
-  setTimeout(managePresenceInDB, PRESENCE_LENGTH);
+  setTimeout(() => managePresenceInDB(allRoomNames), PRESENCE_LENGTH);
 } 
 
 async function setTransaction(id: string, status: string) {
@@ -145,56 +148,22 @@ async function transact(transaction: any, id: string ) {
     return;
   } 
 
-  const fromAccountRef = doc(firestore, "energy_accounts", from)
-  const fromAccount = await getDoc(fromAccountRef);
-
-  const toAccountRef = doc(firestore, "energy_accounts", to);
-  const toAccount = await getDoc(toAccountRef);
-  if (!fromAccount.exists() || !toAccount.exists() || fromAccount.data()['energy'] == undefined || toAccount.data()['energy'] == undefined ) {
-    logWarning("Transaction failing because account doesnt exist", fromAccount.data(), toAccount.data());
+  try {
+    let room = await getRoom(to);
+    let roomEnergy = room['energy'] || 0;
+    await setDoc(roomDoc(to), {energy: roomEnergy + amount}, {merge: true})
+    await setTransaction(id, 'SUCCESS');
+    
+    logUpdate("Transaction succeeded");
+  } catch (e) {
     await setTransaction(id, 'FAILED');
     return;
-  };
-
-  if (fromAccount.data()['energy'] < amount) {
-    logInfo("Transaction failing because account doesnt have enough funds");
-    await setTransaction(id, 'INSUFFICIENT_FUNDS');
-    return;
   }
-  const newFromAccountEnergy = fromAccount.data()['energy'] - transaction.amount; 
-  const newToAccountEnergy = toAccount.data()['energy']  + transaction.amount;
-
-  await setDoc(fromAccountRef, {energy: newFromAccountEnergy}, {merge: true});
-  await setDoc(toAccountRef, {energy: newToAccountEnergy}, {merge: true});
-  setTransaction(id, 'SUCCESS');
-
-  logUpdate("Transaction succeeded");
+  
 }
 
 
-//Maybe run this on a schedule too? That way actually i can retry as well lol jesus
-
-export async function manageEnergyTxInDB() {
-  const transactionRef = collection(firestore, "energy_transactions");
-  const unsub = onSnapshot(transactionRef, (docs) => {
-    docs.docChanges().forEach((change) => {
-      let transaction = change.doc;
-      if (change.type === "added") {
-        try {
-          console.log("Processing transaction" , transaction.id);
-          transact(transaction.data(), transaction.id);
-        } catch (e) {
-          logError("Error with transaction " + transaction.id, (e as Error).message);
-        }
-      }
-      if (change.type === "modified") {
-        //UMM? lol. 
-      }
-    });
-  });
-
-}
-
+//Optimization: Group BY and then process each room together.
 export async function transactionProcessor() {
 
   const transactionRef = collection(firestore, "energy_transactions");
@@ -215,4 +184,14 @@ export async function transactionProcessor() {
   }
 
   setTimeout(transactionProcessor, 3000);
+}
+
+export async function presenceProcessor() {
+
+  let collectionRef =  collection(firestore, "rooms");;
+  let docs = await getDocs(collectionRef);
+  
+  let docNames: string[] = [];
+  docs.forEach((d) => docNames.push(d.id));
+  managePresenceInDB(docNames);
 }

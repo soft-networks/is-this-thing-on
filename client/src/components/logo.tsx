@@ -21,6 +21,7 @@ const FooterLogo: React.FC<{ ring: WebRing }> = ({ ring }) => {
   const {push} = useRouter();
   const roomID = useRoomStore(useCallback((s) => s.currentRoomID, []));
   const indexSelected = useMemo(() => {
+    if (!roomID) return;
     let i = Object.keys(ring).indexOf(roomID);
     return i > -1 ? i : undefined;
   }, [ring, roomID]);
@@ -50,7 +51,7 @@ const FooterLogo: React.FC<{ ring: WebRing }> = ({ ring }) => {
       </div>
     </div>
   ) : (
-    <div> loading </div>
+    null
   );
 };
 

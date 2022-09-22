@@ -29,6 +29,7 @@ interface StreamNames {
 
 type STREAM_STATUS_TYPE = "active" | "disconnected"
 interface RoomLinkInfo {
+  roomID: string,
   roomName: string,
   roomColor: string,
   streamStatus: STREAM_STATUS_TYPE
@@ -39,18 +40,23 @@ type RoomInfo = RoomLinkInfo & {
   streamOwner: string,
   streamPlaybackID: string
   numOnline: number,
+  energy: number
 }
 
 
 
 type Pos = [number, number];
 
-type BehaviorTypes = "COIN";
-interface InteractiveElement {
+type BEHAVIOR_TYPES = "MOVE" | "DELETE" | "NORMAL";
+interface Sticker {
+  behaviorType: BEHAVIOR_TYPES,
+  cdnID: string,
+  imageURL: string
+}
+interface StickerInstance {
   position: Pos,
-  behaviorType: string,
-  cdnID?: string,
   timestamp: number
+  cdnID: string
 }
 interface EnergyAccount {
   userID: UserID,
@@ -68,8 +74,6 @@ interface EnergyTransactionPosted extends EnergyTransaction {
   status: TransactionStatus,
   id: string
 }
-
-type TransactionCompleteCallback =  (status: TransactionStatus) => void
 
 type TransactionStatusTypes = "ERROR" | "SUCCESS" | "PENDING"
 interface TransactionStatus {

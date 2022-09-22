@@ -41,12 +41,13 @@ export const Chat: React.FC<RoomUIProps> = ({className = DEFAULT_CLASSNAME, styl
   );
   const sendNewMessage = useCallback(
     (c: ChatMessage) => {
-      addChatMessageDB(roomID, c);
+      roomID && addChatMessageDB(roomID, c);
     },
     [roomID]
   );
   useEffect(() => {
     async function setupDB() {
+      if (!roomID) return;
       if (unsubRef.current) {
         setChatList({});
         unsubRef.current();
@@ -75,7 +76,8 @@ export const Chat: React.FC<RoomUIProps> = ({className = DEFAULT_CLASSNAME, styl
 
 const ChatInput: React.FC<{ onSubmit: (chat: ChatMessage) => void }> = ({ onSubmit }) => {
   const currentUser = useUserStore((state) => state.currentUser);
-
+  const numOnline = useRoomStore((state) => state.roomInfo?.numOnline);
+  
   const [currentMessage, setCurrentMessage] = useState<string>("");
   const submitMessage = useCallback(() => {
     if (currentMessage && currentUser) {
@@ -90,6 +92,7 @@ const ChatInput: React.FC<{ onSubmit: (chat: ChatMessage) => void }> = ({ onSubm
   }, [currentMessage, currentUser, onSubmit]);
   return currentUser ? (
     <div className="stack:s-1 border-bottom padded chatInputContainer">
+      {numOnline ? <div> {numOnline} people online </div> : null}
       <div> send message as {currentUser.email} </div>
       <input
         value={currentMessage}

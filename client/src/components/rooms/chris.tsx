@@ -1,14 +1,14 @@
 import React from "react";
 import { Chat } from "../chat";
-import Stream from "../stream";
-import Coins from "../coins";
+import VideoPlayer from "../videoPlayer";
+import Stickers from "../stickers"; 
 
 
 const Chris: React.FC = () => {
 
   return (
     <div className="fullBleed overflowScroll">
-      <Stream
+      <VideoPlayer
         style={{
           width: "calc(2 * 100vw)",
           height: "calc(2 *56vw)",
@@ -27,7 +27,10 @@ const Chris: React.FC = () => {
           } as React.CSSProperties
         }
       />
-      <Coins/>
+      <Stickers style={{
+          width: "calc(2 * 100vw)",
+          height: "calc(2 *56vw)"
+        }}/>
     </div>
   );
 }

@@ -4,10 +4,8 @@ import useRingStore from "../stores/ringStore";
 
 const RoomGate: React.FunctionComponent<{ id: string }> = ({ id, children }) => {
   const ring = useRingStore(room => room.links);
-  const gate = useMemo(() => {
-    
+  const gate = useMemo(() => {    
     const streamNames = Object.keys(ring);
-    console.log(streamNames, id);
     return streamNames.includes(id) ? <> {children} </> : <div> Sorry, thats not a valid stream name </div>;
   }, [ring, id, children]);
   return gate;
