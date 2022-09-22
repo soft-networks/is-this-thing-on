@@ -44,7 +44,8 @@ const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
 
   return (
     <RoomGate id={roomID as string}>
-      <SeasonOne roomID={roomID}/>
+      {/* <SeasonOne roomID={roomID}/> */}
+      <SeasonZero  />
     </RoomGate>
   );
 };
