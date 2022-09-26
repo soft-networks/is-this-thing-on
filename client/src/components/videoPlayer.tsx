@@ -23,7 +23,7 @@ const VideoPlayer: React.FunctionComponent<RoomUIProps> = ({
           height="100%"
         />
       ) : (
-        <ReactPlayer
+        null && <ReactPlayer
           muted={true}
           controls={false}
           playing={true}

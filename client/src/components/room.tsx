@@ -8,12 +8,12 @@ import { useUserStore } from "../stores/userStore";
 import Chris from "./rooms/chris";
 import VideoPlayer from "./videoPlayer";
 import Molly from "./rooms/molly";
-import RoomGate from "./roomGate";
+import RoomGate, { RoomOnlineGate } from "./roomGate";
 import useRingStore from "../stores/ringStore";
 import useStickerCDNStore from "../stores/stickerStore";
 import Stickers from "./stickers";
 
-const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
+const Room: React.FC<{ roomID: string; season?: number }> = ({ roomID, season }) => {
   const changeRoom = useRoomStore(useCallback((state) => state.changeRoom, []));
   const changeRoomStickers = useStickerCDNStore(useCallback((state) => state.changeRoomStickers, []));
   const unsubscribeFromRoomInfo = useRef<Unsubscribe>();
@@ -21,6 +21,8 @@ const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
   const initializeRing = useRingStore(useCallback((s) => s.initializeRing, []));
   const ringUnsubs = useRef<Unsubscribe[]>();
   const updateRingStatus = useRingStore(useCallback((s) => s.updateStatus, []));
+  const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
+
   useEffect(() => {
     async function setupSync() {
       ringUnsubs.current = await syncWebRing(initializeRing, updateRingStatus);
@@ -52,13 +54,13 @@ const Room: React.FC<{ roomID: string }> = ({ roomID }) => {
   }, [changeRoom, changeRoomStickers, roomID]);
   return (
     <RoomGate id={roomID as string}>
-      {/* <SeasonOne roomID={roomID}/> */}
-      <SeasonZero  />
+      <RoomOnlineGate>
+        {season == 0 || season == undefined ? <SeasonZero /> : <SeasonOne roomID={roomID} />}
+      </RoomOnlineGate>
     </RoomGate>
   );
 };
-
-const SeasonOne = ({roomID}: {roomID: string}) => {
+const SeasonOne = ({ roomID }: { roomID: string }) => {
   if (roomID == "chris") {
     let doubleSizeStyle: React.CSSProperties = {
       width: "calc(2 * 100vw)",
@@ -71,39 +73,28 @@ const SeasonOne = ({roomID}: {roomID: string}) => {
       "--chatMessageColor": "var(--white)",
       zIndex: 3,
     } as React.CSSProperties;
-    return <RoomView videoStyle={doubleSizeStyle} chatStyle={chatStyle} stickerStyle={doubleSizeStyle} />
+    return <RoomView videoStyle={doubleSizeStyle} chatStyle={chatStyle} stickerStyle={doubleSizeStyle} />;
   }
-  return <RoomView/>
-}
+  return <RoomView />;
+};
 const SeasonZero: React.FC = () => {
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
-
-  return roomInfo ? (
-    roomInfo.streamStatus == "active" ? (
-      <div className="fullBleed">
-        <iframe
-          className="fullBleed"
-          src={
-            roomInfo?.streamPlaybackID ||
-            "http://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&origin=http://example.com"
-          }
-        />{" "}
-      </div>
-    ) : (
-      <div className="fullBleed">
-        <div className="center:absolute"> ... </div>
-      </div>
-    )
-  ) : (
-    <div> </div>
+  return (
+    <div className="fullBleed">
+      <iframe
+        className="fullBleed"
+        src={
+          roomInfo?.streamPlaybackID || "http://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&origin=http://example.com"
+        }
+      />
+    </div>
   );
 };
 
-
 interface RoomViewProps {
-  chatStyle?: React.CSSProperties,
-  videoStyle?: React.CSSProperties,
-  stickerStyle?: React.CSSProperties
+  chatStyle?: React.CSSProperties;
+  videoStyle?: React.CSSProperties;
+  stickerStyle?: React.CSSProperties;
 }
 const RoomView = ({ chatStyle, videoStyle, stickerStyle }: RoomViewProps) => {
   return (
