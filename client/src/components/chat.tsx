@@ -11,7 +11,7 @@ export const Chat: React.FC<RoomUIProps> = ({className, style}) => {
   let roomID = useRoomStore((state) => state.currentRoomID);
   let unsubRef = useRef<Unsubscribe>();
   let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
-
+  let roomColor = useRoomStore(useCallback((state) => state.roomInfo?.roomColor, []));
   const chatWasAdded = useCallback(
     (cID, chat) => {
       setChatList((pc) => {
@@ -54,13 +54,25 @@ export const Chat: React.FC<RoomUIProps> = ({className, style}) => {
   return (
     <div className={(className || "") + " chat"} style={style as React.CSSProperties}>
       <ChatInput onSubmit={sendNewMessage} />
-      <div className="stack:custom padded:custom" >
-        {Object.entries(chatList).map(([id, chat]) => (
-          <div key={id} className="stack:s-2  padded:s-2 chatMessage">
-            <div className="caption">{chat.username || "unknown"}</div>
-            <div>{chat.message}</div>
-          </div>
-        ))}
+      <div
+        className="stack:s-3 padded:custom"
+        style={
+          {
+            "--stackSpacing": "var(--s-4)",
+            "--spacing": "var(--s-4)",
+            maxHeight: "20vw",
+            overflowY: "auto",
+          } as React.CSSProperties
+        }
+      >
+        {Object.entries(chatList)
+          .reverse()
+          .map(([id, chat]) => (
+            <p key={id} className="padded:custom chatMessage">
+              <span style={{ color: roomColor || "gray" }}>{chat.username || "unknown"}</span>{" "}
+              <span>{chat.message}</span>
+            </p>
+          ))}
       </div>
     </div>
   );
@@ -83,18 +95,26 @@ const ChatInput: React.FC<{ onSubmit: (chat: ChatMessage) => void }> = ({ onSubm
     setCurrentMessage("");
   }, [currentMessage, currentUser, onSubmit]);
   return currentUser ? (
-    <div className="stack:s-1 border-bottom padded chatInputContainer">
+    <div className="stack:s-2 border-bottom padded chatInputContainer">
       {numOnline ? <div> {numOnline} people online </div> : null}
       <div> send message as {currentUser.displayName || currentUser.email} </div>
-      <input
-        value={currentMessage}
-        onChange={(e) => {
-          setCurrentMessage(e.target.value);
-        }}
-      />
-      <span onClick={submitMessage} className="button align-start">
-        submit
-      </span>
+      <div className="fullWidth horizontal-stack">
+        <input
+          value={currentMessage}
+          className="flex-1"
+          onChange={(e) => {
+            setCurrentMessage(e.target.value);
+          }}
+          onKeyPress={(e) => {
+            if (e.key == "Enter") {
+              submitMessage();
+            }
+          }}
+        />
+        <span onClick={submitMessage} className="button align-start">
+          send
+        </span>
+      </div>
     </div>
   ) : (
     <div> login to chat </div>

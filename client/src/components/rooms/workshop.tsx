@@ -2,8 +2,9 @@ import { NextPage } from "next";
 import Room from "../room";
 import Layout from "../../layouts/layout";
 
-export const WorkshopPartZero: NextPage = () => {
 
+
+const WorkshopPartZero: NextPage = () => {
   return (
     <Layout>
         <Room roomID={"WORKSHOP"} season={0}/>
@@ -11,7 +12,7 @@ export const WorkshopPartZero: NextPage = () => {
   );
 };
 
-export const WorkshopPartOne: NextPage = () => {
+const WorkshopPartOne: NextPage = () => {
 
   return (
     <Layout>
@@ -20,5 +21,12 @@ export const WorkshopPartOne: NextPage = () => {
   );
 };
 
+const Workshop: NextPage = () => {
+  if (true) {
+    return <WorkshopPartZero/>
+  } else {
+    return <WorkshopPartOne/>
+  }
+}
 
-
+export default Workshop;

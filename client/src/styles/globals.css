@@ -351,6 +351,7 @@ p {
 
 .stack,
 .stack\:noGap,
+.stack\:s-2,
 .stack\:s-1,
 .stack\:s1,
 .stack\:s2,
@@ -379,6 +380,10 @@ p {
 .stack\:s-1>*+* {
   margin-block-start: var(--s-1);
 }
+.stack\:s-2>*+* {
+  margin-block-start: var(--s-2);
+}
+
 
 .stack\:s1>*+* {
   margin-block-start: var(--s1);
@@ -539,6 +544,7 @@ a:hover,
   background: var(--black);
 }
 
+
 .contrastFill, .contrastFill\:hover:hover {
   background: var(--contrast);
 }
@@ -576,7 +582,7 @@ a:hover,
 .chat {
   --chatAuthorcolor: var(--contrast);
   --chatMessageColor: var(--light);
-  --chatContainerBackground: rgba(0,0,0,0.8);
+  --chatContainerBackground: rgba(0,0,0,0.8); 
   background: var(--chatContainerBackground);
   color: var(--chatMessageColor);
 }
