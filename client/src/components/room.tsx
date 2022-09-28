@@ -79,12 +79,17 @@ const SeasonOne = ({ roomID }: { roomID: string }) => {
 };
 const SeasonZero: React.FC = () => {
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
+  if (roomInfo?.roomID == "WORKSHOP" && roomInfo?.streamPlaybackID) {
+    return (
+      <VideoPlayer className="fullBleed"/>
+    )
+  }
   return (
     <div className="fullBleed">
       <iframe
         className="fullBleed"
         src={
-          roomInfo?.streamPlaybackID || "http://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&origin=http://example.com"
+          roomInfo?.season0URL 
         }
       />
     </div>

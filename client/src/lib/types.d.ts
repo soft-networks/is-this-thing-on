@@ -38,7 +38,8 @@ type WebRing = {[key:string] : RoomLinkInfo};
 
 type RoomInfo = RoomLinkInfo & {
   streamOwner: string,
-  streamPlaybackID: string
+  streamPlaybackID: string,
+  season0URL?: string,
   numOnline: number,
   energy: number
 }

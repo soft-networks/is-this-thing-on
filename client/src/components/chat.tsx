@@ -85,7 +85,7 @@ const ChatInput: React.FC<{ onSubmit: (chat: ChatMessage) => void }> = ({ onSubm
   return currentUser ? (
     <div className="stack:s-1 border-bottom padded chatInputContainer">
       {numOnline ? <div> {numOnline} people online </div> : null}
-      <div> send message as {currentUser.email} </div>
+      <div> send message as {currentUser.displayName || currentUser.email} </div>
       <input
         value={currentMessage}
         onChange={(e) => {

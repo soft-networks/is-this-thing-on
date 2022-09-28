@@ -17,7 +17,7 @@ const AccountButton: React.FunctionComponent = () => {
 
     <div className="whiteFill border contrastFill:hover padded:s-2 clickable" onClick={() => back()}>back</div>    
     <Link href="/" passHref>
-      <div className="whiteFill border contrastFill:hover padded:s-2 clickable">THING</div>
+      <div className="whiteFill border contrastFill:hover padded:s-2 clickable">go home</div>
     </Link>
     </div>
   );

@@ -177,6 +177,7 @@ a, a:visited, .clickable {
 
 p {
   max-inline-size: var(--textWidth);
+  line-height: 1.2;
 }
 
 .wide  {

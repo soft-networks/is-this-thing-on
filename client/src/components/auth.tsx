@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, ReactText } from "react";
 import { useUserStore } from "../stores/userStore";
 import { generate } from "generate-password";
 import Admin from "./admin"
@@ -20,6 +20,10 @@ const Auth: React.FC = () => {
         </div>
       ) : (
         <div className="stack:s2">
+          <div className="stack:custom" style={{"--stackSpacing": "var(--s-2)"} as React.CSSProperties}>
+            <em>welcome to is this thing on</em>
+            <p>to chat, or leave a reaction, you have to create an account. currently, all your personal data is being stored in Googles cloud servers, and is viewable and manageable by one central admin. <a href="mailto:hello@softnet.works">email us</a> if you need help, or want your data deleted.</p> 
+          </div>
           <SignUp />
           <SignIn />
         </div>
