@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { generateStreamLink } from "../lib/server-api";
 import { useRoomStore } from "../stores/roomStore";
@@ -5,22 +6,27 @@ import { useRoomStore } from "../stores/roomStore";
 const DEFAULT_CLASSNAME = "fullWidth";
 const DEFAULT_STYLE = {};
 
-const VideoPlayer: React.FunctionComponent<RoomUIProps> = ({
+const VideoPlayer: React.FunctionComponent<RoomUIProps & {urlOverride?: string}> = ({
   className = DEFAULT_CLASSNAME,
   style = DEFAULT_STYLE,
+  urlOverride
 }) => {
   const roomInfo = useRoomStore((state) => state.roomInfo);
+  const [mute, setMuted] = useState(true);
 
+  useEffect(()=> {
+    window.addEventListener("click", () => setMuted(false))
+  }, [])
   return (
     <div className={className} style={style}>
-      {roomInfo && roomInfo.streamStatus == "active" && roomInfo.streamPlaybackID ? (
+      { (roomInfo && roomInfo.streamStatus == "active" && roomInfo.streamPlaybackID) || (urlOverride) ? (
         <ReactPlayer
-          url={generateStreamLink(roomInfo.streamPlaybackID)}
-          muted={true}
-          controls={false}
+          url={urlOverride || generateStreamLink((roomInfo as RoomInfo).streamPlaybackID)}
+          muted={mute}
           playing={true}
-          width="100%"
+          loop={true}
           height="100%"
+          width="auto"
         />
       ) : (
         null && <ReactPlayer

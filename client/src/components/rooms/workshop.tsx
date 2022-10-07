@@ -22,7 +22,7 @@ const WorkshopPartOne: NextPage = () => {
 };
 
 const Workshop: NextPage = () => {
-  if (true) {
+  if (false) {
     return <WorkshopPartZero/>
   } else {
     return <WorkshopPartOne/>

@@ -13,7 +13,7 @@ const RoomPage: NextPage = () => {
 
   return (
     <Layout>
-        <Room roomID={id as string} />
+        <Room roomID={id as string} season={1}/>
     </Layout>
   );
 };

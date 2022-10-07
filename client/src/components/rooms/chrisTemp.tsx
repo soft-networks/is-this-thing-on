@@ -4,17 +4,12 @@ import VideoPlayer from "../videoPlayer";
 import Stickers from "../stickers"; 
 
 
-const Chris: React.FC = () => {
+const ChrisTemp: React.FC = () => {
 
   return (
     <div className="fullBleed overflowScroll">
       <VideoPlayer
-        style={{
-          width: "calc(2 * 100vw)",
-          height: "calc(2 *56vw)",
-          zIndex: 0
-        }}
-        className="noEvents absoluteOrigin"
+        className=" absoluteOrigin"
         urlOverride="https://storage.googleapis.com/is-this-thing-on/chris/thing_description.mp4"
       />
       <Chat
@@ -28,12 +23,9 @@ const Chris: React.FC = () => {
           } as React.CSSProperties
         }
       />
-      <Stickers style={{
-          width: "calc(2 * 100vw)",
-          height: "calc(2 *56vw)"
-        }}/>
+      <Stickers />
     </div>
   );
 }
 
-export default Chris;
+export default ChrisTemp;
