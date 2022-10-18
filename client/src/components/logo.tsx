@@ -47,7 +47,7 @@ export const FooterLogo: React.FC<{ ring: WebRing, roomID: string}> = ({ ring, r
   );
 };
 
-export const HomeLogo: React.FC<{ ring: WebRing }> = ({ ring }) => {
+export const HomeLogo: React.FC<{ ring: WebRing, noNav?: boolean }> = ({ ring, noNav}) => {
   const numKeys = useMemo(() => Object.keys(ring).length, [ring]);
   const [selectedRoom, setSelectedRoom] = useState<number>(0);
   const animInterval = useRef<NodeJS.Timeout>();
@@ -69,10 +69,11 @@ export const HomeLogo: React.FC<{ ring: WebRing }> = ({ ring }) => {
           link={link}
           id={activeKey}
           className={classNames({ selected: true })}
+          noNav={noNav}
         />
       </div>
     );
-  }, [selectedRoom, ring]);
+  }, [ring, selectedRoom, noNav]);
   return (
     <div
       className="fullWidth stack:custom relative"

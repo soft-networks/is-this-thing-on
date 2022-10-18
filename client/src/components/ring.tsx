@@ -7,8 +7,9 @@ import { FooterLogo, HomeLogo } from "./logo";
 
 interface RingProps {
   collapsed?: boolean;
+  noNav?: boolean
 }
-const Ring: React.FC<RingProps> = ({ collapsed }) => {
+const Ring: React.FC<RingProps> = ({ collapsed, noNav}) => {
   const ring = useRingStore(useCallback((s) => s.links, []));
   const roomID = useRoomStore(useCallback((s) => s.currentRoomID, []));
  
@@ -18,7 +19,7 @@ const Ring: React.FC<RingProps> = ({ collapsed }) => {
         <FooterLogo ring={ring} roomID={roomID} />
       ) : null
     ) : (
-      <HomeLogo ring={ring} />
+      <HomeLogo ring={ring} noNav={noNav}/>
     )
   ) : (
     <div> no links </div>

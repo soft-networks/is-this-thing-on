@@ -1,5 +1,6 @@
 import { Unsubscribe } from "firebase/firestore";
 import { NextPage } from "next";
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { syncWebRing } from "../../lib/firestore";
 import useRingStore from "../../stores/ringStore";
@@ -28,8 +29,8 @@ const Season0Home : NextPage = () => {
       <div className="flex-1 contrastFill padded:s3">
         <Season0Ring />
       </div>
-      <div className="grow-text padded">
-       is this THING on is currently <span className="contrastFill"> LIVE</span> in Season 0. 
+      <div className="grow-text padded:s-2">
+       is this THING on is an artist powered live streaming platform, currently in Season 0 of 3. Learn more about the project <Link href={"/about"}>here</Link>
       </div>
     </div>
   )
