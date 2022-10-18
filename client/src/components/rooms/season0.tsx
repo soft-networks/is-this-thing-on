@@ -52,23 +52,32 @@ const Season0Ring : React.FC = () => {
       const src = iLink.season0URL;
       if (iLink.streamStatus == "active" && src) {
         nodes.push(
-          <g onClick={() => window.open(iLink.season0Href || src,'_blank')} style={{cursor: "ne-resize"}}>
+          <g onClick={() => window.open(iLink.season0Href || src, "_blank")} style={{ cursor: "ne-resize" }} key={`node-visible-${i}`}>
             <animateMotion dur={`${ANIM_LENGTH}s`} begin={`${i * -ANIM_OFFSET}s`} repeatCount="indefinite">
               <mpath xlinkHref="#ellipsePath" />
             </animateMotion>
-            <text y={-iframeSize[1]/2  - 5} textAnchor="middle" fill="blue">
-                {iLink.roomName}
-            </text>
             <foreignObject
               width={iframeSize[0]}
               height={iframeSize[1]}
               transform={`translate(-${iframeSize[0] / 2}, -${iframeSize[1] / 2})`}
-              onClick={() => window.open(src,'_blank')}
+              style={{ border: "2px solid blue", filter: `drop-shadow(0px 0px 10px ${iLink.roomColor || "white"})` }}
+              onClick={() => window.open(src, "_blank")}
             >
-              <iframe src={src} width="100%" height="100%" frameBorder={0} className="noEvents noOverflow" allow="accelerometer; autoplay; modestbranding;" style={{border: "2px solid blue"}}/>
+              <iframe
+                src={src}
+                width="100%"
+                height="100%"
+                frameBorder={0}
+                className="noEvents noOverflow"
+                allow="accelerometer; autoplay; modestbranding;"
+                
+              />
             </foreignObject>
+            <text y={-iframeSize[1] / 2 - 5} textAnchor="middle" fill="blue" style={{filter: `drop-shadow(0px 0px 6px ${iLink.roomColor || "white"})`}}>
+              {iLink.roomName}
+            </text>
+
           </g>
-          
         );
       } else {
         nodes.push(<SVGRingNode
