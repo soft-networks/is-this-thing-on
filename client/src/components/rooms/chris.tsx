@@ -15,7 +15,7 @@ const Chris: React.FC = () => {
           zIndex: 0
         }}
         className="noEvents absoluteOrigin"
-        urlOverride="https://storage.googleapis.com/is-this-thing-on/chris/thing_description.mp4"
+  
       />
       <Chat
         className="quarterWidth absoluteOrigin"

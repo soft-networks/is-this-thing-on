@@ -11,6 +11,7 @@ export function sanitizeRoomInfo(data: DocumentData, id: string): RoomInfo {
     roomID: id,
     streamPlaybackID: data["stream_playback_id"] || undefined,
     season0URL: data["season0URL"] || undefined,
+    season0Href: data["season0HREF"] || data["season0URL"] || undefined,
     streamOwner: "bhavik",
     streamStatus: data["stream_status"] || "disconnected",
     numOnline: data["num_online"] || 0,

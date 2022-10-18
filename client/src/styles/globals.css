@@ -437,6 +437,9 @@ pre {
 }
 
 
+.blue {
+  color: blue;
+}
 .border {
   border: 3px solid var(--black);
 }
