@@ -117,6 +117,10 @@ a, a:visited, .clickable {
   cursor: inherit;
 }
 
+iframe html, iframe body {
+  overflow: hidden !important;
+
+}
 /* (Optional) Apply a "closed-hand" cursor during drag operation. */
 .draggable.active {
   cursor: grabbing;
@@ -529,7 +533,13 @@ a:hover,
   scale: 1.4;
 }
 
-
+.scale\:hover {
+  scale: 1;
+  transition: scale 300ms;
+}
+.scale\:hover:hover {
+  scale: 1.2;
+}
 .whiteFill {
   background: var(--white);
 }

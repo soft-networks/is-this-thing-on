@@ -4,15 +4,12 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { syncWebRing } from "../../lib/firestore";
 import useRingStore from "../../stores/ringStore";
-import {  SVGRingNode, SVGRingSeparate } from "../logo";
+import { SVGRingNode, SVGRingSeparate } from "../logo";
 import VideoPlayer from "../videoPlayer";
 
-
-
-const Season0Home : NextPage = () => {
-  
-  const initializeRing = useRingStore(useCallback(s => s.initializeRing, []));
-  const updateRingStatus = useRingStore(useCallback(s => s.updateStatus, []));
+const Season0Home: NextPage = () => {
+  const initializeRing = useRingStore(useCallback((s) => s.initializeRing, []));
+  const updateRingStatus = useRingStore(useCallback((s) => s.updateStatus, []));
   const ringUnsubs = useRef<Unsubscribe[]>();
 
   useEffect(() => {
@@ -23,27 +20,30 @@ const Season0Home : NextPage = () => {
     return () => ringUnsubs.current && ringUnsubs.current.forEach((u) => u());
   }, [initializeRing, updateRingStatus]);
 
-
   return (
     <div className="fullBleed stack">
       <div className="flex-1 contrastFill padded:s3">
         <Season0Ring />
       </div>
       <div className="grow-text padded:s-2">
-       is this THING on is an artist powered live streaming platform, currently in Season 0 of 3. Learn more about the project <Link href={"/about"}>here</Link>
+        Is this THING on? is a live streaming network for artists being built slowly over three seasons, guided by public performance and conversation. Season 0 is{" "}
+        <span className="contrastFill">LIVE TODAY</span> with performances at 7PM ET and{" "}
+        <a href="https://nyu.zoom.us/j/96229850527" target="_blank" rel="noreferrer">
+          salon
+        </a>{" "}
+        at 8PM ET. Learn more <Link href={"/about"}>here</Link>.
       </div>
     </div>
-  )
-}
+  );
+};
 
-const Season0Ring : React.FC = () => {
-
+const Season0Ring: React.FC = () => {
   const ANIM_LENGTH = 1000;
-  const ring = useRingStore(useCallback(s => s.links, []));
-  const ringPieces: JSX.Element[] = useMemo(() => SVGRingSeparate({ring: ring, returnWithoutWrapping: true}), [ring]);
+  const ring = useRingStore(useCallback((s) => s.links, []));
+  const ringPieces: JSX.Element[] = useMemo(() => SVGRingSeparate({ ring: ring, returnWithoutWrapping: true }), [ring]);
 
   const ringNodes = useMemo(() => {
-    const nodes : JSX.Element[] = [];
+    const nodes: JSX.Element[] = [];
     const numKeys = Object.keys(ring).length;
     const ANIM_OFFSET = ANIM_LENGTH / numKeys;
     const iframeSize = [160, 90];
@@ -52,7 +52,12 @@ const Season0Ring : React.FC = () => {
       const src = iLink.season0URL;
       if (iLink.streamStatus == "active" && src) {
         nodes.push(
-          <g onClick={() => window.open(iLink.season0Href || src, "_blank")} style={{ cursor: "ne-resize" }} key={`node-visible-${i}`}>
+          <g
+            className="scale:hover"
+            onClick={() => window.open(iLink.season0Href || src, "_blank")}
+            style={{ cursor: "ne-resize" }}
+            key={`node-visible-${i}`}
+          >
             <animateMotion dur={`${ANIM_LENGTH}s`} begin={`${i * -ANIM_OFFSET}s`} repeatCount="indefinite">
               <mpath xlinkHref="#ellipsePath" />
             </animateMotion>
@@ -70,30 +75,37 @@ const Season0Ring : React.FC = () => {
                 frameBorder={0}
                 className="noEvents noOverflow"
                 allow="accelerometer; autoplay; modestbranding;"
-                
+                style={{overflow: "hidden"}}
+                scrolling="no"
               />
             </foreignObject>
-            <text y={-iframeSize[1] / 2 - 5} textAnchor="middle" fill="blue" style={{filter: `drop-shadow(0px 0px 6px ${iLink.roomColor || "white"})`}}>
+            <text
+              y={-iframeSize[1] / 2 - 5}
+              textAnchor="middle"
+              fill="blue"
+              style={{ filter: `drop-shadow(0px 0px 6px ${iLink.roomColor || "white"})` }}
+            >
               {iLink.roomName}
             </text>
-
           </g>
         );
       } else {
-        nodes.push(<SVGRingNode
-          index={i}
-          myColor={iLink.roomColor}
-          ANIM_LENGTH={ANIM_LENGTH}
-          showColor={false}
-          key={`node-${i}`}
-          ANIM_OFFSET={ANIM_OFFSET}
-          selected={false}
-        />)
+        nodes.push(
+          <SVGRingNode
+            index={i}
+            myColor={iLink.roomColor}
+            ANIM_LENGTH={ANIM_LENGTH}
+            showColor={false}
+            key={`node-${i}`}
+            ANIM_OFFSET={ANIM_OFFSET}
+            selected={false}
+          />
+        );
       }
     });
     return nodes;
   }, [ring]);
-  
+
   return (
     <svg xmlns="http://www.w3.org/2000/svg" className="fullWidth overflowVisible" viewBox="-50 -50 550 450">
       <text x={150} y={210} style={{ fontSize: "55px", fontStyle: "italic" }}>
@@ -102,7 +114,7 @@ const Season0Ring : React.FC = () => {
       {ringPieces[0]}
       {ringNodes}
     </svg>
-  ); 
-}
+  );
+};
 
-export default Season0Home; 
+export default Season0Home;

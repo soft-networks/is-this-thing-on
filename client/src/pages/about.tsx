@@ -67,7 +67,7 @@ const About: NextPage = () => {
           for a salon after the stream to discuss.
         </p>
         <p className="grow-text wide">
-          THING is a cooperative project by Molly Soda, Christopher Clary, soft networks, Semi Anonymous Friend and
+          THING is a cooperative project by Molly Soda, Christopher Clary, soft networks, Sarah Rothberg, Semi Anonymous Friend and
           you?. It is supported by the Next Web Grant and c/change. Thanks for stopping by and see you soon!
         </p>
       </main>
