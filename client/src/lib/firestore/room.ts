@@ -52,8 +52,8 @@ export async function syncWebRing(initRing: (ring: WebRing) => void, linkUpdate:
     }
     let unsub = onSnapshot(doc.ref, (doc) => {
       let data = doc.data();
-      if (data) {
-        let sanitized = sanitizeRoomInfo(data, data.id);
+      if (data && doc.id) {
+        let sanitized = sanitizeRoomInfo(data, doc.id);
         linkUpdate(doc.id, sanitized);
       }
     })

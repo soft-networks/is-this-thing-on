@@ -1,7 +1,7 @@
 import { Unsubscribe } from "firebase/firestore";
 import { NextPage } from "next";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { syncWebRing } from "../../lib/firestore";
 import useRingStore from "../../stores/ringStore";
 import { SVGRingNode, SVGRingSeparate } from "../logo";
@@ -22,10 +22,10 @@ const Season0Home: NextPage = () => {
 
   return (
     <div className="fullBleed stack">
-      <div className="flex-1 contrastFill padded:s3">
+      <div className="flex-1 contrastFill center-text" style={{ padding: "72px 96px"} as React.CSSProperties} >
         <Season0Ring />
       </div>
-      <div className="grow-text padded:s-2">
+      <div className="grow-text padded:s-2" style={{paddingTop: 0}}>
         Is this THING on? is a live streaming network for artists being built slowly over three seasons, guided by public performance and conversation. Season 0 is{" "}
         <span className="contrastFill">LIVE TODAY</span> with performances at 7PM ET and{" "}
         <a href="https://nyu.zoom.us/j/96229850527" target="_blank" rel="noreferrer">
@@ -46,10 +46,13 @@ const Season0Ring: React.FC = () => {
     const nodes: JSX.Element[] = [];
     const numKeys = Object.keys(ring).length;
     const ANIM_OFFSET = ANIM_LENGTH / numKeys;
-    const iframeSize = [160, 90];
+    let iframeSize = [160, 90];
+    //iframeSize = iframeSize.map(s => s*0.75);
     Object.keys(ring).forEach((key, i) => {
       let iLink = ring[key];
       const src = iLink.season0URL;
+      if (key == "molly")
+        console.log("Setting up ....", iLink);
       if (iLink.streamStatus == "active" && src) {
         nodes.push(
           <g
@@ -107,7 +110,7 @@ const Season0Ring: React.FC = () => {
   }, [ring]);
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" className="fullWidth overflowVisible" viewBox="-50 -50 550 450">
+    <svg xmlns="http://www.w3.org/2000/svg" className="fullWidth overflowVisible" style={{maxWidth: "18000px"}} viewBox="-50 -50 550 450">
       <text x={150} y={210} style={{ fontSize: "55px", fontStyle: "italic" }}>
         THING
       </text>
