@@ -22,7 +22,7 @@ const Season0Home: NextPage = () => {
 
   return (
     <div className="fullBleed stack">
-      <div className="flex-1 contrastFill center-text" style={{ padding: "72px 96px"} as React.CSSProperties} >
+      <div className="flex-1 contrastFill center-text" style={{ padding: "var(--s-2) 96px"} as React.CSSProperties} >
         <Season0Ring />
       </div>
       <div className="grow-text padded:s-2" style={{paddingTop: 0}}>
