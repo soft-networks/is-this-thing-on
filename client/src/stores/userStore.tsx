@@ -5,6 +5,7 @@ import { getAuth, createUserWithEmailAndPassword, User, signInWithEmailAndPasswo
 import { app } from "../lib/firestore/init";
 const auth = getAuth(app);
 
+const randomName = () => `anon-${Math.floor(Math.random() * 1000)}`;
 interface UserState {
   currentUser: User | undefined;
   displayName: string,
@@ -18,7 +19,7 @@ interface UserState {
 export const useUserStore = create<UserState>()(
   persist((set) => ({
     currentUser: undefined,
-    displayName: `anon-${Math.floor(Math.random() * 1000)}`,
+    displayName: randomName(),
     updateDisplayname: (displayName, callback) => {
       let currentUser = auth.currentUser;
       if (!currentUser) {
@@ -83,7 +84,7 @@ export const useUserStore = create<UserState>()(
         .then(() => {
           // Sign-out successful.
           console.log("Signed out");
-          set((s) => ({ currentUser: undefined }));
+          set((s) => ({ currentUser: undefined, displayName: randomName() }));
         })
         .catch((error) => {
           console.log("Error signing out" , error);

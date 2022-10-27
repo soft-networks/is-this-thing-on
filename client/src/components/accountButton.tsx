@@ -1,24 +1,24 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useCallback } from "react";
 import { useUserStore } from "../stores/userStore";
 
 const AccountButton: React.FunctionComponent = () => {
-  const currentUser = useUserStore((state) => state.currentUser);
+  const displayName = useUserStore(useCallback((state) => state.displayName, []));
+  const currentUser = useUserStore(useCallback((state) => state.currentUser, []));
   const { pathname, back } = useRouter();
 
   return pathname !== "/account" ? (
     <Link href="/account" passHref>
-      <div className="whiteFill border contrastFill:hover padded:s-2 clickable">
-        {currentUser ? (currentUser.displayName || currentUser.email) : "login"}
+      <div className="whiteFill border contrastFill:hover padded:s-2 clickable clickable:link">
+        {currentUser ? currentUser.displayName || currentUser.email : `${displayName}`}
       </div>
     </Link>
   ) : (
     <div className="horizontal-stack">
-
-    <div className="whiteFill border contrastFill:hover padded:s-2 clickable" onClick={() => back()}>back</div>    
-    <Link href="/" passHref>
-      <div className="whiteFill border contrastFill:hover padded:s-2 clickable">go home</div>
-    </Link>
+      <div className="whiteFill border contrastFill:hover padded:s-2 clickable clickable:link" onClick={() => back()}>
+        close
+      </div>
     </div>
   );
 };

@@ -28,7 +28,7 @@ const BigRingPage: NextPage = () => {
 
   return (
     <Layout>
-    <div className="fullBleed stack">
+    <div className="fullBleed stack whiteFill">
       <div className="flex-1 contrastFill center-text" style={{ padding: "var(--s-2) 96px"} as React.CSSProperties} >
         <BigRing />
       </div>

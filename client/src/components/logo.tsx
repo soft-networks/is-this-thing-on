@@ -29,14 +29,14 @@ export const FooterLogo: React.FC<{ ring: WebRing, roomID: string}> = ({ ring, r
       <div className="center:absolute ">{ringParts[0]}</div>
         <div className="horizontal-stack:s-1">
           <div
-            className="clickable border padded:s-2 contrastFill:hover"
+            className="clickable clickable:link border padded:s-2 contrastFill:hover"
             onClick={() => indexSelected !== undefined && navStream(indexSelected - 1)}
           >
             prev
           </div>
           <NodeLink link={ring[roomID]} id={roomID} noNav />
           <div
-            className="clickable border padded:s-2 contrastFill:hover"
+            className="clickable clickable:link border padded:s-2 contrastFill:hover"
             onClick={() => indexSelected !== undefined && navStream(indexSelected + 1)}
           >
             next

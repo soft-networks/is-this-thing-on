@@ -1,5 +1,6 @@
 import { Unsubscribe } from "firebase/firestore";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { createRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Draggable from "react-draggable";
 import { addChatMessageDB, syncChat } from "../lib/firestore/";
 import useRingStore from "../stores/ringStore";
 import { useRoomStore } from "../stores/roomStore";
@@ -12,7 +13,9 @@ export const Chat: React.FC<RoomUIProps> = ({className, style}) => {
   let roomID = useRoomStore((state) => state.currentRoomID);
   let unsubRef = useRef<Unsubscribe>();
   let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
-  
+  let chatRef = createRef<HTMLDivElement>();
+  let [filterRoom, setFilterRoom] = useState<boolean>(false);
+
   const chatWasAdded = useCallback(
     (cID, chat) => {
       setChatList((pc) => {
@@ -52,26 +55,38 @@ export const Chat: React.FC<RoomUIProps> = ({className, style}) => {
     };
   }, [chatWasAdded, chatWasRemoved]);
   return (
-    <div className={(className || "") + " chat highest"} style={style as React.CSSProperties}>
-      <ChatInput onSubmit={sendNewMessage} />
-      <div
-        className="stack:s-3 padded:custom"
-        style={
-          {
-            "--stackSpacing": "var(--s-4)",
-            "--spacing": "var(--s-4)",
-            maxHeight: "20vw",
-            overflowY: "auto",
-          } as React.CSSProperties
-        }
-      >
-        {Object.entries(chatList)
+    <Draggable handle=".handle" nodeRef={chatRef}>
+      <div className={(className || "") + " chat highest border"} style={style as React.CSSProperties} ref={chatRef}>
+        <div className="handle" style={{ height: "var(--sp-2)", background: "var(--chatBorderColor)" }}>
+          .
+        </div>
+        <ChatInput onSubmit={sendNewMessage} />
+        <div className="padded:s-2 caption horizontal-stack clickable" style={{background: "var(--black)"}} onClick={() => setFilterRoom(!filterRoom)}>
+          <input type="checkbox" checked={filterRoom}  />
+          <p>see messages in this room only</p>
+        </div>
+        <div
+          className="stack:s-3 padded:custom"
+          style={
+            {
+              "--stackSpacing": "var(--s-4)",
+              "--spacing": "var(--s-4)",
+              maxHeight: "20vw",
+              overflowY: "auto",
+            } as React.CSSProperties
+          }
+        >
+          {Object.entries(chatList)
           .reverse()
-          .map(([id, chat]) => (
-           <RenderChat id={id} chat={chat} key={`chat-${id}`} />
-          ))}
+          .map(([id, chat]) => {
+            if (filterRoom && chat.roomID !== (roomID || "home")) {
+              return null
+            }
+            return <RenderChat id={id} chat={chat} key={`chat-${id}`} />
+          })}
       </div>
-    </div>
+      </div>
+    </Draggable>
   );
 };
 

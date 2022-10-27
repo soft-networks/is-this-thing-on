@@ -94,7 +94,7 @@ body {
   letter-spacing: -1px;
 }
 
-a, a:visited, .clickable {
+a, a:visited, .clickable\:link {
   color: blue;
   text-decoration: underline;
 }
@@ -339,6 +339,9 @@ p {
   display: flex;
   justify-content: center;
 }
+.align-start {
+  align-items: flex-start;
+}
 .align-start\:vertical {
   display: flex;
   align-items: flex-start;
@@ -532,10 +535,8 @@ a:hover,
 }
 
 
-.clickable {
-  
+.clickable {  
   cursor: pointer;
-  text-decoration: underline;
 }
 .clickable\:opacity {
   cursor: pointer;
@@ -610,15 +611,40 @@ a:hover,
 .chat {
   --chatAuthorColor: var(--contrast);
   --chatMessageColor: var(--light);
-  --chatContainerBackground: rgba(0,0,0,0.8); 
+  --chatContainerBackground: var(--black); 
+  --chatBorderColor: var(--gray);
   background: var(--chatContainerBackground);
   color: var(--chatMessageColor);
-  width: max(20ch, 20vw)
-}
-
-.chat {
+  width: max(20ch, 20vw);
   border-color:  var(--chatBorderColor);
 }
+.chat * {
+  border-color:  var(--chatBorderColor) !important;
+}
+
+.handle {
+  cursor: all-scroll;
+}
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--gray);
+
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+} 
 
 .chatMessage {
   background: var(--chatMessageBackground);

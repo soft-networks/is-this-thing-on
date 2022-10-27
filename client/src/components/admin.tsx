@@ -48,9 +48,9 @@ const RoomAdminUI: React.FC<{ roomID: string; uid: string }> = ({ roomID, uid })
   }, [roomID]);
 
   return (
-    <div className="stack padded border-thin whiteFill">
-      <div> <span className="contrastFill">{roomID}</span> </div>
-      <div>stream key: <br/>{streamKey}</div>
+    <div className="stack padded border-thin">
+      <div> <span>{roomID}</span> </div>
+      <div>stream key: <br/> <span className="contrastFill">{streamKey}</span></div>
       <div
         onClick={() => {
           resetRoom(roomID);
