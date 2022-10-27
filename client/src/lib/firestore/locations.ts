@@ -12,9 +12,9 @@ export function roomDoc(roomName: string) {
 export function energyAccountDoc(userID: string) {
  return doc(collection(db, "energy_accounts"), userID);
 }
-export function chatCollection(roomDoc: DocumentReference) {
+export function chatCollection() {
   // console.log("Room chat doc reference", roomDoc);
-  return collection(roomDoc, "chats");
+  return collection(db, "chat");
 }
 export function stickerCDNCollection(roomDoc: DocumentReference) {
   return collection(roomDoc, "sticker_cdn");

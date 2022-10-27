@@ -17,7 +17,7 @@ const Chris: React.FC = () => {
         className="noEvents absoluteOrigin"
   
       />
-      <Chat
+      {/* <Chat
         className="quarterWidth absoluteOrigin"
         style={
           {
@@ -27,7 +27,7 @@ const Chris: React.FC = () => {
             zIndex: 3,
           } as React.CSSProperties
         }
-      />
+      /> */}
       <Stickers style={{
           width: "calc(2 * 100vw)",
           height: "calc(2 *56vw)"

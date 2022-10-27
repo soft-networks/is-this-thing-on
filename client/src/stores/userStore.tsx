@@ -7,16 +7,18 @@ const auth = getAuth(app);
 
 interface UserState {
   currentUser: User | undefined;
+  displayName: string,
   signIn: (username: string, password: string, signInComplete: (complete: boolean, error?: string)=> void) => void;
-  signUp: (username: string, password: string, signUpCompete: (complete: boolean, error?: string) => void) => void;
+  signUp: (email: string, password: string,  signUpCompete: (complete: boolean, error?: string) => void) => void;
   signOut: () => void;
-  updateDisplayname: (displayName: string, callback: (success: boolean, e?: Error) => void) => void,
+  updateDisplayname: (displayName: string, callback: (success: boolean, error?: Error) => void) => void,
 }
 
 
 export const useUserStore = create<UserState>()(
   persist((set) => ({
     currentUser: undefined,
+    displayName: `anon-${Math.floor(Math.random() * 1000)}`,
     updateDisplayname: (displayName, callback) => {
       let currentUser = auth.currentUser;
       if (!currentUser) {
@@ -31,7 +33,7 @@ export const useUserStore = create<UserState>()(
         // ...
         console.log("Name updated!", displayName);
         if (auth.currentUser) {
-          set({currentUser: auth.currentUser});
+          set({currentUser: auth.currentUser, displayName: displayName});
         }
         callback(true);    
       }).catch((error) => {
@@ -59,8 +61,8 @@ export const useUserStore = create<UserState>()(
         });
       return;
     },
-    signUp: (username: string, password: string, onSignUp) => {
-      createUserWithEmailAndPassword(auth, username, password)
+    signUp: (email: string, password: string, onSignUp) => {
+      createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;

@@ -5,14 +5,11 @@ import { useRoomStore } from "../stores/roomStore";
 import { setUserHeartbeat, syncRoomInfoDB, syncWebRing } from "../lib/firestore";
 import { Unsubscribe } from "firebase/auth";
 import { useUserStore } from "../stores/userStore";
-import Chris from "./rooms/chris";
 import VideoPlayer from "./videoPlayer";
-import Molly from "./rooms/molly";
 import RoomGate, { RoomOnlineGate } from "./roomGate";
 import useRingStore from "../stores/ringStore";
 import useStickerCDNStore from "../stores/stickerStore";
 import Stickers from "./stickers";
-import ChrisTemp from "./rooms/chrisTemp";
 
 const Room: React.FC<{ roomID: string; season?: number }> = ({ roomID, season }) => {
   const changeRoom = useRoomStore(useCallback((state) => state.changeRoom, []));
@@ -63,19 +60,18 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({ roomID, season })
 };
 const SeasonOne = ({ roomID }: { roomID: string }) => {
   if (roomID == "chris") {
-    return <ChrisTemp/>
-    // let doubleSizeStyle: React.CSSProperties = {
-    //   width: "calc(2 * 100vw)",
-    //   height: "calc(2 *56vw)",
-    //   zIndex: 0,
-    // };
-    // let chatStyle: React.CSSProperties = {
-    //   "--chatAuthorColor": "hotpink",
-    //   "--chatContainerBackground": "rgba(0,0,0,0.6)",
-    //   "--chatMessageColor": "var(--white)",
-    //   zIndex: 3,
-    // } as React.CSSProperties;
-    // return <RoomView videoStyle={doubleSizeStyle} chatStyle={chatStyle} stickerStyle={doubleSizeStyle} />;
+    let doubleSizeStyle: React.CSSProperties = {
+      width: "calc(2 * 100vw)",
+      height: "calc(2 *56vw)",
+      zIndex: 0,
+    };
+    let chatStyle: React.CSSProperties = {
+      "--chatAuthorColor": "hotpink",
+      "--chatContainerBackground": "rgba(0,0,0,0.6)",
+      "--chatMessageColor": "var(--white)",
+      zIndex: 3,
+    } as React.CSSProperties;
+    return <RoomView videoStyle={doubleSizeStyle} chatStyle={chatStyle} stickerStyle={doubleSizeStyle} />;
   }
   return <RoomView />;
 };
@@ -107,7 +103,6 @@ const RoomView = ({ chatStyle, videoStyle, stickerStyle }: RoomViewProps) => {
   return (
     <div className="fullBleed overflowScroll">
       <VideoPlayer style={videoStyle} className="fullBleed noEvents absoluteOrigin" />
-      <Chat className="quarterWidth absoluteOrigin highest" style={chatStyle} />
       <Stickers style={stickerStyle} />
     </div>
   );

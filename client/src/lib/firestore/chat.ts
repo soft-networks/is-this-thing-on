@@ -1,20 +1,16 @@
-import { addDoc, onSnapshot } from "firebase/firestore";
+import { addDoc, limit, onSnapshot, orderBy, query } from "firebase/firestore";
 import { validateRoomName } from "./converters";
 import { chatCollection, roomDoc } from "./locations";
 
 export async function syncChat(
-  roomName: string,
   addChat: (id: string, chat: ChatMessage) => void,
   removeChat: (id: string) => void
 ) {
-  if (!validateRoomName(roomName)) {
-    return;
-  }
-  const chats = chatCollection(roomDoc(roomName));
-  const unsub = onSnapshot(chats, (docs) => {
+  const chats = chatCollection();
+  const q = query(chats, orderBy("timestamp"), limit(100))
+  const unsub = onSnapshot(q, (docs) => {
     docs.docChanges().forEach((change) => {
       let chat = change.doc;
-
       if (change.type === "added") {
         addChat(chat.id, change.doc.data() as ChatMessage);
       }
@@ -27,7 +23,7 @@ export async function syncChat(
   });
   return unsub;
 }
-export async function addChatMessageDB(roomName: string, chat: ChatMessage) {
-  const chats = chatCollection(roomDoc(roomName));
+export async function addChatMessageDB(chat: ChatMessage) {
+  const chats = chatCollection();
   await addDoc(chats,  chat);
 }

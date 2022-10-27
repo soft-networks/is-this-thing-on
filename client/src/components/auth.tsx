@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, ReactText } from "react";
 import { useUserStore } from "../stores/userStore";
 import { generate } from "generate-password";
-import Admin from "./admin"
+import Admin from "./admin";
 
 const Auth: React.FC = () => {
   const currentUser = useUserStore(useCallback((state) => state.currentUser, []));
@@ -9,20 +9,20 @@ const Auth: React.FC = () => {
     <div className="quarterWidth centerh padded">
       {currentUser ? (
         <div className="stack:s2">
-          <div>
-            <p> <em>welcome!</em> </p>
-            <p> email address: {currentUser.email}</p>
-            <p> user name: {currentUser.displayName}</p>
-          </div>
+          <em>welcome!</em>
           <SignOut />
-          <AccountManager/>
+          <AccountManager />
           <Admin uid={currentUser.uid} />
         </div>
       ) : (
         <div className="stack:s2">
-          <div className="stack:custom" style={{"--stackSpacing": "var(--s-2)"} as React.CSSProperties}>
+          <div className="stack:s-1">
             <em>welcome to is this thing on</em>
-            <p>to chat, or leave a reaction, you have to create an account. currently, all your personal data is being stored in Googles cloud servers, and is viewable and manageable by one central admin. <a href="mailto:hello@softnet.works">email us</a> if you need help, or want your data deleted.</p> 
+            <p>
+              to chat, or leave a reaction, you have to create an account. currently, all your personal data is being
+              stored in Googles cloud servers, and is viewable and manageable by one central admin.{" "}
+              <a href="mailto:hello@softnet.works">email us</a> if you need help, or want your data deleted.
+            </p>
           </div>
           <SignUp />
           <SignIn />
@@ -32,66 +32,78 @@ const Auth: React.FC = () => {
   );
 };
 const SignUp: React.FC = () => {
-  const [usernameValue, setUsernameValue] = useState("");
+  const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
+  const [usernameValue, setUsernameValue] = useState("");
+
   const [error, setError] = useState("");
   const signUp = useUserStore(useCallback((state) => state.signUp, []));
+  const updateDisplayname = useUserStore(useCallback((state) => state.updateDisplayname, []));
 
   const signUpComplete = useCallback(
-    (success: boolean, error?: string) => {
+    (success: boolean, error?: Error) => {
       if (success) {
-        setUsernameValue("");
+        setEmailValue("");
         setPasswordValue("");
+        setUsernameValue("");
       } else {
-        setError(error || "There was an error signing up sorry");
+        setError(error?.message || "There was an error signing up sorry");
       }
     },
-    [setUsernameValue, setPasswordValue, setError]
+    [setEmailValue, setPasswordValue, setError]
   );
 
   const onSubmit = () => {
-    if (usernameValue == "" || passwordValue == "") {
+    if (emailValue == "" || passwordValue == "" || usernameValue == "") {
       console.error("Need username and password");
       return;
     }
     console.log("signing up with password", passwordValue);
-    signUp(usernameValue, passwordValue, signUpComplete);
-  };
-  const generatePassword = () => {
-    setPasswordValue(generate());
+    signUp(emailValue, passwordValue, () => updateDisplayname(usernameValue, signUpComplete));
   };
 
   return (
-    <div className="stack padded  border-thin">
-      <div> <em>sign up</em> </div>
-      <input
-        value={usernameValue}
-        placeholder="email"
-        type="email"
-        className="padded"
-        onChange={(e) => setUsernameValue(e.target.value)}
-      />
+    <form className="stack padded  border-thin">
       <div>
-        {passwordValue == "" ? (
-          <div onClick={generatePassword} className="padded border-thin clickable whiteFill contrastFill:hover">
-            {" "}
-            Generate unique password{" "}
-          </div>
-        ) : (
-          <div className="stack:s-1">
-            <div className="contrastFill padded">{passwordValue}</div>
-            <div className="caption">
-              This is your unique password. Keep it somewhere self. If you lose it, well.. we will help you get back into your account so no worries! 
-            </div>
-          </div>
-        )}
+        {" "}
+        <em>sign up</em>{" "}
+      </div>
+      <div className="stack:s-2">
+        <label className="caption">email</label>
+        <input
+          value={emailValue}
+          placeholder="email"
+          type="email"
+          className="padded"
+          onChange={(e) => setEmailValue(e.target.value)}
+        />
+      </div>
+
+      <div className="stack:s-2">
+        <label className="caption">password</label>
+        <input
+          value={passwordValue}
+          placeholder="password"
+          type="password"
+          className="padded"
+          onChange={(e) => setEmailValue(e.target.value)}
+        />
+      </div>
+      <div className="stack:s-2">
+        <label className="caption">username for chat</label>
+        <input
+          value={usernameValue}
+          placeholder="username"
+          type="text"
+          className="padded"
+          onChange={(e) => setUsernameValue(e.target.value)}
+        />
       </div>
       <div onClick={() => onSubmit()} className="clickable">
-        {" "}
-        create account{" "}
+        create account
       </div>
       <div className="red">{error}</div>
-    </div>
+    </form>
   );
 };
 
@@ -121,21 +133,23 @@ const SignIn: React.FC = () => {
 
   return (
     <div className="stack border-thin padded ">
-      <div><em> sign in </em></div>
-        <input
-          value={usernameValue}
-          placeholder="email"
-          type="email"
-          onChange={(e) => setUsernameValue(e.target.value)}
-          className="padded"
-        />
-        <input
-          value={passwordValue}
-          placeholder="password"
-          type="password"
-          className="padded"
-          onChange={(e) => setPasswordValue(e.target.value)}
-        />
+      <div>
+        <em> sign in </em>
+      </div>
+      <input
+        value={usernameValue}
+        placeholder="email"
+        type="email"
+        onChange={(e) => setUsernameValue(e.target.value)}
+        className="padded"
+      />
+      <input
+        value={passwordValue}
+        placeholder="password"
+        type="password"
+        className="padded"
+        onChange={(e) => setPasswordValue(e.target.value)}
+      />
       <div onClick={() => onSubmit()} className="clickable">
         sign in
       </div>
@@ -148,12 +162,11 @@ const SignOut = () => {
   const signOut = useUserStore(useCallback((state) => state.signOut, []));
 
   return (
-    <div  >
-      <span className="clickable border-thin padded:s-1 whiteFill" onClick={() => signOut()}>
+    <div>
+      <span className="clickable border-thin padded:s-1 whiteFill constrastFill:hover" onClick={() => signOut()}>
         sign out
       </span>
     </div>
-    
   );
 };
 const AccountManager = () => {
@@ -163,49 +176,48 @@ const AccountManager = () => {
   const [localDisplayname, setLocalDisplayname] = useState<string>("");
 
   useEffect(() => {
-   setTimeout(() => setSuccess(undefined), 1500);
+    setTimeout(() => setSuccess(undefined), 1500);
   }, [success]);
 
-  useEffect(() => {
-    
-    if (currentUser) {
-        if (currentUser.displayName) {
-          if (currentUser.displayName !== localDisplayname)
-            setLocalDisplayname(currentUser.displayName);
-        } else {
-          let r = Math.round(Math.random() * 1000);
-          updateDisplayname(`anon-${r}`, (s,e) => setSuccess({success: s, error: e}))
-        }
-      } 
-    } 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  , [currentUser,  updateDisplayname]);
-
-  const changeName = useCallback((newName: string) => {
-    updateDisplayname(newName, (s,e) => setSuccess({success: s, error:e}))    
-  }, [updateDisplayname])
+  const changeName = useCallback(
+    (newName: string) => {
+      updateDisplayname(newName, (s, e) => setSuccess({ success: s, error: e }));
+    },
+    [updateDisplayname]
+  );
 
   return (
-    <div className="stack border-thin lightFill padded">
-      <div><em>Change your username</em></div>
-      <input
-        type="text"
-        className="padded:s-1"
-        value={localDisplayname}
-        onChange={(e) => setLocalDisplayname(e.target.value)}
-      />
-      {currentUser && localDisplayname !== currentUser?.displayName && (
-        <div className="clickable" onClick={(e) => changeName(localDisplayname)}>
-          submit change
+    <>
+      <div className="stack padded border-thin">
+        <em>account details</em>
+        <p> email address: {currentUser?.email}</p>
+        <p> user name: {currentUser?.displayName}</p>
+      </div>
+      <div className="stack padded border-thin">
+        <em>change username</em>
+        <div className="stack:s-2">
+          <label className="caption">new username</label>
+          <input
+            type="text"
+            className="padded:s-1"
+            placeholder="new username"
+            value={localDisplayname}
+            onChange={(e) => setLocalDisplayname(e.target.value)}
+          />
+          <div>
+            <span className="clickable padded:s-2 border-thin contrastFill:hover" onClick={(e) => changeName(localDisplayname)}>
+              change username
+            </span>
+          </div>
+        {success &&
+          (success.success == true ? (
+            <div className="green">succesfully changed display name!</div>
+          ) : (
+            <div className="red"> hmm.. something went wrong</div>
+          ))}
         </div>
-      )}
-      {success &&
-        (success.success == true ? (
-          <div className="green">succesfully changed display name!</div>
-        ) : (
-          <div className="red"> hmm.. something went wrong</div>
-        ))}
-    </div>
+      </div>
+    </>
   );
 };
 

@@ -10,10 +10,10 @@ type UserID = string;
 
 
 interface ChatMessage {
-  userID: UserID,
   timestamp: number,
   message: string,
-  username: string
+  username: string,
+  roomID: string
 }
 
 interface Collective {

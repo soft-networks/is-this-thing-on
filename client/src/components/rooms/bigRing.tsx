@@ -1,17 +1,23 @@
 import { Unsubscribe } from "firebase/firestore";
 import { NextPage } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import Layout from "../../layouts/layout";
 import { syncWebRing } from "../../lib/firestore";
 import useRingStore from "../../stores/ringStore";
+import { useRoomStore } from "../../stores/roomStore";
 import { SVGRingNode, SVGRingSeparate } from "../logo";
-import VideoPlayer from "../videoPlayer";
 
-const Season0Home: NextPage = () => {
+const BigRingPage: NextPage = () => {
   const initializeRing = useRingStore(useCallback((s) => s.initializeRing, []));
   const updateRingStatus = useRingStore(useCallback((s) => s.updateStatus, []));
   const ringUnsubs = useRef<Unsubscribe[]>();
-
+  const changeRoom = useRoomStore((s) => s.changeRoom);
+  useEffect(() => {
+    changeRoom(null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   useEffect(() => {
     async function setupSync() {
       ringUnsubs.current = await syncWebRing(initializeRing, updateRingStatus);
@@ -21,26 +27,25 @@ const Season0Home: NextPage = () => {
   }, [initializeRing, updateRingStatus]);
 
   return (
+    <Layout>
     <div className="fullBleed stack">
       <div className="flex-1 contrastFill center-text" style={{ padding: "var(--s-2) 96px"} as React.CSSProperties} >
-        <Season0Ring />
+        <BigRing />
       </div>
       <div className="grow-text padded:s-2" style={{paddingTop: 0}}>
-        Is this THING on? is a live streaming network for artists being built slowly over three seasons, guided by public performance and conversation. Season 0 is{" "}
-        <span className="contrastFill">LIVE TODAY</span> with performances at 7PM ET and{" "}
-        <a href="https://nyu.zoom.us/j/96229850527" target="_blank" rel="noreferrer">
-          salon
-        </a>{" "}
-        at 8PM ET. Learn more <Link href={"/about"}>here</Link>.
+        Is this THING on? is a live streaming network for artists being built slowly over three seasons, guided by public performance and conversation. Season 1 is{" "}
+        <span className="contrastFill">live most Sundays</span> at 7PM ET.  Learn more <Link href={"/about"}>here</Link>.
       </div>
     </div>
+    </Layout>
   );
 };
 
-const Season0Ring: React.FC = () => {
+const BigRing: React.FC = () => {
   const ANIM_LENGTH = 1000;
   const ring = useRingStore(useCallback((s) => s.links, []));
   const ringPieces: JSX.Element[] = useMemo(() => SVGRingSeparate({ ring: ring, returnWithoutWrapping: true }), [ring]);
+  const router = useRouter();
 
   const ringNodes = useMemo(() => {
     const nodes: JSX.Element[] = [];
@@ -50,9 +55,7 @@ const Season0Ring: React.FC = () => {
     //iframeSize = iframeSize.map(s => s*0.75);
     Object.keys(ring).forEach((key, i) => {
       let iLink = ring[key];
-      const src = iLink.season0URL;
-      if (key == "molly")
-        console.log("Setting up ....", iLink);
+      const src = `/streams/${iLink.roomID}`;
       if (iLink.streamStatus == "active" && src) {
         nodes.push(
           <g
@@ -69,7 +72,7 @@ const Season0Ring: React.FC = () => {
               height={iframeSize[1]}
               transform={`translate(-${iframeSize[0] / 2}, -${iframeSize[1] / 2})`}
               style={{ border: "2px solid blue", filter: `drop-shadow(0px 0px 10px ${iLink.roomColor || "white"})` }}
-              onClick={() => window.open(src, "_blank")}
+              onClick={() => router.push(src)}
             >
               <iframe
                 src={src}
@@ -98,16 +101,19 @@ const Season0Ring: React.FC = () => {
             index={i}
             myColor={iLink.roomColor}
             ANIM_LENGTH={ANIM_LENGTH}
-            showColor={false}
+            showColor={true}
             key={`node-${i}`}
             ANIM_OFFSET={ANIM_OFFSET}
             selected={false}
+            name={iLink.roomName}
+            hoverBehavior={true}
+            onClick={() => router.push(src)}
           />
         );
       }
     });
     return nodes;
-  }, [ring]);
+  }, [ring, router]);
 
   return (
     <svg xmlns="http://www.w3.org/2000/svg" className="fullWidth overflowVisible" style={{maxWidth: "18000px"}} viewBox="-50 -50 550 450">
@@ -120,4 +126,4 @@ const Season0Ring: React.FC = () => {
   );
 };
 
-export default Season0Home;
+export default BigRingPage;

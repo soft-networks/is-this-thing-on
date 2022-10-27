@@ -184,6 +184,10 @@ p {
   line-height: 1.2;
 }
 
+.inline-block {
+  display: inline-block
+}
+
 .wide  {
   --textWidth: 100%;
 }
@@ -243,6 +247,13 @@ p {
 }
 .hide {
   display: none;
+}
+.showOnHover{
+  opacity: 0;
+  transition: opacity 300ms;
+}
+.showOnHoverTrigger:hover .showOnHover{
+  opacity: 1;
 }
 .overflowVisible {
   overflow: visible;
@@ -305,6 +316,11 @@ p {
   
 }
 .align-end\:absolute {
+  bottom: 0;
+  top: unset;
+}
+.align-end\:fixed {
+  position: fixed;
   bottom: 0;
   top: unset;
 }
@@ -520,7 +536,6 @@ a:hover,
   
   cursor: pointer;
   text-decoration: underline;
-  background: var(--light);
 }
 .clickable\:opacity {
   cursor: pointer;
@@ -587,17 +602,18 @@ a:hover,
 }
 
 .caption {
-  font-size: var(--s-1);
+  font-size: calc(0.8 * var(--s0));
 }
 
 /* Specific */
 
 .chat {
-  --chatAuthorcolor: var(--contrast);
+  --chatAuthorColor: var(--contrast);
   --chatMessageColor: var(--light);
   --chatContainerBackground: rgba(0,0,0,0.8); 
   background: var(--chatContainerBackground);
   color: var(--chatMessageColor);
+  width: max(20ch, 20vw)
 }
 
 .chat {

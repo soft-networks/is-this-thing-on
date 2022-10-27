@@ -148,10 +148,22 @@ interface SVGRingNodeProps {
   ANIM_LENGTH: number;
   selected?: boolean;
   onClick?: (myIndex: number) => void;
+  hoverBehavior?: boolean,
+  name?: string
 }
-export const SVGRingNode: React.FC<SVGRingNodeProps> = ({ index, myColor, showColor, ANIM_OFFSET, selected, onClick, ANIM_LENGTH}) => {
+export const SVGRingNode: React.FC<SVGRingNodeProps> = ({
+  index,
+  myColor,
+  showColor,
+  ANIM_OFFSET,
+  selected,
+  onClick,
+  ANIM_LENGTH,
+  hoverBehavior,
+  name,
+}) => {
   return (
-    <g key={`node-${index}`}>
+    <g key={`node-${index}`} className={classNames({showOnHoverTrigger: hoverBehavior})}>
       <rect
         className={classNames({ stroke: true, selected: selected, clickable: onClick !== undefined })}
         width="40"
@@ -163,6 +175,11 @@ export const SVGRingNode: React.FC<SVGRingNodeProps> = ({ index, myColor, showCo
       <animateMotion dur={`${ANIM_LENGTH}s`} begin={`${index * -ANIM_OFFSET}s`} repeatCount="indefinite">
         <mpath xlinkHref="#ellipsePath" />
       </animateMotion>
+      {name && (
+        <text className={classNames({ showOnHover: hoverBehavior })} textAnchor="middle" transform="translate(0, -40)"  style={{ filter: `drop-shadow(0px 0px 2px ${myColor || "white"})` }}>
+          {name}
+        </text>
+      )}
     </g>
   );
 };
