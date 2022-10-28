@@ -19,7 +19,6 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({ roomID, season })
   const initializeRing = useRingStore(useCallback((s) => s.initializeRing, []));
   const ringUnsubs = useRef<Unsubscribe[]>();
   const updateRingStatus = useRingStore(useCallback((s) => s.updateStatus, []));
-  const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
 
   useEffect(() => {
     async function setupSync() {
@@ -65,45 +64,39 @@ const SeasonOne = ({ roomID }: { roomID: string }) => {
       height: "calc(2 *56vw)",
       zIndex: 0,
     };
-    let chatStyle: React.CSSProperties = {
-      "--chatAuthorColor": "hotpink",
-      "--chatContainerBackground": "rgba(0,0,0,0.6)",
-      "--chatMessageColor": "var(--white)",
-      zIndex: 3,
-    } as React.CSSProperties;
-    return <RoomView videoStyle={doubleSizeStyle} chatStyle={chatStyle} stickerStyle={doubleSizeStyle} />;
+    return <RoomView videoStyle={doubleSizeStyle} stickerStyle={doubleSizeStyle} />;
   }
   return <RoomView />;
 };
 const SeasonZero: React.FC = () => {
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
   if (roomInfo?.roomID == "WORKSHOP" && roomInfo?.streamPlaybackID) {
-    return (
-      <VideoPlayer className="fullBleed"/>
-    )
+    return <VideoPlayer className="fullBleed" />;
   }
   return (
     <div className="fullBleed">
-      <iframe
-        className="fullBleed"
-        src={
-          roomInfo?.season0URL 
-        }
-      />
+      <iframe className="fullBleed" src={roomInfo?.season0URL} />
     </div>
   );
 };
 
 interface RoomViewProps {
-  chatStyle?: React.CSSProperties;
   videoStyle?: React.CSSProperties;
   stickerStyle?: React.CSSProperties;
 }
-const RoomView = ({ chatStyle, videoStyle, stickerStyle }: RoomViewProps) => {
+const RoomView = ({ videoStyle, stickerStyle }: RoomViewProps) => {
+  const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
+
   return (
     <div className="fullBleed overflowScroll">
-      <VideoPlayer style={videoStyle} className="fullBleed noEvents absoluteOrigin" />
-      <Stickers style={stickerStyle} />
+      {roomInfo ? (
+        <>
+          <VideoPlayer style={videoStyle} className="fullBleed noEvents absoluteOrigin" streamPlaybackID={roomInfo.streamPlaybackID} />
+          <Stickers style={stickerStyle} />
+        </>
+      ) : (
+        <div className="centerh"> loading </div>
+      )}
     </div>
   );
 };

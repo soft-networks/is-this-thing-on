@@ -6,38 +6,37 @@ import { useRoomStore } from "../stores/roomStore";
 const DEFAULT_CLASSNAME = "fullWidth";
 const DEFAULT_STYLE = {};
 
-const VideoPlayer: React.FunctionComponent<RoomUIProps & {urlOverride?: string}> = ({
+const VideoPlayer: React.FunctionComponent<RoomUIProps & {urlOverride?: string, streamPlaybackID?: string, muteOverride?: boolean}> = ({
   className = DEFAULT_CLASSNAME,
   style = DEFAULT_STYLE,
-  urlOverride
+  streamPlaybackID,
+  urlOverride,
+  muteOverride
 }) => {
   const roomInfo = useRoomStore((state) => state.roomInfo);
   const [mute, setMuted] = useState(true);
-
   useEffect(()=> {
-    window.addEventListener("click", () => setMuted(false))
+    window.addEventListener("click", () => {
+      if (mute && !muteOverride) {
+        setMuted(false);
+      }
+  })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   return (
-    <div className={className} style={style}>
-      { (roomInfo && roomInfo.streamStatus == "active" && roomInfo.streamPlaybackID) || (urlOverride) ? (
-        <ReactPlayer
-          url={urlOverride || generateStreamLink((roomInfo as RoomInfo).streamPlaybackID)}
-          muted={mute}
-          playing={true}
-          loop={true}
-          height="100%"
-          width="auto"
-        />
-      ) : (
-        null && <ReactPlayer
-          muted={true}
-          controls={false}
-          playing={true}
-          url={"https://www.youtube.com/watch?v=q55qNEKQLG0"}
-          width="100%"
-          height="100%"
-        />
-      )}
+    <div
+      className={className}
+      style={style}
+    >
+      { (streamPlaybackID || urlOverride) ? <ReactPlayer
+        url={urlOverride || generateStreamLink((roomInfo as RoomInfo).streamPlaybackID)}
+        muted={muteOverride || mute}
+        playing={true}
+        loop={true}
+        height="100%"
+        width="auto"
+        className="noEvents"
+      /> : null}
     </div>
   );
 };

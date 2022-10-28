@@ -62,7 +62,7 @@ export const Chat: React.FC<RoomUIProps> = ({className, style}) => {
         </div>
         <ChatInput onSubmit={sendNewMessage} />
         <div className="padded:s-2 caption horizontal-stack clickable" style={{background: "var(--black)"}} onClick={() => setFilterRoom(!filterRoom)}>
-          <input type="checkbox" checked={filterRoom}  />
+          <input type="checkbox" checked={filterRoom} onChange={() => setFilterRoom(!setFilterRoom)}  />
           <p>see messages in this room only</p>
         </div>
         <div
