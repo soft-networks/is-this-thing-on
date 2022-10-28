@@ -50,7 +50,12 @@ export const useUserStore = create<UserState>()(
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          set((s) => ({ currentUser: user }));
+          if (user.displayName) {
+            set({ currentUser: user, displayName: user.displayName });
+          } else {
+            set({ currentUser: user});
+          }
+          
           onSignIn(true);
           console.log("Account logged in sucesfully");
         })
