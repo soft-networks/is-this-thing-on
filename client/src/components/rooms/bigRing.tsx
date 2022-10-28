@@ -162,11 +162,11 @@ const ExpandedSeasonOne: React.FC<{
 }> = ({ iLink, ANIM_OFFSET, router, i }) => {
   const src = `/streams/${iLink.roomID}`;
 
-  const [localMuted, setLocalMuted] = useState(false);
+  const [localMuted, setLocalMuted] = useState(true);
 
   if (iLink.streamStatus == "active" && src) {
     return (
-      <g className="scale:hover clickable" onClick={() => router.push(src)} key={`node-visible-${i}`}>
+      <g className="scale:hover showOnHoverTrigger" key={`node-visible-${i}`}>
         <animateMotion dur={`${ANIM_LENGTH}s`} begin={`${i * -ANIM_OFFSET}s`} repeatCount="indefinite">
           <mpath xlinkHref="#ellipsePath" />
         </animateMotion>
@@ -174,16 +174,18 @@ const ExpandedSeasonOne: React.FC<{
           width={iframeSize[0]}
           height={iframeSize[1]}
           transform={`translate(-${iframeSize[0] / 2}, -${iframeSize[1] / 2})`}
-          style={{ border: "1px solid blue", filter: `drop-shadow(0px 0px 10px ${iLink.roomColor || "white"})` }}
+          style={{ border: "1px solid blue", filter: `drop-shadow(0px 0px 10px ${iLink.roomColor || "white"})`, cursor: 'ne-resize' }}
           onClick={() => router.push(src)}
         >
-          <VideoPlayer className="fullBleed" urlOverride="https://www.youtube.com/watch?v=IoIXT7VQ-nA&t=1805s" />
+          <VideoPlayer className="fullBleed" urlOverride="https://www.youtube.com/watch?v=IoIXT7VQ-nA&t=1805s" muteOverride={localMuted}/>
         </foreignObject>
         <text
           y={-iframeSize[1] / 2 - 5}
           textAnchor="middle"
           fill="blue"
-          style={{ filter: `drop-shadow(0px 0px 6px ${iLink.roomColor || "white"})` }}
+          style={{ filter: `drop-shadow(0px 0px 6px ${iLink.roomColor || "white"})`, cursor: 'ne-resize'}}
+          onClick={() => router.push(src)} 
+
         >
           {iLink.roomName}
         </text>
@@ -212,38 +214,10 @@ const AnimatedMuteButton: React.FC<{ onMuteChanged: (newMute: boolean) => void; 
   onMuteChanged,
   muted,
 }) => {
-  const rectWidth = 100;
-  const triggerTime = 3000;
-  const [timeHovered, setTimeHovered] = useState(0);
-  const [isHovering, setIsHovering] = useState(false);
-  const hoveringInterval = useRef<NodeJS.Timer>();
-  const hoverWidth = useMemo(() => rectWidth * (timeHovered / triggerTime), [timeHovered])
-
-  const reset = () => {
-    if (hoveringInterval.current) clearInterval(hoveringInterval.current);
-    hoveringInterval.current = undefined;
-    setTimeHovered(0);
-  }
-  useEffect(() => {
-    if (timeHovered > triggerTime) {
-      onMuteChanged(!muted);
-      reset();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ timeHovered]);
-
-  useEffect(() => {
-    if (isHovering) {
-      hoveringInterval.current = setInterval(() => setTimeHovered(t => t + 100), 100);
-    } else {
-      reset();
-    }
-  }, [isHovering]);
-
+  const rectWidth = 75;
   return (
-    <g transform={`translate(0, ${iframeSize[1]/2 + 10})`} onMouseOver={() => setIsHovering(true)} onMouseOut={() => setIsHovering(false)}>
-      <rect width={rectWidth} height={20} fill={"white"} transform={`translate(-${rectWidth/2},-15)`}></rect>
-      <rect width={hoverWidth} height={20} fill={"gray"} transform={`translate(-${hoverWidth/2}, -15)`}></rect>
+    <g transform={`translate(0, ${iframeSize[1]/2 + 10})`} onClick={() => onMuteChanged(!muted)} className="clickable showOnHover clickable:link">
+      <rect width={rectWidth} height={20} fill={"white"} stroke={"black"} transform={`translate(-${rectWidth/2},-14)`}></rect>
       <text textAnchor="middle"> {muted ? "unmute" : "mute"} </text>
     </g>
   );

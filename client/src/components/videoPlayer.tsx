@@ -30,7 +30,7 @@ const VideoPlayer: React.FunctionComponent<RoomUIProps & {urlOverride?: string, 
     >
       { (streamPlaybackID || urlOverride) ? <ReactPlayer
         url={urlOverride || generateStreamLink((roomInfo as RoomInfo).streamPlaybackID)}
-        muted={muteOverride || mute}
+        muted={ muteOverride !== undefined ? muteOverride: mute}
         playing={true}
         loop={true}
         height="100%"

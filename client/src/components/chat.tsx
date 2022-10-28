@@ -55,10 +55,10 @@ export const Chat: React.FC<RoomUIProps> = ({className, style}) => {
     };
   }, [chatWasAdded, chatWasRemoved]);
   return (
-    <Draggable handle=".handle" nodeRef={chatRef}>
+    <Draggable handle=".handle" nodeRef={chatRef} defaultPosition={{x: 10, y: 10}}>
       <div className={(className || "") + " chat highest border"} style={style as React.CSSProperties} ref={chatRef}>
-        <div className="handle" style={{ height: "var(--sp-2)", background: "var(--chatBorderColor)" }}>
-          .
+        <div className="handle" style={{ minHeight: "var(--sp0)", height: "var(--sp0)", background: "var(--chatBorderColor)" }}>
+          ...
         </div>
         <ChatInput onSubmit={sendNewMessage} />
         <div className="padded:s-2 caption horizontal-stack clickable" style={{background: "var(--black)"}} onClick={() => setFilterRoom(!filterRoom)}>
