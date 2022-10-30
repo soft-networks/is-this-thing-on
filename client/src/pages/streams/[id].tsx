@@ -11,11 +11,7 @@ const RoomPage: NextPage = () => {
     return <div className="fullBleed darkFill"> something went wrong </div>;
   }
 
-  return (
-    <Layout>
-        <Room roomID={id as string} season={1}/>
-    </Layout>
-  );
+  return <Room roomID={id as string} season={1} />;
 };
 
 export default RoomPage;

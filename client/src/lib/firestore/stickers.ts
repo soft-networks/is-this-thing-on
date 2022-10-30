@@ -1,6 +1,6 @@
-import { addDoc, getDocs, onSnapshot, query, where } from "firebase/firestore";
+import { addDoc, deleteDoc, getDoc, getDocs, onSnapshot, query, setDoc, where } from "firebase/firestore";
 import { sanitizeStickerCDNFromDB, sanitizeStickerInstanceForDB, sanitizeStickerInstanceFromDB, validateRoomName } from "./converters";
-import { stickerInstanceCollection, roomDoc, stickerCDNCollection } from "./locations";
+import { stickerInstanceCollection, roomDoc, stickerCDNCollection, stickerInstanceDoc } from "./locations";
 
 
 export async function getStickerCDN(roomName: string, initStickerCDN: (cdn: {[key:string]: Sticker}) => void) {
@@ -23,7 +23,8 @@ export async function getStickerCDN(roomName: string, initStickerCDN: (cdn: {[ke
 export function syncStickerInstances(
   roomName: string,
   stickerAdded: (id: string, element: StickerInstance) => void,
-  stickerRemoved: (id: string) => void
+  stickerRemoved: (id: string) => void,
+  stickerPosUpdated: (id: string, pos: Pos) => void
 ) {
   if (!validateRoomName(roomName)) {
     return;
@@ -39,6 +40,10 @@ export function syncStickerInstances(
         stickerAdded(element.id, sanitizedStickerInstance);
       }
       if (change.type === "modified") {
+        let stickerData = element.data();
+        if (stickerData.position) {
+          stickerPosUpdated(element.id, stickerData.position);
+        }
       }
       if (change.type === "removed") {
         stickerRemoved(element.id);
@@ -49,6 +54,21 @@ export function syncStickerInstances(
 }
 
 export async function addStickerInstance(roomName: string, element: StickerInstance) {
-  const chats = stickerInstanceCollection(roomDoc(roomName));
-  await addDoc(chats, sanitizeStickerInstanceForDB(element));
+  const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
+  await addDoc(stickerInstances, sanitizeStickerInstanceForDB(element));
+}
+
+export async function updateStickerInstancePos(roomName: string, stickerID: string, pos: Pos) {
+  const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
+  const stickerInstance = stickerInstanceDoc(stickerInstances, stickerID);
+
+  setDoc(stickerInstance, {position: pos}, {merge: true});
+}
+
+export async function deleteStickerInstance(roomName: string, stickerID: string) {
+  const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
+  const stickerInstance = stickerInstanceDoc(stickerInstances, stickerID);
+
+  deleteDoc(stickerInstance);
+
 }

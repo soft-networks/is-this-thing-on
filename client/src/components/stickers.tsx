@@ -2,8 +2,26 @@
 
 import classnames from "classnames";
 import { Unsubscribe } from "firebase/firestore";
-import React, { MouseEventHandler, useEffect, useRef, useState, useCallback } from "react";
-import { addStickerInstance, getStickerCDN, performTransaction, syncStickerInstances } from "../lib/firestore";
+import React, {
+  MouseEventHandler,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  createRef,
+  RefObject,
+  useMemo,
+} from "react";
+import Draggable, { DraggableEventHandler } from "react-draggable";
+import useMeasure, { RectReadOnly } from "react-use-measure";
+import {
+  addStickerInstance,
+  deleteStickerInstance,
+  getStickerCDN,
+  performTransaction,
+  syncStickerInstances,
+  updateStickerInstancePos,
+} from "../lib/firestore";
 import { useRoomStore } from "../stores/roomStore";
 import useStickerCDNStore from "../stores/stickerStore";
 import { useUserStore } from "../stores/userStore";
@@ -20,6 +38,7 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
   const stickerCDN = useStickerCDNStore(useCallback((state) => state.stickerCDN, []));
   const displayName = useUserStore(useCallback((state) => state.displayName, []));
   const [stickerStyle, setStickerStyle] = useState<React.CSSProperties>();
+  const [ref, bounds] = useMeasure();
 
   useEffect(() => {
     let currentStyle = {};
@@ -28,10 +47,10 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
     }
     switch (roomID) {
       case "chris": {
-        let chrisStyle ={
-          "--stickerSize": "10ch"
-        } as React.CSSProperties
-        currentStyle = {...chrisStyle, ...style};
+        let chrisStyle = {
+          "--stickerSize": "10ch",
+        } as React.CSSProperties;
+        currentStyle = { ...chrisStyle, ...style };
       }
     }
     setStickerStyle(currentStyle);
@@ -52,11 +71,11 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
     });
   };
   return roomID ? (
-    <div className={className || "fullBleed absoluteOrigin"} style={stickerStyle} id="sticker-overlay">
+    <div className={className || "fullBleed absoluteOrigin"} style={stickerStyle} id="sticker-overlay" ref={ref}>
       {stickerCDN && (
         <>
           <StickerChooser addSticker={addSticker} cdn={stickerCDN} />
-          <ServerStickers roomID={roomID} key={`${roomID}-sscoins`} cdn={stickerCDN} />
+          <ServerStickers roomID={roomID} key={`${roomID}-sscoins`} cdn={stickerCDN} containerBounds={bounds} />
         </>
       )}
     </div>
@@ -81,7 +100,7 @@ const DefaultStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn }) =
         setShowStickerTypePicker(true);
       }
     } else {
-       setShowStickerTypePicker(false);
+      setShowStickerTypePicker(false);
     }
   };
   const typeChosen = (id?: string) => {
@@ -123,8 +142,10 @@ const DefaultChooseStickerType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: 
 }) => {
   return (
     <>
-      
-      <div className="grid:s-2 skrimFill border-radius padded" style={{maxWidth: "calc(4 * (var(--stickerSize) + 2 * var(--s2))"}}>
+      <div
+        className="grid:s-2 skrimFill border-radius padded"
+        style={{ maxWidth: "calc(4 * (var(--stickerSize) + 2 * var(--s2))" }}
+      >
         <div
           className="lightFill border contrastFill:hover padded:s-2 clickable highest"
           style={{ position: "absolute", top: "calc(-1 * var(--s1)", left: "calc(-1 * var(--s1)" }}
@@ -142,9 +163,25 @@ const DefaultChooseStickerType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: 
   );
 };
 
-const ServerStickers: React.FC<{ roomID: string; cdn: StickerCDN }> = ({ roomID, cdn }) => {
+const ServerStickers: React.FC<{ roomID: string; cdn: StickerCDN; containerBounds: RectReadOnly }> = ({
+  roomID,
+  cdn,
+  containerBounds,
+}) => {
   let [serverSideCoins, setServerSideCoins] = useState<{ [key: string]: StickerInstance }>({});
   const unsub = useRef<Unsubscribe>();
+
+  const stickerPosUpdated = useCallback(
+    (cID, pos) => {
+      setServerSideCoins((pc) => {
+        let npc = { ...pc };
+        npc[cID].position = pos;
+        console.log("Updating pos");
+        return npc;
+      });
+    },
+    [setServerSideCoins]
+  );
 
   const stickerAdded = useCallback(
     (cID, element) => {
@@ -167,7 +204,7 @@ const ServerStickers: React.FC<{ roomID: string; cdn: StickerCDN }> = ({ roomID,
   );
   useEffect(() => {
     async function setupServerSync() {
-      unsub.current = syncStickerInstances(roomID, stickerAdded, stickerRemoved);
+      unsub.current = syncStickerInstances(roomID, stickerAdded, stickerRemoved, stickerPosUpdated);
     }
     setupServerSync();
     return () => unsub.current && unsub.current();
@@ -182,7 +219,9 @@ const ServerStickers: React.FC<{ roomID: string; cdn: StickerCDN }> = ({ roomID,
             <StickerRenderer
               key={`servercoin-${id}`}
               pos={stickerInstance.position}
-              url={cdn[stickerInstance.cdnID].imageURL}
+              sticker={cdn[stickerInstance.cdnID]}
+              id={id}
+              containerBounds={containerBounds}
             />
           )
       )}
@@ -190,18 +229,74 @@ const ServerStickers: React.FC<{ roomID: string; cdn: StickerCDN }> = ({ roomID,
   );
 };
 
-const StickerRenderer = ({ pos, url }: { pos: Pos; url: string }) => {
-  return pos && url ? (
-    <div style={{ left: `${pos[0] * 100}%`, top: `${pos[1] * 100}%` }} className={"absoluteOrigin"}>
-      <StickerImage url={url} />
-    </div>
-  ) : (
-    <span></span>
-  );
+interface StickerRenderProps {
+  sticker: Sticker;
+  pos: Pos;
+  id: string;
+  containerBounds: RectReadOnly;
+}
+
+const StickerRenderer: React.FC<StickerRenderProps> = (props) => {
+  if (!props.pos && !props.sticker) return <span> </span>;
+
+  switch (props.sticker.behaviorType) {
+    case "MOVE":
+      return <MoveableSticker {...props} />;
+    case "DELETE":
+      return <DeletableSticker {...props} />
+    case "NORMAL":
+    default:
+      return <StaticSticker {...props} />;
+  }
 };
 
+const DeletableSticker: React.FC<StickerRenderProps> = ({ sticker, pos, id }) => {
+  const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));
+  const deleteSticker = () => {
+     roomID && deleteStickerInstance(roomID, id);
+  }
+  return (
+    <div
+      style={{ left: `${pos[0] * 100}%`, top: `${pos[1] * 100}%` }}
+      onClick={(e) => deleteSticker()}
+      className={"absoluteOrigin deleteCursor highest"}
+    >
+      <StickerImage url={sticker.imageURL} />
+    </div>
+  );
+};
+const MoveableSticker: React.FC<StickerRenderProps> = ({ sticker, pos, id, containerBounds }) => {
+  const myRef = createRef<HTMLDivElement>();
+  const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));
+  const [isDragging, setIsDragging] = useState(false);
+
+  const dragEnded: DraggableEventHandler = (e, data) => {
+    setIsDragging(false);
+    let newPos: Pos = [data.x / containerBounds.width, data.y / containerBounds.height];
+    roomID && updateStickerInstancePos(roomID, id, newPos);
+  };
+  return roomID && containerBounds ? (
+    <Draggable
+      onStop={dragEnded}
+      onStart={() => setIsDragging(true)}
+      position={{ x: pos[0] * containerBounds.width, y: pos[1] * containerBounds.height }}
+      nodeRef={myRef}
+    >
+      <div className={classnames("moveCursor absoluteOrigin highest", { animateTransform: !isDragging })} ref={myRef}>
+        <StickerImage url={sticker.imageURL} />
+      </div>
+    </Draggable>
+  ) : null;
+};
+
+const StaticSticker = ({ sticker, pos }: StickerRenderProps) => (
+  <div style={{ left: `${pos[0] * 100}%`, top: `${pos[1] * 100}%` }} className={"absoluteOrigin"}>
+    <StickerImage url={sticker.imageURL} />
+  </div>
+);
+
 const StickerImage = ({ url }: { url: string }) => (
-  <img src={url} alt={"Sticker"} style={{ width: "var(--stickerSize)"}} />
+  <img src={url} className="noEvents" alt={"Sticker"} style={{ width: "var(--stickerSize)" }} />
 );
 
 export default Stickers;

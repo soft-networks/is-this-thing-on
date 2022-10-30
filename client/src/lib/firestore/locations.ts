@@ -1,4 +1,4 @@
-import { collection, doc, DocumentReference } from "firebase/firestore";
+import { collection, CollectionReference, doc, DocumentReference } from "firebase/firestore";
 
 import db from './init';
 
@@ -21,6 +21,9 @@ export function stickerCDNCollection(roomDoc: DocumentReference) {
 }
 export function stickerInstanceCollection(roomDoc: DocumentReference) {
   return collection(roomDoc, "stickers");
+}
+export function stickerInstanceDoc(stickerInstanceCollection: CollectionReference, id: string) {
+  return doc(stickerInstanceCollection, id);
 }
 export function transactionCollection() {
   return collection(db, "energy_transactions");

@@ -1,13 +1,11 @@
-import RoomInfoViewer from "./roomInfo";
-import { Chat } from "./chat";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+
+import { useCallback, useEffect, useRef } from "react";
 import { useRoomStore } from "../stores/roomStore";
-import { setUserHeartbeat, syncRoomInfoDB, syncWebRing } from "../lib/firestore";
+import { setUserHeartbeat, syncRoomInfoDB } from "../lib/firestore";
 import { Unsubscribe } from "firebase/auth";
 import { useUserStore } from "../stores/userStore";
 import VideoPlayer from "./videoPlayer";
 import RoomGate, { RoomOnlineGate } from "./roomGate";
-import useRingStore from "../stores/ringStore";
 import useStickerCDNStore from "../stores/stickerStore";
 import Stickers from "./stickers";
 
@@ -16,17 +14,6 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({ roomID, season })
   const changeRoomStickers = useStickerCDNStore(useCallback((state) => state.changeRoomStickers, []));
   const unsubscribeFromRoomInfo = useRef<Unsubscribe>();
   const currentUser = useUserStore(useCallback((state) => state.currentUser, []));
-  const initializeRing = useRingStore(useCallback((s) => s.initializeRing, []));
-  const ringUnsubs = useRef<Unsubscribe[]>();
-  const updateRingStatus = useRingStore(useCallback((s) => s.updateStatus, []));
-
-  useEffect(() => {
-    async function setupSync() {
-      ringUnsubs.current = await syncWebRing(initializeRing, updateRingStatus);
-    }
-    setupSync();
-    return () => ringUnsubs.current && ringUnsubs.current.forEach((u) => u());
-  }, [initializeRing, updateRingStatus]);
   useEffect(() => {
     //TODO: This is slightly innefficient, doesnt have to detach to reattach
     if (currentUser) {

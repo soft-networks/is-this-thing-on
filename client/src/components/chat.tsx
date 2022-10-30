@@ -14,7 +14,6 @@ export const Chat: React.FC<RoomUIProps> = ({className, style}) => {
   let unsubRef = useRef<Unsubscribe>();
   let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
   let chatRef = createRef<HTMLDivElement>();
-  let chatWasSetup = useRef<boolean>();
   let [filterRoom, setFilterRoom] = useState<boolean>(false);
   let [chatStyle, setChatStyle] = useState<React.CSSProperties>();
 
@@ -76,12 +75,12 @@ export const Chat: React.FC<RoomUIProps> = ({className, style}) => {
       }
       unsubRef.current = await syncChat(chatWasAdded, chatWasRemoved);
     }
-    if (!chatWasSetup.current) {
-      setupDB();
-      chatWasSetup.current = true;
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    setupDB();
+    return () => {
+      console.log("Destroying chat sync");
+      if (unsubRef.current) unsubRef.current();
+    };
+  }, [chatWasAdded, chatWasRemoved]);
   return (
     <Draggable handle=".handle" nodeRef={chatRef} defaultPosition={{x: 10, y: 10}}>
       <div className={(className || "") + " chat highest border"} style={chatStyle} ref={chatRef}>
@@ -150,7 +149,7 @@ const ChatInput: React.FC<{ onSubmit: (chat: {message: string, timestamp: number
     <div className="stack:s-1 border-bottom padded:s-1 chatInputContainer">
       
       <div className="horizontal-stack"> 
-        <div className="flex-1"> chat as {displayName} </div>
+        <div className="flex-1" suppressHydrationWarning> chat as {displayName} </div>
         {numOnline ? <div> {numOnline} people in this room </div> : null}
       </div>
       <div className="fullWidth horizontal-stack align-middle">

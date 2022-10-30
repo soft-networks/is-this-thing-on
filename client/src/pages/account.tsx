@@ -13,9 +13,7 @@ const Account: NextPage = () => {
     changeRoom(null, undefined);
   }, [changeRoom])
   return (
-    <Layout>
       <Auth/>
-    </Layout>
   );
 };
 

@@ -1,24 +1,9 @@
-import { Unsubscribe } from "firebase/firestore";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useEffect, useCallback, useRef} from "react";
 import Ring from "../ring";
-import { syncWebRing } from "../../lib/firestore";
-import useRingStore from "../../stores/ringStore";
+
  
 const Home: NextPage = () => {
-
-  const initializeRing = useRingStore(useCallback(s => s.initializeRing, []));
-  const updateRingStatus = useRingStore(useCallback(s => s.updateStatus, []));
-  const ringUnsubs = useRef<Unsubscribe[]>();
-
-  useEffect(() => {
-    async function setupSync() {
-      ringUnsubs.current = await syncWebRing(initializeRing, updateRingStatus);
-    }
-    setupSync();
-    return () => ringUnsubs.current && ringUnsubs.current.forEach((u) => u());
-  }, [initializeRing, updateRingStatus]);
 
  
   return (

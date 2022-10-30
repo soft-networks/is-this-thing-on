@@ -10,7 +10,7 @@ const AccountButton: React.FunctionComponent = () => {
 
   return pathname !== "/account" ? (
     <Link href="/account" passHref>
-      <div className="whiteFill border contrastFill:hover padded:s-2 clickable clickable:link">
+      <div className="whiteFill border contrastFill:hover padded:s-2 clickable clickable:link" suppressHydrationWarning>
         {currentUser ? currentUser.displayName || currentUser.email : `${displayName}`}
       </div>
     </Link>

@@ -1,21 +1,13 @@
-import { Unsubscribe } from "firebase/firestore";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useEffect, useCallback, useRef} from "react";
+import { useEffect} from "react";
 import Ring from "../components/ring";
-import Layout from "../layouts/layout";
-import { syncWebRing } from "../lib/firestore";
-import useRingStore from "../stores/ringStore";
 import { useRoomStore } from "../stores/roomStore";
-
 
 
  
 const About: NextPage = () => {
 
-  const initializeRing = useRingStore(useCallback(s => s.initializeRing, []));
-  const updateRingStatus = useRingStore(useCallback(s => s.updateStatus, []));
-  const ringUnsubs = useRef<Unsubscribe[]>();
   const changeRoom = useRoomStore((s) => s.changeRoom);
 
   useEffect(() => {
@@ -23,17 +15,8 @@ const About: NextPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    async function setupSync() {
-      ringUnsubs.current = await syncWebRing(initializeRing, updateRingStatus);
-    }
-    setupSync();
-    return () => ringUnsubs.current && ringUnsubs.current.forEach((u) => u());
-  }, [initializeRing, updateRingStatus]);
-
  
   return (
-    <Layout>
     <div className="padded whiteFill">
       <Head>
         <title>is this thing on</title>
@@ -81,7 +64,6 @@ const About: NextPage = () => {
         </p>
       </main>
     </div>
-    </Layout>
   );
 };
 

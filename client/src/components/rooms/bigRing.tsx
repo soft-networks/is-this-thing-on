@@ -1,34 +1,22 @@
-import { Unsubscribe } from "firebase/firestore";
+
 import { NextPage } from "next";
 import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Layout from "../../layouts/layout";
-import { syncWebRing } from "../../lib/firestore";
 import useRingStore from "../../stores/ringStore";
 import { useRoomStore } from "../../stores/roomStore";
 import { SVGRingNode, SVGRingSeparate } from "../logo";
 import VideoPlayer from "../videoPlayer";
 
 const BigRingPage: NextPage = () => {
-  const initializeRing = useRingStore(useCallback((s) => s.initializeRing, []));
-  const updateRingStatus = useRingStore(useCallback((s) => s.updateStatus, []));
-  const ringUnsubs = useRef<Unsubscribe[]>();
   const changeRoom = useRoomStore((s) => s.changeRoom);
   useEffect(() => {
     changeRoom(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  useEffect(() => {
-    async function setupSync() {
-      ringUnsubs.current = await syncWebRing(initializeRing, updateRingStatus);
-    }
-    setupSync();
-    return () => ringUnsubs.current && ringUnsubs.current.forEach((u) => u());
-  }, [initializeRing, updateRingStatus]);
+
 
   return (
-    <Layout>
       <div className="fullBleed stack whiteFill">
         <div className="flex-1 contrastFill center-text" style={{ padding: "var(--s-2) 96px" } as React.CSSProperties}>
           <BigRing />
@@ -39,7 +27,6 @@ const BigRingPage: NextPage = () => {
           7PM ET. Learn more <Link href={"/about"}>here</Link>.
         </div>
       </div>
-    </Layout>
   );
 };
 

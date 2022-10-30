@@ -79,7 +79,7 @@ export function sanitizeStickerInstanceFromDB(stickerInstance: any): StickerInst
 export function sanitizeStickerCDNFromDB(sticker: any, id:string): Sticker {
   return {
     cdnID: id ,
-    behaviorType: sticker["behavior_type"] || "NORMAL",
+    behaviorType: sticker["type"] || "NORMAL",
     imageURL: sticker["url"]
   }
 }

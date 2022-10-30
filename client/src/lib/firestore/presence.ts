@@ -15,7 +15,7 @@ export async function setUserHeartbeat(userID: string, roomName: string) {
   if (activeTimeout) {
     clearTimeout(activeTimeout);
   }
-  console.log(" Setting user presence " , roomName)
+  //console.log(" Setting user presence " , roomName)
   await setPresenceDB(userID, roomName);
   activeTimeout = setTimeout(() => setUserHeartbeat(userID, roomName), PRESENCE_LENGTH);
 }

@@ -105,7 +105,15 @@ a, a:visited, .clickable\:link {
 .closeCursor {
   cursor: alias;
 }
-
+.moveCursor {
+  cursor: all-scroll;
+}
+.deleteCursor {
+  cursor:not-allowed;
+}
+.animateTransform {
+  transition: transform 1000ms;
+}
 
 .draggable {
   cursor: move; /* fallback if grab cursor is unsupported */
