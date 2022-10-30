@@ -102,6 +102,9 @@ a, a:visited, .clickable\:link {
 .addCursor {
   cursor: crosshair;
 }
+.closeCursor {
+  cursor: alias;
+}
 
 
 .draggable {
@@ -342,6 +345,9 @@ p {
 .align-start {
   align-items: flex-start;
 }
+.align-middle, .horizontal-stack.align-middle{
+  align-items: center;
+}
 .align-start\:vertical {
   display: flex;
   align-items: flex-start;
@@ -574,9 +580,11 @@ a:hover,
 }
 
 
-.contrastFill, .contrastFill\:hover:hover {
+.contrastFill, .contrastFill\:hover:hover, .hoverTrigger:hover .contrastFill\:hover\:triggered{
   background: var(--contrast);
+  fill: var(--contrast);
 }
+
 .skrimFill {
   background: rgba(0,0,0,0.5);
 }
@@ -617,6 +625,10 @@ a:hover,
   color: var(--chatMessageColor);
   width: max(20ch, 20vw);
   border-color:  var(--chatBorderColor);
+  transition: all 100ms;
+}
+.chat .contrastColor\:hover:hover {
+  color: var(--chatAuthorColor);
 }
 .chat * {
   border-color:  var(--chatBorderColor) !important;

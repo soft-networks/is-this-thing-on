@@ -11,8 +11,7 @@ const useStickerCDNStore = create<StickerStoreState>((set) => ({
   changeRoomStickers: (roomID: string) => {
     getStickerCDN(roomID, (c) => {
       set({stickerCDN: c });
-      console.log("stickers update ", c)
-    });
+     });
   },
   stickerCDN: undefined
 }));

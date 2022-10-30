@@ -77,7 +77,6 @@ export function sanitizeStickerInstanceFromDB(stickerInstance: any): StickerInst
 }
 
 export function sanitizeStickerCDNFromDB(sticker: any, id:string): Sticker {
-  console.log(sticker);
   return {
     cdnID: id ,
     behaviorType: sticker["behavior_type"] || "NORMAL",

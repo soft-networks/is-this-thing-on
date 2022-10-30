@@ -26,7 +26,7 @@ const Admin: React.FC<AdminViewProps> = ({ uid }) => {
         Rooms you manage
       </em>
       <p>
-        All streams should point to <span className="contrastFill">rtmps://global-live.mux.com:443/app</span>
+        All streams should point to <br/> <span className="contrastFill">rtmps://global-live.mux.com:443/app</span>
       </p>
       {rooms.map((r) => (
         <RoomAdminUI roomID={r.roomID} key={r.roomName + "-adminView"} uid={uid} />

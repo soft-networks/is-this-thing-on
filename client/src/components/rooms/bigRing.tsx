@@ -177,7 +177,7 @@ const ExpandedSeasonOne: React.FC<{
           style={{ border: "1px solid blue", filter: `drop-shadow(0px 0px 10px ${iLink.roomColor || "white"})`, cursor: 'ne-resize' }}
           onClick={() => router.push(src)}
         >
-          <VideoPlayer className="fullBleed" urlOverride="https://www.youtube.com/watch?v=IoIXT7VQ-nA&t=1805s" muteOverride={localMuted}/>
+          <VideoPlayer className="fullBleed" streamPlaybackID={iLink.streamPlaybackID} muteOverride={localMuted}/>
         </foreignObject>
         <text
           y={-iframeSize[1] / 2 - 5}
@@ -216,9 +216,9 @@ const AnimatedMuteButton: React.FC<{ onMuteChanged: (newMute: boolean) => void; 
 }) => {
   const rectWidth = 75;
   return (
-    <g transform={`translate(0, ${iframeSize[1]/2 + 10})`} onClick={() => onMuteChanged(!muted)} className="clickable showOnHover clickable:link">
-      <rect width={rectWidth} height={20} fill={"white"} stroke={"black"} transform={`translate(-${rectWidth/2},-14)`}></rect>
-      <text textAnchor="middle"> {muted ? "unmute" : "mute"} </text>
+    <g transform={`translate(0, ${iframeSize[1]/2 + 10})`} onClick={() => onMuteChanged(!muted)} className="clickable showOnHover hoverTrigger">
+      <rect width={rectWidth} height={20} fill={"white"} stroke={"black"} transform={`translate(-${rectWidth/2},-14)`} className="contrastFill:hover:triggered"></rect>
+      <text textAnchor="middle" fill={"black"}> {muted ? "unmute" : "mute"} </text>
     </g>
   );
 };

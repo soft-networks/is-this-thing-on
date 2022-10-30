@@ -14,7 +14,33 @@ export const Chat: React.FC<RoomUIProps> = ({className, style}) => {
   let unsubRef = useRef<Unsubscribe>();
   let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
   let chatRef = createRef<HTMLDivElement>();
+  let chatWasSetup = useRef<boolean>();
   let [filterRoom, setFilterRoom] = useState<boolean>(false);
+  let [chatStyle, setChatStyle] = useState<React.CSSProperties>();
+
+  useEffect(() => {
+    let currentStyle = {
+      "--chatAuthorColor": "var(--contrast)",
+      "--chatMessageColor": "var(--light)",
+      "--chatContainerBackground": "var(--black);",
+      "--chatBorderColor": "var(--gray)"
+    } as React.CSSProperties
+    if (style) {
+      currentStyle = {...currentStyle, ...style}
+    }
+    switch (roomID) {
+      case "chris": {
+        let chrisStyle = {
+          "--chatContainerBackground": "rgba(0,0,0,0.6)",
+          "--chatBorderColor": "rgba(0,0,0,0.6)",
+          "--chatMessageColor": "var(--white)",
+          "--chatAuthorColor": "hotpink"
+        } as React.CSSProperties;
+        currentStyle = {...currentStyle, ...chrisStyle};
+      }
+    }
+    setChatStyle(currentStyle);
+  }, [roomID, style])
 
   const chatWasAdded = useCallback(
     (cID, chat) => {
@@ -43,26 +69,28 @@ export const Chat: React.FC<RoomUIProps> = ({className, style}) => {
   );
   useEffect(() => {
     async function setupDB() {
+      console.log("Setting up chat sync");
       if (unsubRef.current) {
         setChatList({});
         unsubRef.current();
       }
       unsubRef.current = await syncChat(chatWasAdded, chatWasRemoved);
     }
-    setupDB();
-    return () => {
-      if (unsubRef.current) unsubRef.current();
-    };
-  }, [chatWasAdded, chatWasRemoved]);
+    if (!chatWasSetup.current) {
+      setupDB();
+      chatWasSetup.current = true;
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <Draggable handle=".handle" nodeRef={chatRef} defaultPosition={{x: 10, y: 10}}>
-      <div className={(className || "") + " chat highest border"} style={style as React.CSSProperties} ref={chatRef}>
+      <div className={(className || "") + " chat highest border"} style={chatStyle} ref={chatRef}>
         <div className="handle" style={{ minHeight: "var(--sp0)", height: "var(--sp0)", background: "var(--chatBorderColor)" }}>
           ...
         </div>
         <ChatInput onSubmit={sendNewMessage} />
-        <div className="padded:s-2 caption horizontal-stack clickable" style={{background: "var(--black)"}} onClick={() => setFilterRoom(!filterRoom)}>
-          <input type="checkbox" checked={filterRoom} onChange={() => setFilterRoom(!setFilterRoom)}  />
+        <div className="padded:s-2 caption horizontal-stack clickable" style={{background: "var(--chatBackgroundColor)"}} onClick={() => setFilterRoom(!filterRoom)}>
+          <input type="checkbox" checked={filterRoom} onClick={() => setFilterRoom(!setFilterRoom)} readOnly />
           <p>see messages in this room only</p>
         </div>
         <div
@@ -119,13 +147,16 @@ const ChatInput: React.FC<{ onSubmit: (chat: {message: string, timestamp: number
     setCurrentMessage("");
   }, [currentMessage, displayName, onSubmit]);
   return (
-    <div className="stack:s-2 border-bottom padded chatInputContainer">
-      {numOnline ? <div> {numOnline} people online </div> : null}
-      <div> send message as {displayName} </div>
-      <div className="fullWidth horizontal-stack">
+    <div className="stack:s-1 border-bottom padded:s-1 chatInputContainer">
+      
+      <div className="horizontal-stack"> 
+        <div className="flex-1"> chat as {displayName} </div>
+        {numOnline ? <div> {numOnline} people in this room </div> : null}
+      </div>
+      <div className="fullWidth horizontal-stack align-middle">
         <input
           value={currentMessage}
-          className="flex-1"
+          className="flex-1 padded:s-2"
           onChange={(e) => {
             setCurrentMessage(e.target.value);
           }}
@@ -135,10 +166,11 @@ const ChatInput: React.FC<{ onSubmit: (chat: {message: string, timestamp: number
             }
           }}
         />
-        <span onClick={submitMessage} className="button align-start">
+        <div onClick={submitMessage} className="clickable contrastColor:hover">
           send
-        </span>
+        </div>
       </div>
+      
     </div>
   )
 };

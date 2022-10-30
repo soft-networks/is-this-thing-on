@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
+import classnames from "classnames";
 import { Unsubscribe } from "firebase/firestore";
 import React, { MouseEventHandler, useEffect, useRef, useState, useCallback } from "react";
 import { addStickerInstance, getStickerCDN, performTransaction, syncStickerInstances } from "../lib/firestore";
@@ -15,14 +16,26 @@ interface StickersProps {
   className?: string;
 }
 const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdder, style, className }) => {
-  const user = useUserStore(useCallback((state) => state.currentUser, []));
   const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));
   const stickerCDN = useStickerCDNStore(useCallback((state) => state.stickerCDN, []));
-  // const [stickerCDN, setStickerCDN] = useState<{[key:string]: Sticker}>();
+  const displayName = useUserStore(useCallback((state) => state.displayName, []));
+  const [stickerStyle, setStickerStyle] = useState<React.CSSProperties>();
 
-  // useEffect(() => {
-  //   getStickerCDN(roomID, setStickerCDN);
-  // },[roomID]);
+  useEffect(() => {
+    let currentStyle = {};
+    if (style) {
+      currentStyle = style;
+    }
+    switch (roomID) {
+      case "chris": {
+        let chrisStyle ={
+          "--stickerSize": "10ch"
+        } as React.CSSProperties
+        currentStyle = {...chrisStyle, ...style};
+      }
+    }
+    setStickerStyle(currentStyle);
+  }, [roomID, style]);
 
   const addSticker = (pos: Pos, cdnID: string) => {
     if (!roomID) return;
@@ -33,16 +46,16 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
     });
     performTransaction({
       amount: 1,
-      from: user?.displayName || "unknown",
+      from: displayName || "unknown",
       to: roomID,
       timestamp: Date.now(),
     });
   };
   return roomID ? (
-    <div className={className || "fullBleed absoluteOrigin"} style={style}>
+    <div className={className || "fullBleed absoluteOrigin"} style={stickerStyle} id="sticker-overlay">
       {stickerCDN && (
         <>
-          {user && <StickerChooser addSticker={addSticker} cdn={stickerCDN} />}
+          <StickerChooser addSticker={addSticker} cdn={stickerCDN} />
           <ServerStickers roomID={roomID} key={`${roomID}-sscoins`} cdn={stickerCDN} />
         </>
       )}
@@ -67,6 +80,8 @@ const DefaultStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn }) =
         currentPosChosen.current = [x, y];
         setShowStickerTypePicker(true);
       }
+    } else {
+       setShowStickerTypePicker(false);
     }
   };
   const typeChosen = (id?: string) => {
@@ -80,7 +95,14 @@ const DefaultStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn }) =
     }
   };
   return (
-    <div className="fullBleed absoluteOrigin high addCursor" onClick={clicked} ref={containerRef}>
+    <div
+      className={classnames("fullBleed absoluteOrigin high", {
+        addCursor: !showStickerTypePicker,
+        closeCursor: showStickerTypePicker,
+      })}
+      onClick={clicked}
+      ref={containerRef}
+    >
       {showStickerTypePicker ? (
         <div
           className="absoluteOrigin "

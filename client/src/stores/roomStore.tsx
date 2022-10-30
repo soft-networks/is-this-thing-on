@@ -11,7 +11,7 @@ export const useRoomStore = create<RoomState>((set) => ({
   currentRoomID: null,
   roomInfo: undefined,
   changeRoom: (newRoom: string | null, roomInfo?: RoomInfo) => {
-    console.log("Room store updated", newRoom, roomInfo);
+    //console.log("Room store updated", newRoom, roomInfo);
     set((s) => ({currentRoomID: newRoom, roomInfo: roomInfo}));
   }
 }))
