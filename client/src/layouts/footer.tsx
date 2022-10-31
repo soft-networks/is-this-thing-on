@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
     return (
       <footer className="align-end:fixed fullWidth highest " >
         {roomID && <div className="padded:s2  horizontal-stack" style={{position: "absolute", bottom: 0, left: 0}}>
-          <Link href={"/"} passHref ><div className="padded:s-2 border clickable lightFill contrastFill:hover"> home </div></Link>
+          <Link href={"/"} passHref ><div className="padded:s-2 border clickable whiteFill contrastFill:hover"> home </div></Link>
           <RoomEnergy roomID={roomID}/>
         </div>}
         {roomID && <div className="padded:s2  centerh:absolute align-end:absolute  overflowVisible ">

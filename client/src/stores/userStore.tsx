@@ -3,12 +3,14 @@ import { persist } from "zustand/middleware";
 import { getAuth, createUserWithEmailAndPassword, User, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 
 import { app } from "../lib/firestore/init";
+import { getRoomsWhereUserISAdmin } from "../lib/firestore";
 const auth = getAuth(app);
 
 const randomName = () => `anon-${Math.floor(Math.random() * 1000)}`;
 interface UserState {
   currentUser: User | undefined;
   displayName: string,
+  adminFor?: string[],
   signIn: (username: string, password: string, signInComplete: (complete: boolean, error?: string)=> void) => void;
   signUp: (email: string, password: string,  signUpCompete: (complete: boolean, error?: string) => void) => void;
   signOut: () => void;
@@ -47,16 +49,23 @@ export const useUserStore = create<UserState>()(
     },
     signIn: (username: string, password: string, onSignIn) => {
       signInWithEmailAndPassword(auth, username, password)
-        .then((userCredential) => {
+        .then(async (userCredential) => {
           // Signed in
           const user = userCredential.user;
+          let newUserState : Partial<UserState> = {};
+          newUserState.currentUser = user;
+
           if (user.displayName) {
-            set({ currentUser: user, displayName: user.displayName });
-          } else {
-            set({ currentUser: user});
+            newUserState.displayName = user.displayName;
           }
-          
+
+          let rooms = await getRoomsWhereUserISAdmin(user.uid);
+          if (rooms) {
+            newUserState.adminFor = rooms.map(r => r.roomID);
+          }
+          set(newUserState);
           onSignIn(true);
+          
           console.log("Account logged in sucesfully");
         })
         .catch((error) => {

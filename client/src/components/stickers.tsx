@@ -237,17 +237,26 @@ interface StickerRenderProps {
 }
 
 const StickerRenderer: React.FC<StickerRenderProps> = (props) => {
-  if (!props.pos && !props.sticker) return <span> </span>;
+  const currentRoomID = useRoomStore(useCallback( s => s.currentRoomID, []));
+  const adminForIDs = useUserStore(useCallback(s => s.adminFor, []));
+  const stickerToUse = useMemo(() => {
+    
+    console.log(currentRoomID, adminForIDs);
+    if (!props.pos && !props.sticker) return <span> </span>;
+    if (adminForIDs && currentRoomID && adminForIDs.includes(currentRoomID)) return <DeletableSticker {...props}/>
+    switch (props.sticker.behaviorType) {
+      case "MOVE":
+        return <MoveableSticker {...props} />;
+      case "DELETE":
+        return <DeletableSticker {...props} />
+      case "NORMAL":
+      default:
+        return <StaticSticker {...props} />;
+    }
+  }, [props, adminForIDs, currentRoomID]);
 
-  switch (props.sticker.behaviorType) {
-    case "MOVE":
-      return <MoveableSticker {...props} />;
-    case "DELETE":
-      return <DeletableSticker {...props} />
-    case "NORMAL":
-    default:
-      return <StaticSticker {...props} />;
-  }
+  return stickerToUse;
+
 };
 
 const DeletableSticker: React.FC<StickerRenderProps> = ({ sticker, pos, id }) => {

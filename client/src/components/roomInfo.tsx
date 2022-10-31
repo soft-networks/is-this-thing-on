@@ -12,7 +12,7 @@ const RoomEnergy: React.FC<{roomID: string}> = ({roomID}) => {
     timeout.current = setTimeout(() => setJustUpdated(false), 3000);
     return () => timeout.current && clearTimeout(timeout.current);
   }, [roomEnergy]);
-  return roomID  ? <div className={classnames("whiteFill border padded:s-2", { fadeContrast: justUpdated })}> {roomEnergy} NRG </div> : null
+  return roomID  ? <div className={classnames("lightFill border padded:s-2", { fadeContrast: justUpdated })}> {roomEnergy} NRG </div> : null
 }
 
 const RoomInfoViewer: React.FunctionComponent = () => {
