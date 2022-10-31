@@ -80,6 +80,7 @@ export function sanitizeStickerCDNFromDB(sticker: any, id:string): Sticker {
   return {
     cdnID: id ,
     behaviorType: sticker["type"] || "NORMAL",
-    imageURL: sticker["url"]
+    imageURL: sticker["url"],
+    noGift: sticker["noGift"]
   }
 }

@@ -53,7 +53,8 @@ type BEHAVIOR_TYPES = "MOVE" | "DELETE" | "NORMAL";
 interface Sticker {
   behaviorType: BEHAVIOR_TYPES,
   cdnID: string,
-  imageURL: string
+  imageURL: string,
+  noGift: string
 }
 interface StickerInstance {
   position: Pos,
