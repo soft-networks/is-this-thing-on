@@ -49,7 +49,7 @@ type RoomInfo = RoomLinkInfo & {
 
 type Pos = [number, number];
 
-type BEHAVIOR_TYPES = "MOVE" | "DELETE" | "NORMAL";
+type BEHAVIOR_TYPES = "MOVE" | "DELETE" | "NORMAL" | "SCALE";
 interface Sticker {
   behaviorType: BEHAVIOR_TYPES,
   cdnID: string,
@@ -58,8 +58,10 @@ interface Sticker {
 }
 interface StickerInstance {
   position: Pos,
+  size?: number,
   timestamp: number
-  cdnID: string
+  cdnID: string,
+  zIndex: number
 }
 interface EnergyAccount {
   userID: UserID,

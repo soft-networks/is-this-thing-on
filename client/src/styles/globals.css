@@ -344,6 +344,9 @@ p {
 .highest {
   z-index: 99;
 }
+.everest {
+  z-index: 99999;
+}
 
 
 .align\:center {
@@ -561,6 +564,12 @@ a:hover,
 .clickable\:opacity:hover {
   opacity: 1;
   scale: 1.4;
+}
+.opacity\:hover {
+  opacity: 0.3;
+}
+.opacity\:hover:hover {
+  opacity: 1;
 }
 
 .scale\:hover {

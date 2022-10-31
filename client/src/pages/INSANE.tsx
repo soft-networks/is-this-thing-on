@@ -2,13 +2,14 @@
 
 import { NextPage } from "next";
 import { useEffect } from "react";
-import { bhavikShouldNeverCodeAgain } from "../lib/firestore";
+import { bhavikShouldNeverCodeAgain, butWeMayAsWellDoItAll } from "../lib/firestore";
 
 
 const insane: NextPage = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     //bhavikShouldNeverCodeAgain();
+    //butWeMayAsWellDoItAll();
   }, []);
   return <div> this page is insane</div>;
 };

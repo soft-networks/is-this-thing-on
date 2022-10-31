@@ -72,7 +72,9 @@ export function sanitizeStickerInstanceFromDB(stickerInstance: any): StickerInst
   return {
     position: stickerInstance.position || [0, 0],
     cdnID: stickerInstance["cdn_id"] || undefined,
-    timestamp: stickerInstance["timestamp"] || 0
+    timestamp: stickerInstance["timestamp"] || 0,
+    size: stickerInstance["size"],
+    zIndex: stickerInstance["zIndex"] || 100
   };
 }
 
