@@ -68,9 +68,18 @@ export function sanitizeStickerInstanceForDB(stickerInstance: StickerInstance) {
   };
 }
 
+function sanitizePosition(n?: [number, number]): Pos {
+  if (n == undefined) return [0,0];
+  if (n[0] <= 2) {
+    return n
+  } else {
+    return [n[0]/1920, n[1]/1080]
+  }
+}
+
 export function sanitizeStickerInstanceFromDB(stickerInstance: any): StickerInstance {
   return {
-    position: stickerInstance.position || [0, 0],
+    position:  sanitizePosition(stickerInstance["position"]),
     cdnID: stickerInstance["cdn_id"] || undefined,
     timestamp: stickerInstance["timestamp"] || 0,
     size: stickerInstance["size"],

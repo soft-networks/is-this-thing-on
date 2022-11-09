@@ -98,7 +98,7 @@ export const useUserStore = create<UserState>()(
         .then(() => {
           // Sign-out successful.
           console.log("Signed out");
-          set((s) => ({ currentUser: undefined, displayName: randomName() }));
+          set((s) => ({ currentUser: undefined, displayName: randomName(), adminFor: undefined }));
         })
         .catch((error) => {
           console.log("Error signing out" , error);

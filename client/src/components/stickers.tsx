@@ -190,6 +190,9 @@ const ServerStickers: React.FC<{ roomID: string; cdn: StickerCDN; containerBound
   );
   const [behaviorOverride, setBehaviorOverride] = useState<BEHAVIOR_TYPES>();
 
+  useEffect(() => {
+    console.log(serverSideCoins);
+  }, [serverSideCoins])
   const stickerUpdated = useCallback(
     (cID, pos, scale, z) => {
       setServerSideCoins((pc) => {
@@ -234,8 +237,11 @@ const ServerStickers: React.FC<{ roomID: string; cdn: StickerCDN; containerBound
   return (
     <>
       {Object.entries(serverSideCoins).map(
-        ([id, stickerInstance]) =>
-          cdn[stickerInstance.cdnID] && (
+        ([id, stickerInstance]) => {
+          if (! cdn[stickerInstance.cdnID]) {
+            console.log("No sticker", stickerInstance.cdnID);
+          }
+          return cdn[stickerInstance.cdnID] && (
             <StickerRenderer
               key={`servercoin-${id}`}
               pos={stickerInstance.position}
@@ -243,8 +249,10 @@ const ServerStickers: React.FC<{ roomID: string; cdn: StickerCDN; containerBound
               sticker={cdn[stickerInstance.cdnID]}
               id={id}
               containerBounds={containerBounds}
-              adminOverride={behaviorOverride} zIndex={stickerInstance.zIndex}            />
+              adminOverride={behaviorOverride} zIndex={100 + stickerInstance.zIndex}            />
           )
+        }
+         
       )}
       {isAdmin && (
         <div style={{ position: "fixed", top: 0, right: 0 }} className="horizontal-stack padded highest">
