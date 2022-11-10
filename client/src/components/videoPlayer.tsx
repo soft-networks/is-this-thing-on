@@ -16,6 +16,7 @@ const VideoPlayer: React.FunctionComponent<
   const clickCallback = useCallback(() => {
     if (mute && !muteOverride) {
       setMuted(false);
+      window.removeEventListener("click", clickCallback)
       globalClick.current = true;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -23,12 +24,17 @@ const VideoPlayer: React.FunctionComponent<
 
   useEffect(() => {
     if (!globalClick.current) window.addEventListener("click", clickCallback);
-    return () =>  window.removeEventListener("click", clickCallback);
+    return () => window.removeEventListener("click", clickCallback);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  return (
-    <div className={className} style={style}>
-      {streamPlaybackID || urlOverride ? (
+  return streamPlaybackID || urlOverride ? (
+    <>
+      <div className="highest padded" style={{ position: "fixed", top: "0px", right: "0px" }}>
+        <div className="border-thin whiteFill padded:s-2 clickable contrastFill:hover" onClick={() => setMuted(!mute)}>
+          {mute ? "play audio" : "mute audio"}
+        </div>
+      </div>
+      <div className={className} style={style}>
         <ReactPlayer
           url={
             urlOverride ||
@@ -42,9 +48,9 @@ const VideoPlayer: React.FunctionComponent<
           width="auto"
           className="noEvents"
         />
-      ) : null}
-    </div>
-  );
+      </div>
+    </>
+  ) : null;
 };
 
 export default VideoPlayer;

@@ -8,8 +8,11 @@ import { bhavikShouldNeverCodeAgain, butWeMayAsWellDoItAll } from "../lib/firest
 const insane: NextPage = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
-    bhavikShouldNeverCodeAgain();
-    // butWeMayAsWellDoItAll();
+    if (true) {
+      //bhavikShouldNeverCodeAgain();
+      // butWeMayAsWellDoItAll();
+    }
+    
   }, []);
   return <div> this page is insane</div>;
 };

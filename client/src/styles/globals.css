@@ -342,7 +342,7 @@ p {
   z-index: 50;
 }
 .highest {
-  z-index: 99;
+  z-index: 999;
 }
 .everest {
   z-index: 99999;

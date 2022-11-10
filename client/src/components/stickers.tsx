@@ -190,9 +190,6 @@ const ServerStickers: React.FC<{ roomID: string; cdn: StickerCDN; containerBound
   );
   const [behaviorOverride, setBehaviorOverride] = useState<BEHAVIOR_TYPES>();
 
-  useEffect(() => {
-    console.log(serverSideCoins);
-  }, [serverSideCoins])
   const stickerUpdated = useCallback(
     (cID, pos, scale, z) => {
       setServerSideCoins((pc) => {
@@ -255,15 +252,12 @@ const ServerStickers: React.FC<{ roomID: string; cdn: StickerCDN; containerBound
          
       )}
       {isAdmin && (
-        <div style={{ position: "fixed", top: 0, right: 0 }} className="horizontal-stack padded highest">
+        <div style={{ position: "fixed", top: 0, right: "50%" }} className="horizontal-stack padded highest">
           <div className="clickable contrastFill:hover" onClick={() => setBehaviorOverride("MOVE")}>
             {"MOVE"} MODE
           </div>
           <div className="clickable contrastFill:hover" onClick={() => setBehaviorOverride("DELETE")}>
             {"DELETE"} MODE
-          </div>
-          <div className="clickable contrastFill:hover" onClick={() => setBehaviorOverride("SCALE")}>
-            {"SCALE/ZINDEX"} MODE
           </div>
           <div className="clickable contrastFill:hover" onClick={() => setBehaviorOverride(undefined)}>
             {"USER"} MODE
@@ -320,7 +314,7 @@ const DeletableSticker: React.FC<StickerRenderProps> = ({ sticker, pos, id, size
       onClick={(e) => deleteSticker()}
       className={"absoluteOrigin deleteCursor highest"}
     >
-      <StickerImage url={sticker.imageURL} size={size} />
+      <StickerImage url={sticker.imageURL} size={size} id={id} />
     </div>
   );
 };
@@ -346,7 +340,7 @@ const MoveableSticker: React.FC<StickerRenderProps> = ({ sticker, pos, id, conta
         style={{ width: size ? `${size * 100}%` : "var(--stickerSize)" , zIndex: zIndex}}
         ref={myRef}
       >
-        <StickerImage url={sticker.imageURL} size={size} />
+        <StickerImage url={sticker.imageURL} size={size} id={id}/>
       </div>
     </Draggable>
   ) : null;
@@ -423,22 +417,22 @@ const ResizableSticker = ({ sticker, pos, id, size , zIndex}: StickerRenderProps
           </div>
         )}
       </div>
-      <StickerImage url={sticker.imageURL} size={size} />
+      <StickerImage url={sticker.imageURL} size={size} id={id} />
     </div>
   );
 };
 
-const StaticSticker = ({ sticker, pos, size, zIndex }: StickerRenderProps) => (
+const StaticSticker = ({ sticker, pos, size, zIndex, id }: StickerRenderProps) => (
   <div
     style={{ left: `${pos[0] * 100}%`, top: `${pos[1] * 100}%`, width: size ? `${size * 100}%` : "var(--stickerSize)", zIndex: zIndex }}
     className={"absoluteOrigin"}
   >
-    <StickerImage url={sticker.imageURL} size={size} />
+    <StickerImage url={sticker.imageURL} size={size} id={id}/>
   </div>
 );
 
-const StickerImage = ({ url, size }: { url: string; size?: number }) => (
-  <img src={url} className="noEvents" alt={"Sticker"} style={{ width: "100%" }} />
+const StickerImage = ({ url, size, id}: { url: string; size?: number, id?: string }) => (
+  <img src={url} className="noEvents" alt={"Sticker"} style={{ width: "100%" }} id={id} />
 );
 
 export default Stickers;
