@@ -29,11 +29,11 @@ const VideoPlayer: React.FunctionComponent<
   }, []);
   return streamPlaybackID || urlOverride ? (
     <>
-      <div className="highest padded" style={{ position: "fixed", top: "0px", right: "0px" }}>
+      {muteOverride == undefined && <div className="highest padded" style={{ position: "fixed", top: "0px", right: "0px" }}>
         <div className="border-thin whiteFill padded:s-2 clickable contrastFill:hover" onClick={() => setMuted(!mute)}>
           {mute ? "play audio" : "mute audio"}
         </div>
-      </div>
+      </div>}
       <div className={className} style={style}>
         <ReactPlayer
           url={

@@ -8,6 +8,7 @@ import VideoPlayer from "./videoPlayer";
 import RoomGate, { RoomOnlineGate } from "./roomGate";
 import useStickerCDNStore from "../stores/stickerStore";
 import Stickers from "./stickers";
+import Head from "next/head";
 
 const Room: React.FC<{ roomID: string; season?: number }> = ({ roomID, season }) => {
   const changeRoom = useRoomStore(useCallback((state) => state.changeRoom, []));
@@ -76,6 +77,7 @@ const RoomView = ({ videoStyle, stickerStyle }: RoomViewProps) => {
 
   return (
     <div className="fullBleed overflowScroll">
+      <Head><title>{roomInfo?.roomName} is {roomInfo?.streamStatus == "active" ? "ON": "OFF"}</title></Head>
       {roomInfo ? (
         <>
           <VideoPlayer style={videoStyle} className="fullBleed noEvents absoluteOrigin" streamPlaybackID={roomInfo.streamPlaybackID} />

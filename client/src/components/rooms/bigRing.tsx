@@ -1,5 +1,6 @@
 
 import { NextPage } from "next";
+import Head from "next/head";
 import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -18,6 +19,7 @@ const BigRingPage: NextPage = () => {
 
   return (
       <div className="fullBleed stack whiteFill">
+        <Head><title>THING</title></Head>
         <div className="flex-1 contrastFill center-text" style={{ padding: "var(--s-2) 96px" } as React.CSSProperties}>
           <BigRing />
         </div>
@@ -66,7 +68,7 @@ const BigRing: React.FC = () => {
       style={{ maxWidth: "18000px" }}
       viewBox="-50 -50 550 450"
     >
-      <text x={150} y={210} style={{ fontSize: "55px", fontStyle: "italic" }}>
+      <text x={150} y={210} style={{ fontSize: "55px", fontStyle: "italic" }} fill="black">
         THING
       </text>
       {ringPieces[0]}
