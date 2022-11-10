@@ -6,9 +6,16 @@ import { useRoomStore } from "../stores/roomStore";
 const DEFAULT_CLASSNAME = "fullWidth";
 const DEFAULT_STYLE = {};
 
-const VideoPlayer: React.FunctionComponent<
-  RoomUIProps & { urlOverride?: string; streamPlaybackID?: string; muteOverride?: boolean }
-> = ({ className = DEFAULT_CLASSNAME, style = DEFAULT_STYLE, streamPlaybackID, urlOverride, muteOverride }) => {
+type VideoPlayerProps = RoomUIProps & { urlOverride?: string; streamPlaybackID?: string; muteOverride?: boolean, hideMuteButton?: boolean }
+
+const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
+  className = DEFAULT_CLASSNAME,
+  style = DEFAULT_STYLE,
+  streamPlaybackID,
+  urlOverride,
+  muteOverride,
+  hideMuteButton
+}) => {
   const roomInfo = useRoomStore((state) => state.roomInfo);
   const [mute, setMuted] = useState(true);
   const globalClick = useRef<boolean>(false);
@@ -16,7 +23,7 @@ const VideoPlayer: React.FunctionComponent<
   const clickCallback = useCallback(() => {
     if (mute && !muteOverride) {
       setMuted(false);
-      window.removeEventListener("click", clickCallback)
+      window.removeEventListener("click", clickCallback);
       globalClick.current = true;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -29,11 +36,16 @@ const VideoPlayer: React.FunctionComponent<
   }, []);
   return streamPlaybackID || urlOverride ? (
     <>
-      {muteOverride == undefined && <div className="highest padded" style={{ position: "fixed", top: "0px", right: "0px" }}>
-        <div className="border-thin whiteFill padded:s-2 clickable contrastFill:hover" onClick={() => setMuted(!mute)}>
-          {mute ? "play audio" : "mute audio"}
+      {!hideMuteButton && (
+        <div className="highest padded" style={{ position: "fixed", top: "0px", right: "0px" }}>
+          <div
+            className="border-thin whiteFill padded:s-2 clickable contrastFill:hover"
+            onClick={() => setMuted(!mute)}
+          >
+            {mute ? "play audio" : "mute audio"}
+          </div>
         </div>
-      </div>}
+      )}
       <div className={className} style={style}>
         <ReactPlayer
           url={

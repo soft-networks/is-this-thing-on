@@ -166,7 +166,7 @@ const ExpandedSeasonOne: React.FC<{
           style={{ border: "1px solid blue", filter: `drop-shadow(0px 0px 10px ${iLink.roomColor || "white"})`, cursor: 'ne-resize' }}
           onClick={() => router.push(src)}
         >
-          <VideoPlayer className="fullBleed" streamPlaybackID={iLink.streamPlaybackID} muteOverride={localMuted}/>
+          <VideoPlayer className="fullBleed" streamPlaybackID={iLink.streamPlaybackID} muteOverride={localMuted} hideMuteButton={true}/>
         </foreignObject>
         <text
           y={-iframeSize[1] / 2 - 5}
