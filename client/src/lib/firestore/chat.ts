@@ -7,7 +7,7 @@ export async function syncChat(
   removeChat: (id: string) => void
 ) {
   const chats = chatCollection();
-  const q = query(chats, orderBy("timestamp"), limit(100))
+  const q = query(chats, orderBy("timestamp"))
   const unsub = onSnapshot(q, (docs) => {
     docs.docChanges().forEach((change) => {
       let chat = change.doc;
