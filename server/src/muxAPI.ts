@@ -35,7 +35,7 @@ export const createAndReturnStreamKey : RequestHandler = async (req, res) => {
 }
 export const muxCreateStream = async () => {
   const { stream_key, id } = await Video.LiveStreams.create({
-    low_latency: true,
+    reduced_latency: true,
     playback_policy: "public",
     new_asset_settings: { playback_policy: "public" },
      
