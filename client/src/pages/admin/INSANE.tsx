@@ -2,7 +2,7 @@
 
 import { NextPage } from "next";
 import { useEffect } from "react";
-import { bhavikShouldNeverCodeAgain, butWeMayAsWellDoItAll } from "../lib/firestore";
+import { bhavikShouldNeverCodeAgain, butWeMayAsWellDoItAll } from "../../lib/firestore";
 
 
 const insane: NextPage = () => {

@@ -1,4 +1,4 @@
-
+import Head from "next/head";
 import { useCallback, useMemo } from "react";
 import useRingStore from "../stores/ringStore";
 import { useRoomStore } from "../stores/roomStore";
@@ -6,8 +6,8 @@ import { useRoomStore } from "../stores/roomStore";
 const loadingDiv = <div className="center:absolute highest"> loading...</div>;
 
 const RoomGate: React.FunctionComponent<{ id: string }> = ({ id, children }) => {
-  const ring = useRingStore(useCallback(room => room.links, []));
-  const gate = useMemo(() => {    
+  const ring = useRingStore(useCallback((room) => room.links, []));
+  const gate = useMemo(() => {
     if (ring == undefined || Object.keys(ring).length == 0) {
       return loadingDiv;
     }
@@ -17,15 +17,28 @@ const RoomGate: React.FunctionComponent<{ id: string }> = ({ id, children }) => 
   return gate;
 };
 
-export const RoomOnlineGate: React.FunctionComponent = ({children}) => {
+export const RoomOnlineGate: React.FunctionComponent = ({ children }) => {
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
   const roomOnline = useMemo(() => {
     if (!roomInfo) {
-      return loadingDiv
+      return loadingDiv;
     }
-    return roomInfo.streamStatus == "active" ? <>{children}</> : <div className="center:absolute highest"> offline... for now</div>
-  },[children, roomInfo]);
-  return roomOnline
-}
+    return (
+      <>
+        <Head>
+          <title>
+          {roomInfo.roomName} is {roomInfo?.streamStatus == "active" ? "ON" : "OFF"}
+          </title>
+        </Head>
+        {roomInfo.streamStatus == "active" ? (
+          <>{ children }</>
+        ) : (
+          <div className="center:absolute highest"> offline... for now</div>
+        )}
+      </>
+    );
+  }, [children, roomInfo]);
+  return roomOnline;
+};
 
 export default RoomGate;

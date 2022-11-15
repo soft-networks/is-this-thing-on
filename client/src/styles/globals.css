@@ -26,6 +26,7 @@
   --textWidth: 48ch; 
 
   --stickerSize: 5ch;
+  
 
 }
 @font-face {
@@ -583,6 +584,7 @@ a:hover,
   background: var(--white);
 }
 
+
 .lightFill {
   background: var(--light);
   color: var(--black);
@@ -605,6 +607,9 @@ a:hover,
   fill: var(--contrast);
 }
 
+.hoverTrigger:hover .glow\:hover {
+  filter: drop-shadow(0px 0px 5px var(--contrast));
+}
 .skrimFill {
   background: rgba(0,0,0,0.5);
 }
@@ -643,7 +648,7 @@ a:hover,
   --chatBorderColor: var(--gray);
   background: var(--chatContainerBackground);
   color: var(--chatMessageColor);
-  width: max(20ch, 20vw);
+  width: max(35ch, 20vw);
   border-color:  var(--chatBorderColor);
   transition: all 100ms;
 }

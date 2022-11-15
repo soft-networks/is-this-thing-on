@@ -46,13 +46,24 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({ roomID, season })
   );
 };
 const SeasonOne = ({ roomID }: { roomID: string }) => {
-  if (roomID == "chris") {
+  if (roomID == "chrisy") {
     let doubleSizeStyle: React.CSSProperties = {
       width: "calc(2 * 100vw)",
-      height: "calc(2 *56vw)",
+      height: "calc(2 * 56.25vw)",
       zIndex: 0,
     };
-    return <RoomView videoStyle={doubleSizeStyle} stickerStyle={doubleSizeStyle} />;
+    return <RoomView videoContainerStyle={doubleSizeStyle} stickerStyle={doubleSizeStyle} />;
+  }
+  if (roomID == "molly") {
+    
+    let fullHeight: React.CSSProperties = {
+      width: "100%",
+      height: "100%"
+    }
+    return (
+      <RoomView videoStyle={fullHeight} videoContainerStyle={{ width: "100%", height: "100%", background: "pink" }} />
+    );
+
   }
   return <RoomView />;
 };
@@ -69,18 +80,18 @@ const SeasonZero: React.FC = () => {
 };
 
 interface RoomViewProps {
+  videoContainerStyle?: React.CSSProperties;
   videoStyle?: React.CSSProperties;
   stickerStyle?: React.CSSProperties;
 }
-const RoomView = ({ videoStyle, stickerStyle }: RoomViewProps) => {
+const RoomView = ({ videoContainerStyle: videoStyle, stickerStyle }: RoomViewProps) => {
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
 
   return (
     <div className="fullBleed overflowScroll">
-      <Head><title>{roomInfo?.roomName} is {roomInfo?.streamStatus == "active" ? "ON": "OFF"}</title></Head>
       {roomInfo ? (
         <>
-          <VideoPlayer style={videoStyle} className="fullBleed noEvents absoluteOrigin" streamPlaybackID={roomInfo.streamPlaybackID} />
+          <VideoPlayer style={videoStyle} className="fullBleed noEvents absoluteOrigin" streamPlaybackID={roomInfo.streamPlaybackID} videoStyle={videoStyle}/>
           <Stickers style={stickerStyle} />
         </>
       ) : (

@@ -9,7 +9,7 @@ import { useUserStore } from "../stores/userStore";
 
 
 
-export const Chat: React.FC<RoomUIProps> = ({className, style}) => {
+export const Chat: React.FC<RoomUIProps> = ({className}) => {
   let roomID = useRoomStore((state) => state.currentRoomID);
   let unsubRef = useRef<Unsubscribe>();
   let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
@@ -21,25 +21,46 @@ export const Chat: React.FC<RoomUIProps> = ({className, style}) => {
     let currentStyle = {
       "--chatAuthorColor": "var(--contrast)",
       "--chatMessageColor": "var(--light)",
-      "--chatContainerBackground": "var(--black);",
+      "--chatContainerBackground": "var(--black)",
       "--chatBorderColor": "var(--gray)"
     } as React.CSSProperties
-    if (style) {
-      currentStyle = {...currentStyle, ...style}
-    }
     switch (roomID) {
-      case "chris": {
+      case "chrisy": {
         let chrisStyle = {
-          "--chatContainerBackground": "rgba(0,0,0,0.6)",
-          "--chatBorderColor": "rgba(0,0,0,0.6)",
+          "--chatContainerBackground": "rgba(0,0,0,0.1)",
+          "--chatBorderColor": "rgba(0,0,0,0.1)",
           "--chatMessageColor": "var(--white)",
-          "--chatAuthorColor": "hotpink"
+          "--chatAuthorColor": "magenta"
         } as React.CSSProperties;
         currentStyle = {...currentStyle, ...chrisStyle};
+        break;
+      }
+      case "molly": {
+        let mollyStyle = {
+          "--chatContainerBackground": "pink",
+          "--chatBorderColor": "hotpink",
+          "--chatMessageColor": "var(--black)",
+          "--chatAuthorColor": "black"
+        } as React.CSSProperties;
+        currentStyle = {...currentStyle, ...mollyStyle};
+        break;
+      }
+      case "soft": {
+        let softStyle = {
+          "--chatContainerBackground": "rgb(189, 222, 239)",
+          "--chatBorderColor": "rgb(135, 188, 215)",
+          "--chatMessageColor": "rgb(70, 116, 91)",
+          "--chatAuthorColor": "#183c28"
+        }
+        currentStyle = {...currentStyle, ...softStyle};
+        break;
+      }
+      default: {
+
       }
     }
     setChatStyle(currentStyle);
-  }, [roomID, style])
+  }, [roomID])
 
   const chatWasAdded = useCallback(
     (cID, chat) => {
@@ -104,7 +125,6 @@ export const Chat: React.FC<RoomUIProps> = ({className, style}) => {
           }
         >
           {Object.entries(chatList)
-          .reverse()
           .map(([id, chat]) => {
             if (filterRoom && chat.roomID !== (roomID || "home")) {
               return null
@@ -123,7 +143,7 @@ const RenderChat : React.FC<{id: string, chat: ChatMessage}> = ({chat, id}) => {
   
   return (
     <p key={id} className="padded:custom chatMessage">
-    <span style={{background:  myRoom  ? myRoom.roomColor : "gray"}}>@{myRoom ? myRoom.roomName : "home"}</span>{" "}
+    <span style={{background:  myRoom  ? myRoom.roomColor : "var(--contrast)", color: "var(--black)"}}>@{myRoom ? myRoom.roomName : "home"}</span>{" "}
     <span style={{ color: "var(--chatAuthorColor)"}}>{chat.username || "unknown"}</span>{": "}
     <span>{chat.message}</span>
   </p>

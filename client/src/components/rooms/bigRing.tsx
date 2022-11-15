@@ -1,10 +1,9 @@
-
 import { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import useRingStore from "../../stores/ringStore";
+import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
 import { useRoomStore } from "../../stores/roomStore";
 import { SVGRingNode, SVGRingSeparate } from "../logo";
 import VideoPlayer from "../videoPlayer";
@@ -16,24 +15,25 @@ const BigRingPage: NextPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
   return (
-      <div className="fullBleed stack whiteFill">
-        <Head><title>THING</title></Head>
-        <div className="flex-1 contrastFill center-text" style={{ padding: "var(--s-2) 96px" } as React.CSSProperties}>
-          <BigRing />
-        </div>
-        <div className="grow-text padded:s-2" style={{ paddingTop: 0 }}>
-          Is this THING on? is a live streaming network for artists being built slowly over three seasons, guided by
-          public performance and conversation. Season 1 is <span className="contrastFill">live most Sundays</span> at
-          7PM ET. Learn more <Link href={"/about"}>here</Link>.
-        </div>
+    <div className="fullBleed stack whiteFill">
+      <Head>
+        <title>THING</title>
+      </Head>
+      <div className="flex-1 contrastFill center-text" style={{ padding: "var(--s-2) 96px" } as React.CSSProperties}>
+        <BigRing />
       </div>
+      <div className="grow-text padded:s-2" style={{ paddingTop: 0 }}>
+        Is this THING on? is a live streaming network for artists being built slowly over three seasons, guided by
+        public performance and conversation. Season 1 is <span className="contrastFill">live most Sundays</span> at 7PM
+        ET. Learn more <Link href={"/about"}>here</Link>.
+      </div>
+    </div>
   );
 };
 
 const ANIM_LENGTH = 1000;
-const iframeSize = [160, 90];
+const iframeSize = [155, 90];
 
 const BigRing: React.FC = () => {
   const ring = useRingStore(useCallback((s) => s.links, []));
@@ -149,7 +149,7 @@ const ExpandedSeasonOne: React.FC<{
   ANIM_OFFSET: number;
   router: NextRouter;
 }> = ({ iLink, ANIM_OFFSET, router, i }) => {
-  const src = `/streams/${iLink.roomID}`;
+  const src = roomIDToHREF(iLink.roomID);
 
   const [localMuted, setLocalMuted] = useState(true);
 
@@ -163,20 +163,24 @@ const ExpandedSeasonOne: React.FC<{
           width={iframeSize[0]}
           height={iframeSize[1]}
           transform={`translate(-${iframeSize[0] / 2}, -${iframeSize[1] / 2})`}
-          style={{ border: "1px solid blue", filter: `drop-shadow(0px 0px 10px ${iLink.roomColor || "white"})`, cursor: 'ne-resize' }}
+          style={{
+            border: "1px solid blue",
+            filter: `drop-shadow(0px 0px 10px ${iLink.roomColor || "white"})`,
+            cursor: "ne-resize",
+          }}
           onClick={() => router.push(src)}
         >
-          <VideoPlayer className="fullBleed" streamPlaybackID={iLink.streamPlaybackID} muteOverride={localMuted} hideMuteButton={true}/>
+           <VideoPlayerPerRoom iLink={iLink} localMuted={localMuted}/>
         </foreignObject>
         <text
           y={-iframeSize[1] / 2 - 5}
           textAnchor="middle"
           fill="blue"
-          style={{ filter: `drop-shadow(0px 0px 6px ${iLink.roomColor || "white"})`, cursor: 'ne-resize'}}
-          onClick={() => router.push(src)} 
-
+          style={{ filter: `drop-shadow(0px 0px 6px ${iLink.roomColor || "white"})`, cursor: "ne-resize" }}
+          onClick={() => router.push(src)}
         >
           {iLink.roomName}
+         
         </text>
         <AnimatedMuteButton muted={localMuted} onMuteChanged={setLocalMuted} />
       </g>
@@ -199,15 +203,52 @@ const ExpandedSeasonOne: React.FC<{
   }
 };
 
+const VideoPlayerPerRoom: React.FC<{ iLink: RoomLinkInfo; localMuted: boolean }> = ({ iLink, localMuted }) => {
+  switch (iLink.roomID) {
+    case "chrisy":
+      return (
+        <VideoPlayer
+          className="fullBleed"
+          style={{ width: "200%", height: "200%" }}
+          streamPlaybackID={iLink.streamPlaybackID}
+          muteOverride={localMuted}
+          hideMuteButton={true}
+        />
+      );
+    default:
+      return (
+        <VideoPlayer
+          className="fullBleed"
+          streamPlaybackID={iLink.streamPlaybackID}
+          muteOverride={localMuted}
+          hideMuteButton={true}
+        />
+      );
+  }
+};
 const AnimatedMuteButton: React.FC<{ onMuteChanged: (newMute: boolean) => void; muted: boolean }> = ({
   onMuteChanged,
   muted,
 }) => {
   const rectWidth = 75;
   return (
-    <g transform={`translate(0, ${iframeSize[1]/2 + 10})`} onClick={() => onMuteChanged(!muted)} className="clickable showOnHover hoverTrigger">
-      <rect width={rectWidth} height={20} fill={"white"} stroke={"black"} transform={`translate(-${rectWidth/2},-14)`} className="contrastFill:hover:triggered"></rect>
-      <text textAnchor="middle" fill={"black"}> {muted ? "unmute" : "mute"} </text>
+    <g
+      transform={`translate(0, ${iframeSize[1] / 2 + 10})`}
+      onClick={() => onMuteChanged(!muted)}
+      className="clickable showOnHover hoverTrigger"
+    >
+      <rect
+        width={rectWidth}
+        height={20}
+        fill={"white"}
+        stroke={"black"}
+        transform={`translate(-${rectWidth / 2},-14)`}
+        className="contrastFill:hover:triggered"
+      ></rect>
+      <text textAnchor="middle" fill={"black"}>
+        {" "}
+        {muted ? "unmute" : "mute"}{" "}
+      </text>
     </g>
   );
 };

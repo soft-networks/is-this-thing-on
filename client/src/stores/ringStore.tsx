@@ -47,7 +47,7 @@ const useRingStore = create<RingState>((set) => ({
 }));
 
 export const roomIDToHREF = (id: string) => {
-  return `/streams/${slugify(id)}`;
+  return `/${slugify(id)}`;
 }
 
 

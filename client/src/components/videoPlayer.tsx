@@ -1,23 +1,26 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { generateStreamLink } from "../lib/server-api";
-import { useRoomStore } from "../stores/roomStore";
+
+import MuxVideo from '@mux/mux-video-react';
+
 
 const DEFAULT_CLASSNAME = "fullWidth";
-const DEFAULT_STYLE = {};
+const DEFAULT_STYLE = {} as React.CSSProperties;
+const DEFAULT_VIDEO_STYLE = {height: "100%", width: "auto"};
 
-type VideoPlayerProps = RoomUIProps & { urlOverride?: string; streamPlaybackID?: string; muteOverride?: boolean, hideMuteButton?: boolean }
+type VideoPlayerProps = RoomUIProps & { videoStyle?: React.CSSProperties, urlOverride?: string; streamPlaybackID?: string; muteOverride?: boolean, hideMuteButton?: boolean }
 
 const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
   className = DEFAULT_CLASSNAME,
   style = DEFAULT_STYLE,
+  videoStyle ,
   streamPlaybackID,
   urlOverride,
   muteOverride,
   hideMuteButton
 }) => {
-  const roomInfo = useRoomStore((state) => state.roomInfo);
-  const [mute, setMuted] = useState(true);
+  const [mute, setMuted] = useState(false);
   const globalClick = useRef<boolean>(false);
 
   const clickCallback = useCallback(() => {
@@ -34,6 +37,35 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
     return () => window.removeEventListener("click", clickCallback);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const player = useMemo(() => {
+    let shouldMute = muteOverride !== undefined ? muteOverride : mute;
+    if (urlOverride) {
+      <ReactPlayer
+      url={
+        urlOverride || "https://www.youtube.com/watch?v=VhR4hGUd4Lc"
+      }
+      muted={shouldMute}
+      playing={true}
+      loop={true}
+      height={(videoStyle || DEFAULT_VIDEO_STYLE).height}
+      width={(videoStyle || DEFAULT_VIDEO_STYLE).width}
+      className="noEvents"
+    />
+    }
+    if (streamPlaybackID) {
+      return (
+        <MuxVideo
+          playbackId={streamPlaybackID}
+          autoPlay
+          muted={shouldMute}
+          style={videoStyle || DEFAULT_VIDEO_STYLE}
+          className="noEvents"
+        />
+      );
+    } 
+    return null;
+  }, [mute, muteOverride, streamPlaybackID, urlOverride, videoStyle])
   return streamPlaybackID || urlOverride ? (
     <>
       {!hideMuteButton && (
@@ -47,19 +79,7 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
         </div>
       )}
       <div className={className} style={style}>
-        <ReactPlayer
-          url={
-            urlOverride ||
-            (streamPlaybackID && generateStreamLink(streamPlaybackID)) ||
-            "https://www.youtube.com/watch?v=VhR4hGUd4Lc"
-          }
-          muted={muteOverride !== undefined ? muteOverride : mute}
-          playing={true}
-          loop={true}
-          height="100%"
-          width="auto"
-          className="noEvents"
-        />
+        {player}
       </div>
     </>
   ) : null;

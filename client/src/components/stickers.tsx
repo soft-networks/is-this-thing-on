@@ -9,7 +9,6 @@ import React, {
   useState,
   useCallback,
   createRef,
-  RefObject,
   useMemo,
 } from "react";
 import Draggable, { DraggableEventHandler } from "react-draggable";
@@ -41,7 +40,18 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
   const stickerCDN = useStickerCDNStore(useCallback((state) => state.stickerCDN, []));
   const displayName = useUserStore(useCallback((state) => state.displayName, []));
   const [stickerStyle, setStickerStyle] = useState<React.CSSProperties>();
-  const [ref, bounds] = useMeasure();
+  const [ref, bounds] = useMeasure({scroll: true});
+  const currentRoomID = useRoomStore(useCallback((s) => s.currentRoomID, []));
+  const adminForIDs = useUserStore(useCallback((s) => s.adminFor, []));
+  const isAdmin = useMemo(
+    () => {
+      if(adminForIDs && currentRoomID && adminForIDs.includes(currentRoomID)) return true
+      else return undefined
+    },
+    [adminForIDs, currentRoomID]
+  );
+  
+
 
   useEffect(() => {
     let currentStyle = {};
@@ -49,7 +59,7 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
       currentStyle = style;
     }
     switch (roomID) {
-      case "chris": {
+      case "chrisy": {
         let chrisStyle = {
           "--stickerSize": "10ch",
         } as React.CSSProperties;
@@ -78,8 +88,8 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
     <div className={className || "fullBleed absoluteOrigin"} style={stickerStyle} id="sticker-overlay" ref={ref}>
       {stickerCDN && (
         <>
-          <StickerChooser addSticker={addSticker} cdn={stickerCDN} />
-          <ServerStickers roomID={roomID} key={`${roomID}-sscoins`} cdn={stickerCDN} containerBounds={bounds} />
+          <StickerChooser addSticker={addSticker} cdn={stickerCDN} containerBounds={bounds} isAdmin={isAdmin} />
+          <ServerStickers roomID={roomID} key={`${roomID}-sscoins`} cdn={stickerCDN} containerBounds={bounds} isAdmin={isAdmin} />
         </>
       )}
     </div>
@@ -89,18 +99,22 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
 interface StickerAdderProps {
   addSticker: (pos: Pos, cdnID: string) => void;
   cdn: StickerCDN;
+  containerBounds: RectReadOnly;
+  isAdmin?: boolean
 }
-const DefaultStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+const DefaultStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn, containerBounds, isAdmin}) => {
+  
   const [showStickerTypePicker, setShowStickerTypePicker] = useState<boolean>(false);
   const currentPosChosen = useRef<Pos>();
   const clicked: MouseEventHandler<HTMLDivElement> = (e) => {
     if (!showStickerTypePicker) {
-      if (containerRef.current && cdn && Object.keys(cdn).length > 0) {
-        let bounds = containerRef.current.getBoundingClientRect();
-        let x = e.pageX / bounds.width;
-        let y = e.pageY / bounds.height;
+      if (containerBounds && cdn && Object.keys(cdn).length > 0) {
+        
+        
+        let x = (e.clientX - containerBounds.left) / containerBounds.width;
+        let y = (e.clientY - containerBounds.top) / containerBounds.height;
         currentPosChosen.current = [x, y];
+        console.log(e.pageX, e.pageY, containerBounds, currentPosChosen.current);
         setShowStickerTypePicker(true);
       }
     } else {
@@ -124,7 +138,6 @@ const DefaultStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn }) =
         closeCursor: showStickerTypePicker,
       })}
       onClick={clicked}
-      ref={containerRef}
     >
       {showStickerTypePicker ? (
         <div
@@ -134,15 +147,16 @@ const DefaultStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn }) =
             left: `${currentPosChosen.current ? currentPosChosen.current[0] * 100 : 50}%`,
           }}
         >
-          <DefaultChooseStickerType cdn={cdn} typeSelected={typeChosen} />
+          <DefaultChooseStickerType cdn={cdn} typeSelected={typeChosen} isAdmin={isAdmin} />
         </div>
       ) : null}
     </div>
   );
 };
-const DefaultChooseStickerType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: string) => void }> = ({
+const DefaultChooseStickerType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: string) => void, isAdmin?: boolean }> = ({
   cdn,
   typeSelected,
+  isAdmin
 }) => {
   return (
     <>
@@ -159,7 +173,7 @@ const DefaultChooseStickerType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: 
         </div>
         {Object.keys(cdn).map(
           (k) =>
-            !cdn[k].noGift && (
+            (!cdn[k].noGift || (isAdmin && cdn[k].behaviorType == "DELETE")) && (
               <div
                 className="clickable:opacity"
                 key={`choosesticker-${k}`}
@@ -175,19 +189,15 @@ const DefaultChooseStickerType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: 
   );
 };
 
-const ServerStickers: React.FC<{ roomID: string; cdn: StickerCDN; containerBounds: RectReadOnly }> = ({
+const ServerStickers: React.FC<{ roomID: string; cdn: StickerCDN; containerBounds: RectReadOnly, isAdmin?: boolean }> = ({
   roomID,
   cdn,
   containerBounds,
+  isAdmin
 }) => {
   let [serverSideCoins, setServerSideCoins] = useState<{ [key: string]: StickerInstance }>({});
   const unsub = useRef<Unsubscribe>();
-  const currentRoomID = useRoomStore(useCallback((s) => s.currentRoomID, []));
-  const adminForIDs = useUserStore(useCallback((s) => s.adminFor, []));
-  const isAdmin = useMemo(
-    () => adminForIDs && currentRoomID && adminForIDs.includes(currentRoomID),
-    [adminForIDs, currentRoomID]
-  );
+
   const [behaviorOverride, setBehaviorOverride] = useState<BEHAVIOR_TYPES>();
 
   const stickerUpdated = useCallback(
@@ -312,7 +322,7 @@ const DeletableSticker: React.FC<StickerRenderProps> = ({ sticker, pos, id, size
         zIndex: zIndex
       }}
       onClick={(e) => deleteSticker()}
-      className={"absoluteOrigin deleteCursor highest"}
+      className={"absoluteOrigin deleteCursor highest "}
     >
       <StickerImage url={sticker.imageURL} size={size} id={id} />
     </div>
@@ -336,7 +346,7 @@ const MoveableSticker: React.FC<StickerRenderProps> = ({ sticker, pos, id, conta
       nodeRef={myRef}
     >
       <div
-        className={classnames("moveCursor absoluteOrigin highest", { animateTransform: !isDragging })}
+        className={classnames("moveCursor absoluteOrigin highest hoverTrigger", { animateTransform: !isDragging })}
         style={{ width: size ? `${size * 100}%` : "var(--stickerSize)" , zIndex: zIndex}}
         ref={myRef}
       >
@@ -346,6 +356,7 @@ const MoveableSticker: React.FC<StickerRenderProps> = ({ sticker, pos, id, conta
   ) : null;
 };
 
+//Not used, really badly coded. Remove 
 const ResizableSticker = ({ sticker, pos, id, size , zIndex}: StickerRenderProps) => {
   const [localScale, setLocalScale] = useState<number | undefined>(size);
   const [localZIndex, setLocalZIndex] = useState<number | undefined>(size);
@@ -425,14 +436,14 @@ const ResizableSticker = ({ sticker, pos, id, size , zIndex}: StickerRenderProps
 const StaticSticker = ({ sticker, pos, size, zIndex, id }: StickerRenderProps) => (
   <div
     style={{ left: `${pos[0] * 100}%`, top: `${pos[1] * 100}%`, width: size ? `${size * 100}%` : "var(--stickerSize)", zIndex: zIndex }}
-    className={"absoluteOrigin"}
+    className={"absoluteOrigin noEvents"}
   >
     <StickerImage url={sticker.imageURL} size={size} id={id}/>
   </div>
 );
 
 const StickerImage = ({ url, size, id}: { url: string; size?: number, id?: string }) => (
-  <img src={url} className="noEvents" alt={"Sticker"} style={{ width: "100%" }} id={id} />
+  <img src={url} className="noEvents glow:hover" alt={"Sticker"} style={{ width: "100%" }} id={id} />
 );
 
 export default Stickers;
