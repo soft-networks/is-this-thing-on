@@ -124,7 +124,7 @@ export const Chat: React.FC<RoomUIProps> = ({className}) => {
             } as React.CSSProperties
           }
         >
-          {Object.entries(chatList)
+          {Object.entries(chatList).sort( (a,b) => b[1].timestamp - a[1].timestamp)
           .map(([id, chat]) => {
             if (filterRoom && chat.roomID !== (roomID || "home")) {
               return null

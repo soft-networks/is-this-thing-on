@@ -51,8 +51,6 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
     [adminForIDs, currentRoomID]
   );
   
-
-
   useEffect(() => {
     let currentStyle = {};
     if (style) {
@@ -69,13 +67,14 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
     setStickerStyle(currentStyle);
   }, [roomID, style]);
 
-  const addSticker = (pos: Pos, cdnID: string) => {
+  const addSticker = (pos: Pos, cdnID: string, scale?: number) => {
     if (!roomID) return;
     addStickerInstance(roomID, {
       position: pos,
       timestamp: Date.now(),
       cdnID: cdnID,
-      zIndex: 1000
+      size: scale,
+      zIndex: 199
     });
     performTransaction({
       amount: 1,
@@ -96,8 +95,8 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
   ) : null;
 };
 
-interface StickerAdderProps {
-  addSticker: (pos: Pos, cdnID: string) => void;
+export interface StickerAdderProps {
+  addSticker: (pos: Pos, cdnID: string, scale?: number) => void;
   cdn: StickerCDN;
   containerBounds: RectReadOnly;
   isAdmin?: boolean
@@ -153,16 +152,47 @@ const DefaultStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn, con
     </div>
   );
 };
-const DefaultChooseStickerType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: string) => void, isAdmin?: boolean }> = ({
+
+export const StaticStickerAdder: React.FC<StickerAdderProps> = ({addSticker, cdn, containerBounds, isAdmin}) => {
+
+  const [chooserOpen, setChooserOpen] = useState<boolean>(false);
+  const typeChosen = (id?: string) => {
+    setChooserOpen(false);
+    if (id) {
+        addSticker([Math.random(), Math.random()], id, 0.1);
+    }
+  };
+  return (
+    <>
+      {!chooserOpen && (
+        <div
+          className="everest padded:s-1 whiteFill contrastFill:hover absoluteOrigin border clickable"
+          style={{ top: "85%", left: "50%", transform: "translate(-50%, -50%)" }}
+          onClick={() => setChooserOpen(!chooserOpen)}
+        >
+          gift me
+        </div>
+      )}
+      {chooserOpen && (
+        <div className="absoluteOrigin everest" style={{ top: "85%", left: "50%", transform: "translate(-50%, -50%)" }}>
+          <DefaultChooseStickerType cdn={cdn} typeSelected={typeChosen} isAdmin={isAdmin} className="grid:s-2 padded lightFill" style={{maxWidth: "100%", "--stickerSize": "12ch"} as React.CSSProperties}/>
+        </div>
+      )}
+    </>
+  );
+}
+const DefaultChooseStickerType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: string) => void, isAdmin?: boolean, style?: React.CSSProperties, className?: string}> = ({
   cdn,
   typeSelected,
-  isAdmin
+  isAdmin, 
+  style,
+  className
 }) => {
   return (
     <>
       <div
-        className="grid:s-2 skrimFill border-radius padded"
-        style={{ maxWidth: "calc(4 * (var(--stickerSize) + 2 * var(--s2))" }}
+        className={className || "grid:s-2 skrimFill border-radius padded"}
+        style={style || { maxWidth: "calc(4 * (var(--stickerSize) + 2 * var(--s2))" }}
       >
         <div
           className="lightFill border contrastFill:hover padded:s-2 clickable highest"
@@ -322,7 +352,7 @@ const DeletableSticker: React.FC<StickerRenderProps> = ({ sticker, pos, id, size
         zIndex: zIndex
       }}
       onClick={(e) => deleteSticker()}
-      className={"absoluteOrigin deleteCursor highest "}
+      className={"absoluteOrigin deleteCursor highest hoverTrigger"}
     >
       <StickerImage url={sticker.imageURL} size={size} id={id} />
     </div>

@@ -7,8 +7,7 @@ import { useUserStore } from "../stores/userStore";
 import VideoPlayer from "./videoPlayer";
 import RoomGate, { RoomOnlineGate } from "./roomGate";
 import useStickerCDNStore from "../stores/stickerStore";
-import Stickers from "./stickers";
-import Head from "next/head";
+import Stickers, { StaticStickerAdder, StickerAdderProps } from "./stickers";
 
 const Room: React.FC<{ roomID: string; season?: number }> = ({ roomID, season }) => {
   const changeRoom = useRoomStore(useCallback((state) => state.changeRoom, []));
@@ -61,7 +60,7 @@ const SeasonOne = ({ roomID }: { roomID: string }) => {
       height: "100%"
     }
     return (
-      <RoomView videoStyle={fullHeight} videoContainerStyle={{ width: "100%", height: "100%", background: "pink" }} />
+      <RoomView videoStyle={fullHeight} videoContainerStyle={{ width: "100%", height: "100%", background: "#dcbdbb" }} stickerChooser={StaticStickerAdder} />
     );
 
   }
@@ -83,8 +82,9 @@ interface RoomViewProps {
   videoContainerStyle?: React.CSSProperties;
   videoStyle?: React.CSSProperties;
   stickerStyle?: React.CSSProperties;
+  stickerChooser?: React.FC<StickerAdderProps>
 }
-const RoomView = ({ videoContainerStyle: videoStyle, stickerStyle }: RoomViewProps) => {
+const RoomView = ({ videoContainerStyle: videoStyle, stickerStyle , stickerChooser}: RoomViewProps) => {
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
 
   return (
@@ -92,7 +92,7 @@ const RoomView = ({ videoContainerStyle: videoStyle, stickerStyle }: RoomViewPro
       {roomInfo ? (
         <>
           <VideoPlayer style={videoStyle} className="fullBleed noEvents absoluteOrigin" streamPlaybackID={roomInfo.streamPlaybackID} videoStyle={videoStyle}/>
-          <Stickers style={stickerStyle} />
+          <Stickers style={stickerStyle} StickerChooser={stickerChooser}/>
         </>
       ) : (
         <div className="centerh"> loading </div>

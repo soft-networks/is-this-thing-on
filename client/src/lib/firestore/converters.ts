@@ -65,6 +65,7 @@ export function sanitizeStickerInstanceForDB(stickerInstance: StickerInstance) {
     position: stickerInstance.position,
     cdn_id: stickerInstance.cdnID,
     timestamp: stickerInstance.timestamp,
+    size: stickerInstance.size
   };
 }
 
