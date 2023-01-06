@@ -54,7 +54,8 @@ interface Sticker {
   behaviorType: BEHAVIOR_TYPES,
   cdnID: string,
   imageURL: string,
-  noGift: string
+  noGift: string,
+  size?: number
 }
 interface StickerInstance {
   position: Pos,

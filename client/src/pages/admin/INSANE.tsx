@@ -2,7 +2,7 @@
 
 import { NextPage } from "next";
 import { useEffect } from "react";
-import { bhavikShouldNeverCodeAgain, butWeMayAsWellDoItAll } from "../../lib/firestore";
+import { bhavikShouldNeverCodeAgain, butWeMayAsWellDoItAll, repopulateMollyDeletedAssets } from "../../lib/firestore";
 
 
 const insane: NextPage = () => {
@@ -11,6 +11,7 @@ const insane: NextPage = () => {
     if (true) {
       //bhavikShouldNeverCodeAgain();
       // butWeMayAsWellDoItAll();
+      //repopulateMollyDeletedAssets();
     }
     
   }, []);

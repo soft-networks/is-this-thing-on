@@ -7,6 +7,7 @@ import {
 } from "./converters";
 import { stickerInstanceCollection, roomDoc, stickerCDNCollection, stickerInstanceDoc } from "./locations";
 import { MollyAssetsJson } from "./mollyAssets";
+import { MollyDeleteAssets } from "./mollyAssetsDeleteOnly";
 
 export async function getStickerCDN(roomName: string, initStickerCDN: (cdn: { [key: string]: Sticker }) => void) {
   if (!validateRoomName(roomName)) {
@@ -122,3 +123,18 @@ export async function butWeMayAsWellDoItAll() {
     });
 
   }}
+
+  export async function repopulateMollyDeletedAssets(){
+    for (let i = 0; i < MollyDeleteAssets.length; i++) {
+      let asset = MollyDeleteAssets[i];
+      let id = asset.id;
+  
+      const stickerInstances = stickerInstanceCollection(roomDoc("molly"));
+      await addDoc(stickerInstances, {
+        cdn_id: id,
+        position: [asset.position.x, asset.position.y],
+        timestamp: Date.now(),
+        zIndex: asset.zIndex,
+        size: asset.size
+      });
+    }}

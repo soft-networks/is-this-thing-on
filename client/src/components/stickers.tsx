@@ -74,7 +74,7 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
       timestamp: Date.now(),
       cdnID: cdnID,
       size: scale,
-      zIndex: 199
+      zIndex: 200
     });
     performTransaction({
       amount: 1,
@@ -159,7 +159,7 @@ export const StaticStickerAdder: React.FC<StickerAdderProps> = ({addSticker, cdn
   const typeChosen = (id?: string) => {
     setChooserOpen(false);
     if (id) {
-        addSticker([Math.random(), Math.random()], id, 0.1);
+        addSticker([Math.random(), 0.5 +  Math.random()/2], id, cdn[id].size || 0.1);
     }
   };
   return (
@@ -203,7 +203,7 @@ const DefaultChooseStickerType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: 
         </div>
         {Object.keys(cdn).map(
           (k) =>
-            (!cdn[k].noGift || (isAdmin && cdn[k].behaviorType == "DELETE")) && (
+            !cdn[k].noGift  && (
               <div
                 className="clickable:opacity"
                 key={`choosesticker-${k}`}

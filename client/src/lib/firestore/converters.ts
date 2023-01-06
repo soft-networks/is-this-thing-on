@@ -93,6 +93,7 @@ export function sanitizeStickerCDNFromDB(sticker: any, id:string): Sticker {
     cdnID: id ,
     behaviorType: sticker["type"] || "NORMAL",
     imageURL: sticker["url"],
-    noGift: sticker["noGift"]
+    noGift: sticker["noGift"],
+    size: sticker["size"] || undefined, 
   }
 }
