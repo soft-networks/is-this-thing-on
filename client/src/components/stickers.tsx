@@ -237,6 +237,7 @@ const ServerStickers: React.FC<{ roomID: string; cdn: StickerCDN; containerBound
         if (npc[cID].position != pos) npc[cID].position = pos;
         if (npc[cID].size != scale) npc[cID].size = scale;
         if (npc[cID].zIndex != z) npc[cID].zIndex = z;
+        //console.log(JSON.stringify(npc));
         return npc;
       });
     },
