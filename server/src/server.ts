@@ -1,11 +1,12 @@
 import "dotenv/config";
 import express, { Application } from "express";
 import { createServer } from "http";
-import { managePresenceInDB,  presenceProcessor,  resetMuxFirestoreRelationship,  transactionProcessor } from "./firestore-api.js";
+import { chrisStickerScaler, managePresenceInDB,  presenceProcessor,  resetMuxFirestoreRelationship,  transactionProcessor } from "./firestore-api.js";
 import bodyParser from "body-parser"
 import { logUpdate } from "./logger.js";
 import { muxAuthHelper, createAndReturnStreamKey } from "./muxAPI.js";
 import { muxUpdateWasReceived } from "./processUpdate.js";
+
 
 
 const app: Application = express();
@@ -43,4 +44,5 @@ httpServer.listen(port, () => {
 
 presenceProcessor();
 transactionProcessor();
+chrisStickerScaler();
 
