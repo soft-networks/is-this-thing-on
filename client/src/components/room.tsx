@@ -51,7 +51,8 @@ const SeasonOne = ({ roomID }: { roomID: string }) => {
       height: "calc(2 * 56.25vw)",
       zIndex: 0,
     };
-    return <RoomView videoContainerStyle={doubleSizeStyle} stickerStyle={doubleSizeStyle} />;
+    let stickerStyle = {...doubleSizeStyle, overflow: "hidden"}
+    return <RoomView videoContainerStyle={doubleSizeStyle} stickerStyle={stickerStyle} />;
   }
   if (roomID == "molly") {
     

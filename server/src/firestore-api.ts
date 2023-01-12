@@ -213,8 +213,8 @@ export async function chrisStickerScaler() {
       let data = sticker.data();
       //data.size = undefined;
       let nextSize = (data.size || 0.02) + 0.008;
-      nextSize = Math.min(nextSize, 0.3);
-      return setDoc(sticker.ref, { size: (data.size + 0.01 || 0.03)}, {merge: true});
+      nextSize = Math.min(nextSize, 0.75);
+      return setDoc(sticker.ref, { size: nextSize}, {merge: true});
     }))
     setTimeout(chrisStickerScaler, 1500);
   } else {
