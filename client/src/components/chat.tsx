@@ -136,6 +136,17 @@ export const Chat: React.FC<RoomUIProps> = ({className}) => {
   );
 };
 
+const getRoomNameForChat = (roomName: string) => {
+  let rn = `in ${roomName}`;
+  if (roomName.charAt(roomName.length -1 ) == "s") {
+    rn += "'";
+  } else {
+    rn += "'s";
+  }
+  rn += " room";
+  return rn;
+}
+
 const RenderChat : React.FC<{id: string, chat: ChatMessage}> = ({chat, id}) => {
   const links = useRingStore(s => s.links);
   const myRoom = useMemo(() => links[chat.roomID], [links, chat]);
@@ -148,7 +159,7 @@ const RenderChat : React.FC<{id: string, chat: ChatMessage}> = ({chat, id}) => {
         style={{ background: myRoom ? myRoom.roomColor : "var(--contrast)", color: "var(--black)"}}
       >
         <div className="caption" style={{ color: "rgba(0,0,0,0.8)" }}>
-          @{myRoom ? myRoom.roomName : "home"}
+          { myRoom && myRoom.roomName ? getRoomNameForChat(myRoom.roomName) : "in the home room"}
         </div>
         <div>
           <em>{chat.username || "unknown"}</em>
