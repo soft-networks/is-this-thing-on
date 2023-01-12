@@ -61,12 +61,15 @@ export function sanitizeTransactionForDB(transaction: EnergyTransaction) {
 }
 
 export function sanitizeStickerInstanceForDB(stickerInstance: StickerInstance) {
-  return {
+  let instance: { position: Pos, cdn_id: string, timestamp: number, size?: number} = {
     position: stickerInstance.position,
     cdn_id: stickerInstance.cdnID,
-    timestamp: stickerInstance.timestamp,
-    size: stickerInstance.size
+    timestamp: stickerInstance.timestamp
   };
+  if (stickerInstance.size) {
+    instance["size"] = stickerInstance.size
+  }
+  return instance;
 }
 
 function sanitizePosition(n?: [number, number]): Pos {
