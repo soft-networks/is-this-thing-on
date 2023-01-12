@@ -114,10 +114,9 @@ export const Chat: React.FC<RoomUIProps> = ({className}) => {
           <p>see messages in this room only</p>
         </div>
         <div
-          className="stack:s-3 padded:custom"
+          className="stack:s-2 padded:custom"
           style={
             {
-              "--stackSpacing": "var(--s-4)",
               "--spacing": "var(--s-4)",
               maxHeight: "20vw",
               overflowY: "auto",
@@ -142,12 +141,24 @@ const RenderChat : React.FC<{id: string, chat: ChatMessage}> = ({chat, id}) => {
   const myRoom = useMemo(() => links[chat.roomID], [links, chat]);
   
   return (
-    <p key={id} className="padded:custom chatMessage">
-    <span style={{background:  myRoom  ? myRoom.roomColor : "var(--contrast)", color: "var(--black)"}}>@{myRoom ? myRoom.roomName : "home"}</span>{" "}
-    <span style={{ color: "var(--chatAuthorColor)"}}>{chat.username || "unknown"}</span>{": "}
-    <span>{chat.message}</span>
-  </p>
-  )
+    <div className="stack:noGap fullWidth align-start">
+      <p
+        key={id}
+        className="padded:s-2 chatMessage border-radius"
+        style={{ background: myRoom ? myRoom.roomColor : "var(--contrast)", color: "var(--black)"}}
+      >
+        <div className="caption" style={{ color: "rgba(0,0,0,0.8)" }}>
+          @{myRoom ? myRoom.roomName : "home"}
+        </div>
+        <div>
+          <em>{chat.username || "unknown"}</em>
+          <span>:{" "}{chat.message}</span>
+        </div>
+        
+      </p>
+      
+    </div>
+  );
 }
 
 const ChatInput: React.FC<{ onSubmit: (chat: {message: string, timestamp: number, username: string}) => void }> = ({ onSubmit }) => {

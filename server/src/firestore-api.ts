@@ -198,19 +198,28 @@ export async function presenceProcessor() {
 
 export async function chrisStickerScaler() {
   const roomRef = roomDoc("chrisy");
-  const stickerRef = collection(roomRef, "stickers");
 
-  const currentStickers = await getDocs(stickerRef);
+  const room = await getDoc(roomRef);
+  const roomData = room.data();
+  if (roomData && roomData.stream_status == "active") {
+    //console.log("Messing with chrissy's stickers");
+    const stickerRef = collection(roomRef, "stickers");
+    const currentStickers = await getDocs(stickerRef);
+    let processArray:QueryDocumentSnapshot<DocumentData>[] = []; 
+    currentStickers.forEach((sticker) => {
+        processArray.push(sticker);
+    });
+    await Promise.all(processArray.map(async (sticker) => {
+      let data = sticker.data();
+      //data.size = undefined;
+      let nextSize = (data.size || 0.02) + 0.008;
+      nextSize = Math.min(nextSize, 0.3);
+      return setDoc(sticker.ref, { size: (data.size + 0.01 || 0.03)}, {merge: true});
+    }))
+    setTimeout(chrisStickerScaler, 1500);
+  } else {
+    setTimeout(chrisStickerScaler, 5000);
+  }
 
-  let processArray:QueryDocumentSnapshot<DocumentData>[] = []; 
-  currentStickers.forEach((sticker) => {
-      processArray.push(sticker);
-  });
-  await Promise.all(processArray.map(async (sticker) => {
-    let data = sticker.data();
-    //data.size = undefined;
-    return setDoc(sticker.ref, { size: (data.size + 0.0005 || 0.03)}, {merge: true});
-  }))
-
-  setTimeout(chrisStickerScaler, 3000);
+  
 }

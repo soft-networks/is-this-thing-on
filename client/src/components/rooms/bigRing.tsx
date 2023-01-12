@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -159,6 +160,7 @@ const ExpandedSeasonOne: React.FC<{
         <animateMotion dur={`${ANIM_LENGTH}s`} begin={`${i * -ANIM_OFFSET}s`} repeatCount="indefinite">
           <mpath xlinkHref="#ellipsePath" />
         </animateMotion>
+
         <foreignObject
           width={iframeSize[0]}
           height={iframeSize[1]}
@@ -170,7 +172,14 @@ const ExpandedSeasonOne: React.FC<{
           }}
           onClick={() => router.push(src)}
         >
-           <VideoPlayerPerRoom iLink={iLink} localMuted={localMuted}/>
+          {iLink.roomName == "molly" && (
+            <img
+              src="https://storage.googleapis.com/is-this-thing-on/Molly_PNG_Overlay.png"
+              alt="molly video overlay"
+              className="fullBleed"
+            />
+          )}
+          <VideoPlayerPerRoom iLink={iLink} localMuted={localMuted} />
         </foreignObject>
         <text
           y={-iframeSize[1] / 2 - 5}
@@ -180,7 +189,6 @@ const ExpandedSeasonOne: React.FC<{
           onClick={() => router.push(src)}
         >
           {iLink.roomName}
-         
         </text>
         <AnimatedMuteButton muted={localMuted} onMuteChanged={setLocalMuted} />
       </g>
