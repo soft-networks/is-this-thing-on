@@ -49,7 +49,7 @@ const BigRing: React.FC = () => {
     //iframeSize = iframeSize.map(s => s*0.75);
     Object.keys(ring).forEach((key, i) => {
       let iLink = ring[key];
-      if (false) {
+      if (false || iLink.forceSeason0) {
         nodes.push(
           <ExpandedSeasonZero iLink={iLink} ANIM_OFFSET={ANIM_OFFSET} router={router} i={i} key={`node-0-${i}`} />
         );

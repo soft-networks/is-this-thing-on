@@ -36,6 +36,7 @@ interface RoomLinkInfo {
   season0URL?: string,
   season0Href?: string,
   streamPlaybackID?: string,
+  forceSeason0?: boolean
 }
 type WebRing = {[key:string] : RoomLinkInfo};
 

@@ -1,5 +1,5 @@
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useRoomStore } from "../stores/roomStore";
 import { setUserHeartbeat, syncRoomInfoDB } from "../lib/firestore";
 import { Unsubscribe } from "firebase/auth";
@@ -14,6 +14,7 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({ roomID, season })
   const changeRoomStickers = useStickerCDNStore(useCallback((state) => state.changeRoomStickers, []));
   const unsubscribeFromRoomInfo = useRef<Unsubscribe>();
   const currentUser = useUserStore(useCallback((state) => state.currentUser, []));
+  const roomInfo = useRoomStore(useCallback(state => state.roomInfo, []));
   useEffect(() => {
     //TODO: This is slightly innefficient, doesnt have to detach to reattach
     if (currentUser) {
@@ -36,10 +37,11 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({ roomID, season })
       if (unsubscribeFromRoomInfo.current) unsubscribeFromRoomInfo.current();
     };
   }, [changeRoom, changeRoomStickers, roomID]);
+
   return (
     <RoomGate id={roomID as string}>
       <RoomOnlineGate>
-        {season == 0 || season == undefined ? <SeasonZero /> : <SeasonOne roomID={roomID} />}
+        {season == 0 || season == undefined || roomInfo?.forceSeason0 ? <SeasonZero /> : <SeasonOne roomID={roomID} />}
       </RoomOnlineGate>
     </RoomGate>
   );
@@ -69,8 +71,8 @@ const SeasonOne = ({ roomID }: { roomID: string }) => {
 };
 const SeasonZero: React.FC = () => {
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
-  if (roomInfo?.roomID == "WORKSHOP" && roomInfo?.streamPlaybackID) {
-    return <VideoPlayer className="fullBleed" />;
+  if (roomInfo?.roomID == "WORKSHOP") {
+    return <div className="fullBleed"><div className="center:absolute highest">join our <a href={roomInfo?.season0Href} target="_blank" rel="noreferrer">salon on zoom</a></div></div>;
   }
   return (
     <div className="fullBleed">
