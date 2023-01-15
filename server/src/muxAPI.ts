@@ -1,4 +1,4 @@
-import Mux from "@mux/mux-node";
+import Mux, { CreateLiveStreamParams } from "@mux/mux-node";
 import auth from "basic-auth";
 import { Request, RequestHandler } from "express";
 import { logError, logInfo } from "./logger.js";
@@ -35,11 +35,11 @@ export const createAndReturnStreamKey : RequestHandler = async (req, res) => {
 }
 export const muxCreateStream = async () => {
   const { stream_key, id } = await Video.LiveStreams.create({
-    reduced_latency: true,
+    latency_mode: "low",
     playback_policy: "public",
     new_asset_settings: { playback_policy: "public" },
      
-  });
+  } as unknown as CreateLiveStreamParams);
   return { streamKey: stream_key, muxID: id};
 };
 export const muxAuthHelper: RequestHandler = (req, res, next) => {
