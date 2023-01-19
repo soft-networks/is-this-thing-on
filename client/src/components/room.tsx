@@ -72,7 +72,16 @@ const SeasonOne = ({ roomID }: { roomID: string }) => {
 const SeasonZero: React.FC = () => {
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
   if (roomInfo?.roomID == "WORKSHOP") {
-    return <div className="fullBleed"><div className="center:absolute highest">join our <a href={roomInfo?.season0Href} target="_blank" rel="noreferrer">salon on zoom</a></div></div>;
+    return (
+      <div className="fullBleed">
+        <div className="center:absolute highest">
+          join our{" "}
+          <a href={roomInfo?.season0Href} target="_blank" rel="noreferrer">
+            salon on zoom
+          </a>
+        </div>
+      </div>
+    );
   }
   return (
     <div className="fullBleed">
