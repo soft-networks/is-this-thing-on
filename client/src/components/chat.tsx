@@ -14,9 +14,10 @@ export const Chat: React.FC<RoomUIProps> = ({className}) => {
   let unsubRef = useRef<Unsubscribe>();
   let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
   let chatRef = createRef<HTMLDivElement>();
-  let [filterRoom, setFilterRoom] = useState<boolean>(false);
+  let [filterRoom, setFilterRoom] = useState<boolean>(true);
   let [chatStyle, setChatStyle] = useState<React.CSSProperties>();
 
+  
   useEffect(() => {
     let currentStyle = {
       "--chatAuthorColor": "var(--contrast)",

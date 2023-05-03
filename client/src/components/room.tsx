@@ -8,8 +8,9 @@ import VideoPlayer from "./videoPlayer";
 import RoomGate, { RoomOnlineGate } from "./roomGate";
 import useStickerCDNStore from "../stores/stickerStore";
 import Stickers, { StaticStickerAdder, StickerAdderProps } from "./stickers";
+import Layout from "../layouts/layout";
 
-const Room: React.FC<{ roomID: string; season?: number }> = ({ roomID, season }) => {
+const Room: React.FC<{ roomID: string; season?: number}> = ({ roomID, season }) => {
   const changeRoom = useRoomStore(useCallback((state) => state.changeRoom, []));
   const changeRoomStickers = useStickerCDNStore(useCallback((state) => state.changeRoomStickers, []));
   const unsubscribeFromRoomInfo = useRef<Unsubscribe>();
@@ -39,11 +40,13 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({ roomID, season })
   }, [changeRoom, changeRoomStickers, roomID]);
 
   return (
+    <Layout>
     <RoomGate id={roomID as string}>
       <RoomOnlineGate>
         {season == 0 || season == undefined || roomInfo?.forceSeason0 ? <SeasonZero /> : <SeasonOne roomID={roomID} />}
       </RoomOnlineGate>
     </RoomGate>
+    </Layout>
   );
 };
 const SeasonOne = ({ roomID }: { roomID: string }) => {
