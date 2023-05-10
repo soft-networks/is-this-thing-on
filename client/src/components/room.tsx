@@ -9,6 +9,7 @@ import RoomGate, { RoomOnlineGate } from "./roomGate";
 import useStickerCDNStore from "../stores/stickerStore";
 import Stickers, { StaticStickerAdder, StickerAdderProps } from "./stickers";
 import Layout from "../layouts/layout";
+import Ambient from "./rooms/ambient";
 
 const Room: React.FC<{ roomID: string; season?: number}> = ({ roomID, season }) => {
   const changeRoom = useRoomStore(useCallback((state) => state.changeRoom, []));
@@ -50,6 +51,9 @@ const Room: React.FC<{ roomID: string; season?: number}> = ({ roomID, season }) 
   );
 };
 const SeasonOne = ({ roomID }: { roomID: string }) => {
+  if (roomID == "ambient") {
+    return <Ambient/>
+  }
   if (roomID == "chrisy") {
     let doubleSizeStyle: React.CSSProperties = {
       width: "calc(2 * 100vw)",
