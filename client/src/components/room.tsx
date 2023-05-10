@@ -10,6 +10,7 @@ import useStickerCDNStore from "../stores/stickerStore";
 import Stickers, { StaticStickerAdder, StickerAdderProps } from "./stickers";
 import Layout from "../layouts/layout";
 import Ambient from "./rooms/ambient";
+import Compromised from "./rooms/compromised";
 
 const Room: React.FC<{ roomID: string; season?: number}> = ({ roomID, season }) => {
   const changeRoom = useRoomStore(useCallback((state) => state.changeRoom, []));
@@ -51,6 +52,9 @@ const Room: React.FC<{ roomID: string; season?: number}> = ({ roomID, season }) 
   );
 };
 const SeasonOne = ({ roomID }: { roomID: string }) => {
+  if (roomID == "compromised") {
+    return <Compromised/>
+  }
   if (roomID == "ambient") {
     return <Ambient/>
   }
@@ -64,7 +68,6 @@ const SeasonOne = ({ roomID }: { roomID: string }) => {
     return <RoomView videoContainerStyle={doubleSizeStyle} stickerStyle={stickerStyle} />;
   }
   if (roomID == "molly") {
-    
     let fullHeight: React.CSSProperties = {
       width: "100%",
       height: "100%"
