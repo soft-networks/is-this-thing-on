@@ -11,6 +11,7 @@ import Stickers, { StaticStickerAdder, StickerAdderProps } from "./stickers";
 import Layout from "../layouts/layout";
 import Ambient from "./rooms/ambient";
 import Compromised from "./rooms/compromised";
+import Maya from "./rooms/maya";
 
 const Room: React.FC<{ roomID: string; season?: number}> = ({ roomID, season }) => {
   const changeRoom = useRoomStore(useCallback((state) => state.changeRoom, []));
@@ -54,6 +55,9 @@ const Room: React.FC<{ roomID: string; season?: number}> = ({ roomID, season }) 
 const SeasonOne = ({ roomID }: { roomID: string }) => {
   if (roomID == "compromised") {
     return <Compromised/>
+  }
+  if (roomID == "maya") {
+    return <Maya/>
   }
   if (roomID == "ambient") {
     return <Ambient/>

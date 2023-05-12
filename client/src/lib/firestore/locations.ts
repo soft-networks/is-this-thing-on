@@ -16,8 +16,13 @@ export function chatCollection() {
   // console.log("Room chat doc reference", roomDoc);
   return collection(db, "chat");
 }
+
+
 export function stickerCDNCollection(roomDoc: DocumentReference) {
   return collection(roomDoc, "sticker_cdn");
+}
+export function stickerInstanceResetCollection(roomDoc: DocumentReference) {
+  return collection(roomDoc, "stickers_reset");
 }
 export function stickerInstanceCollection(roomDoc: DocumentReference) {
   return collection(roomDoc, "stickers");
