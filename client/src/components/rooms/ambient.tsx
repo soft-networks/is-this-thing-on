@@ -16,6 +16,14 @@ const Ambient: React.FC = () => {
         className="noEvents absoluteOrigin"
   
       />
+      
+    <iframe
+      src="https://ambient.institute/sounds/"
+      title="yahoo"
+      width="80%" height="80%"
+      style={{ overflow: "hidden" }}>
+    />
+      
       <Chat
         className="quarterWidth absoluteOrigin"
         style={
