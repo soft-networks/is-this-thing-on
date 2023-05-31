@@ -44,5 +44,5 @@ httpServer.listen(port, () => {
 
 presenceProcessor();
 transactionProcessor();
-chrisStickerScaler();
+//chrisStickerScaler();
 
