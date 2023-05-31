@@ -276,6 +276,7 @@ p {
   margin-inline: auto;
 }
 
+
 .halfWidth {
   max-inline-size: min(80%, 1200px);
 }

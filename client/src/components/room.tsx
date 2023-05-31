@@ -7,11 +7,14 @@ import { useUserStore } from "../stores/userStore";
 import VideoPlayer from "./videoPlayer";
 import RoomGate, { RoomOnlineGate } from "./roomGate";
 import useStickerCDNStore from "../stores/stickerStore";
-import Stickers, { StaticStickerAdder, StickerAdderProps } from "./stickers";
+import Stickers from "./stickers";
 import Layout from "../layouts/layout";
 import Ambient from "./rooms/ambient";
 import Compromised from "./rooms/compromised";
 import Maya from "./rooms/maya";
+import Chris from "./rooms/chris";
+import { StickerAdderProps } from "./stickerAdders";
+import Molly from "./rooms/molly";
 
 const Room: React.FC<{ roomID: string; season?: number}> = ({ roomID, season }) => {
   const changeRoom = useRoomStore(useCallback((state) => state.changeRoom, []));
@@ -63,23 +66,10 @@ const SeasonOne = ({ roomID }: { roomID: string }) => {
     return <Ambient/>
   }
   if (roomID == "chrisy") {
-    let doubleSizeStyle: React.CSSProperties = {
-      width: "calc(2 * 100vw)",
-      height: "calc(2 * 56.25vw)",
-      zIndex: 0,
-    };
-    let stickerStyle = {...doubleSizeStyle, overflow: "hidden"}
-    return <RoomView videoContainerStyle={doubleSizeStyle} stickerStyle={stickerStyle} />;
+    return <Chris/>
   }
   if (roomID == "molly") {
-    let fullHeight: React.CSSProperties = {
-      width: "100%",
-      height: "100%"
-    }
-    return (
-      <RoomView videoStyle={fullHeight} videoContainerStyle={{ width: "100%", height: "100%", background: "#dcbdbb" }} stickerChooser={StaticStickerAdder} />
-    );
-
+    return <Molly/>
   }
   return <RoomView />;
 };
@@ -110,7 +100,7 @@ interface RoomViewProps {
   stickerStyle?: React.CSSProperties;
   stickerChooser?: React.FC<StickerAdderProps>
 }
-const RoomView = ({ videoContainerStyle: videoStyle, stickerStyle , stickerChooser}: RoomViewProps) => {
+export const RoomView = ({ videoContainerStyle: videoStyle, stickerStyle , stickerChooser}: RoomViewProps) => {
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
 
   return (

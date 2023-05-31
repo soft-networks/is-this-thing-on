@@ -8,7 +8,7 @@ interface MagicPiece {
 
 type UserID = string; 
 
-
+type StickerCDN = { [key: string]: Sticker };
 interface ChatMessage {
   timestamp: number,
   message: string,
