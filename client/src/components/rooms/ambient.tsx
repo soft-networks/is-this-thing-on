@@ -3,7 +3,6 @@ import { Chat } from "../chat";
 import VideoPlayer from "../videoPlayer";
 import Stickers from "../stickers"; 
 
-
 const Ambient: React.FC = () => {
   return (
     <div className="fullBleed overflowScroll">
@@ -18,11 +17,8 @@ const Ambient: React.FC = () => {
       />
       
     <iframe
-      src="https://ambient.institute/sounds/"
-      title="yahoo"
-      width="80%" height="80%"
-      style={{ overflow: "hidden" }}>
-    />
+      src="https://ambient.institute/sounds/" 
+      width="100%" height="100%" />
       
       <Chat
         className="quarterWidth absoluteOrigin"
@@ -38,7 +34,5 @@ const Ambient: React.FC = () => {
     </div>
   );
 }
-
-
 
 export default Ambient;
