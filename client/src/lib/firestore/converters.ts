@@ -18,7 +18,8 @@ export function sanitizeRoomInfo(data: DocumentData, id: string): RoomInfo {
     roomName: data['room_name'] || id,
     roomColor: data["room_color"] || "#FCFF54",
     energy: data["energy"] || 0,
-    forceSeason0: data["forceSeason0"] || false
+    forceSeason0: data["forceSeason0"] || false,
+    consentURL: data["consentURL"] || undefined,
   };
 }
 export function sanitizeEnergyAccount(amount: number, id: string): EnergyAccount {

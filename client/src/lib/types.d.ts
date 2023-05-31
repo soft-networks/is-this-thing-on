@@ -36,14 +36,15 @@ interface RoomLinkInfo {
   season0URL?: string,
   season0Href?: string,
   streamPlaybackID?: string,
-  forceSeason0?: boolean
+  forceSeason0?: boolean,
+  consentURL?: string,
 }
 type WebRing = {[key:string] : RoomLinkInfo};
 
 type RoomInfo = RoomLinkInfo & {
   streamOwner: string,
   numOnline: number,
-  energy: number
+  energy: number,
 }
 
 

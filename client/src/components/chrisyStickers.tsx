@@ -80,7 +80,7 @@ const ChrisyStickerViewerController: React.FC<{
   };
 
   useEffect(()=> {
-    
+
   }, [])
 
   const stickerAdded = useCallback(
@@ -135,7 +135,7 @@ const ChrisyStickerViewerController: React.FC<{
       {behaviorOverride == "NORMAL" && (
         <DefaultStickerAdder addSticker={addSticker} cdn={cdn} containerBounds={containerBounds} />
       )}
-      <div style={{ position: "fixed", top: "var(--s0)", width: "100%" }} className="align:center">
+      <div style={{ position: "fixed", top: "var(--s0)", width: "100%" }} className="align:center everest">
         <div className="horizontal-stack">
           <div
             className={classnames("clickable contrastFill:hover", { blue: behaviorOverride == "NORMAL" })}

@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useCallback, useMemo } from "react";
 import useRingStore from "../stores/ringStore";
 import { useRoomStore } from "../stores/roomStore";
+import ConsentGate from "./consentGate";
 
 const loadingDiv = <div className="center:absolute highest"> loading...</div>;
 
@@ -31,7 +32,7 @@ export const RoomOnlineGate: React.FunctionComponent = ({ children }) => {
           </title>
         </Head>
         {roomInfo.streamStatus == "active" ? (
-          <>{ children }</>
+          <ConsentGate roomID={roomInfo.roomID} active={roomInfo.consentURL !== undefined}>{ children }</ConsentGate>
         ) : (
           <div className="center:absolute highest"> offline... for now</div>
         )}

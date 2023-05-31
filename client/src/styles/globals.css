@@ -21,6 +21,7 @@
   --light: #ececec;
   --black: rgb(10, 38, 42);
   --white: white;
+  --faintWhite: rgba(255, 255, 255, 0.9);
   --contrast: #FCFF54;
 
   --textWidth: 48ch; 
@@ -583,6 +584,9 @@ a:hover,
 }
 .whiteFill {
   background: var(--white);
+}
+.faintWhiteFill {
+  background: var(--faintWhite);
 }
 
 
