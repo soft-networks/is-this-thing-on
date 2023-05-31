@@ -6,6 +6,12 @@ import Stickers from "../stickers";
 const Ambient: React.FC = () => {
   return (
     <div className="fullBleed overflowScroll" style={{background: "#edf3f4"}}>
+    
+    
+    <iframe className="ambience absoluteOrigin" 
+      src="https://ambient.institute/sounds"  />
+      
+      
       <VideoPlayer
         style={{
           width: "100%",
@@ -13,21 +19,7 @@ const Ambient: React.FC = () => {
           zIndex: 0
         }}
         className="noEvents absoluteOrigin"
-      />
-      
-    <iframe className="ambience" 
-      src="https://ambient.institute/sounds"  />
-      
-      <Chat
-        className="quarterWidth absoluteOrigin"
-        style={
-          {
-            "--chatAuthorColor": "#d3ecef",
-            "--chatContainerBackground": "rgba(0,0,0,0.1)",
-            "--chatMessageColor": "var(--white)",
-            zIndex: 3,
-          } as React.CSSProperties
-        }
+  
       />
       
       <Stickers className="noEvents" style={{
