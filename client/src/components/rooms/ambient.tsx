@@ -6,7 +6,7 @@ import Stickers from "../stickers";
 
 const Ambient: React.FC = () => {
   return (
-    <div className="fullBleed overflowScroll" style={{background: "red"}}>
+    <div className="fullBleed overflowScroll">
       <VideoPlayer
         style={{
           width: "100%",
@@ -35,12 +35,10 @@ const Ambient: React.FC = () => {
           } as React.CSSProperties
         }
       />
-      <Stickers style={{
-          width: "100%",
-          height: "100%"
-        }}/>
     </div>
   );
 }
+
+
 
 export default Ambient;
