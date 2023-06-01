@@ -107,7 +107,7 @@ export const RoomView = ({ videoContainerStyle: videoStyle, stickerStyle , stick
     <div className="fullBleed overflowScroll">
       {roomInfo ? (
         <>
-          <VideoPlayer style={videoStyle} className="fullBleed noEvents absoluteOrigin" streamPlaybackID={roomInfo.streamPlaybackID} videoStyle={videoStyle}/>
+          <VideoPlayer style={videoStyle} className="fullBleed noEvents absoluteOrigin" videoStyle={videoStyle}/>
           <Stickers style={stickerStyle} StickerChooser={stickerChooser}/>
         </>
       ) : (

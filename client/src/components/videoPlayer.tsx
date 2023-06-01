@@ -3,6 +3,7 @@ import ReactPlayer from "react-player";
 import { generateStreamLink } from "../lib/server-api";
 
 import MuxVideo from '@mux/mux-video-react';
+import { useRoomStore } from "../stores/roomStore";
 
 
 const DEFAULT_CLASSNAME = "fullWidth";
@@ -14,15 +15,14 @@ type VideoPlayerProps = RoomUIProps & { videoStyle?: React.CSSProperties, urlOve
 const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
   className = DEFAULT_CLASSNAME,
   style = DEFAULT_STYLE,
-  videoStyle ,
-  streamPlaybackID,
+  videoStyle ,  
   urlOverride,
   muteOverride,
   hideMuteButton
 }) => {
   const [mute, setMuted] = useState(false);
   const globalClick = useRef<boolean>(false);
-
+  const streamPlaybackID = useRoomStore(useCallback((s) => s.roomInfo?.streamPlaybackID, []));
   const clickCallback = useCallback(() => {
     if (mute && !muteOverride) {
       setMuted(false);
