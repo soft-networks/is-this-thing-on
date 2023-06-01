@@ -102,16 +102,35 @@ a, a:visited, .clickable\:link {
 }
 
 .addCursor {
-  cursor: crosshair;
+  /*cursor: crosshair;*/
+  cursor:url(https://i6.cims.nyu.edu/~mr6465/chrisy/add_2.png),auto;
+}
+
+.addHair {
+/*cursor: crosshair;*/
+cursor:url(https://i6.cims.nyu.edu/~mr6465/chrisy/add_2.png),auto;
 }
 .closeCursor {
   cursor: alias;
+  
 }
 .moveCursor {
-  cursor: all-scroll;
+  /*  cursor: all-scroll;*/
+cursor:url(https://i6.cims.nyu.edu/~mr6465/chrisy/move_2.png),auto;
+}
+
+.moveHair {
+/*  cursor: all-scroll;*/
+cursor:url(https://i6.cims.nyu.edu/~mr6465/chrisy/move_2.png),auto;
 }
 .deleteCursor {
-  cursor:not-allowed;
+  /*  cursor:not-allowed;*/
+  cursor:url(https://i6.cims.nyu.edu/~mr6465/chrisy/delete_2.png),auto;
+}
+
+.deleteHair {
+/*  cursor:not-allowed;*/
+  cursor:url(https://i6.cims.nyu.edu/~mr6465/chrisy/delete_2.png),auto;
 }
 .animateTransform {
   transition: transform 1000ms;
