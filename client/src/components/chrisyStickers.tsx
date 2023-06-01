@@ -141,19 +141,19 @@ const ChrisyStickerViewerController: React.FC<{
             className={classnames("clickable contrastFill:hover", { blue: behaviorOverride == "NORMAL" })}
             onClick={() => setBehaviorOverride("NORMAL")}
           >
-            {"BIC"} MODE
+            {"HIMS"} MODE
           </div>
           <div
             className={classnames("clickable contrastFill:hover", { blue: behaviorOverride == "MOVE" })}
             onClick={() => setBehaviorOverride("MOVE")}
           >
-            {"HIMS"} MODE
+            {"RUB"} MODE
           </div>
           <div
             className={classnames("clickable contrastFill:hover", { blue: behaviorOverride == "DELETE" })}
             onClick={() => setBehaviorOverride("DELETE")}
           >
-            {"PET"} MODE
+            {"BIC"} MODE
           </div>
         </div>
       </div>
