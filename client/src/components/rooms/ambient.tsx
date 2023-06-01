@@ -7,14 +7,17 @@ const Ambient: React.FC = () => {
   return (
     <div className="fullBleed overflowScroll" style={{background: "#edf3f4"}}>
     
-   
+    <iframe className="ambience absoluteOrigin highest" 
+      src="https://ambient.institute/sounds"  />
+      
+      
       <VideoPlayer
         style={{
           width: "100%",
           height: "100%",
           zIndex: 0
         }}
-        className="fullBleed absoluteOrigin"
+        className="noEvents absoluteOrigin"
   
       />
       
