@@ -51,7 +51,7 @@ type RoomInfo = RoomLinkInfo & {
 
 type Pos = [number, number];
 
-type BEHAVIOR_TYPES = "MOVE" | "DELETE" | "NORMAL" | "SCALE";
+type BEHAVIOR_TYPES = "MOVE" | "DELETE" | "NORMAL" | "SCALE" | "RESET";
 interface Sticker {
   behaviorType: BEHAVIOR_TYPES,
   cdnID: string,

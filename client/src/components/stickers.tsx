@@ -2,12 +2,14 @@
 import { Unsubscribe } from "firebase/firestore";
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import useMeasure, { RectReadOnly } from "react-use-measure";
-import { addStickerInstance, performTransaction, syncStickerInstances } from "../lib/firestore";
+import { addStickerInstance, performTransaction, resetStickers, syncStickerInstances } from "../lib/firestore";
 import { useRoomStore } from "../stores/roomStore";
 import useStickerCDNStore from "../stores/stickerStore";
 import { useUserStore } from "../stores/userStore";
 import { StickerAdderProps, DefaultStickerAdder } from "./stickerAdders";
 import { StickerRenderer } from "./stickerRenderHelpers";
+import Admin from "./admin";
+import classnames from "classnames";
 
 interface StickersProps {
   StickerChooser?: React.FC<StickerAdderProps>;
@@ -23,8 +25,12 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
   const currentRoomID = useRoomStore(useCallback((s) => s.currentRoomID, []));
   const adminForIDs = useUserStore(useCallback((s) => s.adminFor, []));
   const isAdmin = useMemo(() => {
-    if (adminForIDs && currentRoomID && adminForIDs.includes(currentRoomID)) return true;
-    else return undefined;
+    if (adminForIDs && currentRoomID && adminForIDs.includes(currentRoomID)) {
+      console.log("is admin");
+      return true;
+    }
+    console.log("NOT ADMIN", adminForIDs);
+    return undefined;
   }, [adminForIDs, currentRoomID]);
 
   useEffect(() => {
@@ -96,6 +102,7 @@ const ServerStickers: React.FC<{
         if (npc[cID].position != pos) npc[cID].position = pos;
         if (npc[cID].size != scale) npc[cID].size = scale;
         if (npc[cID].zIndex != z) npc[cID].zIndex = z;
+         console.log(JSON.stringify(npc[cID]), cID);
         //console.log(JSON.stringify(npc));
         return npc;
       });
@@ -131,6 +138,14 @@ const ServerStickers: React.FC<{
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const updateBehavior = useCallback((behavior: BEHAVIOR_TYPES | undefined) => {
+    if (behavior == "RESET") {
+      resetStickers(roomID);
+      return;
+    }
+    setBehaviorOverride(behavior);
+  },[roomID])
+
   return (
     <>
       {Object.entries(serverSideCoins).map(([id, stickerInstance]) => {
@@ -152,21 +167,53 @@ const ServerStickers: React.FC<{
           )
         );
       })}
-      {isAdmin && (
-        <div style={{ position: "fixed", top: 0, right: "50%" }} className="horizontal-stack padded highest">
-          <div className="clickable contrastFill:hover" onClick={() => setBehaviorOverride("MOVE")}>
-            {"MOVE"} MODE
-          </div>
-          <div className="clickable contrastFill:hover" onClick={() => setBehaviorOverride("DELETE")}>
-            {"DELETE"} MODE
-          </div>
-          <div className="clickable contrastFill:hover" onClick={() => setBehaviorOverride(undefined)}>
-            {"USER"} MODE
-          </div>
-        </div>
-      )}
+      {isAdmin && <AdminPanel setBehaviorOverride={updateBehavior} behaviorOverride={behaviorOverride}/>}
     </>
   );
 };
 
+const AdminPanel: React.FC<{
+  setBehaviorOverride: (behavior: BEHAVIOR_TYPES | undefined) => void;
+  behaviorOverride: BEHAVIOR_TYPES | undefined;
+}> = ({ setBehaviorOverride, behaviorOverride }) => {
+  return (
+    <div style={{ position: "fixed", top: "var(--s0)", width: "100%" }} className="align:center ">
+      <div className="stack:s-2 faintWhiteFill padded:s-2 relative border-radius everest ">
+        <div
+          className="caption absoluteOrigin noEvents center-text lightFill"
+          style={{ left: "calc(-1 *var(--s-2))", top: "calc(-1 * var(--s-2)" }}
+        >
+          admin panel
+        </div>
+        <div className="horizontal-stack">
+          <div
+            className={classnames("clickable contrastFill:hover", { blue: behaviorOverride == "NORMAL" })}
+            onClick={() => setBehaviorOverride("MOVE")}
+          >
+            {"MOVE"} MODE
+          </div>
+          <div
+            className={classnames("clickable contrastFill:hover", { blue: behaviorOverride == "DELETE" })}
+            onClick={() => setBehaviorOverride("DELETE")}
+          >
+            {"DELETE"} MODE
+          </div>
+          <div
+            className={classnames("clickable contrastFill:hover", { blue: behaviorOverride == undefined })}
+            onClick={() => setBehaviorOverride(undefined)}
+          >
+            {"USER"} MODE
+          </div>
+
+          <div
+            className={classnames("clickable contrastFill:hover")}
+            onClick={() => setBehaviorOverride("RESET")}
+          >
+            RESET STICKERS
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 export default Stickers;

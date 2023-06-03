@@ -6,8 +6,8 @@ import {
   validateRoomName,
 } from "./converters";
 import { stickerInstanceCollection, roomDoc, stickerCDNCollection, stickerInstanceDoc } from "./locations";
-import { MollyAssetsJson } from "./mollyAssets";
-import { MollyDeleteAssets } from "./mollyAssetsDeleteOnly";
+import { MollyAssetsJson } from "./custom/mollyAssets";
+import { MollyDeleteAssets } from "./custom/mollyAssetsDeleteOnly";
 
 export async function getStickerCDN(roomName: string, initStickerCDN: (cdn: { [key: string]: Sticker }) => void) {
   if (!validateRoomName(roomName)) {
@@ -87,11 +87,25 @@ export async function deleteStickerInstance(roomName: string, stickerID: string)
   deleteDoc(stickerInstance);
 }
 
+export async function resetStickers(roomName: string) { 
+ 
+  if (roomName == "chrisy") {
+    return;
+   }
+   const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
+   const querySnapshot = await getDocs(stickerInstances);
+   querySnapshot.forEach((doc) => {
+     deleteDoc(doc.ref);
+   });
+   if (roomName == "molly") {
+    populateMollyAllInstances();
+   }
+}
+
 ///PLEASE DONT JUDGE ME FOR THIS  :)
 
 
-
-export function bhavikShouldNeverCodeAgain() {
+export function populateMollyCDN() {
   const roomDocRef = roomDoc("molly");
   const dbStickerCDN = stickerCDNCollection(roomDocRef);
 
@@ -108,7 +122,7 @@ export function bhavikShouldNeverCodeAgain() {
   }
 }
 
-export async function butWeMayAsWellDoItAll() {
+export async function populateMollyAllInstances() {
   for (let i = 0; i < MollyAssetsJson.length; i++) {
     let asset = MollyAssetsJson[i];
     let id = asset.id;
@@ -124,7 +138,7 @@ export async function butWeMayAsWellDoItAll() {
 
   }}
 
-  export async function repopulateMollyDeletedAssets(){
+  export async function repopulateOnlyDeletedAssetsMolly(){
     for (let i = 0; i < MollyDeleteAssets.length; i++) {
       let asset = MollyDeleteAssets[i];
       let id = asset.id;
