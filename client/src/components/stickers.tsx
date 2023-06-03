@@ -148,6 +148,7 @@ const ServerStickers: React.FC<{
 
   return (
     <>
+      {isAdmin && <AdminPanel setBehaviorOverride={updateBehavior} behaviorOverride={behaviorOverride}/>}
       {Object.entries(serverSideCoins).map(([id, stickerInstance]) => {
         if (!cdn[stickerInstance.cdnID]) {
           console.log("No sticker", stickerInstance.cdnID);
@@ -167,7 +168,7 @@ const ServerStickers: React.FC<{
           )
         );
       })}
-      {isAdmin && <AdminPanel setBehaviorOverride={updateBehavior} behaviorOverride={behaviorOverride}/>}
+      
     </>
   );
 };
@@ -185,28 +186,28 @@ const AdminPanel: React.FC<{
         >
           admin panel
         </div>
-        <div className="horizontal-stack">
+        <div className="horizontal-stack everest">
           <div
-            className={classnames("clickable contrastFill:hover", { blue: behaviorOverride == "NORMAL" })}
+            className={classnames("everest clickable contrastFill:hover", { blue: behaviorOverride == "NORMAL" })}
             onClick={() => setBehaviorOverride("MOVE")}
           >
             {"MOVE"} MODE
           </div>
           <div
-            className={classnames("clickable contrastFill:hover", { blue: behaviorOverride == "DELETE" })}
+            className={classnames("everest clickable contrastFill:hover", { blue: behaviorOverride == "DELETE" })}
             onClick={() => setBehaviorOverride("DELETE")}
           >
             {"DELETE"} MODE
           </div>
           <div
-            className={classnames("clickable contrastFill:hover", { blue: behaviorOverride == undefined })}
+            className={classnames("everest clickable contrastFill:hover", { blue: behaviorOverride == undefined })}
             onClick={() => setBehaviorOverride(undefined)}
           >
             {"USER"} MODE
           </div>
 
           <div
-            className={classnames("clickable contrastFill:hover")}
+            className={classnames("everest clickable contrastFill:hover")}
             onClick={() => setBehaviorOverride("RESET")}
           >
             RESET STICKERS

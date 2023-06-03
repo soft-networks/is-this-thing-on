@@ -65,9 +65,11 @@ export async function addStickerInstance(roomName: string, element: StickerInsta
 }
 
 export async function updateStickerInstancePos(roomName: string, stickerID: string, pos: Pos) {
+  if (pos[0] <=0 || pos[1] <= 0 || pos[0] >= 1 || pos[1] >= 1) {
+    return; 
+  }
   const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
   const stickerInstance = stickerInstanceDoc(stickerInstances, stickerID);
-
   setDoc(stickerInstance, { position: pos }, { merge: true });
 }
 export async function updateStickerInstanceScale(roomName: string, stickerID: string, size: number) {
@@ -92,6 +94,9 @@ export async function resetStickers(roomName: string) {
   if (roomName == "chrisy") {
     return;
    }
+   if (roomName == "compromised") {
+    populateHerdimasCDN();
+   }
    const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
    const querySnapshot = await getDocs(stickerInstances);
    querySnapshot.forEach((doc) => {
@@ -104,6 +109,22 @@ export async function resetStickers(roomName: string) {
 
 ///PLEASE DONT JUDGE ME FOR THIS  :)
 
+export async function populateHerdimasCDN() {
+  //Delete all CDN stickers for herdimas
+  const stickerCDN = stickerCDNCollection(roomDoc("compromised"));
+  const querySnapshotCDN = await getDocs(stickerCDN);
+  querySnapshotCDN.forEach((doc) => {
+    deleteDoc(doc.ref);
+  });
+
+  const roomDocRef = roomDoc("compromised");
+  const dbStickerCDN = stickerCDNCollection(roomDocRef);
+
+  for (let i = 1; i < 33; i++) {
+    let assetDoc = doc(dbStickerCDN, i.toString());
+    setDoc(assetDoc, { url: `https://storage.googleapis.com/is-this-thing-on/compromised/${i}.png` });
+  }
+}
 
 export function populateMollyCDN() {
   const roomDocRef = roomDoc("molly");

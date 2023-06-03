@@ -135,22 +135,22 @@ const ChrisyStickerViewerController: React.FC<{
       {behaviorOverride == "NORMAL" && (
         <DefaultStickerAdder addSticker={addSticker} cdn={cdn} containerBounds={containerBounds} />
       )}
-      <div style={{ position: "fixed", top: "var(--s0)", width: "100%" }} className="align:center everest">
-        <div className="horizontal-stack">
+      <div style={{ position: "fixed", top: "var(--s0)", width: "100%" }} className="align:center">
+        <div className="horizontal-stack ">
           <div
-            className={classnames("clickable contrastFill:hover", { blue: behaviorOverride == "NORMAL" })}
+            className={classnames("highest clickable contrastFill:hover", { blue: behaviorOverride == "NORMAL" })}
             onClick={() => setBehaviorOverride("NORMAL")}
           >
             {"HIMS"} MODE
           </div>
           <div
-            className={classnames("clickable contrastFill:hover", { blue: behaviorOverride == "MOVE" })}
+            className={classnames("highest clickable contrastFill:hover", { blue: behaviorOverride == "MOVE" })}
             onClick={() => setBehaviorOverride("MOVE")}
           >
             {"RUB"} MODE
           </div>
           <div
-            className={classnames("clickable contrastFill:hover", { blue: behaviorOverride == "DELETE" })}
+            className={classnames("highest clickable contrastFill:hover", { blue: behaviorOverride == "DELETE" })}
             onClick={() => setBehaviorOverride("DELETE")}
           >
             {"BIC"} MODE

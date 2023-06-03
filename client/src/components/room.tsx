@@ -108,7 +108,7 @@ export const RoomView = ({ videoContainerStyle: videoStyle, stickerStyle , stick
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
 
   return (
-    <div className="fullBleed overflowScroll">
+    <div className="fullBleed noOverflow">
       {roomInfo ? (
         <>
           <VideoPlayer style={videoStyle} className="fullBleed noEvents absoluteOrigin" videoStyle={videoStyle}/>
