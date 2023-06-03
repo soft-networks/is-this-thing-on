@@ -3,12 +3,12 @@
 import { Unsubscribe } from "firebase/firestore";
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import useMeasure, { RectReadOnly } from "react-use-measure";
-import { addStickerInstance, performTransaction, syncStickerInstances } from "../lib/firestore";
-import { useRoomStore } from "../stores/roomStore";
-import useStickerCDNStore from "../stores/stickerStore";
-import { useUserStore } from "../stores/userStore";
-import {  DefaultStickerAdder } from "./stickerAdders";
-import { StickerRenderer } from "./stickerRenderHelpers";
+import { addStickerInstance, performTransaction, syncStickerInstances } from "../../lib/firestore";
+import { useRoomStore } from "../../stores/roomStore";
+import useStickerCDNStore from "../../stores/stickerStore";
+import { useUserStore } from "../../stores/userStore";
+import {  DefaultStickerAdder } from "../stickerAdders";
+import { StickerRenderer } from "../stickerRenderHelpers";
 import classnames from "classnames";
 
 const ChrisyStickers: React.FC = () => {

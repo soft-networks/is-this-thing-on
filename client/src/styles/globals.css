@@ -317,6 +317,13 @@ p {
 
 }
 
+.absoluteEnd {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(80%,50%);
+}
+
 .absoluteCaption {
   position: absolute;
   bottom: 0;
@@ -598,7 +605,6 @@ a:hover,
 .faintWhiteFill {
   background: var(--faintWhite);
 }
-
 
 .lightFill {
   background: var(--light);

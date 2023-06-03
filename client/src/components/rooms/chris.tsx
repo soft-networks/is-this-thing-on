@@ -1,6 +1,6 @@
 import React from "react";
 import VideoPlayer from "../videoPlayer";
-import ChrisyStickers from "../chrisyStickers";
+import ChrisyStickers from "../custom/chrisyStickers";
 
 
 const Chris: React.FC = () => {

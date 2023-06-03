@@ -6,6 +6,11 @@ interface MagicPiece {
   reward?: number;
 }
 
+interface SarahQuestion {
+  question: string;
+  status?: "ACCEPTED";
+}
+
 type UserID = string; 
 
 type StickerCDN = { [key: string]: Sticker };

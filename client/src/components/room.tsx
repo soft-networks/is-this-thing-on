@@ -15,6 +15,7 @@ import Maya from "./rooms/maya";
 import Chris from "./rooms/chris";
 import { StickerAdderProps } from "./stickerAdders";
 import Molly from "./rooms/molly";
+import Sarah from "./rooms/sarah";
 
 const Room: React.FC<{ roomID: string; season?: number}> = ({ roomID, season }) => {
   const changeRoom = useRoomStore(useCallback((state) => state.changeRoom, []));
@@ -70,6 +71,9 @@ const SeasonOne = ({ roomID }: { roomID: string }) => {
   }
   if (roomID == "molly") {
     return <Molly/>
+  }
+  if (roomID == "sarah")  {
+    return <Sarah/>
   }
   return <RoomView />;
 };

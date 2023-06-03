@@ -17,6 +17,10 @@ export function chatCollection() {
   return collection(db, "chat");
 }
 
+export function sarahQuestionsCollection() {
+  const sarahRoom = roomDoc("sarah");
+  return collection(sarahRoom, "questions");
+}
 
 export function stickerCDNCollection(roomDoc: DocumentReference) {
   return collection(roomDoc, "sticker_cdn");
