@@ -61,12 +61,8 @@ export const Chat: React.FC<RoomUIProps> = ({className}) => {
       }
       case "compromised": {
         let compromisedStyle = {
-          "--chatContainerBackground": "black",
-          "--chatBorderColor": "black",
-          "--chatMessageColor": "var(--white)",
-          "--chatAuthorColor": "var(--white)",
-          left: "50%",
-          top: "40%",
+          left: "37%",
+          top: "30%",
           transform: "translate(-50%, 0%)"
         } as React.CSSProperties;
         currentStyle = {...currentStyle, ...compromisedStyle};
