@@ -23,6 +23,7 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
   const [mute, setMuted] = useState(false);
   const globalClick = useRef<boolean>(false);
   const streamPlaybackID = useRoomStore(useCallback((s) => s.roomInfo?.streamPlaybackID, []));
+
   const clickCallback = useCallback(() => {
     if (mute && !muteOverride) {
       setMuted(false);

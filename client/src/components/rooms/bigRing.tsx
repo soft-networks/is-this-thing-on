@@ -9,6 +9,7 @@ import { useRoomStore } from "../../stores/roomStore";
 import { SVGRingNode, SVGRingSeparate } from "../logo";
 import VideoPlayer from "../videoPlayer";
 import Layout from "../../layouts/layout";
+import MuxVideo from "@mux/mux-video-react";
 
 const BigRingPage: NextPage = () => {
   const changeRoom = useRoomStore((s) => s.changeRoom);
@@ -223,27 +224,15 @@ const ExpandedSeasonOne: React.FC<{
 };
 
 const VideoPlayerPerRoom: React.FC<{ iLink: RoomLinkInfo; localMuted: boolean }> = ({ iLink, localMuted }) => {
-  switch (iLink.roomID) {
-    case "chrisy":
-      return (
-        <VideoPlayer
-          className="fullBleed"
-          style={{ width: "200%", height: "200%" }}
-          streamPlaybackID={iLink.streamPlaybackID}
-          muteOverride={localMuted}
-          hideMuteButton={true}
-        />
-      );
-    default:
-      return (
-        <VideoPlayer
-          className="fullBleed"
-          streamPlaybackID={iLink.streamPlaybackID}
-          muteOverride={localMuted}
-          hideMuteButton={true}
-        />
-      );
-  }
+  return (
+    <MuxVideo
+      playbackId={iLink.streamPlaybackID}
+      autoPlay
+      muted={true}
+      className="noEvents"
+      style={iLink.roomID == "chrisy" ? { width: "200%", height: "auto" } : { height: "100%", width: "auto" }}
+    />
+  );
 };
 const AnimatedMuteButton: React.FC<{ onMuteChanged: (newMute: boolean) => void; muted: boolean }> = ({
   onMuteChanged,

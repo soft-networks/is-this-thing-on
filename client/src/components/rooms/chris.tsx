@@ -6,9 +6,9 @@ import ChrisyStickers from "../custom/chrisyStickers";
 const Chris: React.FC = () => {
 
   return (
-    <div className="fullBleed chrisyRoom" >
-      <VideoPlayer className="fullBleed noEvents absoluteOrigin" />
-      <ChrisyStickers/>
+    <div className="fullBleed chrisyRoom noOverflow">
+      <VideoPlayer className="fullBleed noEvents absoluteOrigin"  />
+      <ChrisyStickers />
     </div>
   );
 }

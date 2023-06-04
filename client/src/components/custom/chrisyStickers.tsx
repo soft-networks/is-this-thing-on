@@ -7,7 +7,7 @@ import { addStickerInstance, performTransaction, syncStickerInstances } from "..
 import { useRoomStore } from "../../stores/roomStore";
 import useStickerCDNStore from "../../stores/stickerStore";
 import { useUserStore } from "../../stores/userStore";
-import {  DefaultStickerAdder } from "../stickerAdders";
+import {  DefaultStickerAdder, RandomStickerAdder } from "../stickerAdders";
 import { StickerRenderer } from "../stickerRenderHelpers";
 import classnames from "classnames";
 
@@ -144,7 +144,7 @@ const ChrisyStickerViewerController: React.FC<{
         );
       })}
       {behaviorOverride == "NORMAL" && (
-        <DefaultStickerAdder addSticker={addSticker} cdn={cdn} containerBounds={containerBounds} />
+        <RandomStickerAdder addSticker={addSticker} cdn={cdn} containerBounds={containerBounds} />
       )}
       <div style={{ position: "fixed", top: "var(--s0)", width: "100%" }} className="align:center">
         <div className="horizontal-stack ">

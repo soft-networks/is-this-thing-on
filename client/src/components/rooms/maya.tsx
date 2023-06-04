@@ -2,6 +2,7 @@ import React from "react";
 import { Chat } from "../chat";
 import VideoPlayer from "../videoPlayer";
 import Stickers from "../stickers"; 
+import { EmptyChooser } from "../stickerAdders";
 
 
 const Maya: React.FC = () => {
@@ -19,7 +20,7 @@ const Maya: React.FC = () => {
       <Stickers style={{
           width: "100%",
           height: "100%"
-        }}/>
+        }} StickerChooser={EmptyChooser}/>
     </div>
   );
 }

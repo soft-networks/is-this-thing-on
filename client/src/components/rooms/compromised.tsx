@@ -1,8 +1,4 @@
 import React, { useMemo } from "react";
-import { Chat } from "../chat";
-import VideoPlayer from "../videoPlayer";
-import Stickers from "../stickers";
-import Ring from "../ring";
 import { RoomView } from "../room";
 import { CompromisedStickerAdder } from "../custom/compromisedStickerAdder";
 

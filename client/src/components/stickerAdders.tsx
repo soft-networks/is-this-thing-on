@@ -13,6 +13,26 @@ export interface StickerAdderProps {
 export const EmptyChooser: React.FC<StickerAdderProps> = ({}) =>{
   return null
 }
+
+export const RandomStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn, containerBounds, isAdmin}) => {
+  const currentPosChosen = useRef<Pos>();
+  const clicked: MouseEventHandler<HTMLDivElement> = (e) => {
+      if (containerBounds && cdn && Object.keys(cdn).length > 0) {  
+        let x = (e.clientX - containerBounds.left) / containerBounds.width;
+        let y = (e.clientY - containerBounds.top) / containerBounds.height;
+        currentPosChosen.current = [x, y];
+        
+        addSticker(currentPosChosen.current || [0, 0], Object.keys(cdn)[Math.floor(Math.random() * Object.keys(cdn).length)]);
+      }
+    }
+  return (
+    <div
+      className={classnames("fullBleed absoluteOrigin addCursor")}
+      onClick={clicked}
+    >
+    </div>
+  );
+}
 export const DefaultStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn, containerBounds, isAdmin}) => {
   
   const [showStickerTypePicker, setShowStickerTypePicker] = useState<boolean>(false);

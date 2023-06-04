@@ -11,6 +11,7 @@ import { useUserStore } from "../stores/userStore";
 
 export const Chat: React.FC<RoomUIProps> = ({className}) => {
   let roomID = useRoomStore((state) => state.currentRoomID);
+  let roomColor = useRoomStore((state) => state.currentRoomColor);
   let unsubRef = useRef<Unsubscribe>();
   let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
   let chatRef = createRef<HTMLDivElement>();
@@ -22,10 +23,22 @@ export const Chat: React.FC<RoomUIProps> = ({className}) => {
     let currentStyle = {
       "--chatAuthorColor": "var(--contrast)",
       "--chatMessageColor": "var(--light)",
+      "--chatMessageBackgroundColor": roomColor,
       "--chatContainerBackground": "var(--black)",
       "--chatBorderColor": "var(--gray)"
     } as React.CSSProperties
     switch (roomID) {
+      case "ambient": {
+        let ambientStyle = {
+          "--chatContainerBackground": "rgba(0,0,0,0)",
+          "--chatBorderColor": "rgba(0,0,0,0)",
+          "--chatMessageBackgroundColor": "rgba(0,0,0,0)",
+          "--chatMessageColor": "var(--white)",
+          "--chatAuthorColor": "var(--white)"
+        } as React.CSSProperties;
+        currentStyle = {...currentStyle, ...ambientStyle};
+        break;
+      }
       case "chrisy": {
         let chrisStyle = {
           "--chatContainerBackground": "rgba(0,0,0,0.1)",
@@ -44,6 +57,19 @@ export const Chat: React.FC<RoomUIProps> = ({className}) => {
           "--chatAuthorColor": "black"
         } as React.CSSProperties;
         currentStyle = {...currentStyle, ...mollyStyle};
+        break;
+      }
+      case "compromised": {
+        let compromisedStyle = {
+          "--chatContainerBackground": "black",
+          "--chatBorderColor": "black",
+          "--chatMessageColor": "var(--white)",
+          "--chatAuthorColor": "var(--white)",
+          left: "50%",
+          top: "40%",
+          transform: "translate(-50%, 0%)"
+        } as React.CSSProperties;
+        currentStyle = {...currentStyle, ...compromisedStyle};
         break;
       }
       case "soft": {
@@ -105,14 +131,14 @@ export const Chat: React.FC<RoomUIProps> = ({className}) => {
   }, [chatWasAdded, chatWasRemoved]);
   return (
     <Draggable handle=".handle" nodeRef={chatRef} defaultPosition={{x: 10, y: 10}} disabled={roomID == "compromised"}>
-      <div className={(className || "") + " chat highest border"} style={chatStyle} ref={chatRef}>
+      <div className={(className || "") + " chat everest border"} style={chatStyle} ref={chatRef}>
         <div className="handle" style={{ minHeight: "var(--sp0)", height: "var(--sp0)", background: "var(--chatBorderColor)" }}>
           ...
         </div>
         <ChatInput onSubmit={sendNewMessage} />
         <div className="padded:s-2 caption horizontal-stack clickable" style={{background: "var(--chatBackgroundColor)"}} onClick={() => setFilterRoom(!filterRoom)}>
-          <input type="checkbox" checked={filterRoom} onClick={() => setFilterRoom(!setFilterRoom)} readOnly />
-          <p>see messages in this room only</p>
+          <input type="checkbox" checked={!filterRoom} onClick={() => setFilterRoom(!setFilterRoom)} readOnly />
+          <p>listen in on other rooms</p>
         </div>
         <div
           className="stack:s-2 padded:custom"
@@ -148,6 +174,8 @@ const getRoomNameForChat = (roomName: string) => {
   return rn;
 }
 
+
+
 const RenderChat : React.FC<{id: string, chat: ChatMessage}> = ({chat, id}) => {
   const links = useRingStore(s => s.links);
   const myRoom = useMemo(() => links[chat.roomID], [links, chat]);
@@ -157,18 +185,16 @@ const RenderChat : React.FC<{id: string, chat: ChatMessage}> = ({chat, id}) => {
       <p
         key={id}
         className="padded:s-2 chatMessage border-radius"
-        style={{ background: myRoom ? myRoom.roomColor : "var(--contrast)", color: "var(--black)"}}
+        style={{ background: "var(--chatMessageBackgroundColor)", color: "var(--chatMessageColor)" }}
       >
-        <div className="caption" style={{ color: "rgba(0,0,0,0.8)" }}>
-          { myRoom && myRoom.roomName ? getRoomNameForChat(myRoom.roomName) : "in the home room"}
+        <div className="caption" style={{ color: "var(--chatMessageColor)" }}>
+          {myRoom && myRoom.roomName ? getRoomNameForChat(myRoom.roomName) : "in the home room"}
         </div>
         <div>
           <em>{chat.username || "unknown"}</em>
-          <span>:{" "}{chat.message}</span>
+          <span>: {chat.message}</span>
         </div>
-        
       </p>
-      
     </div>
   );
 }
