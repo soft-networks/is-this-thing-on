@@ -6,7 +6,7 @@ import Stickers from "../stickers";
 
 const Maya: React.FC = () => {
   return (
-    <div className="fullBleed overflowScroll" style={{background: "pink"}}>
+    <div className="fullBleed noOverflow" style={{background: "pink"}}>
       <VideoPlayer
         style={{
           width: "100%",

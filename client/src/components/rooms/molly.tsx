@@ -1,9 +1,4 @@
 import React from "react";
-import { Chat } from "../chat";
-import RoomInfoViewer from "../roomInfo";
-import VideoPlayer from "../videoPlayer";
-import Stickers from "../stickers";
-import Footer from "../../layouts/footer";
 import { PopupStickerAdder } from "../stickerAdders";
 import { RoomView } from "../room";
 

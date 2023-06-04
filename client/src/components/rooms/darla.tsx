@@ -1,16 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useCallback, useEffect } from "react";
-import { Chat } from "../chat";
-import RoomInfoViewer from "../roomInfo";
-import VideoPlayer from "../videoPlayer";
-import Stickers from "../stickers";
-import Footer from "../../layouts/footer";
-import { PopupStickerAdder } from "../stickerAdders";
 import { RoomView } from "../room";
 import { Unsubscribe } from "firebase/auth";
 import { resetNextSpinTime, syncSpin } from "../../lib/firestore/custom/darlaSpinner";
 import Countdown from "react-countdown";
-import Draggable from "react-draggable";
 
 const Darla: React.FC = () => {
   return (

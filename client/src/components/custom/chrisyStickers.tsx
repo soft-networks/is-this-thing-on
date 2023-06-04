@@ -64,6 +64,10 @@ const ChrisyStickerViewerController: React.FC<{
   );
   const addSticker = (pos: Pos, cdnID: string, scale?: number) => {
     if (!roomID) return;
+    let localScale = 0.3;
+    if (cdnID == "hair1") {
+      localScale = 0.5;
+    }
     addStickerInstance(roomID, {
       position: pos,
       timestamp: Date.now(),
@@ -119,16 +123,23 @@ const ChrisyStickerViewerController: React.FC<{
         }
         return (
           cdn[stickerInstance.cdnID] && (
-            <StickerRenderer
-              key={`servercoin-${id}`}
-              pos={stickerInstance.position}
-              size={stickerInstance.size}
-              sticker={cdn[stickerInstance.cdnID]}
-              id={id}
-              containerBounds={containerBounds}
-              adminOverride={behaviorOverride}
-              zIndex={100 + stickerInstance.zIndex}
-            />
+            <div
+              className={classnames(" fullBleed absoluteOrigin", {
+                deleteCursor: behaviorOverride == "DELETE",
+                moveCursor: behaviorOverride == "MOVE",
+              })}
+            >
+              <StickerRenderer
+                key={`servercoin-${id}`}
+                pos={stickerInstance.position}
+                size={stickerInstance.size}
+                sticker={cdn[stickerInstance.cdnID]}
+                id={id}
+                containerBounds={containerBounds}
+                adminOverride={behaviorOverride}
+                zIndex={100 + stickerInstance.zIndex}
+              />
+            </div>
           )
         );
       })}
