@@ -53,6 +53,7 @@ html, #__next, body {
   width: 100%; height: 100%;
 }
 
+
 body {
   font-family: "Manifont Grotesk", monospace;
 
@@ -609,6 +610,10 @@ a:hover,
 .lightFill {
   background: var(--light);
   color: var(--black);
+}
+
+.blueBorder\:hover:hover {
+  border:blue 2px solid;
 }
 
 .grayFill {

@@ -22,6 +22,13 @@ export function sarahQuestionsCollection() {
   return collection(sarahRoom, "questions");
 }
 
+export function darlaSpinnerDoc() {
+  const roomDocRef = roomDoc("messydarla");
+  const collectionDocRef = collection(roomDocRef, "customSpinner");
+  const spinnerRef = doc(collectionDocRef, "spinner");
+  return spinnerRef;
+}
+
 export function stickerCDNCollection(roomDoc: DocumentReference) {
   return collection(roomDoc, "sticker_cdn");
 }
