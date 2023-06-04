@@ -66,13 +66,22 @@ const ChrisyStickerViewerController: React.FC<{
     if (!roomID) return;
     let localScale = 0.3;
     if (cdnID == "hair1") {
-      localScale = 0.5;
+      localScale = 0.27;
+    }
+    if (cdnID == "hair2") {
+      localScale = 0.33;
+    }
+    if (cdnID == "hair3") {
+      localScale = 0.24;
+    }
+    if (cdnID == "hair4") {
+      localScale = 0.57;
     }
     addStickerInstance(roomID, {
       position: pos,
       timestamp: Date.now(),
       cdnID: cdnID,
-      size: scale,
+      size: localScale,
       zIndex: 200,
     });
     performTransaction({
