@@ -51,8 +51,11 @@ const Spinner: React.FC = () => {
       </div>
       <div style={{ position: "absolute", bottom: "96px", right: "var(--s2)" }}>
         {isIncomplete ? (
-          <div className="high padded lightFill noEvents">
-            <div className="absoluteOrigin caption contrastFill">
+          <div className="high padded whiteFill noEvents">
+            <div
+              className="absoluteOrigin caption contrastFill"
+              style={{ top: "calc(-1* var(--s0)", left: "calc(-1 * var(--s0)" }}
+            >
               next spin in...
             </div>
             <Countdown
@@ -67,7 +70,7 @@ const Spinner: React.FC = () => {
             />
           </div>
         ) : (
-          <div className="padded contrastFill clickable blueBorder:hover" onClick={() => resetNextSpinTime()}>
+          <div className="padded contrastFill clickable contrastFill:hover" onClick={() => resetNextSpinTime()}>
             spin the wheel!!!
           </div>
         )}

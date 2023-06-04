@@ -612,8 +612,8 @@ a:hover,
   color: var(--black);
 }
 
-.blueBorder\:hover:hover {
-  border:blue 2px solid;
+.contrastFill\:hover:hover {
+  background: pink !important;
 }
 
 .grayFill {
