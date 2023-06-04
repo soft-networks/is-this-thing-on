@@ -188,7 +188,7 @@ const AdminPanel: React.FC<{
         </div>
         <div className="horizontal-stack everest">
           <div
-            className={classnames("everest clickable contrastFill:hover", { blue: behaviorOverride == "NORMAL" })}
+            className={classnames("everest clickable contrastFill:hover", { blue: behaviorOverride == "MOVE" })}
             onClick={() => setBehaviorOverride("MOVE")}
           >
             {"MOVE"} MODE

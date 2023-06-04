@@ -9,6 +9,10 @@ export interface StickerAdderProps {
   containerBounds: RectReadOnly;
   isAdmin?: boolean
 }
+
+export const EmptyChooser: React.FC<StickerAdderProps> = ({}) =>{
+  return null
+}
 export const DefaultStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn, containerBounds, isAdmin}) => {
   
   const [showStickerTypePicker, setShowStickerTypePicker] = useState<boolean>(false);

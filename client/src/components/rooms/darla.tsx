@@ -4,6 +4,7 @@ import { RoomView } from "../room";
 import { Unsubscribe } from "firebase/auth";
 import { resetNextSpinTime, syncSpin } from "../../lib/firestore/custom/darlaSpinner";
 import Countdown from "react-countdown";
+import { EmptyChooser } from "../stickerAdders";
 
 const Darla: React.FC = () => {
   return (
@@ -14,7 +15,7 @@ const Darla: React.FC = () => {
           height: "100%",
         }}
         videoContainerStyle={{ width: "100%", height: "100%" }}
-        stickerChooser={undefined}
+        stickerChooser={EmptyChooser}
       />
       <Spinner />
     </div>
