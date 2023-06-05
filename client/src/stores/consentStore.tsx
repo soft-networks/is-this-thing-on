@@ -8,8 +8,7 @@ interface ConsentStore {
   setConsent: (consent: string) => void;
 }
 
-const useConsentStore = create<ConsentStore>()(
-  persist(
+const useConsentStore = create<ConsentStore>(
     (set) => ({
       consent: [],
       setConsent: (c) =>
@@ -18,12 +17,10 @@ const useConsentStore = create<ConsentStore>()(
             console.log("updating consent");
             return { consent: [...p.consent, c] };
           } else {
+            console.log("duplicate consent");;
             return {};
           }
         }),
-    }),
-    { name: "consent-store" }
-  )
-);
+    }));
 
 export default useConsentStore;
