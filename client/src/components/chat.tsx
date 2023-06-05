@@ -39,6 +39,17 @@ export const Chat: React.FC<RoomUIProps> = ({className}) => {
         currentStyle = {...currentStyle, ...ambientStyle};
         break;
       }
+      case "maya": {
+        let ambientStyle = {
+          "--chatContainerBackground": "rgba(0,0,0)",
+          "--chatBorderColor": "rgba(0,0,0)",
+          "--chatMessageBackgroundColor": "rgba(0,0,0)",
+          "--chatMessageColor": "var(--white)",
+          "--chatAuthorColor": "var(--white)"
+        } as React.CSSProperties;
+        currentStyle = {...currentStyle, ...ambientStyle};
+        break;
+      }
       case "chrisy": {
         let chrisStyle = {
           "--chatContainerBackground": "rgba(0,0,0,0.1)",
