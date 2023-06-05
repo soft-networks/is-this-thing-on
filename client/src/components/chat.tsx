@@ -11,7 +11,7 @@ import { useUserStore } from "../stores/userStore";
 
 export const Chat: React.FC<RoomUIProps> = ({className}) => {
   let roomID = useRoomStore((state) => state.currentRoomID);
-  let roomColor = useRoomStore((state) => state.currentRoomColor);
+  let roomColor = useRoomStore((state) => state.roomInfo?.roomColor);
   let unsubRef = useRef<Unsubscribe>();
   let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
   let chatRef = createRef<HTMLDivElement>();
