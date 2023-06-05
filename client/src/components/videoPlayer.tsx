@@ -56,12 +56,16 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
     }
     if (streamPlaybackID) {
       return (
-        <MuxVideo
-          playbackId={streamPlaybackID}
+        <ReactPlayer
+        url={
+          `https://stream.mux.com/${streamPlaybackID}.m3u8`
+        }
           autoPlay
           muted={shouldMute}
           style={videoStyle || DEFAULT_VIDEO_STYLE}
-          className="noEvents"
+          className="noEvents fullBleed"
+          width={"100%"}
+          height={"100%"}
         />
       );
     } 
