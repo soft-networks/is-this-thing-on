@@ -1,8 +1,8 @@
 import classNames from "classnames";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { roomIDToHREF } from "../stores/ringStore";
-import { useRoomStore } from "../stores/roomStore";
+import { roomIDToHREF } from "../../stores/ringStore";
+import { useRoomStore } from "../../stores/roomStore";
 
 const ELLIPSE_PATH =
   "M71.25,84.27L177.31,22.66,297.1,3.07l100.91,27.55,55.04,66.55-4.58,87.99-63.6,86.7-106.07,61.62-119.79,19.59-100.91-27.55L3.06,258.97l4.58-87.99,63.61-86.7Z";
@@ -10,80 +10,6 @@ const ELLIPSE_PATH =
 const GLOBAL_ANIM_LENGTH = 100;
 
 
-export const FooterLogo: React.FC<{ ring: WebRing, roomID: string}> = ({ ring, roomID}) => {
-  const {push} = useRouter();
-  const indexSelected = useMemo(() => {
-    if (!roomID) return;
-    let i = Object.keys(ring).indexOf(roomID);
-    return i > -1 ? i : undefined;
-  }, [ring, roomID]);
-  const navStream = useCallback((n : number) => {
-    let keys = Object.keys(ring);
-    n = n < 0 ? keys.length - 1 : n;
-    let nextKey = keys[n % keys.length];
-    push(roomIDToHREF(nextKey));
-  }, [push, ring]);
-  const ringParts = useMemo(() => SVGRingSeparate({ring, currentlySelected: indexSelected}), [indexSelected, ring]);
-  return (
-    <div className="centerh relative">
-      <div className="center:absolute ">{ringParts[0]}</div>
-        <div className="horizontal-stack:s-1">
-          <div
-            className="clickable clickable:link border padded:s-2 contrastFill:hover"
-            onClick={() => indexSelected !== undefined && navStream(indexSelected - 1)}
-          >
-            prev
-          </div>
-          <NodeLink link={ring[roomID]} id={roomID} noNav />
-          <div
-            className="clickable clickable:link border padded:s-2 contrastFill:hover"
-            onClick={() => indexSelected !== undefined && navStream(indexSelected + 1)}
-          >
-            next
-          </div>
-        </div>
-      <div className="center:absolute highest noEvents">{ringParts[1]}</div>
-    </div>
-  );
-};
-
-export const HomeLogo: React.FC<{ ring: WebRing, noNav?: boolean }> = ({ ring, noNav}) => {
-  const numKeys = useMemo(() => Object.keys(ring).length, [ring]);
-  const [selectedRoom, setSelectedRoom] = useState<number>(0);
-  const animInterval = useRef<NodeJS.Timeout>();
-  const incCurrentStream = useCallback(() => {
-    setSelectedRoom((c) => (c + 1) % numKeys);
-  }, [numKeys]);
-  useEffect(() => {
-    animInterval.current && clearTimeout(animInterval.current);
-    animInterval.current = setTimeout(incCurrentStream, 5000);
-    return () => animInterval.current && clearTimeout(animInterval.current);
-  }, [incCurrentStream, selectedRoom]);
-  const nodeNav = useMemo(() => {
-    let activeKey = Object.keys(ring)[selectedRoom];
-    let link = ring[activeKey];
-    if (!link) return <div className="centerh"> loading... </div>;
-    return (
-      <div className="horizontal-stack:s-1 centerh">
-        <NodeLink
-          link={link}
-          id={activeKey}
-          className={classNames({ selected: true })}
-          noNav={noNav}
-        />
-      </div>
-    );
-  }, [ring, selectedRoom, noNav]);
-  return (
-    <div
-      className="fullWidth stack:custom relative"
-      style={{ "--stackSpacing": "calc(-1 * var(--s-1))", marginTop: "calc(-1 * var(--s2))" } as React.CSSProperties}
-    >
-      {<SVGRingCombined ring={ring} currentlySelected={selectedRoom} onNodeClick={(n) => setSelectedRoom(n)} />}
-      {nodeNav}
-    </div>
-  );
-};
 
 interface SVGRingProps {
   ring: WebRing;
@@ -190,7 +116,7 @@ interface NodeLinkProps {
   noNav?: boolean;
   id:string;
 }
-const NodeLink: React.FC<NodeLinkProps> = ({ link, className, noNav, id}) => {
+export const NodeLink: React.FC<NodeLinkProps> = ({ link, className, noNav, id}) => {
 
   const text = useMemo(() => `${link.roomName} is ${link.streamStatus == 'active' ? 'online' : 'offline'}`, [link.roomName, link.streamStatus]);
   return (
@@ -199,3 +125,4 @@ const NodeLink: React.FC<NodeLinkProps> = ({ link, className, noNav, id}) => {
     </div>
   );
 };
+

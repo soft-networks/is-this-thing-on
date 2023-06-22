@@ -10,9 +10,9 @@ import {
   addQuestionToSarahQuestions,
   deleteQuestion,
   syncQuestions,
-} from "../../lib/firestore/custom/sarahQuestions";
-import { useRoomStore } from "../../stores/roomStore";
-import { useUserStore } from "../../stores/userStore";
+} from "../../../lib/firestore/custom/sarahQuestions";
+import { useRoomStore } from "../../../stores/roomStore";
+import { useUserStore } from "../../../stores/userStore";
 import classNames from "classnames";
 import Draggable from "react-draggable";
 

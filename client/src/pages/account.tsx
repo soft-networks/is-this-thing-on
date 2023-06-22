@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { useCallback, useEffect } from "react";
 import Auth from "../components/auth";
-import Layout from "../layouts/layout";
+import Layout from "../components/room/layout";
 import { useRoomStore } from "../stores/roomStore";
 
 

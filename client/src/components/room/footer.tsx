@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { useCallback } from "react";
-import AccountButton from "../components/accountButton";
-import Ring from "../components/ring";
-import { RoomEnergy } from "../components/roomInfo";
-import { useRoomStore } from "../stores/roomStore";
+import AccountButton from "../account/accountButton";
+import Ring from "../rings/smallRing";
+import RoomEnergy  from "./roomEnergy";
+import { useRoomStore } from "../../stores/roomStore";
 
 
 const Footer: React.FC = () => {

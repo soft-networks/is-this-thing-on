@@ -1,10 +1,10 @@
 import React from "react";
-import { PopupStickerAdder } from "../stickerAdders";
-import { RoomView } from "../room";
+import { PopupStickerAdder } from "../interactive/stickerAdders";
+import DefaultRoomView from "./defaultRoom";
 
 const Molly: React.FC = () => {
   return (
-    <RoomView
+    <DefaultRoomView
       videoStyle={{
         width: "100%",
         height: "100%",

@@ -1,8 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ReactPlayer from "react-player";
-import { generateStreamLink } from "../lib/server-api";
-
-import MuxVideo from '@mux/mux-video-react';
 import { useRoomStore } from "../stores/roomStore";
 
 

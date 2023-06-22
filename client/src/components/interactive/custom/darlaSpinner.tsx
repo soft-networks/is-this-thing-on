@@ -1,32 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useCallback, useEffect } from "react";
-import { RoomView } from "../room";
-import { Unsubscribe } from "firebase/auth";
-import { resetNextSpinTime, syncSpin } from "../../lib/firestore/custom/darlaSpinner";
-import Countdown from "react-countdown";
-import { EmptyChooser } from "../stickerAdders";
 
-const Darla: React.FC = () => {
-  return (
-    <div className="fullBleed noOverflow relative">
-      <RoomView
-        videoStyle={{
-          width: "100%",
-          height: "100%",
-        }}
-        videoContainerStyle={{ width: "100%", height: "100%" }}
-        stickerChooser={EmptyChooser}
-      />
-      <Spinner />
-    </div>
-  );
-};
+import { Unsubscribe } from "firebase/auth";
+import { resetNextSpinTime, syncSpin } from "../../../lib/firestore/custom/darlaSpinner";
+import Countdown from "react-countdown";
+import { useCallback, useEffect, useRef, useState } from "react";
+
 
 const Spinner: React.FC = () => {
-  const [nextTime, setNextTime] = React.useState<number>();
-  const [isIncomplete, setIsIncomplete] = React.useState<boolean>(nextTime ? nextTime > Date.now() : false);
-  const [nextSpinAmount, setNextSpinAmount] = React.useState<number>(0);
-  const unsub = React.useRef<Unsubscribe>();
+  const [nextTime, setNextTime] = useState<number>();
+  const [isIncomplete, setIsIncomplete] = useState<boolean>(nextTime ? nextTime > Date.now() : false);
+  const [nextSpinAmount, setNextSpinAmount] = useState<number>(0);
+  const unsub = useRef<Unsubscribe>();
   const spinHappened = useCallback((nextTime: number, nextSpinAmount: number) => {
     setNextTime(nextTime);
     setIsIncomplete(true);
@@ -79,4 +63,5 @@ const Spinner: React.FC = () => {
     </>
   );
 };
-export default Darla;
+
+export default Spinner;

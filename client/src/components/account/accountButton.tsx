@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
-import { useUserStore } from "../stores/userStore";
+import { useUserStore } from "../../stores/userStore";
 
 const AccountButton: React.FunctionComponent = () => {
   const displayName = useUserStore(useCallback((state) => state.displayName, []));

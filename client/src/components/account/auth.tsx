@@ -1,6 +1,6 @@
 import { User } from "firebase/auth";
 import { useCallback, useEffect, useState } from "react";
-import { useUserStore } from "../stores/userStore";
+import { useUserStore } from "../../stores/userStore";
 import Admin from "./admin";
 import { SignIn,  SignUp } from "./loginComponents";
 

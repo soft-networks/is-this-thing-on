@@ -1,8 +1,8 @@
 import { Unsubscribe } from "firebase/firestore";
 import { useCallback, useEffect, useRef } from "react";
-import { Chat } from "../components/chat";
-import { syncWebRing } from "../lib/firestore";
-import useRingStore from "../stores/ringStore";
+import { Chat } from "../interactive/chat";
+import { syncWebRing } from "../../lib/firestore";
+import useRingStore from "../../stores/ringStore";
 import Footer from "./footer";
 
 const Layout: React.FunctionComponent<{ hideChat?: boolean; hideFooter?: boolean }> = ({
@@ -24,7 +24,6 @@ const Layout: React.FunctionComponent<{ hideChat?: boolean; hideFooter?: boolean
   return (
     <div className="fullBleed lightFill relative" key="layout">
       <main className="fullBleed" key="container">
-        {!hideChat && <Chat className=" absoluteOrigin" key="chat" />}
         {children}
       </main>
       {!hideFooter && <Footer />}

@@ -1,10 +1,10 @@
 import { Unsubscribe } from "firebase/firestore";
 import React, { createRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Draggable from "react-draggable";
-import { addChatMessageDB, syncChat } from "../lib/firestore/";
-import useRingStore from "../stores/ringStore";
-import { useRoomStore } from "../stores/roomStore";
-import { useUserStore } from "../stores/userStore";
+import { addChatMessageDB, syncChat } from "../../lib/firestore";
+import useRingStore from "../../stores/ringStore";
+import { useRoomStore } from "../../stores/roomStore";
+import { useUserStore } from "../../stores/userStore";
 
 
 

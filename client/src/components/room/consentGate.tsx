@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import useConsentStore from "../stores/consentStore";
+import useConsentStore from "../../stores/consentStore";
 
 const ConsentGate: React.FC<{ roomID: string; active: boolean }> = ({ roomID, children, active }) => {
   const consent = useConsentStore(useCallback((s) => s.consent, []));

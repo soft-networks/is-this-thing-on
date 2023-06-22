@@ -1,8 +1,8 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import Room from "../../components/room";
+import Room from "../../components/room/room";
 import RoomGate, { RoomOnlineGate } from "../../components/roomGate";
-import Layout from "../../layouts/layout";
+import Layout from "../../components/room/layout";
 import VideoPlayer from "../../components/videoPlayer";
 import { useRoomStore } from "../../stores/roomStore";
 import { useCallback, useEffect, useRef, useState } from "react";

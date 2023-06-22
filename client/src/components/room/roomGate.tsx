@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { useCallback, useMemo } from "react";
-import useRingStore from "../stores/ringStore";
-import { useRoomStore } from "../stores/roomStore";
+import useRingStore from "../../stores/ringStore";
+import { useRoomStore } from "../../stores/roomStore";
 import ConsentGate from "./consentGate";
 
 const loadingDiv = <div className="center:absolute highest"> loading...</div>;

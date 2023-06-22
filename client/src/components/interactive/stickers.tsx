@@ -2,13 +2,12 @@
 import { Unsubscribe } from "firebase/firestore";
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import useMeasure, { RectReadOnly } from "react-use-measure";
-import { addStickerInstance, performTransaction, resetStickers, syncStickerInstances } from "../lib/firestore";
-import { useRoomStore } from "../stores/roomStore";
-import useStickerCDNStore from "../stores/stickerStore";
-import { useUserStore } from "../stores/userStore";
+import { addStickerInstance, performTransaction, resetStickers, syncStickerInstances } from "../../lib/firestore";
+import { useRoomStore } from "../../stores/roomStore";
+import useStickerCDNStore from "../../stores/stickerStore";
+import { useUserStore } from "../../stores/userStore";
 import { StickerAdderProps, DefaultStickerAdder } from "./stickerAdders";
 import { StickerRenderer } from "./stickerRenderHelpers";
-import Admin from "./admin";
 import classnames from "classnames";
 
 interface StickersProps {

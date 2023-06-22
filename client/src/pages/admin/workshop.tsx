@@ -1,2 +1,2 @@
-import  Workshop from "../../components/rooms/workshop";
+import  Workshop from "../../components/artistRooms/workshop";
 export default Workshop;

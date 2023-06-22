@@ -1,5 +1,5 @@
 import "../styles/globals.css";
-import Layout from '../layouts/layout';
+import Layout from '../components/room/layout';
 import App from "next/app";
 class MyApp extends App {
   render() {
