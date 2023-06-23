@@ -1,8 +1,8 @@
 import { updateProfile, User} from "firebase/auth";
 import { useCallback, useEffect, useState } from "react";
-import { getRoomsWhereUserISAdmin } from "../lib/firestore";
-import { getStreamKey, resetRoom } from "../lib/server-api";
-import { useUserStore } from "../stores/userStore";
+import { getRoomsWhereUserISAdmin } from "../../lib/firestore";
+import { getStreamKey, resetRoom } from "../../lib/server-api";
+import { useUserStore } from "../../stores/userStore";
 
 /**
  * AdminView renders RoomAdminUI for each room that a user id admin for

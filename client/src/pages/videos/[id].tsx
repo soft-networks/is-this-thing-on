@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import Room from "../../components/room/room";
-import RoomGate, { RoomOnlineGate } from "../../components/roomGate";
+import RoomGate, { RoomOnlineGate } from "../../components/room/roomGate";
 import Layout from "../../components/room/layout";
 import VideoPlayer from "../../components/videoPlayer";
 import { useRoomStore } from "../../stores/roomStore";
@@ -55,8 +55,6 @@ const VideoOnlyPageInternal = ({ roomID }: { roomID: string }) => {
             {userClicked && roomInfo && (
               <>
                 <VideoPlayer
-                  style={{}}
-                  className="fullBleed noEvents absoluteOrigin"
                   streamPlaybackID={roomInfo.streamPlaybackID}
                 />
               </>
