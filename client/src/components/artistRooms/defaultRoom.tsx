@@ -8,15 +8,16 @@ import { Chat } from "../interactive/chat";
 interface RoomViewProps {
   stickerStyle?: React.CSSProperties;
   stickerChooser?: React.FC<StickerAdderProps>
+  chatStyle?: React.CSSProperties
 }
-const DefaultRoom = ({ stickerStyle , stickerChooser}: RoomViewProps) => {
+const DefaultRoom = ({ stickerStyle , stickerChooser, chatStyle}: RoomViewProps) => {
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
 
   return (
     <div className="fullBleed noOverflow">
       {roomInfo ? (
         <>
-          <Chat className=" absoluteOrigin" key="chat" />
+          <Chat className=" absoluteOrigin" key="chat" style={chatStyle}/>
           <VideoPlayer />
           <Stickers style={stickerStyle} StickerChooser={stickerChooser}/>
         </>

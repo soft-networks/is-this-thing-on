@@ -31,8 +31,8 @@ const BigRing: React.FC = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="fullWidth overflowVisible"
-      style={{ maxWidth: "18000px" }}
+      className=" overflowVisible"
+      style={{ width: "90%", maxWidth: "18000px" }}
       viewBox="-50 -50 550 450"
     >
       <text x={150} y={210} style={{ fontSize: "55px", fontStyle: "italic" }} fill="black">

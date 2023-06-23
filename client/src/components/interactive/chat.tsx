@@ -7,95 +7,22 @@ import { useRoomStore } from "../../stores/roomStore";
 import { useUserStore } from "../../stores/userStore";
 
 
+const DEFAULT_STYLE =  (roomColor: string) => ({
+  "--chatAuthorColor": "var(--contrast)",
+  "--chatMessageColor": "var(--light)",
+  "--chatContainerBackground": "var(--black)",
+  "--chatBorderColor": "var(--gray)",
+  "--chatMessageBackgroundColor": roomColor,
+} as React.CSSProperties);
 
 
-export const Chat: React.FC<RoomUIProps> = ({className}) => {
+export const Chat: React.FC<RoomUIProps> = ({className, style = {}}) => {
   let roomID = useRoomStore((state) => state.currentRoomID);
   let roomColor = useRoomStore((state) => state.roomInfo?.roomColor);
   let unsubRef = useRef<Unsubscribe>();
   let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
   let chatRef = createRef<HTMLDivElement>();
   let [filterRoom, setFilterRoom] = useState<boolean>(true);
-  let [chatStyle, setChatStyle] = useState<React.CSSProperties>();
-
-  
-  useEffect(() => {
-    let currentStyle = {
-      "--chatAuthorColor": "var(--contrast)",
-      "--chatMessageColor": "var(--light)",
-      "--chatMessageBackgroundColor": roomColor,
-      "--chatContainerBackground": "var(--black)",
-      "--chatBorderColor": "var(--gray)"
-    } as React.CSSProperties
-    switch (roomID) {
-      case "ambient": {
-        let ambientStyle = {
-          "--chatContainerBackground": "rgba(0,0,0,0)",
-          "--chatBorderColor": "rgba(0,0,0,0)",
-          "--chatMessageBackgroundColor": "rgba(0,0,0,0)",
-          "--chatMessageColor": "var(--white)",
-          "--chatAuthorColor": "var(--white)"
-        } as React.CSSProperties;
-        currentStyle = {...currentStyle, ...ambientStyle};
-        break;
-      }
-      case "maya": {
-        let ambientStyle = {
-          "--chatContainerBackground": "rgba(0,0,0)",
-          "--chatBorderColor": "rgba(0,0,0)",
-          "--chatMessageBackgroundColor": "rgba(0,0,0)",
-          "--chatMessageColor": "var(--white)",
-          "--chatAuthorColor": "var(--white)"
-        } as React.CSSProperties;
-        currentStyle = {...currentStyle, ...ambientStyle};
-        break;
-      }
-      case "chrisy": {
-        let chrisStyle = {
-          "--chatContainerBackground": "rgba(0,0,0,0.1)",
-          "--chatBorderColor": "rgba(0,0,0,0.1)",
-          "--chatMessageColor": "var(--white)",
-          "--chatAuthorColor": "magenta"
-        } as React.CSSProperties;
-        currentStyle = {...currentStyle, ...chrisStyle};
-        break;
-      }
-      case "molly": {
-        let mollyStyle = {
-          "--chatContainerBackground": "pink",
-          "--chatBorderColor": "hotpink",
-          "--chatMessageColor": "var(--black)",
-          "--chatAuthorColor": "black"
-        } as React.CSSProperties;
-        currentStyle = {...currentStyle, ...mollyStyle};
-        break;
-      }
-      case "compromised": {
-        let compromisedStyle = {
-          left: "37%",
-          top: "30%",
-          transform: "translate(-50%, 0%)"
-        } as React.CSSProperties;
-        currentStyle = {...currentStyle, ...compromisedStyle};
-        break;
-      }
-      case "soft": {
-        let softStyle = {
-          "--chatContainerBackground": "rgb(189, 222, 239)",
-          "--chatBorderColor": "rgb(135, 188, 215)",
-          "--chatMessageColor": "rgb(70, 116, 91)",
-          "--chatAuthorColor": "#183c28"
-        }
-        currentStyle = {...currentStyle, ...softStyle};
-        break;
-      }
-      default: {
-
-      }
-    }
-    setChatStyle(currentStyle);
-  }, [roomID])
-
   const chatWasAdded = useCallback(
     (cID, chat) => {
       setChatList((pc) => {
@@ -137,13 +64,24 @@ export const Chat: React.FC<RoomUIProps> = ({className}) => {
     };
   }, [chatWasAdded, chatWasRemoved]);
   return (
-    <Draggable handle=".handle" nodeRef={chatRef} defaultPosition={{x: 10, y: 10}} disabled={roomID == "compromised"}>
-      <div className={(className || "") + " chat everest border"} style={chatStyle} ref={chatRef}>
-        <div className="handle" style={{ minHeight: "var(--sp0)", height: "var(--sp0)", background: "var(--chatBorderColor)" }}>
+    <Draggable handle=".handle" nodeRef={chatRef} defaultPosition={{ x: 10, y: 10 }} disabled={roomID == "compromised"}>
+      <div
+        className={(className || "") + " chat everest border"}
+        style={{ ...DEFAULT_STYLE(roomColor || "gray"), ...style }}
+        ref={chatRef}
+      >
+        <div
+          className="handle"
+          style={{ minHeight: "var(--sp0)", height: "var(--sp0)", background: "var(--chatBorderColor)" }}
+        >
           ...
         </div>
         <ChatInput onSubmit={sendNewMessage} />
-        <div className="padded:s-2 caption horizontal-stack clickable" style={{background: "var(--chatBackgroundColor)"}} onClick={() => setFilterRoom(!filterRoom)}>
+        <div
+          className="padded:s-2 caption horizontal-stack clickable"
+          style={{ background: "var(--chatBackgroundColor)" }}
+          onClick={() => setFilterRoom(!filterRoom)}
+        >
           <input type="checkbox" checked={!filterRoom} onClick={() => setFilterRoom(!setFilterRoom)} readOnly />
           <p>listen in on other rooms</p>
         </div>
@@ -157,14 +95,15 @@ export const Chat: React.FC<RoomUIProps> = ({className}) => {
             } as React.CSSProperties
           }
         >
-          {Object.entries(chatList).sort( (a,b) => b[1].timestamp - a[1].timestamp)
-          .map(([id, chat]) => {
-            if (filterRoom && chat.roomID !== (roomID || "home")) {
-              return null
-            }
-            return <RenderChat id={id} chat={chat} key={`chat-${id}`} />
-          })}
-      </div>
+          {Object.entries(chatList)
+            .sort((a, b) => b[1].timestamp - a[1].timestamp)
+            .map(([id, chat]) => {
+              if (filterRoom && chat.roomID !== (roomID || "home")) {
+                return null;
+              }
+              return <RenderChat id={id} chat={chat} key={`chat-${id}`} />;
+            })}
+        </div>
       </div>
     </Draggable>
   );
