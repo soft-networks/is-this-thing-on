@@ -65,7 +65,8 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
     });
   };
   return roomID ? (
-    <div className={className || "fullBleed absoluteOrigin"} style={stickerStyle} id="sticker-overlay" ref={ref}>
+    <div className={className || "fullBleed absoluteOrigin center:children"} style={stickerStyle} id="sticker-overlay" ref={ref}>
+      <div className="videoAspect videoWidthHeight relative">
       {stickerCDN && (
         <>
           <StickerChooser addSticker={addSticker} cdn={stickerCDN} containerBounds={bounds} isAdmin={isAdmin} />
@@ -78,6 +79,7 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
           />
         </>
       )}
+      </div>
     </div>
   ) : null;
 };

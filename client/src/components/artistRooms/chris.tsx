@@ -9,7 +9,7 @@ const Chris: React.FC = () => {
   return (
     <div className="fullBleed chrisyRoom noOverflow relative">
       <Chat className=" absoluteOrigin" key="chat" />
-      <VideoPlayer className="fullBleed noEvents absoluteOrigin"  />
+      <VideoPlayer />
       <ChrisyStickers />
     </div>
   );

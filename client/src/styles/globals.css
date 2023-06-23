@@ -176,10 +176,6 @@ iframe html, iframe body {
 
 
 
-
-
-
-
 /* Sizing */
 .fullBleed {
   width: 100%;
@@ -297,6 +293,7 @@ p {
   max-inline-size: min(42%, 600px);
 }
 
+
 .cover {
   display: flex;
   flex-direction: column;
@@ -333,6 +330,12 @@ p {
 
 }
 
+.center\:children {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .center\:absolute {
   position: absolute;
   top: 50%;
@@ -666,6 +669,22 @@ a:hover,
 }
 
 /* Specific */
+
+.videoAspect {
+  aspect-ratio: 16 / 9;
+}
+.videoWidthHeight {
+  width: 100vw;
+  height: 56.25vw;
+}
+
+
+.muxPlayer {
+  --controls: none;
+  background: none;
+}
+
+
 
 .chat {
   --chatAuthorColor: var(--contrast);

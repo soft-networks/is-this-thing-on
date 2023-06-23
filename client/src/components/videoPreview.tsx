@@ -1,14 +1,17 @@
-import MuxPlayer from "@mux/mux-player-react";
+import ReactPlayer from "react-player";
+import { generateStreamLink } from "../lib/server-api";
 
 const VideoPreview: React.FC<{ iLink: RoomLinkInfo; localMuted: boolean }> = ({ iLink, localMuted }) => {
   return (
-    <MuxPlayer
-      playbackId={iLink.streamPlaybackID}
-      autoPlay
-      muted={true}
-      className="noEvents"
-      style={iLink.roomID == "chrisy" ? { width: "200%", height: "auto" } : { height: "100%", width: "auto" }}
-    />
+    iLink.streamPlaybackID ? <ReactPlayer
+      url={generateStreamLink(iLink.streamPlaybackID)}
+      playing={true}
+      muted={localMuted}
+      style={{ width: "100%", height: "100%" }}
+      className="noEvents fullBleed videoAspect"
+      width={"100%"}
+      height={"100%"}
+    /> : <div></div>
   );
 };
 

@@ -8,12 +8,6 @@ const Ambient: React.FC = () => {
       <iframe className="ambience absoluteOrigin high" src="https://ambient.institute/sounds" />
       <Chat className=" absoluteOrigin" key="chat" />
       <VideoPlayer
-        style={{
-          width: "100%",
-          height: "100%",
-          zIndex: 0,
-        }}
-        className="noEvents absoluteOrigin"
         muteOverride={true}
         hideMuteButton={true}
       />

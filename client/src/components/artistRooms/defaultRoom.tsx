@@ -6,12 +6,10 @@ import VideoPlayer from "../videoPlayer";
 import { Chat } from "../interactive/chat";
 
 interface RoomViewProps {
-  videoContainerStyle?: React.CSSProperties;
-  videoStyle?: React.CSSProperties;
   stickerStyle?: React.CSSProperties;
   stickerChooser?: React.FC<StickerAdderProps>
 }
-const DefaultRoom = ({ videoContainerStyle: videoStyle, stickerStyle , stickerChooser}: RoomViewProps) => {
+const DefaultRoom = ({ stickerStyle , stickerChooser}: RoomViewProps) => {
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
 
   return (
@@ -19,7 +17,7 @@ const DefaultRoom = ({ videoContainerStyle: videoStyle, stickerStyle , stickerCh
       {roomInfo ? (
         <>
           <Chat className=" absoluteOrigin" key="chat" />
-          <VideoPlayer style={videoStyle} className="fullBleed noEvents absoluteOrigin" videoStyle={videoStyle}/>
+          <VideoPlayer />
           <Stickers style={stickerStyle} StickerChooser={stickerChooser}/>
         </>
       ) : (

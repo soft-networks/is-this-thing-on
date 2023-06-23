@@ -7,7 +7,7 @@ import { SVGRingNode, SVGRingSeparate } from "./svg";
 import VideoPreview from "../videoPreview";
 
 
-const iframeSize = [155, 90];
+const iframeSize = [160, 90];
 
 const ANIM_LENGTH = 1000;
 
@@ -19,7 +19,6 @@ const BigRing: React.FC = () => {
     const nodes: JSX.Element[] = [];
     const numKeys = Object.keys(ring).length;
     const ANIM_OFFSET = ANIM_LENGTH / numKeys;
-    //iframeSize = iframeSize.map(s => s*0.75);
     Object.keys(ring).forEach((key, i) => {
       let iLink = ring[key];
         nodes.push(
@@ -60,7 +59,12 @@ const BigRingNode: React.FC<{
 
   if (iLink.streamStatus == "active" && src) {
     return (
-      <g className="scale:hover showOnHoverTrigger" key={`node-visible-${i}`}>
+      <g
+        className="scale:hover showOnHoverTrigger"
+        key={`node-visible-${i}`}
+        onMouseOut={() => setLocalMuted(false)}
+        onMouseEnter={() => setLocalMuted(true)}
+      >
         <animateMotion dur={`${ANIM_LENGTH}s`} begin={`${i * -ANIM_OFFSET}s`} repeatCount="indefinite">
           <mpath xlinkHref="#ellipsePath" />
         </animateMotion>
@@ -93,7 +97,6 @@ const BigRingNode: React.FC<{
         >
           {iLink.roomName}
         </text>
-        <AnimatedMuteButton muted={localMuted} onMuteChanged={setLocalMuted} />
       </g>
     );
   } else {
@@ -112,33 +115,6 @@ const BigRingNode: React.FC<{
       />
     );
   }
-};
-
-const AnimatedMuteButton: React.FC<{ onMuteChanged: (newMute: boolean) => void; muted: boolean }> = ({
-  onMuteChanged,
-  muted,
-}) => {
-  const rectWidth = 75;
-  return (
-    <g
-      transform={`translate(0, ${iframeSize[1] / 2 + 10})`}
-      onClick={() => onMuteChanged(!muted)}
-      className="clickable showOnHover hoverTrigger"
-    >
-      <rect
-        width={rectWidth}
-        height={20}
-        fill={"white"}
-        stroke={"black"}
-        transform={`translate(-${rectWidth / 2},-14)`}
-        className="contrastFill:hover:triggered"
-      ></rect>
-      <text textAnchor="middle" fill={"black"}>
-        {" "}
-        {muted ? "unmute" : "mute"}{" "}
-      </text>
-    </g>
-  );
 };
 
 export default BigRing;

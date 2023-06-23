@@ -9,19 +9,8 @@ const Maya: React.FC = () => {
   return (
     <div className="fullBleed noOverflow" style={{background: "pink"}}>
       <Chat className=" absoluteOrigin" key="chat" />
-      <VideoPlayer
-        style={{
-          width: "100%",
-          height: "100%",
-          zIndex: 0
-        }}
-        className="noEvents absoluteOrigin"
-  
-      />
-      <Stickers style={{
-          width: "100%",
-          height: "100%"
-        }} StickerChooser={EmptyChooser}/>
+      <VideoPlayer/>
+      <Stickers StickerChooser={EmptyChooser}/>
     </div>
   );
 }
