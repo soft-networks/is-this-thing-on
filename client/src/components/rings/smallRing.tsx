@@ -49,7 +49,7 @@ const FooterLogo: React.FC<{ ring: WebRing, roomID: string}> = ({ ring, roomID})
             next
           </div>
         </div>
-      <div className="center:absolute highest noEvents">{ringParts[1]}</div>
+      <div className="center:absolute higherThanStickerLayer noEvents">{ringParts[1]}</div>
     </div>
   );
 };

@@ -47,7 +47,7 @@ export const DeletableSticker: React.FC<StickerRenderProps> = ({ sticker, pos, i
         zIndex: zIndex
       }}
       onClick={(e) => deleteSticker()}
-      className={"absoluteOrigin deleteCursor highest hoverTrigger"}
+      className={"absoluteOrigin deleteCursor interactiveStickerLayer hoverTrigger"}
     >
       <StickerImage url={sticker.imageURL} size={size} id={id} />
     </div>
@@ -82,7 +82,7 @@ const MoveableSticker: React.FC<StickerRenderProps> = ({ sticker, pos, id, conta
       nodeRef={myRef}
     >
       <div
-        className={classnames("moveCursor absoluteOrigin highest hoverTrigger", { animateTransform: !isDragging })}
+        className={classnames("moveCursor absoluteOrigin interactiveStickerLayer hoverTrigger", { animateTransform: !isDragging })}
         style={{ width: size ? `${size * 100}%` : "var(--stickerSize)" , zIndex: zIndex}}
         ref={myRef}
       >

@@ -101,7 +101,7 @@ const QuestionBox: React.FC = () => {
 
   return (
     <Draggable handle=".handle" nodeRef={boxRef} defaultPosition={{ x: 10, y: 10 }}>
-      <div className="stack:noGap absoluteOrigin high whiteFill white">
+      <div className="stack:noGap absoluteOrigin higherThanStickerLayer whiteFill white">
         <div className="handle" style={{ minHeight: "var(--sp0)", height: "var(--sp0)", background: "lightFill" }}>
           ...
         </div>

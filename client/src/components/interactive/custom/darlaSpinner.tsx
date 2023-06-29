@@ -26,7 +26,7 @@ const Spinner: React.FC = () => {
 
   return (
     <>
-      <div className="highest" style={{ position: "absolute", bottom: "200px", right: "20px", width: "20%" }}>
+      <div className="higherThanStickerLayer" style={{ position: "absolute", bottom: "200px", right: "20px", width: "20%" }}>
         <img
           src="https://www.pngall.com/wp-content/uploads/10/Spinning-Wheel-PNG-Images-HD.png"
           alt="Spinning wheel"
@@ -36,7 +36,7 @@ const Spinner: React.FC = () => {
       </div>
       <div style={{ position: "absolute", bottom: "96px", right: "var(--s2)" }}>
         {isIncomplete ? (
-          <div className="high padded whiteFill noEvents">
+          <div className="higherThanStickerLayer padded whiteFill noEvents">
             <div
               className="absoluteOrigin caption contrastFill"
               style={{ top: "calc(-1* var(--s0)", left: "calc(-1 * var(--s0)" }}

@@ -359,19 +359,21 @@ p {
   bottom: 0;
   top: unset;
 }
-.high {
-  z-index: 1
+.baseLayer {
+  z-index: 0;
 }
-.higgher {
+.stickerLayer {
+  z-index: 10;
+}
+.interactiveStickerLayer{
+  z-index: 11
+}
+.higherThanStickerLayer, .higherThanStickerLayer > * {
   z-index: 50;
 }
-.highest {
-  z-index: 999;
+.highestLayer {
+  z-index: 100;
 }
-.everest {
-  z-index: 99999;
-}
-
 
 .align\:center {
   display: flex;
@@ -684,7 +686,15 @@ a:hover,
 .muxPlayer {
   --controls: none;
   background: none;
+  --media-object-fit: cover;
+  --media-object-position: center;
+  --dialog: none;
+  --media-background-color: rgba(0,0,0,0.1);
+  width: 100%;
+  height: 100%;
 }
+
+
 
 .videoMob {
   position: absolute;

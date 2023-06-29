@@ -75,7 +75,7 @@ export const Chat: React.FC<RoomUIProps> = ({className, style = {}}) => {
   return (
     <Draggable handle=".handle" nodeRef={chatRef} defaultPosition={{ x: 10, y: 10 }} disabled={roomID == "compromised"}>
       <div
-        className={(className || "") + " chat everest border"}
+        className={(className || "") + " chat higherThanStickerLayer border"}
         style={{ ...DEFAULT_STYLE(roomColor || "gray"), ...style }}
         ref={chatRef}
       >

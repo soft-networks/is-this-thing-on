@@ -179,35 +179,35 @@ const AdminPanel: React.FC<{
 }> = ({ setBehaviorOverride, behaviorOverride }) => {
   return (
     <div style={{ position: "fixed", top: "var(--s0)", width: "100%" }} className="align:center ">
-      <div className="stack:s-2 faintWhiteFill padded:s-2 relative border-radius everest ">
+      <div className="stack:s-2 faintWhiteFill padded:s-2 relative border-radius higherThanStickerLayer ">
         <div
           className="caption absoluteOrigin noEvents center-text lightFill"
           style={{ left: "calc(-1 *var(--s-2))", top: "calc(-1 * var(--s-2)" }}
         >
           admin panel
         </div>
-        <div className="horizontal-stack everest">
+        <div className="horizontal-stack higherThanStickerLayer">
           <div
-            className={classnames("everest clickable contrastFill:hover", { blue: behaviorOverride == "MOVE" })}
+            className={classnames("higherThanStickerLayer clickable contrastFill:hover", { blue: behaviorOverride == "MOVE" })}
             onClick={() => setBehaviorOverride("MOVE")}
           >
             {"MOVE"} MODE
           </div>
           <div
-            className={classnames("everest clickable contrastFill:hover", { blue: behaviorOverride == "DELETE" })}
+            className={classnames("higherThanStickerLayer clickable contrastFill:hover", { blue: behaviorOverride == "DELETE" })}
             onClick={() => setBehaviorOverride("DELETE")}
           >
             {"DELETE"} MODE
           </div>
           <div
-            className={classnames("everest clickable contrastFill:hover", { blue: behaviorOverride == undefined })}
+            className={classnames("higherThanStickerLayer clickable contrastFill:hover", { blue: behaviorOverride == undefined })}
             onClick={() => setBehaviorOverride(undefined)}
           >
             {"USER"} MODE
           </div>
 
           <div
-            className={classnames("everest clickable contrastFill:hover")}
+            className={classnames("higherThanStickerLayer clickable contrastFill:hover")}
             onClick={() => setBehaviorOverride("RESET")}
           >
             RESET STICKERS

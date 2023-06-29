@@ -5,7 +5,7 @@ import { Chat } from "../interactive/chat";
 const Ambient: React.FC = () => {
   return (
     <main className="fullBleed noOverflow relative" style={{ background: "#edf3f4" }}>
-      <iframe className="ambience absoluteOrigin high" src="https://ambient.institute/sounds" />
+      <iframe className="ambience absoluteOrigin baseLayer" src="https://ambient.institute/sounds" />
       <Chat className=" absoluteOrigin" key="chat" style={{
           "--chatContainerBackground": "rgba(0,0,0,0)",
           "--chatBorderColor": "rgba(0,0,0,0)",

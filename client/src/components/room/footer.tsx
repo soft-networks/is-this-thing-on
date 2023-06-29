@@ -9,7 +9,7 @@ import { useRoomStore } from "../../stores/roomStore";
 const Footer: React.FC = () => {
     const roomID = useRoomStore(useCallback(state => state.currentRoomID,[]));
     return (
-      <footer className="align-end:fixed fullWidth highest " >
+      <footer className="align-end:fixed fullWidth higherThanStickerLayer " >
         {roomID && <div className="padded:s2  horizontal-stack" style={{position: "absolute", bottom: 0, left: 0}}>
           <Link href={"/"} passHref ><div className="padded:s-2 border clickable whiteFill contrastFill:hover"> home </div></Link>
           <RoomEnergy roomID={roomID}/>

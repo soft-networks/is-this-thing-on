@@ -24,7 +24,7 @@ const ChrisyStickers: React.FC = () => {
   }, [adminForIDs, currentRoomID]);
 
   return roomID ? (
-    <div className={"fullBleed absoluteOrigin"} id="sticker-overlay" ref={ref}>
+    <div className={"fullBleed absoluteOrigin relative stickerLayer"} id="sticker-overlay" ref={ref}>
       {stickerCDN && (
         <>
           <ChrisyStickerViewerController
@@ -133,7 +133,7 @@ const ChrisyStickerViewerController: React.FC<{
         return (
           cdn[stickerInstance.cdnID] && (
             <div
-              className={classnames(" fullBleed absoluteOrigin", {
+              className={classnames({
                 deleteCursor: behaviorOverride == "DELETE",
                 moveCursor: behaviorOverride == "MOVE",
               })}
@@ -155,22 +155,22 @@ const ChrisyStickerViewerController: React.FC<{
       {behaviorOverride == "NORMAL" && (
         <RandomStickerAdder addSticker={addSticker} cdn={cdn} containerBounds={containerBounds} />
       )}
-      <div style={{ position: "fixed", top: "var(--s0)", width: "100%" }} className="align:center">
+      <div style={{ position: "fixed", top: "var(--s0)", width: "100%"} as React.CSSProperties} className="align:center">
         <div className="horizontal-stack ">
           <div
-            className={classnames("highest clickable contrastFill:hover", { blue: behaviorOverride == "NORMAL" })}
+            className={classnames("higherThanStickerLayer clickable contrastFill:hover", { blue: behaviorOverride == "NORMAL" })}
             onClick={() => setBehaviorOverride("NORMAL")}
           >
             {"HIMS"} MODE
           </div>
           <div
-            className={classnames("highest clickable contrastFill:hover", { blue: behaviorOverride == "MOVE" })}
+            className={classnames("higherThanStickerLayer clickable contrastFill:hover", { blue: behaviorOverride == "MOVE" })}
             onClick={() => setBehaviorOverride("MOVE")}
           >
             {"RUB"} MODE
           </div>
           <div
-            className={classnames("highest clickable contrastFill:hover", { blue: behaviorOverride == "DELETE" })}
+            className={classnames("higherThanStickerLayer clickable contrastFill:hover", { blue: behaviorOverride == "DELETE" })}
             onClick={() => setBehaviorOverride("DELETE")}
           >
             {"BIC"} MODE

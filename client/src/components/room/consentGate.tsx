@@ -26,7 +26,7 @@ const ConsentGateInternal: React.FC<{ roomID: string; consentURL: string }> = ({
   return consentPassed ? (
     <>{children}</>
   ) : (
-    <div className="fullBleed absolute faintWhiteFill everest">
+    <div className="fullBleed absolute faintWhiteFill highestLayer">
       <div className="center:absolute stack padded" style={{ width: "80%", height: "70%" }}>
         <iframe src={consentURL} className="flex-1" style={{ border: "1px solid black" }} />
         <div className="horizontal-stack">

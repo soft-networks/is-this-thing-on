@@ -3,7 +3,7 @@ import { useCallback, useMemo } from "react";
 import useRingStore from "../../stores/ringStore";
 import { useRoomStore } from "../../stores/roomStore";
 import ConsentGate from "./consentGate";
-const loadingDiv = <div className="center:absolute highest"> loading...</div>;
+const loadingDiv = <div className="center:absolute"> loading...</div>;
 const RoomNameGate: React.FunctionComponent<{ id: string }> = ({ id, children }) => {
   const ring = useRingStore(useCallback((room) => room.links, []));
   const isValidName = useMemo(() => {
@@ -33,7 +33,7 @@ export const RoomStatusGate: React.FunctionComponent = ({ children }) => {
         </ConsentGate>
       )}
       {roomInfo && roomInfo.streamStatus !== "active" && (
-        <div className="center:absolute highest"> offline... for now</div>
+        <div className="center:absolute"> offline... for now</div>
       )}
     </>
   );

@@ -22,7 +22,7 @@ export const SVGRingSeparate = (props: SVGRingProps & {returnWithoutWrapping?: b
     return pieces;
   }
   const wrapSVG = (child: JSX.Element) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="centerh high homeLogoWidth" viewBox="-50 -50 550 450">
+    <svg xmlns="http://www.w3.org/2000/svg" className="centerh homeLogoWidth" viewBox="-50 -50 550 450">
       {child}
     </svg>
   )

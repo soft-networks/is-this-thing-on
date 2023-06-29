@@ -23,7 +23,7 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
   return streamPlaybackID ? (
     <div className="fullBleed" key="videoPlayer">
       {!hideMuteButton && (
-        <div className="highest padded" style={{ position: "fixed", top: "0px", right: "0px" }}>
+        <div className="higherThanStickerLayer padded" style={{ position: "fixed", top: "0px", right: "0px" }}>
           <div
             className="border-thin whiteFill padded:s-2 clickable contrastFill:hover"
             onClick={() => setMuted(!mute)}
@@ -32,7 +32,7 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
           </div>
         </div>
       )}
-      <div className="fullBleed center:children">
+      <div className="baseLayer fullBleed center:children">
         <MuxPlayer
           playbackId={streamPlaybackID}
           autoPlay={"any"}

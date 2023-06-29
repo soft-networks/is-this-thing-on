@@ -101,7 +101,7 @@ export const PopupStickerAdder: React.FC<StickerAdderProps> = ({addSticker, cdn,
     <>
       {!chooserOpen && (
         <div
-          className="highest padded:s-1 whiteFill contrastFill:hover absoluteOrigin border clickable"
+          className="higherThanStickerLayer padded:s-1 whiteFill contrastFill:hover absoluteOrigin border clickable"
           style={{ top: "85%", left: "50%", transform: "translate(-50%, -50%)" }}
           onClick={() => setChooserOpen(!chooserOpen)}
         >
@@ -109,7 +109,7 @@ export const PopupStickerAdder: React.FC<StickerAdderProps> = ({addSticker, cdn,
         </div>
       )}
       {chooserOpen && (
-        <div className="absoluteOrigin highest" style={{ top: "85%", left: "50%", transform: "translate(-50%, -50%)" }}>
+        <div className="higherThanStickerLayer absoluteOrigin " style={{ top: "85%", left: "50%", transform: "translate(-50%, -50%)" }}>
           <DefaultChooseStickerType cdn={cdn} typeSelected={typeChosen} isAdmin={isAdmin} className="grid:s-2 padded lightFill" style={{maxWidth: "100%", "--stickerSize": "12ch"} as React.CSSProperties}/>
         </div>
       )}
@@ -131,7 +131,7 @@ const DefaultChooseStickerType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: 
         className={className || "grid:s-2 skrimFill border-radius padded"}
       >
         <div
-          className="lightFill border contrastFill:hover padded:s-2 clickable highest"
+          className="lightFill border contrastFill:hover padded:s-2 clickable higherThanStickerLayer"
           style={{ position: "absolute", top: "calc(-1 * var(--s1)", left: "calc(-1 * var(--s1)" }}
           onClick={(e) => typeSelected(undefined)}
         >

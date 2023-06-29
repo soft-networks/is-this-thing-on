@@ -76,11 +76,11 @@ const ChooseType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: string) => voi
   return (
     <>
       <div
-        className={"grid:s-2 skrimFill border-radius padded"}
+        className={"grid:s-2 skrimFill border-radius padded higherThanStickerLayer"}
         style={{ maxWidth: "calc(4 * (var(--stickerSize) + 2 * var(--s2))" }}
       >
         <div
-          className="lightFill border contrastFill:hover padded:s-2 clickable highest"
+          className="lightFill border contrastFill:hover padded:s-2 clickable "
           style={{ position: "absolute", top: "calc(-1 * var(--s1)", left: "calc(-1 * var(--s1)" }}
           onClick={(e) => typeSelected(undefined)}
         >
