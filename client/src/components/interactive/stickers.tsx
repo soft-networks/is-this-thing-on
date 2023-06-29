@@ -17,6 +17,8 @@ interface StickersProps {
   className?: string;
 }
 const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdder, className }) => {
+  
+
   //Stores
   const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));
   const stickerCDN = useStickerCDNStore(useCallback((state) => state.stickerCDN, []));

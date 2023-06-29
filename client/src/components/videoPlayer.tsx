@@ -3,6 +3,7 @@ import { useRoomStore } from "../stores/roomStore";
 import MuxPlayer from "@mux/mux-player-react/lazy";
 import { logError, logVideo } from "../lib/logger";
 import { generateStreamLink } from "../lib/server-api";
+import { useRouter } from "next/router";
 
 const DEFAULT_CLASSNAME = "fullWidth";
 const DEFAULT_STYLE = {} as React.CSSProperties;
@@ -15,6 +16,8 @@ interface VideoPlayerProps {
 const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
   hideMuteButton,
 }) => {
+  //Should I even render?
+  const hideVideo  = useRouter().query.hideVideo
   const [mute, setMuted] = useState(false);
   const streamPlaybackID = useRoomStore(useCallback((s) => s.roomInfo?.streamPlaybackID, []));
   useEffect(() => {
@@ -32,7 +35,7 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
           </div>
         </div>
       )}
-      <div className="baseLayer fullBleed center:children">
+      {!hideVideo && <div className="baseLayer fullBleed center:children">
         <MuxPlayer
           playbackId={streamPlaybackID}
           autoPlay={"any"}
@@ -41,7 +44,7 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
           nohotkeys={true}
           onError={(e) => logError(e)}
         />
-      </div>
+      </div>}
     </div>
   ) : (
     <div></div>
