@@ -5,6 +5,7 @@ import { addChatMessageDB, syncChat } from "../../lib/firestore";
 import useRingStore from "../../stores/ringStore";
 import { useRoomStore } from "../../stores/roomStore";
 import { useUserStore } from "../../stores/userStore";
+import { logCallbackDestroyed, logCallbackSetup, logError, logFirebaseUpdate, logInfo } from "../../lib/logger";
 
 
 const DEFAULT_STYLE =  (roomColor: string) => ({
@@ -15,32 +16,38 @@ const DEFAULT_STYLE =  (roomColor: string) => ({
   "--chatMessageBackgroundColor": roomColor,
 } as React.CSSProperties);
 
+//TODO: Fix the Chat Filter: so it actually creates/destroys callbacks.
+//TODO: Don't load 100 chats. Filter by timestamp maybe. Or see if you can batch???
 
 export const Chat: React.FC<RoomUIProps> = ({className, style = {}}) => {
+  let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
+  let chatRef = createRef<HTMLDivElement>();
   let roomID = useRoomStore((state) => state.currentRoomID);
   let roomColor = useRoomStore((state) => state.roomInfo?.roomColor);
   let unsubRef = useRef<Unsubscribe>();
-  let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
-  let chatRef = createRef<HTMLDivElement>();
   let [filterRoom, setFilterRoom] = useState<boolean>(true);
+
   const chatWasAdded = useCallback(
     (cID, chat) => {
+      logFirebaseUpdate("ChatMessage added");
       setChatList((pc) => {
         let npc = { ...pc };
         npc[cID] = chat;
         return npc;
       });
     },
-    [setChatList]
+    []
   );
   const chatWasRemoved = useCallback(
-    (cID) =>
+    (cID) => {
+      logFirebaseUpdate("ChatMessage removed");
       setChatList((pc) => {
         let npc = { ...pc };
         delete npc[cID];
         return npc;
-      }),
-    [setChatList]
+      });
+    },
+    []
   );
   const sendNewMessage = useCallback(
     (c:  {message: string, timestamp: number, username: string}) => {
@@ -49,20 +56,22 @@ export const Chat: React.FC<RoomUIProps> = ({className, style = {}}) => {
     [roomID]
   );
   useEffect(() => {
+    logInfo("ChatClient restarting");
     async function setupDB() {
-      console.log("Setting up chat sync");
-      if (unsubRef.current) {
-        setChatList({});
+      if (unsubRef.current !== undefined) {
+        logError("Chat sync setup with one already there", [unsubRef.current]);
         unsubRef.current();
       }
+      logCallbackSetup(`Chat ${roomID || 'home'}`)
       unsubRef.current = await syncChat(chatWasAdded, chatWasRemoved);
     }
     setupDB();
     return () => {
-      console.log("Destroying chat sync");
+      logCallbackDestroyed(`Chat ${roomID || 'home'}`)
       if (unsubRef.current) unsubRef.current();
     };
-  }, [chatWasAdded, chatWasRemoved]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <Draggable handle=".handle" nodeRef={chatRef} defaultPosition={{ x: 10, y: 10 }} disabled={roomID == "compromised"}>
       <div
@@ -83,7 +92,7 @@ export const Chat: React.FC<RoomUIProps> = ({className, style = {}}) => {
           onClick={() => setFilterRoom(!filterRoom)}
         >
           <input type="checkbox" checked={!filterRoom} onClick={() => setFilterRoom(!setFilterRoom)} readOnly />
-          <p>listen in on other rooms</p>
+          <span>listen in on other rooms</span>
         </div>
         <div
           className="stack:s-2 padded:custom"
@@ -128,7 +137,7 @@ const RenderChat : React.FC<{id: string, chat: ChatMessage}> = ({chat, id}) => {
   
   return (
     <div className="stack:noGap fullWidth align-start">
-      <p
+      <div
         key={id}
         className="padded:s-2 chatMessage border-radius"
         style={{ background: "var(--chatMessageBackgroundColor)", color: "var(--chatMessageColor)" }}
@@ -140,14 +149,14 @@ const RenderChat : React.FC<{id: string, chat: ChatMessage}> = ({chat, id}) => {
           <em>{chat.username || "unknown"}</em>
           <span>: {chat.message}</span>
         </div>
-      </p>
+      </div>
     </div>
   );
 }
 
 const ChatInput: React.FC<{ onSubmit: (chat: {message: string, timestamp: number, username: string}) => void }> = ({ onSubmit }) => {
   const displayName = useUserStore((state) => state.displayName);
-  const numOnline = useRoomStore((state) => state.roomInfo?.numOnline);
+  //const numOnline = useRoomStore((state) => state.roomInfo?.numOnline);
   
   const [currentMessage, setCurrentMessage] = useState<string>("");
   const submitMessage = useCallback(() => {
@@ -165,7 +174,7 @@ const ChatInput: React.FC<{ onSubmit: (chat: {message: string, timestamp: number
       
       <div className="horizontal-stack"> 
         <div className="flex-1" suppressHydrationWarning> chat as {displayName} </div>
-        {numOnline ? <div> {numOnline} people in this room </div> : null}
+        {/* {numOnline ? <div> {numOnline} people in this room </div> : null} */}
       </div>
       <div className="fullWidth horizontal-stack align-middle">
         <input

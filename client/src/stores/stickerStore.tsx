@@ -4,6 +4,7 @@ import { getStickerCDN } from "../lib/firestore";
 
 interface StickerStoreState {
   changeRoomStickers: (roomID:string) => void,
+  unmountRoomStickers: () => void,
   stickerCDN?: {[key:string] : Sticker}
 }
 
@@ -13,7 +14,10 @@ const useStickerCDNStore = create<StickerStoreState>((set) => ({
       set({stickerCDN: c });
      });
   },
-  stickerCDN: undefined
+  stickerCDN: undefined,
+  unmountRoomStickers: () => {
+    set({stickerCDN: undefined})
+  }
 }));
 
 export default useStickerCDNStore;

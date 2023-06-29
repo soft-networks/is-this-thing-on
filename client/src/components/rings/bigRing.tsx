@@ -13,20 +13,25 @@ const ANIM_LENGTH = 1000;
 
 const BigRing: React.FC = () => {
   const ring = useRingStore(useCallback((s) => s.links, []));
-  const ringPieces: JSX.Element[] = useMemo(() => SVGRingSeparate({ ring: ring, returnWithoutWrapping: true }), [ring]);
-  const router = useRouter();
+  const ringForeground: JSX.Element = useMemo(() => SVGRingSeparate({ ring: ring, returnWithoutWrapping: true })[0], [ring]);
   const ringNodes = useMemo(() => {
     const nodes: JSX.Element[] = [];
     const numKeys = Object.keys(ring).length;
     const ANIM_OFFSET = ANIM_LENGTH / numKeys;
     Object.keys(ring).forEach((key, i) => {
-      let iLink = ring[key];
+      let roomLinkDetails = ring[key];
         nodes.push(
-          <BigRingNode iLink={iLink} ANIM_OFFSET={ANIM_OFFSET} router={router} i={i} key={`node-1-${i}`}  ANIM_LENGTH={ANIM_LENGTH}/>
+          <BigRingNode
+            roomLinkDetails={roomLinkDetails}
+            ANIM_OFFSET={ANIM_OFFSET}
+            i={i}
+            key={`bigringnode-${i}`}
+            ANIM_LENGTH={ANIM_LENGTH}
+          />
         );
     });
     return nodes;
-  }, [ring, router]);
+  }, [ring]);
 
   return (
     <svg
@@ -38,32 +43,28 @@ const BigRing: React.FC = () => {
       <text x={150} y={210} style={{ fontSize: "55px", fontStyle: "italic" }} fill="black">
         THING
       </text>
-      {ringPieces[0]}
+      {ringForeground}
       {ringNodes}
     </svg>
   );
 };
 
-
-
 const BigRingNode: React.FC<{
-  iLink: RoomLinkInfo;
+  roomLinkDetails: RoomLinkInfo;
   i: number;
   ANIM_OFFSET: number;
   ANIM_LENGTH: number;
-  router: NextRouter;
-}> = ({ iLink, ANIM_OFFSET, ANIM_LENGTH, router, i }) => {
-  const src = roomIDToHREF(iLink.roomID);
-
+}> = ({ roomLinkDetails, ANIM_OFFSET, ANIM_LENGTH, i }) => {
+  const src = useMemo(() => roomIDToHREF(roomLinkDetails.roomID), [roomLinkDetails.roomID]);
+  const router = useRouter();
   const [localMuted, setLocalMuted] = useState(true);
-
-  if (iLink.streamStatus == "active" && src) {
+  if (roomLinkDetails.streamStatus == "active" && src) {
     return (
       <g
         className="scale:hover showOnHoverTrigger"
         key={`node-visible-${i}`}
-        onMouseOut={() => setLocalMuted(false)}
-        onMouseEnter={() => setLocalMuted(true)}
+        onMouseOut={() => setLocalMuted(true)}
+        onMouseEnter={() => setLocalMuted(false)}
       >
         <animateMotion dur={`${ANIM_LENGTH}s`} begin={`${i * -ANIM_OFFSET}s`} repeatCount="indefinite">
           <mpath xlinkHref="#ellipsePath" />
@@ -74,28 +75,28 @@ const BigRingNode: React.FC<{
           transform={`translate(-${iframeSize[0] / 2}, -${iframeSize[1] / 2})`}
           style={{
             border: "1px solid blue",
-            filter: `drop-shadow(0px 0px 10px ${iLink.roomColor || "white"})`,
+            filter: `drop-shadow(0px 0px 10px ${roomLinkDetails.roomColor || "white"})`,
             cursor: "ne-resize",
           }}
           onClick={() => router.push(src)}
         >
-          {iLink.roomName == "molly" && (
+          {roomLinkDetails.roomName == "molly" && (
             <img
               src="https://storage.googleapis.com/is-this-thing-on/Molly_PNG_Overlay.png"
               alt="molly video overlay"
               className="fullBleed"
             />
           )}
-          <VideoPreview iLink={iLink} localMuted={localMuted} />
+          <VideoPreview iLink={roomLinkDetails} localMuted={localMuted} />
         </foreignObject>
         <text
           y={-iframeSize[1] / 2 - 5}
           textAnchor="middle"
           fill="blue"
-          style={{ filter: `drop-shadow(0px 0px 6px ${iLink.roomColor || "white"})`, cursor: "ne-resize" }}
+          style={{ filter: `drop-shadow(0px 0px 6px ${roomLinkDetails.roomColor || "white"})`, cursor: "ne-resize" }}
           onClick={() => router.push(src)}
         >
-          {iLink.roomName}
+          {roomLinkDetails.roomName}
         </text>
       </g>
     );
@@ -103,13 +104,13 @@ const BigRingNode: React.FC<{
     return (
       <SVGRingNode
         index={i}
-        myColor={iLink.roomColor}
+        myColor={roomLinkDetails.roomColor}
         ANIM_LENGTH={ANIM_LENGTH}
         showColor={true}
         key={`node-${i}`}
         ANIM_OFFSET={ANIM_OFFSET}
         selected={false}
-        name={iLink.roomName}
+        name={roomLinkDetails.roomName}
         hoverBehavior={true}
         onClick={() => router.push(src)}
       />

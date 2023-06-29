@@ -8,6 +8,7 @@ import {
 import { stickerInstanceCollection, roomDoc, stickerCDNCollection, stickerInstanceDoc } from "./locations";
 import { MollyAssetsJson } from "./custom/mollyAssets";
 import { MollyDeleteAssets } from "./custom/mollyAssetsDeleteOnly";
+import { logFirebaseUpdate } from "../logger";
 
 export async function getStickerCDN(roomName: string, initStickerCDN: (cdn: { [key: string]: Sticker }) => void) {
   if (!validateRoomName(roomName)) {
@@ -18,11 +19,11 @@ export async function getStickerCDN(roomName: string, initStickerCDN: (cdn: { [k
   const cdn: { [key: string]: Sticker } = {};
   querySnapshot.forEach((doc) => {
     // doc.data() is never undefined for query doc snapshots
-
     const sticker = sanitizeStickerCDNFromDB(doc.data(), doc.id);
     cdn[doc.id] = sticker;
   });
 
+  logFirebaseUpdate(`Sticker CDN for ${roomName} established`, [cdn]);
   initStickerCDN(cdn);
 }
 

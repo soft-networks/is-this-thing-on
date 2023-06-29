@@ -1,45 +1,23 @@
-import Head from "next/head";
-import { useCallback, useMemo } from "react";
-import useRingStore from "../../stores/ringStore";
-import { useRoomStore } from "../../stores/roomStore";
-import ConsentGate from "./consentGate";
+import { useCallback, useEffect } from "react";
+import useDidClick from "../../stores/clickedStore";
 
-const loadingDiv = <div className="center:absolute highest"> loading...</div>;
+const ClickGate: React.FunctionComponent = ({ children }) => {
+  const didClick = useDidClick(useCallback((s) => s.didClick, []));
+  const setDidClick = useDidClick(useCallback((s) => s.setDidClick, []));
+  
+  const clickHappened = useCallback(() => { setDidClick(true); }, [setDidClick]);
+  useEffect(() => {
+    //Set event listener on window
+    window.addEventListener("click", clickHappened);
+  }, [clickHappened]);
 
-const RoomGate: React.FunctionComponent<{ id: string }> = ({ id, children }) => {
-  const ring = useRingStore(useCallback((room) => room.links, []));
-  const gate = useMemo(() => {
-    if (ring == undefined || Object.keys(ring).length == 0) {
-      return loadingDiv;
-    }
-    const streamNames = Object.keys(ring);
-    return streamNames.includes(id) ? <> {children} </> : <div> Sorry, thats not a valid stream name </div>;
-  }, [ring, id, children]);
-  return gate;
-};
+  return didClick ? (
+    <>{children}</>
+  ) : (
+    <div className="fullBleed contrastFill relative">
+      <div className="h1 center:absolute highest center-text">WELCOME TO THING. <br/> CLICK 2 ENTER</div>
+    </div>
+  );
+}
 
-export const RoomOnlineGate: React.FunctionComponent = ({ children }) => {
-  const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
-  const roomOnline = useMemo(() => {
-    if (!roomInfo) {
-      return loadingDiv;
-    }
-    return (
-      <>
-        <Head>
-          <title>
-          {roomInfo.roomName} is {roomInfo?.streamStatus == "active" ? "ON" : "OFF"}
-          </title>
-        </Head>
-        {roomInfo.streamStatus == "active" ? (
-          <ConsentGate roomID={roomInfo.roomID} active={roomInfo.consentURL !== undefined}>{ children }</ConsentGate>
-        ) : (
-          <div className="center:absolute highest"> offline... for now</div>
-        )}
-      </>
-    );
-  }, [children, roomInfo]);
-  return roomOnline;
-};
-
-export default RoomGate;
+export default ClickGate;

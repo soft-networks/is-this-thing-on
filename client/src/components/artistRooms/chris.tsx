@@ -5,7 +5,7 @@ import { Chat } from "../interactive/chat";
 
 const Chris: React.FC = () => {
   return (
-    <div className="fullBleed chrisyRoom noOverflow relative">
+    <main className="fullBleed noOverflow relative chrisyRoom">
       <Chat
         className=" absoluteOrigin"
         key="chat"
@@ -20,7 +20,7 @@ const Chris: React.FC = () => {
       />
       <VideoPlayer />
       <ChrisyStickers />
-    </div>
+    </main>
   );
 };
 

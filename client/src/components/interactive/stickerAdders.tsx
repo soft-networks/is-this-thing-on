@@ -2,6 +2,7 @@ import classnames from "classnames";
 import { MouseEventHandler, useRef, useState } from "react";
 import { RectReadOnly } from "react-use-measure";
 import { StickerImage } from "./stickerRenderHelpers";
+import { logError } from "../../lib/logger";
 
 export interface StickerAdderProps {
   addSticker: (pos: Pos, cdnID: string, scale?: number) => void;
@@ -39,13 +40,10 @@ export const DefaultStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, c
   const currentPosChosen = useRef<Pos>();
   const clicked: MouseEventHandler<HTMLDivElement> = (e) => {
     if (!showStickerTypePicker) {
-      if (containerBounds && cdn && Object.keys(cdn).length > 0) {
-        
-        
+      if (containerBounds && cdn && Object.keys(cdn).length > 0) {        
         let x = (e.clientX - containerBounds.left) / containerBounds.width;
         let y = (e.clientY - containerBounds.top) / containerBounds.height;
         currentPosChosen.current = [x, y];
-        console.log(e.pageX, e.pageY, containerBounds, currentPosChosen.current);
         setShowStickerTypePicker(true);
       }
     } else {
@@ -58,7 +56,7 @@ export const DefaultStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, c
       if (currentPosChosen.current) {
         addSticker(currentPosChosen.current || [0, 0], id);
       } else {
-        console.log("Something bad happened");
+        logError("Something bad happened with adding a sticker");
       }
     }
   };

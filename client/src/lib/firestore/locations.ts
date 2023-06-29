@@ -9,9 +9,7 @@ export function roomDoc(roomName: string) {
   // console.log("Room doc reference", roomName);
   return doc(db, "rooms", roomName);
 }
-export function energyAccountDoc(userID: string) {
- return doc(collection(db, "energy_accounts"), userID);
-}
+
 export function chatCollection() {
   // console.log("Room chat doc reference", roomDoc);
   return collection(db, "chat");

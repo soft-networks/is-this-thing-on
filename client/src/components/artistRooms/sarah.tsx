@@ -5,13 +5,12 @@ import QuestionBox from "../interactive/custom/SarahQuestionBox";
 
 const Sarah: React.FC = () => {
   return (
-    <div className="fullBleed noOverflow">
-    <DefaultRoomView
-
-      stickerChooser={EmptyChooser}
-    />
-    <QuestionBox/>
-    </div>
+    <main className="fullBleed noOverflow relative">
+      <DefaultRoomView
+        stickerChooser={EmptyChooser}
+      />
+      <QuestionBox/>
+    </main>
   );
 };
 

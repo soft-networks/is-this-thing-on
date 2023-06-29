@@ -7,7 +7,7 @@ import { Chat } from "../interactive/chat";
 
 const Maya: React.FC = () => {
   return (
-    <div className="fullBleed noOverflow" style={{background: "pink"}}>
+    <main className="fullBleed noOverflow relative" style={{background: "pink"}}>
       <Chat className=" absoluteOrigin" key="chat" style={{
           "--chatContainerBackground": "rgba(0,0,0)",
           "--chatBorderColor": "rgba(0,0,0)",
@@ -17,7 +17,7 @@ const Maya: React.FC = () => {
         } as React.CSSProperties} />
       <VideoPlayer/>
       <Stickers StickerChooser={EmptyChooser}/>
-    </div>
+    </main>
   );
 }
 

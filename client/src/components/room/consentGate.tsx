@@ -1,24 +1,34 @@
 import { useCallback, useEffect, useState } from "react";
 import useConsentStore from "../../stores/consentStore";
+import { logInfo } from "../../lib/logger";
+import { useRoomStore } from "../../stores/roomStore";
 
-const ConsentGate: React.FC<{ roomID: string; active: boolean }> = ({ roomID, children, active }) => {
+const ConsentGate: React.FC<{ roomID: string; consentURL?: string }> = ({ roomID, children, consentURL }) => {
+ return consentURL ? (
+   <ConsentGateInternal roomID={roomID} consentURL={consentURL}>
+     {children}
+   </ConsentGateInternal>
+ ) : (
+   <>{children}</>
+ );
+};
+
+const ConsentGateInternal: React.FC<{ roomID: string; consentURL: string }> = ({ roomID, children , consentURL}) => {
   const consent = useConsentStore(useCallback((s) => s.consent, []));
   const setConsent = useConsentStore(useCallback((s) => s.setConsent, []));
   const [consentPassed, setConsentPassed] = useState<boolean>(false);
-  
   useEffect(() => {
-    console.log("consent updated", consent);
     if (consent.includes(roomID)) {
+      logInfo("Consent Accepted for" + roomID);
       setConsentPassed(true);
     }
   }, [consent, roomID])
-
-  return (consentPassed || !active) ? (
+  return consentPassed ? (
     <>{children}</>
   ) : (
     <div className="fullBleed absolute faintWhiteFill everest">
       <div className="center:absolute stack padded" style={{ width: "80%", height: "70%" }}>
-        <iframe src="http://softnet.works" className="flex-1" style={{ border: "1px solid black" }} />
+        <iframe src={consentURL} className="flex-1" style={{ border: "1px solid black" }} />
         <div className="horizontal-stack">
           <div
             className="clickable padded lightFill border contrastFill:hover"
@@ -34,6 +44,6 @@ const ConsentGate: React.FC<{ roomID: string; active: boolean }> = ({ roomID, ch
       </div>
     </div>
   );
-};
+}
 
 export default ConsentGate;

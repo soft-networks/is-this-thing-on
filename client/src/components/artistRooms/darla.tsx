@@ -6,12 +6,12 @@ import Spinner from "../interactive/custom/darlaSpinner";
 
 const Darla: React.FC = () => {
   return (
-    <div className="fullBleed noOverflow relative">
+    <main className="fullBleed noOverflow relative">
       <DefaultRoom
         stickerChooser={EmptyChooser}
       />
       <Spinner />
-    </div>
+    </main>
   );
 };
 

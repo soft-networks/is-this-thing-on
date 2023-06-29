@@ -22,12 +22,6 @@ export function sanitizeRoomInfo(data: DocumentData, id: string): RoomInfo {
     consentURL: data["consentURL"] || undefined,
   };
 }
-export function sanitizeEnergyAccount(amount: number, id: string): EnergyAccount {
-  return {
-    userID: id,
-    energy: amount,
-  };
-}
 
 export function sanitizeChatForDB(chat: ChatMessage) {
   return chat;

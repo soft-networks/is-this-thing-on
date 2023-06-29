@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import Room from "../../components/room/room";
-import RoomGate, { RoomOnlineGate } from "../../components/room/roomGate";
+import RoomNameGate, { RoomStatusGate } from "../../components/room/roomGate";
 import Layout from "../../components/room/layout";
 import VideoPlayer from "../../components/videoPlayer";
 import { useRoomStore } from "../../stores/roomStore";
@@ -41,8 +41,8 @@ const VideoOnlyPageInternal = ({ roomID }: { roomID: string }) => {
   }, [changeRoom, roomID]);
   return (
     <Layout hideChat hideFooter>
-      <RoomGate id={roomID}>
-        <RoomOnlineGate>
+      <RoomNameGate id={roomID}>
+        <RoomStatusGate>
           <div className="fullBleed noOverflow">
             {!userClicked && (
               <div
@@ -61,8 +61,8 @@ const VideoOnlyPageInternal = ({ roomID }: { roomID: string }) => {
             )}
             {userClicked && !roomInfo && <div className="centerh"> loading </div>}
           </div>
-        </RoomOnlineGate>
-      </RoomGate>
+        </RoomStatusGate>
+      </RoomNameGate>
     </Layout>
   );
 };

@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRoomStore } from "../stores/roomStore";
 import MuxPlayer from "@mux/mux-player-react/lazy";
+import { logError, logVideo } from "../lib/logger";
+import { generateStreamLink } from "../lib/server-api";
 
 const DEFAULT_CLASSNAME = "fullWidth";
 const DEFAULT_STYLE = {} as React.CSSProperties;
@@ -15,8 +17,11 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
 }) => {
   const [mute, setMuted] = useState(false);
   const streamPlaybackID = useRoomStore(useCallback((s) => s.roomInfo?.streamPlaybackID, []));
+  useEffect(() => {
+    streamPlaybackID && logVideo(` stream: `, generateStreamLink(streamPlaybackID));
+  }, [streamPlaybackID]);
   return streamPlaybackID ? (
-    <>
+    <div className="fullBleed" key="videoPlayer">
       {!hideMuteButton && (
         <div className="highest padded" style={{ position: "fixed", top: "0px", right: "0px" }}>
           <div
@@ -34,9 +39,10 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
           muted={mute}
           className="noEvents videoAspect muxPlayer"
           nohotkeys={true}
+          onError={(e) => logError(e)}
         />
       </div>
-    </>
+    </div>
   ) : (
     <div></div>
   );

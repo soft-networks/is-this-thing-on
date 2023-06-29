@@ -1,4 +1,5 @@
 import create from "zustand"
+import { logCallbackSetup, logFirebaseUpdate } from "../lib/logger"
 
 interface ChatState {
   chats: { [key: string]: ChatMessage}
@@ -9,7 +10,10 @@ interface ChatState {
 
 export const useChatStore = create<ChatState>( set => ({
   chats: {},
-  initializeChats: c => set({chats: c}),
+  initializeChats: c => {
+    logFirebaseUpdate("CHAT was initialized...")
+    set({chats: c})
+  },
   addChat: (id: string, chat: ChatMessage) => {
     set((p) =>  { 
       let pc = p.chats; 

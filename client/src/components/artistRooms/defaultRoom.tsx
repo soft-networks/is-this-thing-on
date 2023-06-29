@@ -12,19 +12,19 @@ interface RoomViewProps {
 }
 const DefaultRoom = ({ stickerStyle , stickerChooser, chatStyle}: RoomViewProps) => {
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
-
   return (
-    <div className="fullBleed noOverflow">
+    <main className="fullBleed noOverflow relative">
       {roomInfo ? (
         <>
-          <Chat className=" absoluteOrigin" key="chat" style={chatStyle}/>
-          <VideoPlayer />
-          <Stickers style={stickerStyle} StickerChooser={stickerChooser}/>
+          <Chat className=" absoluteOrigin" key={`${roomInfo.roomID}-chat`} style={chatStyle} />
+  
+          <VideoPlayer/>
+          <Stickers style={stickerStyle} StickerChooser={stickerChooser} />
         </>
       ) : (
         <div className="centerh"> loading </div>
       )}
-    </div>
+    </main>
   );
 };
 

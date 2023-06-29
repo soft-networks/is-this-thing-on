@@ -9,47 +9,36 @@ import { useUserStore } from "../../stores/userStore";
 import { StickerAdderProps, DefaultStickerAdder } from "./stickerAdders";
 import { StickerRenderer } from "./stickerRenderHelpers";
 import classnames from "classnames";
+import { logCallbackDestroyed, logCallbackSetup, logFirebaseUpdate, logInfo } from "../../lib/logger";
 
 interface StickersProps {
   StickerChooser?: React.FC<StickerAdderProps>;
   style?: React.CSSProperties;
   className?: string;
 }
-const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdder, style, className }) => {
+const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdder, className }) => {
+  //Stores
   const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));
   const stickerCDN = useStickerCDNStore(useCallback((state) => state.stickerCDN, []));
+  const adminForIDs = useUserStore(useCallback((s) => s.adminFor, []));
   const displayName = useUserStore(useCallback((state) => state.displayName, []));
+
+  //Local
   const [stickerStyle, setStickerStyle] = useState<React.CSSProperties>();
   const [ref, bounds] = useMeasure({ scroll: true });
-  const currentRoomID = useRoomStore(useCallback((s) => s.currentRoomID, []));
-  const adminForIDs = useUserStore(useCallback((s) => s.adminFor, []));
+
+  //TOOD: Abstract this into the user store. Can do in room.tsx or artist room (whever you put the cdn).
   const isAdmin = useMemo(() => {
-    if (adminForIDs && currentRoomID && adminForIDs.includes(currentRoomID)) {
-      console.log("is admin");
+    if (adminForIDs && roomID && adminForIDs.includes(roomID)) {
+      logFirebaseUpdate("You are Admin for this room");
       return true;
     }
-    console.log("NOT ADMIN", adminForIDs);
     return undefined;
-  }, [adminForIDs, currentRoomID]);
-
-  useEffect(() => {
-    let currentStyle = {};
-    if (style) {
-      currentStyle = style;
-    }
-    switch (roomID) {
-      case "chrisy": {
-        let chrisStyle = {
-          "--stickerSize": "10ch",
-        } as React.CSSProperties;
-        currentStyle = { ...chrisStyle, ...style };
-      }
-    }
-    setStickerStyle(currentStyle);
-  }, [roomID, style]);
+  }, [adminForIDs, roomID]);
 
   const addSticker = (pos: Pos, cdnID: string, scale?: number) => {
     if (!roomID) return;
+    logInfo("Adding sticker and performing transaction");
     addStickerInstance(roomID, {
       position: pos,
       timestamp: Date.now(),
@@ -65,20 +54,25 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
     });
   };
   return roomID ? (
-    <div className={className || "fullBleed absoluteOrigin center:children"} style={stickerStyle} id="sticker-overlay" ref={ref}>
+    <div
+      className={className || "fullBleed absoluteOrigin center:children"}
+      style={stickerStyle}
+      id="sticker-overlay"
+      ref={ref}
+    >
       <div className="videoAspect videoWidthHeight relative">
-      {stickerCDN && (
-        <>
-          <StickerChooser addSticker={addSticker} cdn={stickerCDN} containerBounds={bounds} isAdmin={isAdmin} />
-          <ServerStickers
-            roomID={roomID}
-            key={`${roomID}-sscoins`}
-            cdn={stickerCDN}
-            containerBounds={bounds}
-            isAdmin={isAdmin}
-          />
-        </>
-      )}
+        {stickerCDN && (
+          <>
+            <StickerChooser addSticker={addSticker} cdn={stickerCDN} containerBounds={bounds} isAdmin={isAdmin} />
+            <ServerStickers
+              roomID={roomID}
+              key={`${roomID}-sscoins`}
+              cdn={stickerCDN}
+              containerBounds={bounds}
+              isAdmin={isAdmin}
+            />
+          </>
+        )}
       </div>
     </div>
   ) : null;
@@ -89,22 +83,19 @@ const ServerStickers: React.FC<{
   cdn: StickerCDN;
   containerBounds: RectReadOnly;
   isAdmin?: boolean;
-  showControlsToUser?: boolean;
-}> = ({ roomID, cdn, containerBounds, isAdmin, showControlsToUser }) => {
+}> = ({ roomID, cdn, containerBounds, isAdmin }) => {
   let [serverSideCoins, setServerSideCoins] = useState<{ [key: string]: StickerInstance }>({});
-  const unsub = useRef<Unsubscribe>();
-
   const [behaviorOverride, setBehaviorOverride] = useState<BEHAVIOR_TYPES>();
+  const unsub = useRef<Unsubscribe>();
 
   const stickerUpdated = useCallback(
     (cID, pos, scale, z) => {
+      logFirebaseUpdate("StickerInstance updated");
       setServerSideCoins((pc) => {
         let npc = { ...pc };
         if (npc[cID].position != pos) npc[cID].position = pos;
         if (npc[cID].size != scale) npc[cID].size = scale;
         if (npc[cID].zIndex != z) npc[cID].zIndex = z;
-         console.log(JSON.stringify(npc[cID]), cID);
-        //console.log(JSON.stringify(npc));
         return npc;
       });
     },
@@ -113,6 +104,7 @@ const ServerStickers: React.FC<{
 
   const stickerAdded = useCallback(
     (cID, element) => {
+      logFirebaseUpdate("StickerInstance Added");
       setServerSideCoins((pc) => {
         let npc = { ...pc };
         npc[cID] = element;
@@ -122,38 +114,46 @@ const ServerStickers: React.FC<{
     [setServerSideCoins]
   );
   const stickerRemoved = useCallback(
-    (cID) =>
+    (cID) => {
+      logFirebaseUpdate("StickerInstance removed");
       setServerSideCoins((pc) => {
         let npc = { ...pc };
         delete npc[cID];
         return npc;
-      }),
+      });
+    },
     [setServerSideCoins]
   );
   useEffect(() => {
     async function setupServerSync() {
+      logCallbackSetup("StickerInstances");
       unsub.current = syncStickerInstances(roomID, stickerAdded, stickerRemoved, stickerUpdated);
     }
     setupServerSync();
-    return () => unsub.current && unsub.current();
+    return () => {
+      logCallbackDestroyed("StickerInstances")
+      unsub.current && unsub.current();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const updateBehavior = useCallback((behavior: BEHAVIOR_TYPES | undefined) => {
-    if (behavior == "RESET") {
-      resetStickers(roomID);
-      return;
-    }
-    setBehaviorOverride(behavior);
-  },[roomID])
+  const updateBehavior = useCallback(
+    (behavior: BEHAVIOR_TYPES | undefined) => {
+      if (behavior == "RESET") {
+        logFirebaseUpdate("About to remove stickers completely");
+        resetStickers(roomID);
+        return;
+      }
+      setBehaviorOverride(behavior);
+    },
+    [roomID]
+  );
 
+  //TODO URGENT: BEST PRACTICES FOR RENDERING A DICTIONARY LIKE THIS (don't re-render everything??)
   return (
     <>
-      {isAdmin && <AdminPanel setBehaviorOverride={updateBehavior} behaviorOverride={behaviorOverride}/>}
+      {isAdmin && <AdminPanel setBehaviorOverride={updateBehavior} behaviorOverride={behaviorOverride} />}
       {Object.entries(serverSideCoins).map(([id, stickerInstance]) => {
-        if (!cdn[stickerInstance.cdnID]) {
-          console.log("No sticker", stickerInstance.cdnID);
-        }
         return (
           cdn[stickerInstance.cdnID] && (
             <StickerRenderer
@@ -169,7 +169,6 @@ const ServerStickers: React.FC<{
           )
         );
       })}
-      
     </>
   );
 };

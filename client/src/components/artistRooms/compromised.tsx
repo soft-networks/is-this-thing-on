@@ -4,7 +4,7 @@ import { CompromisedStickerAdder } from "../interactive/custom/compromisedSticke
 
 const Compromised: React.FC = () => {
   return (
-    <div className="fullBleed overflowScroll" style={{ background: "black" }}>
+    <main className="fullBleed noOverflow relative" style={{ background: "black" }}>
       <DefaultRoomview
         stickerChooser={CompromisedStickerAdder}
         chatStyle={{
@@ -13,7 +13,7 @@ const Compromised: React.FC = () => {
           transform: "translate(-50%, 0%)"
         } as React.CSSProperties}
       />
-    </div>
+    </main>
   );
 };
 

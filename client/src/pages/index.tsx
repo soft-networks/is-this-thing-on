@@ -36,9 +36,8 @@ const Index: NextPage = () => {
         <div className="flex-1 contrastFill center-text" style={{ padding: "var(--s-2) 96px" } as React.CSSProperties}>
         <BigRing />
       </div>
-      <Chat className="absoluteOrigin" key="chat" style={{left: "70%", top: "40%"}}/>
+      <Chat className="absoluteOrigin" key="index-chat" style={{left: "70%", top: "40%"}}/>
       </div>
-      
     </Layout>
   );
 };

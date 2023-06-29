@@ -4,7 +4,7 @@ import { Chat } from "../interactive/chat";
 
 const Ambient: React.FC = () => {
   return (
-    <div className="fullBleed overflowScroll" style={{ background: "#edf3f4" }}>
+    <main className="fullBleed noOverflow relative" style={{ background: "#edf3f4" }}>
       <iframe className="ambience absoluteOrigin high" src="https://ambient.institute/sounds" />
       <Chat className=" absoluteOrigin" key="chat" style={{
           "--chatContainerBackground": "rgba(0,0,0,0)",
@@ -17,7 +17,7 @@ const Ambient: React.FC = () => {
         muteOverride={true}
         hideMuteButton={true}
       />
-    </div>
+    </main>
   );
 }
 

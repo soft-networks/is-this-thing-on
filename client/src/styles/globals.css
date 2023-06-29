@@ -672,7 +672,9 @@ a:hover,
 
 .videoAspect {
   aspect-ratio: 16 / 9;
+  object-fit: cover;
 }
+
 .videoWidthHeight {
   width: 100vw;
   height: 56.25vw;
@@ -684,6 +686,14 @@ a:hover,
   background: none;
 }
 
+.videoMob {
+  position: absolute;
+  inset: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  overflow: hidden;
+  object-fit: cover;
+ }
 
 
 .chat {
