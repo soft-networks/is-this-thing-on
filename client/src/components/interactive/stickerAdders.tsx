@@ -1,21 +1,21 @@
 import classnames from "classnames";
-import { MouseEventHandler, useRef, useState } from "react";
+import { MouseEventHandler, useCallback, useRef, useState } from "react";
 import { RectReadOnly } from "react-use-measure";
 import { StickerImage } from "./stickerRenderHelpers";
 import { logError } from "../../lib/logger";
+import { useAdminStore } from "../../stores/adminStore";
 
 export interface StickerAdderProps {
   addSticker: (pos: Pos, cdnID: string, scale?: number) => void;
   cdn: StickerCDN;
   containerBounds: RectReadOnly;
-  isAdmin?: boolean
 }
 
 export const EmptyChooser: React.FC<StickerAdderProps> = ({}) =>{
   return null
 }
 
-export const RandomStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn, containerBounds, isAdmin}) => {
+export const RandomStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn, containerBounds}) => {
   const currentPosChosen = useRef<Pos>();
   const clicked: MouseEventHandler<HTMLDivElement> = (e) => {
       if (containerBounds && cdn && Object.keys(cdn).length > 0) {  
@@ -34,8 +34,8 @@ export const RandomStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cd
     </div>
   );
 }
-export const DefaultStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn, containerBounds, isAdmin}) => {
-  
+export const DefaultStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn, containerBounds}) => {
+  const isAdmin = useAdminStore(useCallback((s) => s.isAdmin, []));
   const [showStickerTypePicker, setShowStickerTypePicker] = useState<boolean>(false);
   const currentPosChosen = useRef<Pos>();
   const clicked: MouseEventHandler<HTMLDivElement> = (e) => {
@@ -76,20 +76,20 @@ export const DefaultStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, c
             left: `${currentPosChosen.current ? currentPosChosen.current[0] * 100 : 50}%`,
           }}
         >
-          <DefaultChooseStickerType cdn={cdn} typeSelected={typeChosen} isAdmin={isAdmin} />
+          <DefaultChooseStickerType cdn={cdn} typeSelected={typeChosen}  />
         </div>
       ) : null}
     </div>
   );
 };
 
-export const AdminOnlyStickerAdder: React.FC<StickerAdderProps> = ({addSticker, cdn, containerBounds, isAdmin}) => {
-  if(isAdmin) return <DefaultStickerAdder addSticker={addSticker} cdn={cdn} containerBounds={containerBounds} isAdmin={isAdmin} />
+export const AdminOnlyStickerAdder: React.FC<StickerAdderProps> = ({addSticker, cdn, containerBounds}) => {
+  const isAdmin = useAdminStore(useCallback((s) => s.isAdmin, []));
+  if(isAdmin) return <DefaultStickerAdder addSticker={addSticker} cdn={cdn} containerBounds={containerBounds}/>
   else return null
 }
 
-export const PopupStickerAdder: React.FC<StickerAdderProps> = ({addSticker, cdn, containerBounds, isAdmin}) => {
-
+export const PopupStickerAdder: React.FC<StickerAdderProps> = ({addSticker, cdn, containerBounds}) => {
   const [chooserOpen, setChooserOpen] = useState<boolean>(false);
   const typeChosen = (id?: string) => {
     setChooserOpen(false);
@@ -110,7 +110,7 @@ export const PopupStickerAdder: React.FC<StickerAdderProps> = ({addSticker, cdn,
       )}
       {chooserOpen && (
         <div className="higherThanStickerLayer absoluteOrigin " style={{ top: "85%", left: "50%", transform: "translate(-50%, -50%)" }}>
-          <DefaultChooseStickerType cdn={cdn} typeSelected={typeChosen} isAdmin={isAdmin} className="grid:s-2 padded lightFill" style={{maxWidth: "100%", "--stickerSize": "12ch"} as React.CSSProperties}/>
+          <DefaultChooseStickerType cdn={cdn} typeSelected={typeChosen} className="grid:s-2 padded lightFill" style={{maxWidth: "100%", "--stickerSize": "12ch"} as React.CSSProperties}/>
         </div>
       )}
     </>
@@ -118,10 +118,9 @@ export const PopupStickerAdder: React.FC<StickerAdderProps> = ({addSticker, cdn,
 }
 
 
-const DefaultChooseStickerType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: string) => void, isAdmin?: boolean, style?: React.CSSProperties, className?: string}> = ({
+const DefaultChooseStickerType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: string) => void, style?: React.CSSProperties, className?: string}> = ({
   cdn,
   typeSelected,
-  isAdmin, 
   style,
   className
 }) => {

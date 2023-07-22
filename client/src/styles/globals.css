@@ -59,6 +59,9 @@ body {
 
 }
 
+.monospace {
+  font-family: monospace;
+}
 
 ::selection {
  background: var(--contrast)
@@ -515,6 +518,11 @@ pre {
 
 .border-bottom {
   border-bottom: 3px solid var(--black);
+}
+
+.border-bottom\:thin {
+  padding-bottom: var(--s-1);
+  border-bottom: 1px dotted var(--black);
 }
 
 .border-radius {

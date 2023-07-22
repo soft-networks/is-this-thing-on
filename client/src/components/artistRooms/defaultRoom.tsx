@@ -4,6 +4,7 @@ import { StickerAdderProps } from "../interactive/stickerAdders";
 import Stickers from "../interactive/stickers";
 import VideoPlayer from "../videoPlayer";
 import { Chat } from "../interactive/chat";
+import AdminPanel from "../account/adminPanel";
 
 interface RoomViewProps {
   stickerStyle?: React.CSSProperties;
@@ -17,9 +18,9 @@ const DefaultRoom = ({ stickerStyle , stickerChooser, chatStyle}: RoomViewProps)
       {roomInfo ? (
         <>
           <Chat className=" absoluteOrigin" key={`${roomInfo.roomID}-chat`} style={chatStyle} />
-  
           <VideoPlayer/>
           <Stickers style={stickerStyle} StickerChooser={stickerChooser} />
+          <AdminPanel/>
         </>
       ) : (
         <div className="centerh"> loading </div>

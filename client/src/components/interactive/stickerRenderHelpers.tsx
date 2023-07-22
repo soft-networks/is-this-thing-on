@@ -4,6 +4,7 @@ import { RectReadOnly } from "react-use-measure";
 import { useRoomStore } from "../../stores/roomStore";
 import { deleteStickerInstance, updateStickerInstancePos } from "../../lib/firestore";
 import classnames from "classnames";
+import { useAdminStore } from "../../stores/adminStore";
 
 interface StickerRenderProps {
   sticker: Sticker;
@@ -12,14 +13,14 @@ interface StickerRenderProps {
   zIndex: number;
   id: string;
   containerBounds: RectReadOnly;
-  adminOverride?: BEHAVIOR_TYPES;
 }
 
 export const StickerRenderer: React.FC<StickerRenderProps> = (props) => {
+  const behaviorOverride = useAdminStore(useCallback((s) => s.stickerBehaviorOverride, []));
   const stickerToUse = useMemo(() => {
     if (!props.pos && !props.sticker) return <span> </span>;
     let bt = props.sticker.behaviorType;
-    if (props.adminOverride) bt = props.adminOverride;
+    if (behaviorOverride) bt = behaviorOverride;
     switch (bt) {
       case "MOVE":
         return <MoveableSticker {...props} />;
@@ -29,7 +30,7 @@ export const StickerRenderer: React.FC<StickerRenderProps> = (props) => {
       default:
         return <StaticSticker {...props} />;
     }
-  }, [props]);
+  }, [behaviorOverride, props]);
   return stickerToUse;
 };
 

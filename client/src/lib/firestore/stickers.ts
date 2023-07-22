@@ -91,7 +91,7 @@ export async function deleteStickerInstance(roomName: string, stickerID: string)
 }
 
 export async function resetStickers(roomName: string) { 
- 
+  logFirebaseUpdate("About to reset stickers for " + roomName);
   if (roomName == "chrisy") {
     return;
    }

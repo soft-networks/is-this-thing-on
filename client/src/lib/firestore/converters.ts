@@ -13,7 +13,7 @@ export function sanitizeRoomInfo(data: DocumentData, id: string): RoomInfo {
     season0URL: data["season0URL"] || undefined,
     season0Href: data["season0HREF"] || data["season0URL"] || undefined,
     streamOwner: "bhavik",
-    streamStatus: data["stream_status"] || "disconnected",
+    streamStatus: sanitizeStreamStatus(data["stream_status"]),
     numOnline: data["num_online"] || 0,
     roomName: data['room_name'] || id,
     roomColor: data["room_color"] || "#FCFF54",
@@ -21,6 +21,18 @@ export function sanitizeRoomInfo(data: DocumentData, id: string): RoomInfo {
     forceSeason0: data["forceSeason0"] || false,
     consentURL: data["consentURL"] || undefined,
   };
+}
+
+function sanitizeStreamStatus(data: string): STREAM_STATUS_TYPE {
+  switch (data) {
+    case "active":
+      return "active";
+    case "test":
+    case "active-test":
+      return "active-test";
+    default:
+      return "disconnected";
+  }
 }
 
 export function sanitizeChatForDB(chat: ChatMessage) {

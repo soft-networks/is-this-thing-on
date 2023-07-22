@@ -8,7 +8,6 @@ import useStickerCDNStore from "../../stores/stickerStore";
 import { useUserStore } from "../../stores/userStore";
 import { StickerAdderProps, DefaultStickerAdder } from "./stickerAdders";
 import { StickerRenderer } from "./stickerRenderHelpers";
-import classnames from "classnames";
 import { logCallbackDestroyed, logCallbackSetup, logFirebaseUpdate, logInfo } from "../../lib/logger";
 
 interface StickersProps {
@@ -65,13 +64,12 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
       <div className="videoAspect videoWidthHeight relative">
         {stickerCDN && (
           <>
-            <StickerChooser addSticker={addSticker} cdn={stickerCDN} containerBounds={bounds} isAdmin={isAdmin} />
+            <StickerChooser addSticker={addSticker} cdn={stickerCDN} containerBounds={bounds} />
             <ServerStickers
               roomID={roomID}
               key={`${roomID}-sscoins`}
               cdn={stickerCDN}
               containerBounds={bounds}
-              isAdmin={isAdmin}
             />
           </>
         )}
@@ -84,12 +82,9 @@ const ServerStickers: React.FC<{
   roomID: string;
   cdn: StickerCDN;
   containerBounds: RectReadOnly;
-  isAdmin?: boolean;
-}> = ({ roomID, cdn, containerBounds, isAdmin }) => {
+}> = ({ roomID, cdn, containerBounds }) => {
   let [serverSideCoins, setServerSideCoins] = useState<{ [key: string]: StickerInstance }>({});
-  const [behaviorOverride, setBehaviorOverride] = useState<BEHAVIOR_TYPES>();
   const unsub = useRef<Unsubscribe>();
-
   const stickerUpdated = useCallback(
     (cID, pos, scale, z) => {
       logFirebaseUpdate("StickerInstance updated");
@@ -139,22 +134,11 @@ const ServerStickers: React.FC<{
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const updateBehavior = useCallback(
-    (behavior: BEHAVIOR_TYPES | undefined) => {
-      if (behavior == "RESET") {
-        logFirebaseUpdate("About to remove stickers completely");
-        resetStickers(roomID);
-        return;
-      }
-      setBehaviorOverride(behavior);
-    },
-    [roomID]
-  );
+
 
   //TODO URGENT: BEST PRACTICES FOR RENDERING A DICTIONARY LIKE THIS (don't re-render everything??)
   return (
     <>
-      {isAdmin && <AdminPanel setBehaviorOverride={updateBehavior} behaviorOverride={behaviorOverride} />}
       {Object.entries(serverSideCoins).map(([id, stickerInstance]) => {
         return (
           cdn[stickerInstance.cdnID] && (
@@ -165,7 +149,6 @@ const ServerStickers: React.FC<{
               sticker={cdn[stickerInstance.cdnID]}
               id={id}
               containerBounds={containerBounds}
-              adminOverride={behaviorOverride}
               zIndex={100 + stickerInstance.zIndex}
             />
           )
@@ -175,48 +158,4 @@ const ServerStickers: React.FC<{
   );
 };
 
-const AdminPanel: React.FC<{
-  setBehaviorOverride: (behavior: BEHAVIOR_TYPES | undefined) => void;
-  behaviorOverride: BEHAVIOR_TYPES | undefined;
-}> = ({ setBehaviorOverride, behaviorOverride }) => {
-  return (
-    <div style={{ position: "fixed", top: "var(--s0)", width: "100%" }} className="align:center ">
-      <div className="stack:s-2 faintWhiteFill padded:s-2 relative border-radius higherThanStickerLayer ">
-        <div
-          className="caption absoluteOrigin noEvents center-text lightFill"
-          style={{ left: "calc(-1 *var(--s-2))", top: "calc(-1 * var(--s-2)" }}
-        >
-          admin panel
-        </div>
-        <div className="horizontal-stack higherThanStickerLayer">
-          <div
-            className={classnames("higherThanStickerLayer clickable contrastFill:hover", { blue: behaviorOverride == "MOVE" })}
-            onClick={() => setBehaviorOverride("MOVE")}
-          >
-            {"MOVE"} MODE
-          </div>
-          <div
-            className={classnames("higherThanStickerLayer clickable contrastFill:hover", { blue: behaviorOverride == "DELETE" })}
-            onClick={() => setBehaviorOverride("DELETE")}
-          >
-            {"DELETE"} MODE
-          </div>
-          <div
-            className={classnames("higherThanStickerLayer clickable contrastFill:hover", { blue: behaviorOverride == undefined })}
-            onClick={() => setBehaviorOverride(undefined)}
-          >
-            {"USER"} MODE
-          </div>
-
-          <div
-            className={classnames("higherThanStickerLayer clickable contrastFill:hover")}
-            onClick={() => setBehaviorOverride("RESET")}
-          >
-            RESET STICKERS
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 export default Stickers;

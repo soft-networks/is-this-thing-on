@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { useCallback, useMemo } from "react";
 import useRingStore from "../../stores/ringStore";
-import { useRoomStore } from "../../stores/roomStore";
+import { roomIsActive, useRoomStore } from "../../stores/roomStore";
 import ConsentGate from "./consentGate";
 const loadingDiv = <div className="center:absolute"> loading...</div>;
 const RoomNameGate: React.FunctionComponent<{ id: string }> = ({ id, children }) => {
@@ -23,16 +23,16 @@ export const RoomStatusGate: React.FunctionComponent = ({ children }) => {
       {roomInfo && (
         <Head>
           <title>
-            {roomInfo.roomName} is {roomInfo?.streamStatus == "active" ? "ON" : "OFF"}
+            {roomInfo.roomName} is {roomIsActive(roomInfo) ? "ON" : "OFF"}
           </title>
         </Head>
       )}
-      {roomInfo && roomInfo.streamStatus == "active" && (
+      {roomInfo && roomIsActive(roomInfo) && (
         <ConsentGate roomID={roomInfo.roomID} consentURL={roomInfo.consentURL}>
           {children}
         </ConsentGate>
       )}
-      {roomInfo && roomInfo.streamStatus !== "active" && (
+      {roomInfo && roomIsActive(roomInfo) && (
         <div className="center:absolute"> offline... for now</div>
       )}
     </>

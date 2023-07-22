@@ -15,3 +15,11 @@ export const useRoomStore = create<RoomState>((set) => ({
     set((s) => ({currentRoomID: newRoom, roomInfo: roomInfo}));
   }
 }))
+
+export const roomIsActive = (roomInfo: RoomInfo | RoomLinkInfo | undefined) => {
+  if (roomInfo && roomInfo.streamStatus.includes("active")) {
+    return true;
+  } else {
+    return false
+  }
+}

@@ -15,21 +15,13 @@ import { useRoomStore } from "../../../stores/roomStore";
 import { useUserStore } from "../../../stores/userStore";
 import classNames from "classnames";
 import Draggable from "react-draggable";
+import { useAdminStore } from "../../../stores/adminStore";
 
 const QuestionBox: React.FC = () => {
   const [questions, setQuestions] = useState<{ [key: string]: SarahQuestion }>({});
   let unsubRef = useRef<Unsubscribe>();
   let boxRef = createRef<HTMLDivElement>();
-  const currentRoomID = useRoomStore(useCallback((s) => s.currentRoomID, []));
-  const adminForIDs = useUserStore(useCallback((s) => s.adminFor, []));
-  const isAdmin = useMemo(() => {
-    if (adminForIDs && currentRoomID && adminForIDs.includes(currentRoomID)) {
-      console.log("is admin");
-      return true;
-    }
-    console.log("NOT ADMIN", adminForIDs);
-    return undefined;
-  }, [adminForIDs, currentRoomID]);
+  const isAdmin = useAdminStore(useCallback((s) => s.isAdmin, []));
 
   const questionComponent = useCallback(
     (question: string, id: string, accepted: boolean) => {

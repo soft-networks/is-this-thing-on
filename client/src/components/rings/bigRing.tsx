@@ -5,6 +5,7 @@ import MuxPlayer from "@mux/mux-player-react";
 import { useCallback, useMemo, useState }from "react";
 import { SVGRingNode, SVGRingSeparate } from "./svg";
 import VideoPreview from "../videoPreview";
+import { roomIsActive } from "../../stores/roomStore";
 
 
 const iframeSize = [160, 90];
@@ -58,7 +59,7 @@ const BigRingNode: React.FC<{
   const src = useMemo(() => roomIDToHREF(roomLinkDetails.roomID), [roomLinkDetails.roomID]);
   const router = useRouter();
   const [localMuted, setLocalMuted] = useState(true);
-  if (roomLinkDetails.streamStatus == "active" && src) {
+  if (roomIsActive(roomLinkDetails) && src) {
     return (
       <g
         className="scale:hover showOnHoverTrigger"

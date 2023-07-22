@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { roomIDToHREF } from "../../stores/ringStore";
-import { useRoomStore } from "../../stores/roomStore";
+import { roomIsActive, useRoomStore } from "../../stores/roomStore";
 
 const ELLIPSE_PATH =
   "M71.25,84.27L177.31,22.66,297.1,3.07l100.91,27.55,55.04,66.55-4.58,87.99-63.6,86.7-106.07,61.62-119.79,19.59-100.91-27.55L3.06,258.97l4.58-87.99,63.61-86.7Z";
@@ -52,7 +52,7 @@ const SVGNodes: React.FC<SVGRingProps> = ({ring, currentlySelected, onNodeClick}
         <SVGRingNode
           index={i}
           myColor={iLink.roomColor}
-          showColor={iLink.streamStatus == "active"}
+          showColor={roomIsActive(iLink)}
           key={`node-${i}`}
           ANIM_OFFSET={ANIM_OFFSET}
           selected={currentlySelected == i}
@@ -118,9 +118,9 @@ interface NodeLinkProps {
 }
 export const NodeLink: React.FC<NodeLinkProps> = ({ link, className, noNav, id}) => {
 
-  const text = useMemo(() => `${link.roomName} is ${link.streamStatus == 'active' ? 'online' : 'offline'}`, [link.roomName, link.streamStatus]);
+  const text = useMemo(() => `${link.roomName} is ${link.streamStatus.includes('active') ? 'online' : 'offline'}`, [link.roomName, link.streamStatus]);
   return (
-    <div className={`border padded:s-2 center-text ${className}`} style={{ backgroundColor: link.streamStatus == 'active' ? link.roomColor : "#eee" }}>
+    <div className={`border padded:s-2 center-text ${className}`} style={{ backgroundColor: link.streamStatus.includes('active') ? link.roomColor : "#eee" }}>
       { !noNav && link.streamStatus == 'active' ?  <a href={roomIDToHREF(id)} target="_blank" rel="noreferrer"> {text} </a> :<span> {text} </span>}
     </div>
   );

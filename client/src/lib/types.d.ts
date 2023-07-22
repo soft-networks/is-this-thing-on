@@ -32,7 +32,8 @@ interface StreamNames {
   names?: string[];
 }
 
-type STREAM_STATUS_TYPE = "active" | "disconnected"
+type STREAM_STATUS_TYPE = "active" | "disconnected" | "active-test";
+
 interface RoomLinkInfo {
   roomID: string,
   roomName: string,
