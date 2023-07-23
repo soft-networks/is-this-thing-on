@@ -18,7 +18,7 @@ const AdminPanelInternal: React.FC<{}> = () => {
     <Draggable handle=".handle" nodeRef={panelRef}>
       <div
         className="stack:s-2 grayFill relative border highestLayer "
-        style={{ position: "fixed", top: "var(--s0)" }}
+        style={{ position: "fixed", top: "var(--s3)" , right: "var(--s1)" }}
         ref={panelRef}
       >
         <div
@@ -50,9 +50,9 @@ const StickerOverride: React.FC = () => {
   const setStickerBehaviorOverride = useAdminStore(useCallback((s) => s.setStickerBehaviorOverride, []));
 
   return (
-    <div className="stack:s-2 border-bottom:thin">
+    <div className="stack:s-2 whiteFill padded:s-2">
       <div>
-        <em>Sticker Behavior Override</em>
+        Special Sticker Behavior
       </div>
       <div className="horizontal-stack">
         <div className="horizontal-stack:s-2">
@@ -85,12 +85,14 @@ const StickerOverride: React.FC = () => {
 };
 
 const VideoOverride: React.FC = () => {
-  const videoOverride = useAdminStore(useCallback((s) => s.hideVideo, []));
+  const hideVideo = useAdminStore(useCallback((s) => s.hideVideo, []));
   const setVideoOverride = useAdminStore(useCallback((s) => s.setHideVideo, []));
   return (
-    <div className="horizontal-stack align-end border-bottom:thin">
-      <em>Hide video</em>
-      <input type="checkbox" checked={videoOverride} onChange={() => setVideoOverride(!videoOverride)} />
+    <div
+      className={classnames("padded:s-2 whiteFill clickable contrastFill:hover")}
+      onClick={() => setVideoOverride(!hideVideo)}
+    >
+      {hideVideo ? "🙃 Show video" : "🫥 Hide video"}
     </div>
   );
 };

@@ -96,6 +96,7 @@ const ChrisyStickerViewerController: React.FC<{
           cdn[stickerInstance.cdnID] && (
             <div
               className={classnames({
+                stickerLayer: true,
                 deleteCursor: behaviorOverride == "DELETE",
                 moveCursor: behaviorOverride == "MOVE",
               })}
@@ -170,41 +171,38 @@ const ChrisyStickerAdminController: React.FC = () => {
   const setBehaviorOverride = useAdminStore(useCallback((s) => s.setStickerBehaviorOverride, []));
 
   return (
-    
+    <div
+      style={{ position: "fixed", top: "var(--s0)", width: "100%" } as React.CSSProperties}
+      className="align:center highertThanStickerLayer horizontal-stack"
+    >
       <div
-        style={{ position: "fixed", top: "var(--s0)", width: "100%" } as React.CSSProperties}
-        className="align:center"
+        className={classnames("higherThanStickerLayer clickable contrastFill:hover", {
+          blue: behaviorOverride == undefined,
+        })}
+        onClick={() => setBehaviorOverride(undefined)}
+        key="NORMAL-CLICKER"
       >
-        <div className="horizontal-stack ">
-          <div
-            className={classnames("higherThanStickerLayer clickable contrastFill:hover", {
-              blue: behaviorOverride == undefined,
-            })}
-            onClick={() => setBehaviorOverride(undefined)}
-            key="NORMAL-CLICKER"
-          >
-            {"HIMS"} MODE
-          </div>
-          <div
-            className={classnames("higherThanStickerLayer clickable contrastFill:hover", {
-              blue: behaviorOverride == "MOVE",
-            })}
-            onClick={() => setBehaviorOverride("MOVE")}
-            key="MOVE-CLICKER"
-          >
-            {"RUB"} MODE
-          </div>
-          <div
-            className={classnames("higherThanStickerLayer clickable contrastFill:hover", {
-              blue: behaviorOverride == "DELETE",
-            })}
-            onClick={() => setBehaviorOverride("DELETE")}
-            key={"DELETE-CLICKER"}
-          >
-            {"BIC"} MODE
-          </div>
-        </div>
+        {"HIMS"} MODE
       </div>
+      <div
+        className={classnames("higherThanStickerLayer clickable contrastFill:hover", {
+          blue: behaviorOverride == "MOVE",
+        })}
+        onClick={() => setBehaviorOverride("MOVE")}
+        key="MOVE-CLICKER"
+      >
+        {"RUB"} MODE
+      </div>
+      <div
+        className={classnames("higherThanStickerLayer clickable contrastFill:hover", {
+          blue: behaviorOverride == "DELETE",
+        })}
+        onClick={() => setBehaviorOverride("DELETE")}
+        key={"DELETE-CLICKER"}
+      >
+        {"BIC"} MODE
+      </div>
+    </div>
   );
 };
 

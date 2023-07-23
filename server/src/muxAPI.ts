@@ -37,6 +37,8 @@ export const muxCreateStream = async () => {
   const { stream_key, id } = await Video.LiveStreams.create({
     latency_mode: "low",
     playback_policy: "public",
+    reconnect_window: 30,
+    max_continuous_duration: 14400,
     new_asset_settings: { playback_policy: "public" },
      
   } as unknown as CreateLiveStreamParams);
