@@ -8,7 +8,7 @@ import Draggable from "react-draggable";
 const AdminPanel = () => {
   const isAdmin = useAdminStore(useCallback((s) => s.isAdmin, []));
   return isAdmin ? <AdminPanelInternal /> : null;
-}
+};
 
 const AdminPanelInternal: React.FC<{}> = () => {
   const roomName = useRoomStore(useCallback((s) => s.roomInfo?.roomName, []));
@@ -16,26 +16,31 @@ const AdminPanelInternal: React.FC<{}> = () => {
 
   return (
     <Draggable handle=".handle" nodeRef={panelRef}>
-    <div style={{ position: "fixed", top: "var(--s0)"}} >
-      <div className="stack:s-2 grayFill relative higherThanStickerLayer border  ">
+      <div
+        className="stack:s-2 grayFill relative border highestLayer "
+        style={{ position: "fixed", top: "var(--s0)" }}
+        ref={panelRef}
+      >
         <div
           className="handle horizontal-stack padded:s-2 caption"
-          style={{ minHeight: "var(--sp0)", height: "var(--sp0)", background: "black" , color:"white"}}
+          style={{ minHeight: "var(--sp0)", height: "var(--sp0)", background: "black", color: "white" }}
         >
           <div>...</div>
           <div>Admin Panel</div>
         </div>
         <div className="padded:s-2 stack:s-1 higherThanStickerLayer monospace">
           <StickerOverride />
-          <VideoOverride/>
+          <VideoOverride />
           {roomName && (
-            <div className={classnames("padded:s-2 whiteFill clickable contrastFill:hover")} onClick={() => resetStickers(roomName)}>
-             ⚠️ Reset Stickers
+            <div
+              className={classnames("padded:s-2 whiteFill clickable contrastFill:hover")}
+              onClick={() => resetStickers(roomName)}
+            >
+              ⚠️ Reset Stickers
             </div>
           )}
         </div>
       </div>
-    </div>
     </Draggable>
   );
 };
@@ -43,10 +48,12 @@ const AdminPanelInternal: React.FC<{}> = () => {
 const StickerOverride: React.FC = () => {
   const stickerBehaviorOverride = useAdminStore(useCallback((s) => s.stickerBehaviorOverride, []));
   const setStickerBehaviorOverride = useAdminStore(useCallback((s) => s.setStickerBehaviorOverride, []));
-  
+
   return (
     <div className="stack:s-2 border-bottom:thin">
-      <div><em>Sticker Behavior Override</em></div>
+      <div>
+        <em>Sticker Behavior Override</em>
+      </div>
       <div className="horizontal-stack">
         <div className="horizontal-stack:s-2">
           <label>Move</label>

@@ -2,6 +2,7 @@ import React from "react";
 import VideoPlayer from "../videoPlayer";
 import ChrisyStickers from "../interactive/custom/chrisyStickers";
 import { Chat } from "../interactive/chat";
+import AdminPanel from "../account/adminPanel";
 
 const Chris: React.FC = () => {
   return (
@@ -20,6 +21,7 @@ const Chris: React.FC = () => {
       />
       <VideoPlayer />
       <ChrisyStickers />
+      <AdminPanel/>
     </main>
   );
 };

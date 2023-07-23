@@ -1,12 +1,12 @@
 import React from "react";
 import { EmptyChooser, PopupStickerAdder } from "../interactive/stickerAdders";
-import DefaultRoomView from "./defaultRoom";
+import DefaultRoom from "./defaultRoom";
 import QuestionBox from "../interactive/custom/SarahQuestionBox";
 
 const Sarah: React.FC = () => {
   return (
     <main className="fullBleed noOverflow relative">
-      <DefaultRoomView
+      <DefaultRoom
         stickerChooser={EmptyChooser}
       />
       <QuestionBox/>

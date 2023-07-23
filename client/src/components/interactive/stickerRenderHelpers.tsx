@@ -26,7 +26,6 @@ export const StickerRenderer: React.FC<StickerRenderProps> = (props) => {
         return <MoveableSticker {...props} />;
       case "DELETE":
         return <DeletableSticker {...props} />;
-      case "NORMAL":
       default:
         return <StaticSticker {...props} />;
     }
@@ -84,7 +83,7 @@ const MoveableSticker: React.FC<StickerRenderProps> = ({ sticker, pos, id, conta
     >
       <div
         className={classnames("moveCursor absoluteOrigin interactiveStickerLayer hoverTrigger", { animateTransform: !isDragging })}
-        style={{ width: size ? `${size * 100}%` : "var(--stickerSize)" , zIndex: zIndex}}
+        style={{ width: size ? `${size * 100}%` : "var(--stickerSize)" , zIndex: zIndex || 1}}
         ref={myRef}
       >
         <StickerImage url={sticker.imageURL} size={size} id={id}/>

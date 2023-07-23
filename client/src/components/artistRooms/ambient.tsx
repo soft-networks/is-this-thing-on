@@ -1,6 +1,7 @@
 import React from "react";
 import VideoPlayer from "../videoPlayer";
 import { Chat } from "../interactive/chat";
+import AdminPanel from "../account/adminPanel";
 
 const Ambient: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const Ambient: React.FC = () => {
         muteOverride={true}
         hideMuteButton={true}
       />
+      <AdminPanel/>
     </main>
   );
 }

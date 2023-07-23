@@ -3,6 +3,7 @@ import VideoPlayer from "../videoPlayer";
 import Stickers from "../interactive/stickers"; 
 import { EmptyChooser } from "../interactive/stickerAdders";
 import { Chat } from "../interactive/chat";
+import AdminPanel from "../account/adminPanel";
 
 
 const Maya: React.FC = () => {
@@ -17,6 +18,7 @@ const Maya: React.FC = () => {
         } as React.CSSProperties} />
       <VideoPlayer/>
       <Stickers StickerChooser={EmptyChooser}/>
+      <AdminPanel/>
     </main>
   );
 }

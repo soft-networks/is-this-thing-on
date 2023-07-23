@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
-import DefaultRoomview from "./defaultRoom";
+import DefaultRoom from "./defaultRoom";
 import { CompromisedStickerAdder } from "../interactive/custom/compromisedStickerAdder";
 
 const Compromised: React.FC = () => {
   return (
     <main className="fullBleed noOverflow relative" style={{ background: "black" }}>
-      <DefaultRoomview
+      <DefaultRoom
         stickerChooser={CompromisedStickerAdder}
         chatStyle={{
           left: "37%",
