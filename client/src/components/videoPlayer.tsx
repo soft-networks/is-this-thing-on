@@ -21,7 +21,7 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({ hideMuteButton
   return (
     <>
       {!hideVideo && streamPlaybackID && streamStatus == "active" && (
-        <VideoPlayerInternal streamPlaybackID={streamPlaybackID} hideMuteButton />
+        <VideoPlayerInternal streamPlaybackID={streamPlaybackID} hideMuteButton={hideMuteButton} />
       )}
       {!hideVideo && streamStatus == "active" && streamPlaybackID == undefined && (
         <div>something went wrong with the stream...</div>
@@ -32,7 +32,7 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({ hideMuteButton
   );
 };
 
-const VideoPlayerInternal: React.FunctionComponent<{ streamPlaybackID: string; hideMuteButton: boolean }> = ({
+const VideoPlayerInternal: React.FunctionComponent<{ streamPlaybackID: string; hideMuteButton?: boolean }> = ({
   streamPlaybackID,
   hideMuteButton,
 }) => {
@@ -44,7 +44,7 @@ const VideoPlayerInternal: React.FunctionComponent<{ streamPlaybackID: string; h
   return (
     <div className="fullBleed" key="videoPlayer">
       {!hideMuteButton && (
-        <div className="higherThanStickerLayer padded" style={{ position: "fixed", top: "0px", right: "0px" }}>
+        <div className="highestLayer padded" style={{ position: "fixed", top: "0px", right: "0px" }}>
           <div
             className="border-thin whiteFill padded:s-2 clickable contrastFill:hover"
             onClick={() => setMuted(!mute)}
