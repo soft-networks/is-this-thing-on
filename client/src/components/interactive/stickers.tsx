@@ -13,11 +13,9 @@ import { logCallbackDestroyed, logCallbackSetup, logFirebaseUpdate, logInfo } fr
 interface StickersProps {
   StickerChooser?: React.FC<StickerAdderProps>;
   style?: React.CSSProperties;
-  className?: string;
 }
-const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdder, className }) => {
+const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdder }) => {
   
-
   //Stores
   const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));
   const stickerCDN = useStickerCDNStore(useCallback((state) => state.stickerCDN, []));
@@ -56,12 +54,12 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
   };
   return roomID ? (
     <div
-      className={className || "fullBleed absoluteOrigin center:children"}
+      className={"fullBleed absoluteOrigin videoAspectContainer"}
       style={stickerStyle}
       id="sticker-overlay"
       ref={ref}
     >
-      <div className="videoAspect videoWidthHeight relative">
+      <div className="videoAspectElement">
         {stickerCDN && (
           <>
             <StickerChooser addSticker={addSticker} cdn={stickerCDN} containerBounds={bounds} />

@@ -5,7 +5,7 @@ import { StickerImage } from "../stickerRenderHelpers";
 
 /** Future note: this is bascially the default adder word for word, with a different type chooser. can abstract */
 
-export const CompromisedStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn, containerBounds, isAdmin }) => {
+export const CompromisedStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn, containerBounds }) => {
   const [showStickerTypePicker, setShowStickerTypePicker] = useState<boolean>(false);
   const currentPosChosen = useRef<Pos>();
   const clicked: MouseEventHandler<HTMLDivElement> = (e) => {
@@ -76,7 +76,7 @@ const ChooseType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: string) => voi
   return (
     <>
       <div
-        className={"grid:s-2 skrimFill border-radius padded higherThanStickerLayer"}
+        className={"grid:s-2 skrimFill border-radius padded uiLayer"}
         style={{ maxWidth: "calc(4 * (var(--stickerSize) + 2 * var(--s2))" }}
       >
         <div

@@ -6,7 +6,7 @@ import AdminPanel from "../account/adminPanel";
 
 const Chris: React.FC = () => {
   return (
-    <main className="fullBleed noOverflow relative chrisyRoom">
+    <main className="fullBleed noOverflow relative chrisyRoom" style={{"--stickerGlowShadow": "none"} as React.CSSProperties}>
       <Chat
         className=" absoluteOrigin"
         key="chat"

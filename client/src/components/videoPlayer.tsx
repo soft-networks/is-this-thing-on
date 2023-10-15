@@ -1,14 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useRoomStore } from "../stores/roomStore";
+import { roomIsActive, roomIsTest, useRoomStore } from "../stores/roomStore";
 import MuxPlayer from "@mux/mux-player-react/lazy";
 import { logError, logVideo } from "../lib/logger";
 import { generateStreamLink } from "../lib/server-api";
-import { useRouter } from "next/router";
 import { useAdminStore } from "../stores/adminStore";
+import ReactPlayer from "react-player";
 
-const DEFAULT_CLASSNAME = "fullWidth";
-const DEFAULT_STYLE = {} as React.CSSProperties;
-const DEFAULT_VIDEO_STYLE = { height: "100%", width: "auto" };
+
 interface VideoPlayerProps {
   streamPlaybackID?: string;
   muteOverride?: boolean;
@@ -20,29 +18,32 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({ hideMuteButton
   const hideVideo = useAdminStore(useCallback((s) => s.hideVideo, []));
   return (
     <>
-      {!hideVideo && streamPlaybackID && streamStatus == "active" && (
-        <VideoPlayerInternal streamPlaybackID={streamPlaybackID} hideMuteButton={hideMuteButton} />
+      {!hideVideo && streamPlaybackID && roomIsActive(streamStatus) && (
+        <VideoPlayerInternal
+          streamPlaybackID={streamPlaybackID}
+          hideMuteButton={hideMuteButton}
+          isTest={roomIsTest(streamStatus)}
+        />
       )}
       {!hideVideo && streamStatus == "active" && streamPlaybackID == undefined && (
         <div>something went wrong with the stream...</div>
       )}
-      {!hideVideo && streamStatus && streamStatus.includes("test") && <div>test mode, no video...</div>}
-      {hideVideo && <div>stream is hidden</div>}
     </>
   );
 };
 
-const VideoPlayerInternal: React.FunctionComponent<{ streamPlaybackID: string; hideMuteButton?: boolean }> = ({
-  streamPlaybackID,
-  hideMuteButton,
-}) => {
+const VideoPlayerInternal: React.FunctionComponent<{
+  streamPlaybackID: string;
+  hideMuteButton?: boolean;
+  isTest?: boolean;
+}> = ({ streamPlaybackID, hideMuteButton, isTest }) => {
   const [mute, setMuted] = useState(false);
   useEffect(() => {
     streamPlaybackID && logVideo(` stream: `, generateStreamLink(streamPlaybackID));
   }, [streamPlaybackID]);
 
   return (
-    <div className="fullBleed" key="videoPlayer">
+    <div className="fullBleed" key="videoPlayer" id="videoPlayer">
       {!hideMuteButton && (
         <div className="highestLayer padded" style={{ position: "fixed", top: "0px", right: "0px" }}>
           <div
@@ -54,18 +55,35 @@ const VideoPlayerInternal: React.FunctionComponent<{ streamPlaybackID: string; h
         </div>
       )}
       {
-        <div className="baseLayer fullBleed center:children">
-          <MuxPlayer
-            playbackId={streamPlaybackID}
-            autoPlay={"any"}
-            muted={mute}
-            className="noEvents videoAspect muxPlayer"
-            nohotkeys={true}
-            onError={(e) => logError(e)}
-          />
+        <div className="videoLayer videoAspectContainer">
+          {!isTest && (
+            <MuxPlayer
+              playbackId={streamPlaybackID}
+              autoPlay={"any"}
+              muted={mute}
+              className="noEvents videoAspectElement"
+              nohotkeys={true}
+              onError={(e) => logError(e)}
+            />
+          )}
+          {isTest && (
+            <div className="videoAspectElement">
+            <ReactPlayer
+              url={
+                "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"
+              }
+              playing={true}
+              muted={mute}
+              className="noEvents testPlayer "
+              height={"inherit"}
+              width={"inherit"}
+            />
+            </div>
+          )}
         </div>
       }
     </div>
   );
 };
+
 export default VideoPlayer;

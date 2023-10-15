@@ -133,24 +133,11 @@ const ChrisyStickerAdder: React.FC<{
   const displayName = useUserStore(useCallback((state) => state.displayName, []));
   const addSticker = (pos: Pos, cdnID: string, scale?: number) => {
     if (!roomID) return;
-    let localScale = 0.3;
-    if (cdnID == "hair1") {
-      localScale = 0.27;
-    }
-    if (cdnID == "hair2") {
-      localScale = 0.33;
-    }
-    if (cdnID == "hair3") {
-      localScale = 0.24;
-    }
-    if (cdnID == "hair4") {
-      localScale = 0.57;
-    }
     addStickerInstance(roomID, {
       position: pos,
       timestamp: Date.now(),
       cdnID: cdnID,
-      size: localScale,
+      size: cdn[cdnID].size,
       zIndex: 200,
     });
     performTransaction({
@@ -176,7 +163,7 @@ const ChrisyStickerAdminController: React.FC = () => {
       className="align:center highertThanStickerLayer horizontal-stack"
     >
       <div
-        className={classnames("higherThanStickerLayer clickable contrastFill:hover", {
+        className={classnames("uiLayer whiteFill padded:s-2 border-thin clickable contrastFill:hover", {
           blue: behaviorOverride == undefined,
         })}
         onClick={() => setBehaviorOverride(undefined)}
@@ -185,7 +172,7 @@ const ChrisyStickerAdminController: React.FC = () => {
         {"HIMS"} MODE
       </div>
       <div
-        className={classnames("higherThanStickerLayer clickable contrastFill:hover", {
+        className={classnames("uiLayer whiteFill padded:s-2 border-thin clickable contrastFill:hover", {
           blue: behaviorOverride == "MOVE",
         })}
         onClick={() => setBehaviorOverride("MOVE")}
@@ -194,7 +181,7 @@ const ChrisyStickerAdminController: React.FC = () => {
         {"RUB"} MODE
       </div>
       <div
-        className={classnames("higherThanStickerLayer clickable contrastFill:hover", {
+        className={classnames("uiLayer whiteFill padded:s-2 border-thin clickable contrastFill:hover", {
           blue: behaviorOverride == "DELETE",
         })}
         onClick={() => setBehaviorOverride("DELETE")}

@@ -1,7 +1,6 @@
 import React from "react";
 import { EmptyChooser, PopupStickerAdder } from "../interactive/stickerAdders";
 import DefaultRoom from "./defaultRoom";
-import QuestionBox from "../interactive/custom/SarahQuestionBox";
 
 const Sarah: React.FC = () => {
   return (
@@ -9,7 +8,6 @@ const Sarah: React.FC = () => {
       <DefaultRoom
         stickerChooser={EmptyChooser}
       />
-      <QuestionBox/>
     </main>
   );
 };

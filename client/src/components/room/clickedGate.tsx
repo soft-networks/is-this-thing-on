@@ -15,7 +15,7 @@ const ClickGate: React.FunctionComponent = ({ children }) => {
     <>{children}</>
   ) : (
     <div className="fullBleed contrastFill relative">
-      <div className="h1 center:absolute higherThanStickerLayer center-text">WELCOME TO THING. <br/> CLICK 2 ENTER</div>
+      <div className="h1 center:absolute uiLayer center-text">WELCOME TO THING. <br/> CLICK 2 ENTER</div>
     </div>
   );
 }

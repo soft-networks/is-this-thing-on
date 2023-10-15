@@ -16,8 +16,24 @@ export const useRoomStore = create<RoomState>((set) => ({
   }
 }))
 
-export const roomIsActive = (roomInfo: RoomInfo | RoomLinkInfo | undefined) => {
-  if (roomInfo && roomInfo.streamStatus.includes("active")) {
+export const roomIsActive = (roomInfo: RoomInfo | RoomLinkInfo | undefined | STREAM_STATUS_TYPE) => {
+  if (typeof(roomInfo) == "string") {
+    if  (roomInfo && roomInfo.includes("active")) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  if (roomInfo && roomInfo.streamStatus && roomInfo.streamStatus.includes("active")) {
+    return true;
+  } else {
+    return false
+  }
+}
+
+
+export const roomIsTest = (roomStatus?: string) => {
+  if (roomStatus && roomStatus.includes("test")) {
     return true;
   } else {
     return false

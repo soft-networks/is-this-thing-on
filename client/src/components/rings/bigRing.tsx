@@ -88,7 +88,7 @@ const BigRingNode: React.FC<{
               className="fullBleed"
             />
           )}
-          <VideoPreview iLink={roomLinkDetails} localMuted={localMuted} />
+          <VideoPreview iLink={roomLinkDetails} localMuted={localMuted} isTest={roomLinkDetails.streamStatus.includes("test")} />
         </foreignObject>
         <text
           y={-iframeSize[1] / 2 - 5}

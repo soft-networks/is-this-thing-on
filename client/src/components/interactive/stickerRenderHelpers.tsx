@@ -15,6 +15,19 @@ interface StickerRenderProps {
   containerBounds: RectReadOnly;
 }
 
+const getStickerWidth = (size?: number) => {
+  return size ? `${size * 100}%` : "var(--stickerSize)";
+};
+
+const getStickerStyle = (pos: Pos, size?: number, zIndex?: number) => {
+  return {
+    left: `${pos[0] * 100}%`,
+    top: `${pos[1] * 100}%`,
+    width: getStickerWidth(size),
+    zIndex: zIndex || 1,
+  };
+}
+
 export const StickerRenderer: React.FC<StickerRenderProps> = (props) => {
   const behaviorOverride = useAdminStore(useCallback((s) => s.stickerBehaviorOverride, []));
   const stickerToUse = useMemo(() => {
@@ -40,12 +53,7 @@ export const DeletableSticker: React.FC<StickerRenderProps> = ({ sticker, pos, i
   };
   return (
     <div
-      style={{
-        left: `${pos[0] * 100}%`,
-        top: `${pos[1] * 100}%`,
-        width: size ? `${size * 100}%` : "var(--stickerSize)",
-        zIndex: zIndex
-      }}
+      style={getStickerStyle(pos, size, zIndex)}
       onClick={(e) => deleteSticker()}
       className={"absoluteOrigin deleteCursor interactiveStickerLayer hoverTrigger"}
     >
@@ -56,7 +64,7 @@ export const DeletableSticker: React.FC<StickerRenderProps> = ({ sticker, pos, i
 
 export const StaticSticker = ({ sticker, pos, size, zIndex, id }: StickerRenderProps) => (
   <div
-    style={{ left: `${pos[0] * 100}%`, top: `${pos[1] * 100}%`, width: size ? `${size * 100}%` : "var(--stickerSize)", zIndex: zIndex }}
+    style={getStickerStyle(pos, size, zIndex)}
     className={"absoluteOrigin noEvents"}
   >
     <StickerImage url={sticker.imageURL} size={size} id={id}/>
@@ -83,7 +91,7 @@ const MoveableSticker: React.FC<StickerRenderProps> = ({ sticker, pos, id, conta
     >
       <div
         className={classnames("moveCursor absoluteOrigin interactiveStickerLayer hoverTrigger", { animateTransform: !isDragging })}
-        style={{ width: size ? `${size * 100}%` : "var(--stickerSize)" , zIndex: zIndex || 1}}
+        style={{ width: getStickerWidth(size) , zIndex: zIndex || 1}}
         ref={myRef}
       >
         <StickerImage url={sticker.imageURL} size={size} id={id}/>

@@ -17,7 +17,7 @@ const AdminPanelInternal: React.FC<{}> = () => {
   return (
     <Draggable handle=".handle" nodeRef={panelRef}>
       <div
-        className="stack:s-2 grayFill relative border highestLayer "
+        className="stack:s-2 grayFill relative border uiLayer "
         style={{ position: "fixed", top: "var(--s3)" , right: "var(--s1)" }}
         ref={panelRef}
       >
@@ -28,7 +28,7 @@ const AdminPanelInternal: React.FC<{}> = () => {
           <div>...</div>
           <div>Admin Panel</div>
         </div>
-        <div className="padded:s-2 stack:s-1 higherThanStickerLayer monospace">
+        <div className="padded:s-2 stack:s-1 monospace">
           <StickerOverride />
           <VideoOverride />
           {roomName && (
