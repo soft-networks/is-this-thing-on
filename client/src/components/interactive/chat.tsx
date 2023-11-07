@@ -73,7 +73,7 @@ export const Chat: React.FC<RoomUIProps> = ({className, style = {}}) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <Draggable handle=".handle" nodeRef={chatRef} defaultPosition={{ x: 10, y: 10 }} disabled={roomID == "compromised"}>
+    <Draggable handle=".handle" nodeRef={chatRef} defaultPosition={{ x: 10, y: 10 }} disabled={roomID == "compromised" || roomID == "ambient"}>
       <div
         className={(className || "") + " chat uiLayer border"}
         style={{ ...DEFAULT_STYLE(roomColor || "gray"), ...style }}
@@ -84,7 +84,7 @@ export const Chat: React.FC<RoomUIProps> = ({className, style = {}}) => {
           className="handle"
           style={{ minHeight: "var(--sp0)", height: "var(--sp0)", background: "var(--chatBorderColor)" }}
         >
-          ...
+          {roomID !== "compromised" && roomID !== "ambient" && "..."}
         </div>
         <ChatInput onSubmit={sendNewMessage} />
         <div

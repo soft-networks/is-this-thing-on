@@ -8,7 +8,7 @@ import {
 import { stickerInstanceCollection, roomDoc, stickerCDNCollection, stickerInstanceDoc } from "./locations";
 import { MollyAssetsJson } from "./custom/mollyAssets";
 import { MollyDeleteAssets } from "./custom/mollyAssetsDeleteOnly";
-import { logFirebaseUpdate } from "../logger";
+import { logError, logFirebaseUpdate } from "../logger";
 
 export async function getStickerCDN(roomName: string, initStickerCDN: (cdn: { [key: string]: Sticker }) => void) {
   if (!validateRoomName(roomName)) {
@@ -66,8 +66,8 @@ export async function addStickerInstance(roomName: string, element: StickerInsta
 }
 
 export async function updateStickerInstancePos(roomName: string, stickerID: string, pos: Pos) {
-  if (pos[0] <=0 || pos[1] <= 0 || pos[0] >= 1 || pos[1] >= 1) {
-    return; 
+  if (pos[0] <= 0 || pos[1] <= 0 || pos[0] >= 1 || pos[1] >= 1) {
+    return;
   }
   const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
   const stickerInstance = stickerInstanceDoc(stickerInstances, stickerID);
@@ -90,22 +90,29 @@ export async function deleteStickerInstance(roomName: string, stickerID: string)
   deleteDoc(stickerInstance);
 }
 
-export async function resetStickers(roomName: string) { 
+export async function resetStickers(roomName: string) {
   logFirebaseUpdate("About to reset stickers for " + roomName);
   if (roomName == "chrisy") {
+    logFirebaseUpdate("Chrisy is not allowed to reset stickers");
     return;
-   }
-   if (roomName == "compromised") {
+  }
+  if (roomName == "compromised") {
     populateHerdimasCDN();
-   }
-   const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
-   const querySnapshot = await getDocs(stickerInstances);
-   querySnapshot.forEach((doc) => {
-     deleteDoc(doc.ref);
-   });
-   if (roomName == "molly") {
-    populateMollyAllInstances();
-   }
+  }
+  const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
+
+  try {
+    const querySnapshot = await getDocs(stickerInstances);
+    querySnapshot.forEach((doc) => {
+      logFirebaseUpdate("Deleting sticker instance");
+      deleteDoc(doc.ref);
+    });
+    if (roomName == "molly") {
+      populateMollyAllInstances();
+    }
+  } catch (e) {
+    logError("Error resetting stickers", [(e as Error).message]);
+  }
 }
 
 ///PLEASE DONT JUDGE ME FOR THIS  :)
@@ -155,23 +162,23 @@ export async function populateMollyAllInstances() {
       position: [asset.position.x, asset.position.y],
       timestamp: Date.now(),
       zIndex: asset.zIndex,
-      size: asset.size
+      size: asset.size,
     });
+  }
+}
 
-  }}
+export async function repopulateOnlyDeletedAssetsMolly() {
+  for (let i = 0; i < MollyDeleteAssets.length; i++) {
+    let asset = MollyDeleteAssets[i];
+    let id = asset.id;
 
-  export async function repopulateOnlyDeletedAssetsMolly(){
-    for (let i = 0; i < MollyDeleteAssets.length; i++) {
-      let asset = MollyDeleteAssets[i];
-      let id = asset.id;
-  
-      const stickerInstances = stickerInstanceCollection(roomDoc("molly"));
-      await addDoc(stickerInstances, {
-        cdn_id: id,
-        position: [asset.position.x, asset.position.y],
-        timestamp: Date.now(),
-        zIndex: asset.zIndex,
-        size: asset.size
-      });
-    }}
-
+    const stickerInstances = stickerInstanceCollection(roomDoc("molly"));
+    await addDoc(stickerInstances, {
+      cdn_id: id,
+      position: [asset.position.x, asset.position.y],
+      timestamp: Date.now(),
+      zIndex: asset.zIndex,
+      size: asset.size,
+    });
+  }
+}

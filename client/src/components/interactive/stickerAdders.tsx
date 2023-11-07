@@ -70,7 +70,7 @@ export const DefaultStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, c
     >
       {showStickerTypePicker ? (
         <div
-          className="absoluteOrigin "
+          className="absoluteOrigin uiLayer"
           style={{
             top: `${currentPosChosen.current ? currentPosChosen.current[1] * 100 : 80}%`,
             left: `${currentPosChosen.current ? currentPosChosen.current[0] * 100 : 50}%`,
@@ -127,11 +127,11 @@ const DefaultChooseStickerType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: 
   return (
     <>
       <div
-        className={"uiLayer" + (className || "grid:s-2 skrimFill border-radius padded")}
+        className={"uiLayer " + (className || "grid:s-2 skrimFill border-radius padded")}
       >
         <div
           className="lightFill border contrastFill:hover padded:s-2 clickable"
-          style={{ position: "absolute", top: "calc(-1 * var(--s1)", left: "calc(-1 * var(--s1)" }}
+          style={{ position: "absolute", top: "calc(-1 * var(--s1))", left: "calc(-1 * var(--s1)"}}
           onClick={(e) => typeSelected(undefined)}
         >
           cancel
@@ -143,7 +143,7 @@ const DefaultChooseStickerType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: 
                 className="clickable:opacity"
                 key={`choosesticker-${k}`}
                 onClick={(e) => typeSelected(k)}
-                style={{ width: "var(--stickerSize)" }}
+                style={{ width: "5ch", display: "inline-block" }}
               >
                 <StickerImage url={cdn[k].imageURL} />
               </div>

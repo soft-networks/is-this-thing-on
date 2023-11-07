@@ -41,7 +41,7 @@ export const CompromisedStickerAdder: React.FC<StickerAdderProps> = ({ addSticke
     >
       {showStickerTypePicker ? (
         <div
-          className="absoluteOrigin "
+          className="absoluteOrigin everest"
           style={{
             top: `${currentPosChosen.current ? currentPosChosen.current[1] * 100 : 80}%`,
             left: `${currentPosChosen.current ? currentPosChosen.current[0] * 100 : 50}%`,
@@ -76,8 +76,8 @@ const ChooseType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: string) => voi
   return (
     <>
       <div
-        className={"grid:s-2 skrimFill border-radius padded uiLayer"}
-        style={{ maxWidth: "calc(4 * (var(--stickerSize) + 2 * var(--s2))" }}
+        className={"grid:s-2 skrimFill border-radius padded uiLayer relative"}
+        style={{ maxWidth: "calc(4 * (var(--2ch) + 2 * var(--s2))" }}
       >
         <div
           className="lightFill border contrastFill:hover padded:s-2 clickable "
@@ -94,7 +94,7 @@ const ChooseType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: string) => voi
                   className="clickable:opacity"
                   key={`choosesticker-${k}`}
                   onClick={(e) => typeSelected(k)}
-                  style={{ width: "var(--stickerSize)" }}
+                  style={{ width: "2ch" }}
                 >
                   <StickerImage url={cdn[k].imageURL + "?" + Date.now()} />
                 </div>

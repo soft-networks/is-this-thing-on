@@ -29,11 +29,7 @@ export function resetNextSpinTime() {
   const nextSpinTime = currentTime + waitingPeriod;
   const spinLocation = Math.random();
 
-  
-  
   addStickers();
-
-
   setDoc(darlaSpinnerDoc(), { nextSpinTime: nextSpinTime, spinLocation: spinLocation }, { merge: true });
 }
 

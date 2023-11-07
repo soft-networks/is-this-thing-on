@@ -377,6 +377,10 @@ p {
 .highestLayer {
   z-index: 9000;
 }
+.everest, .everest * {
+  z-index: 99999;
+}
+
 
 .align\:center {
   display: flex;
