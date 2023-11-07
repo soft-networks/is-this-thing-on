@@ -12,7 +12,7 @@ interface VideoPlayerProps {
   muteOverride?: boolean;
   hideMuteButton?: boolean;
 }
-const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({ hideMuteButton }) => {
+const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({ hideMuteButton , muteOverride}) => {
   const streamPlaybackID = useRoomStore(useCallback((s) => s.roomInfo?.streamPlaybackID, []));
   const streamStatus = useRoomStore(useCallback((s) => s.roomInfo?.streamStatus, []));
   const hideVideo = useAdminStore(useCallback((s) => s.hideVideo, []));
@@ -22,6 +22,7 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({ hideMuteButton
         <VideoPlayerInternal
           streamPlaybackID={streamPlaybackID}
           hideMuteButton={hideMuteButton}
+          muteOverride={muteOverride}
           isTest={roomIsTest(streamStatus)}
         />
       )}
@@ -35,8 +36,9 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({ hideMuteButton
 const VideoPlayerInternal: React.FunctionComponent<{
   streamPlaybackID: string;
   hideMuteButton?: boolean;
+  muteOverride?: boolean;
   isTest?: boolean;
-}> = ({ streamPlaybackID, hideMuteButton, isTest }) => {
+}> = ({ streamPlaybackID, hideMuteButton, isTest, muteOverride }) => {
   const [mute, setMuted] = useState(false);
   useEffect(() => {
     streamPlaybackID && logVideo(` stream: `, generateStreamLink(streamPlaybackID));
@@ -60,7 +62,7 @@ const VideoPlayerInternal: React.FunctionComponent<{
             <MuxPlayer
               playbackId={streamPlaybackID}
               autoPlay={"any"}
-              muted={mute}
+              muted={mute || muteOverride}
               className="noEvents videoAspectElement"
               nohotkeys={true}
               onError={(e) => logError(e)}
@@ -73,7 +75,7 @@ const VideoPlayerInternal: React.FunctionComponent<{
                 "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"
               }
               playing={true}
-              muted={mute}
+              muted={mute || muteOverride}
               className="noEvents testPlayer "
               height={"inherit"}
               width={"inherit"}
