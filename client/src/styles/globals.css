@@ -2,7 +2,7 @@
 
 :root {
   --ratio: 1.4;
-  --s0: 1em;
+  --s0: 14px;
   --s1: calc(var(--s0) * var(--ratio));
   --s2: calc(var(--s1) * var(--ratio));
   --s3: calc(var(--s2) * var(--ratio));
@@ -23,6 +23,8 @@
   --white: white;
   --faintWhite: rgba(255, 255, 255, 0.9);
   --contrast: #FCFF54;
+  --backgroundColor: #F3F3F3;
+  --roomColor: var(--white);
 
   --textWidth: 48ch; 
 
@@ -72,7 +74,7 @@ body {
 }
 .stroke {
   stroke: black;
-  stroke-width: 5px;
+  stroke-width: 1px;
 }
 .stroke.selected {
   stroke: blue;
@@ -466,14 +468,17 @@ p {
   margin-block-start: var(--s2);
 }
 
-.horizontal-stack , .horizontal-stack\:s-1,  .horizontal-stack\:s-2 {
+.horizontal-stack , .horizontal-stack\:s-1,  .horizontal-stack\:s-2, .horizontal-stack\:noGap  {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
 }
 
+.horizontal-stack\:noGap >*+*  {
+  margin-left: 0;
+}
 
-.horizontal-stack>*+* {
+.horizontal-stack >*+* {
   margin-left: var(--s0);
 }
 .horizontal-stack\:s-1 >*+* {
@@ -514,14 +519,14 @@ pre {
   color: blue;
 }
 .border {
-  border: 3px solid var(--black);
+  border: 1px solid var(--black);
 }
 .border-thin{
   border: 1px solid var(--black);
 }
 
 .border-bottom {
-  border-bottom: 3px solid var(--black);
+  border-bottom: 1px solid var(--black);
 }
 
 .border-bottom\:thin {
@@ -640,6 +645,9 @@ a:hover,
 .grayFill {
   background: var(--gray);
 }
+.backgroundFill {
+  background: var(--backgroundColor);
+}
 
 .blackFill {
   background: var(--black);
@@ -745,6 +753,9 @@ a:hover,
   width: max(35ch, 20vw);
   border-color:  var(--chatBorderColor);
   transition: all 100ms;
+  position: absolute;
+  bottom: var(--s0);
+  left: var(--s0);
 }
 .chat .contrastColor\:hover:hover {
   color: var(--chatAuthorColor);
@@ -804,7 +815,7 @@ a:hover,
   width: 50%;
 }
 
-footer .homeLogoWidth {
+/* footer .homeLogoWidth {
   width: auto;
   height: 96px;
 }
@@ -812,15 +823,22 @@ footer .stroke {
   stroke-width: 10px;
   filter: drop-shadow( 0px 0px 20px var(--light));
 }
-footer .border {
-  border-width: 2px;
-}
 footer .clickable {
   background: var(--light);
-  box-shadow: 0px 0px 5px var(--light);
 }
 footer .clickable:hover{
   background: var(--contrast);
+} */
+
+input {
+  all: unset;
+  font-size: var(--s0);
+}
+
+input,
+input::placeholder {
+  font-family: "Manifont Grotesk", monospace;
+    font: var(--s0);
 }
 
 @media screen and (min-width: 1300px)  {
@@ -837,9 +855,6 @@ footer .clickable:hover{
     --textWidth: 60vw;
   }
 
-  .border, .border-bottom {
-    border-width: 2px;
-  }
   .homeLogoWidth {
     width: 75%;
   }

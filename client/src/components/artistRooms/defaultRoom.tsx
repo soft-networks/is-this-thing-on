@@ -17,7 +17,7 @@ const DefaultRoom = ({ stickerStyle , stickerChooser, chatStyle}: RoomViewProps)
     <main className="fullBleed noOverflow relative">
       {roomInfo ? (
         <>
-          <Chat className=" absoluteOrigin" key={`${roomInfo.roomID}-chat`} style={chatStyle} />
+          <Chat key={`${roomInfo.roomID}-chat`} style={chatStyle} />
           <VideoPlayer/>
           <Stickers style={stickerStyle} StickerChooser={stickerChooser} />
           <AdminPanel/>

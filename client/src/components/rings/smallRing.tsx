@@ -33,23 +33,21 @@ const FooterLogo: React.FC<{ ring: WebRing, roomID: string}> = ({ ring, roomID})
   const ringParts = useMemo(() => SVGRingSeparate({ring, currentlySelected: indexSelected}), [indexSelected, ring]);
   return (
     <div className="centerh relative">
-      <div className="center:absolute ">{ringParts[0]}</div>
-        <div className="horizontal-stack:s-1">
+        <div className="horizontal-stack:s-2">
           <div
-            className="clickable clickable:link border padded:s-2 contrastFill:hover"
+            className="whiteFill clickable clickable:link border padded:s-2 contrastFill:hover"
             onClick={() => indexSelected !== undefined && navStream(indexSelected - 1)}
           >
             prev
           </div>
           <NodeLink link={ring[roomID]} id={roomID} noNav />
           <div
-            className="clickable clickable:link border padded:s-2 contrastFill:hover"
+            className="whiteFill clickable clickable:link border padded:s-2 contrastFill:hover"
             onClick={() => indexSelected !== undefined && navStream(indexSelected + 1)}
           >
             next
           </div>
         </div>
-      <div className="center:absolute uiLayer noEvents">{ringParts[1]}</div>
     </div>
   );
 };

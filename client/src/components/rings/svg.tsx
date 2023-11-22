@@ -17,7 +17,7 @@ interface SVGRingProps {
   onNodeClick?: (nodeIndex: number) => void;
 }
 export const SVGRingSeparate = (props: SVGRingProps & {returnWithoutWrapping?: boolean}) => {
-  const pieces = [<path key="path-outline" className="stroke" fill={"none"} d={ELLIPSE_PATH} id="ellipsePath"/>, <SVGNodes key="path-nodes" {...props} />]
+  const pieces = [<path key="path-outline"  fill={"none"} d={ELLIPSE_PATH} id="ellipsePath"/>, <SVGNodes key="path-nodes" {...props} />]
   if (props.returnWithoutWrapping) {
     return pieces;
   }
@@ -29,17 +29,7 @@ export const SVGRingSeparate = (props: SVGRingProps & {returnWithoutWrapping?: b
   return pieces.map((p) => wrapSVG(p));
   
 }
-const SVGRingCombined = (props: SVGRingProps) => {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" className="centerh homeLogoWidth" viewBox="-50 -50 550 450">
-      <text x={150} y={210} style={{ fontSize: "55px", fontStyle: "italic" }}>
-        THING
-      </text>
-      <path className="stroke" fill={"none"} d={ELLIPSE_PATH} id="ellipsePath"/>
-      <SVGNodes {...props} />
-    </svg>
-  );
-};
+
 const SVGNodes: React.FC<SVGRingProps> = ({ring, currentlySelected, onNodeClick}) => {
   const nodes = useMemo(() => {
     const numKeys = Object.keys(ring).length;
@@ -92,10 +82,10 @@ export const SVGRingNode: React.FC<SVGRingNodeProps> = ({
     <g key={`node-${index}`} className={classNames({showOnHoverTrigger: hoverBehavior})}>
       <rect
         className={classNames({ stroke: true, selected: selected, clickable: onClick !== undefined })}
-        width="40"
-        height="40"
+        width="80"
+        height="20"
         fill={showColor ? myColor : "#fff"}
-        transform={`rotate(45) translate(-20,-20)`}
+        transform={`translate(-20,-20)`}
         onClick={() => onClick && onClick(index)}
       ></rect>
       <animateMotion dur={`${ANIM_LENGTH}s`} begin={`${index * -ANIM_OFFSET}s`} repeatCount="indefinite">

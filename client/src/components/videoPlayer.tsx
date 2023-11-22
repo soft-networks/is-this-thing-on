@@ -5,6 +5,7 @@ import { logError, logVideo } from "../lib/logger";
 import { generateStreamLink } from "../lib/server-api";
 import { useAdminStore } from "../stores/adminStore";
 import ReactPlayer from "react-player";
+import useLocalMutedStore from "../stores/localMuteStore";
 
 
 interface VideoPlayerProps {
@@ -39,7 +40,9 @@ const VideoPlayerInternal: React.FunctionComponent<{
   muteOverride?: boolean;
   isTest?: boolean;
 }> = ({ streamPlaybackID, hideMuteButton, isTest, muteOverride }) => {
-  const [mute, setMuted] = useState(false);
+  const mute = useLocalMutedStore(useCallback((s) => s.localMuted, []));;
+  const setMuted = useLocalMutedStore(useCallback((s) => s.setLocalMuted, []));;
+
   useEffect(() => {
     streamPlaybackID && logVideo(` stream: `, generateStreamLink(streamPlaybackID));
   }, [streamPlaybackID]);
@@ -52,7 +55,7 @@ const VideoPlayerInternal: React.FunctionComponent<{
             className="border-thin whiteFill padded:s-2 clickable contrastFill:hover"
             onClick={() => setMuted(!mute)}
           >
-            {mute ? "play audio" : "mute audio"}
+            {mute ? "unmute" : "mute"}
           </div>
         </div>
       )}
