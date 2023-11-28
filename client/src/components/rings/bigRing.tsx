@@ -68,7 +68,7 @@ const BigRingNode: React.FC<{
         <animateMotion dur={`${ANIM_LENGTH}s`} begin={`${i * -ANIM_OFFSET}s`} repeatCount="indefinite">
           <mpath xlinkHref="#ellipsePath" />
         </animateMotion>
-        {/* <foreignObject
+        <foreignObject
           width={iframeSize[0]}
           height={iframeSize[1]}
           transform={`translate(-${iframeSize[0] / 2}, -${iframeSize[1] / 2})`}
@@ -88,7 +88,7 @@ const BigRingNode: React.FC<{
             />
           )}
           <VideoPreview iLink={roomLinkDetails} localMuted={localMuted} isTest={roomLinkDetails.streamStatus.includes("test")} />
-        </foreignObject> */}
+        </foreignObject>
         <text
           y={-iframeSize[1] / 2 - 5}
           textAnchor="middle"

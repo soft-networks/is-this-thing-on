@@ -7,6 +7,7 @@ import { useRoomStore } from "../stores/roomStore";
 import Layout from "../components/room/layout";
 import BigRing from "../components/rings/bigRing";
 import { Chat } from "../components/interactive/chat";
+import DomRing from "../components/rings/domRing";
 
 const Index: NextPage = () => {
   const changeRoom = useRoomStore((s) => s.changeRoom);
@@ -21,10 +22,9 @@ const Index: NextPage = () => {
         <Head>
           <title>THING</title>
         </Head>
-        <div className="flex-1 center-text">
-          <BigRing />
-          <div id="testboy">
-          </div>
+        <div className="fullBleed">
+          <DomRing/>
+          <div className="center:absolute videoLayer center-text">is this thing on <br/>returns on Dec 14</div>
         </div>
         <Chat key="index-chat" />
       </div>

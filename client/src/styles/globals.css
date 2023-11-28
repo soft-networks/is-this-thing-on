@@ -24,7 +24,7 @@
   --faintWhite: rgba(255, 255, 255, 0.9);
   --contrast: #FCFF54;
   --backgroundColor: #F3F3F3;
-  --roomColor: yellow;
+  --roomColor: white;
 
   --textWidth: 48ch; 
 
@@ -899,19 +899,44 @@ input::placeholder {
 
 
 
-#testboy {
-  background: red;
-  height: 40px;
-  width: 40px;
-  offset-path: ellipse(50% 25% at center);
-  offset-rotate: 0deg;
-  animation: move 8000ms infinite linear;
+#rotatingEllipseContainer {
+ width: 100%;
+ height: 100%;
+ position: absolute;
+ top: 0;
+ left: 0;
+ transform: rotate(-30deg);
 }
+.antiRotate {
+  transform: rotate(30deg);
+}
+.homepageLabel {
+  width: 150px;
+  height: 32px;
+  text-align: center;
+  vertical-align: middle;
+}
+.homepageVideo {
+  width: 300px;
+  height: 168.75px;
+}
+.smallElementOnEllipse {
+  offset-path: ellipse(18% 15% at center);
+  offset-rotate: 0deg;
+  vertical-align: middle;
+  animation: move 120s infinite linear;
+}
+.largeElementOnEllipse {
+  offset-path: ellipse(30% 35% at center);
+  offset-rotate: 0deg;
+  animation: move 240s infinite linear;
+}
+
 @keyframes move {
   0% {
-    offset-distance: -80%;
+    offset-distance: var(--animStart);
   }
   100% {
-    offset-distance: 80%;
+    offset-distance: var(--animEnd);
   }
 }
