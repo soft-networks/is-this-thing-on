@@ -24,7 +24,7 @@
   --faintWhite: rgba(255, 255, 255, 0.9);
   --contrast: #FCFF54;
   --backgroundColor: #F3F3F3;
-  --roomColor: var(--white);
+  --roomColor: yellow;
 
   --textWidth: 48ch; 
 
@@ -639,7 +639,7 @@ a:hover,
 }
 
 .contrastFill\:hover:hover {
-  background: pink !important;
+  background: yellow !important;
 }
 
 .grayFill {
@@ -655,7 +655,7 @@ a:hover,
 
 
 .contrastFill, .contrastFill\:hover:hover, .hoverTrigger:hover .contrastFill\:hover\:triggered{
-  background: var(--contrast);
+  background: var(--roomColor);
 }
 
 .hoverTrigger:hover rect.contrastFill\:hover\:triggered{
@@ -898,3 +898,20 @@ input::placeholder {
 }
 
 
+
+#testboy {
+  background: red;
+  height: 40px;
+  width: 40px;
+  offset-path: ellipse(50% 25% at center);
+  offset-rotate: 0deg;
+  animation: move 8000ms infinite linear;
+}
+@keyframes move {
+  0% {
+    offset-distance: -80%;
+  }
+  100% {
+    offset-distance: 80%;
+  }
+}

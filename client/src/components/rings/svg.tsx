@@ -87,6 +87,7 @@ export const SVGRingNode: React.FC<SVGRingNodeProps> = ({
         fill={showColor ? myColor : "#fff"}
         transform={`translate(-20,-20)`}
         onClick={() => onClick && onClick(index)}
+        vectorEffect="non-scaling-stroke"
       ></rect>
       <animateMotion dur={`${ANIM_LENGTH}s`} begin={`${index * -ANIM_OFFSET}s`} repeatCount="indefinite">
         <mpath xlinkHref="#ellipsePath" />

@@ -104,5 +104,5 @@ const MoveableSticker: React.FC<StickerRenderProps> = ({ sticker, pos, id, conta
 
 export const StickerImage = ({ url, size, id}: { url: string; size?: number, id?: string }) => (
   // eslint-disable-next-line @next/next/no-img-element
-  <img src={url} className="noEvents glow:hover" alt={"Sticker"} style={{ width: "100%" }} id={id} />
+  <img src={url} className="noEvents noSelect glow:hover" alt={"Sticker"} style={{ width: "100%" }} id={id} />
 );

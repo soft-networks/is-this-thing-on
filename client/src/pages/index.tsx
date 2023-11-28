@@ -23,6 +23,8 @@ const Index: NextPage = () => {
         </Head>
         <div className="flex-1 center-text">
           <BigRing />
+          <div id="testboy">
+          </div>
         </div>
         <Chat key="index-chat" />
       </div>

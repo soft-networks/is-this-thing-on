@@ -3,17 +3,19 @@ import { darlaSpinnerDoc, roomDoc } from "../locations";
 import { addStickerInstance } from "../stickers";
 
 // const waitingPeriod = 5 * 60 * 1000;
-const waitingPeriod = 30 * 1000;
+ const waitingPeriod = 30 * 1000;
 
-async function addStickers() {
-  const radius = Math.random() * 0.2 + 0.3;
-  for (let i=0; i< 2*Math.PI; i+= Math.PI/4) {
+export async function addDarlaStickers(stickerType: string) {
+  const maxStickers = Math.floor(Math.random() * 10 + 10);
+
+  let angle = 0; 
+  for (let i=0; i< maxStickers; i++) {
     
-    //generate a random point on circumfrence with this radius
-    const x = 0.5 + radius * Math.cos(i);
-    const y = 0.5 + radius * Math.sin(i);
+    const wobbledRadius = Math.random() * 0.2 + 0.3;
+    const x = 0.5 + wobbledRadius * Math.cos(angle);
+    const y = 0.5 + wobbledRadius * Math.sin(angle);
     const stickerInstance: StickerInstance ={
-      cdnID: "pie",
+      cdnID: stickerType,
       position: [x, y],
       size: 0.1,
       timestamp: Date.now(),
@@ -21,24 +23,23 @@ async function addStickers() {
     }
     console.log("ADDING STICKER", stickerInstance)
     await addStickerInstance("messydarla", stickerInstance);
+    angle += Math.PI / 4 + (Math.PI/8 * Math.random());
   }
 }
-export function resetNextSpinTime() {
+export function resetNextSpinTime(winningUser: string) {
   // const currentTime = Math.floor(new Date().getTime() / 1000);
   const currentTime = Date.now();
   const nextSpinTime = currentTime + waitingPeriod;
   const spinLocation = Math.random();
-
-  addStickers();
-  setDoc(darlaSpinnerDoc(), { nextSpinTime: nextSpinTime, spinLocation: spinLocation }, { merge: true });
+  setDoc(darlaSpinnerDoc(), { nextSpinTime: nextSpinTime, spinLocation: spinLocation, winningUser: winningUser }, { merge: true });
 }
 
-export function syncSpin(spintTimeUpdated: (nextSpinTime: number, nextSpinAmount: number) => void) {
+export function syncSpin(spinUpdatedCallback: (nextSpinTime: number, nextSpinAmount: number, winner: string) => void) {
   const roomDocRef = darlaSpinnerDoc();
   const unsub = onSnapshot(roomDocRef, (doc) => {
     const data = doc.data();
     if (data) {
-      spintTimeUpdated(data.nextSpinTime, data.spinLocation);
+      spinUpdatedCallback(data.nextSpinTime, data.spinLocation, data.winningUser);
     }
   });
   return unsub;

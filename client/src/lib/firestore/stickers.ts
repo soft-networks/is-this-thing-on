@@ -1,16 +1,34 @@
-import { addDoc, deleteDoc, doc, getDoc, getDocs, onSnapshot, query, setDoc, where } from "firebase/firestore";
+import {
+  addDoc,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import {
   sanitizeStickerCDNFromDB,
   sanitizeStickerInstanceForDB,
   sanitizeStickerInstanceFromDB,
   validateRoomName,
 } from "./converters";
-import { stickerInstanceCollection, roomDoc, stickerCDNCollection, stickerInstanceDoc } from "./locations";
+import {
+  stickerInstanceCollection,
+  roomDoc,
+  stickerCDNCollection,
+  stickerInstanceDoc,
+} from "./locations";
 import { MollyAssetsJson } from "./custom/mollyAssets";
 import { MollyDeleteAssets } from "./custom/mollyAssetsDeleteOnly";
 import { logError, logFirebaseUpdate } from "../logger";
 
-export async function getStickerCDN(roomName: string, initStickerCDN: (cdn: { [key: string]: Sticker }) => void) {
+export async function getStickerCDN(
+  roomName: string,
+  initStickerCDN: (cdn: { [key: string]: Sticker }) => void
+) {
   if (!validateRoomName(roomName)) {
     return;
   }
@@ -31,7 +49,12 @@ export function syncStickerInstances(
   roomName: string,
   stickerAdded: (id: string, element: StickerInstance) => void,
   stickerRemoved: (id: string) => void,
-  stickerPosUpdated: (id: string, pos: Pos, size: number, zIndex: number) => void
+  stickerPosUpdated: (
+    id: string,
+    pos: Pos,
+    size: number,
+    zIndex: number
+  ) => void
 ) {
   if (!validateRoomName(roomName)) {
     return;
@@ -43,13 +66,20 @@ export function syncStickerInstances(
     docs.docChanges().forEach((change) => {
       let element = change.doc;
       if (change.type === "added") {
-        const sanitizedStickerInstance = sanitizeStickerInstanceFromDB(change.doc.data());
+        const sanitizedStickerInstance = sanitizeStickerInstanceFromDB(
+          change.doc.data()
+        );
         stickerAdded(element.id, sanitizedStickerInstance);
       }
       if (change.type === "modified") {
         let stickerData = element.data();
         if (stickerData.position) {
-          stickerPosUpdated(element.id, stickerData.position, stickerData.size, stickerData.zIndex);
+          stickerPosUpdated(
+            element.id,
+            stickerData.position,
+            stickerData.size,
+            stickerData.zIndex
+          );
         }
       }
       if (change.type === "removed") {
@@ -60,12 +90,19 @@ export function syncStickerInstances(
   return unsub;
 }
 
-export async function addStickerInstance(roomName: string, element: StickerInstance) {
+export async function addStickerInstance(
+  roomName: string,
+  element: StickerInstance
+) {
   const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
   await addDoc(stickerInstances, sanitizeStickerInstanceForDB(element));
 }
 
-export async function updateStickerInstancePos(roomName: string, stickerID: string, pos: Pos) {
+export async function updateStickerInstancePos(
+  roomName: string,
+  stickerID: string,
+  pos: Pos
+) {
   if (pos[0] <= 0 || pos[1] <= 0 || pos[0] >= 1 || pos[1] >= 1) {
     return;
   }
@@ -73,17 +110,28 @@ export async function updateStickerInstancePos(roomName: string, stickerID: stri
   const stickerInstance = stickerInstanceDoc(stickerInstances, stickerID);
   setDoc(stickerInstance, { position: pos }, { merge: true });
 }
-export async function updateStickerInstanceScale(roomName: string, stickerID: string, size: number) {
+export async function updateStickerInstanceScale(
+  roomName: string,
+  stickerID: string,
+  size: number
+) {
   const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
   const stickerInstance = stickerInstanceDoc(stickerInstances, stickerID);
   setDoc(stickerInstance, { size: size }, { merge: true });
 }
-export async function updateStickerInstanceZIndex(roomName: string, stickerID: string, zIndex: number) {
+export async function updateStickerInstanceZIndex(
+  roomName: string,
+  stickerID: string,
+  zIndex: number
+) {
   const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
   const stickerInstance = stickerInstanceDoc(stickerInstances, stickerID);
   setDoc(stickerInstance, { zIndex: zIndex }, { merge: true });
 }
-export async function deleteStickerInstance(roomName: string, stickerID: string) {
+export async function deleteStickerInstance(
+  roomName: string,
+  stickerID: string
+) {
   const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
   const stickerInstance = stickerInstanceDoc(stickerInstances, stickerID);
 
@@ -91,6 +139,7 @@ export async function deleteStickerInstance(roomName: string, stickerID: string)
 }
 
 export async function resetStickers(roomName: string) {
+  
   logFirebaseUpdate("About to reset stickers for " + roomName);
   if (roomName == "chrisy") {
     logFirebaseUpdate("Chrisy is not allowed to reset stickers");
@@ -100,18 +149,18 @@ export async function resetStickers(roomName: string) {
     populateHerdimasCDN();
   }
   const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
+  console.log(stickerInstances.path);
+  //const stickerInstances = st
+  const querySnapshot = await getDocs(stickerInstances);
 
-  try {
-    const querySnapshot = await getDocs(stickerInstances);
-    querySnapshot.forEach((doc) => {
-      logFirebaseUpdate("Deleting sticker instance");
-      deleteDoc(doc.ref);
-    });
-    if (roomName == "molly") {
-      populateMollyAllInstances();
-    }
-  } catch (e) {
-    logError("Error resetting stickers", [(e as Error).message]);
+  console.log(querySnapshot.empty);
+  querySnapshot.forEach((doc) => {
+    console.log("HELLO");
+    logFirebaseUpdate("Deleting sticker instance");
+    deleteDoc(doc.ref);
+  });
+  if (roomName == "molly") {
+    populateMollyAllInstances();
   }
 }
 
@@ -130,7 +179,9 @@ export async function populateHerdimasCDN() {
 
   for (let i = 1; i < 33; i++) {
     let assetDoc = doc(dbStickerCDN, i.toString());
-    setDoc(assetDoc, { url: `https://storage.googleapis.com/is-this-thing-on/compromised/${i}.png` });
+    setDoc(assetDoc, {
+      url: `https://storage.googleapis.com/is-this-thing-on/compromised/${i}.png`,
+    });
   }
 }
 
