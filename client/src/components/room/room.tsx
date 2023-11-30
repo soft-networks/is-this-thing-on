@@ -18,7 +18,7 @@ const Room: React.FC<{ roomID: string; season?: number}> = ({ roomID, season }) 
   const unsubscribeFromRoomInfo = useRef<Unsubscribe>();
   const adminForIDs = useUserStore(useCallback((s) => s.adminFor, []));
   const setIsAdmin = useAdminStore(useCallback((s) => s.setIsAdmin, []));
-
+  const roomColor = useRoomStore(useCallback((s) => s.roomInfo?.roomColor, []));
 
   useEffect(() => {
     async function subscribeToRoomInfo() {
@@ -52,7 +52,7 @@ const Room: React.FC<{ roomID: string; season?: number}> = ({ roomID, season }) 
 
 
   return (
-    <Layout>
+    <Layout roomColor={roomColor}>
     <RoomNameGate id={roomID as string}>
       <RoomStatusGate>
         <ArtistRoom roomID={roomID} />

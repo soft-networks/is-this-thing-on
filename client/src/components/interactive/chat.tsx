@@ -167,7 +167,7 @@ const ChatInput: React.FC<{ onSubmit: (chat: { message: string; timestamp: numbe
       <input
         value={currentMessage}
         placeholder={`chat as ${displayName}`}
-        className="flex-1 padded:s-2 whiteFill border"
+        className="padded:s-1 flex-1 whiteFill border "
         onChange={(e) => {
           setCurrentMessage(e.target.value);
         }}
@@ -179,7 +179,7 @@ const ChatInput: React.FC<{ onSubmit: (chat: { message: string; timestamp: numbe
       />
       <div
         onClick={submitMessage}
-        className="clickable padded:s-2 backgroundFill border contrastFill:hover"
+        className="clickable padded:s-1 backgroundFill border contrastFill:hover"
         style={{ borderLeft: "none" }}
       >
         send

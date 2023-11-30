@@ -17,7 +17,7 @@ const AdminPanelInternal: React.FC<{}> = () => {
   return (
     <Draggable handle=".handle" nodeRef={panelRef}>
       <div
-        className="stack:s-2 grayFill relative border uiLayer "
+        className="stack:s-2 grayFill relative border uiLayer showOnHoverSelfTrigger "
         style={{ position: "fixed", top: "var(--s3)" , right: "var(--s1)" }}
         ref={panelRef}
       >
@@ -50,12 +50,12 @@ const StickerOverride: React.FC = () => {
   const setStickerBehaviorOverride = useAdminStore(useCallback((s) => s.setStickerBehaviorOverride, []));
 
   return (
-    <div className="stack:s-2 whiteFill padded:s-2">
+    <div className="highestLayer stack:s-2 whiteFill padded:s-2 ">
       <div>
         Special Sticker Behavior
       </div>
       <div className="horizontal-stack">
-        <div className="horizontal-stack:s-2">
+        <div className="horizontal-stack:s-2 everest">
           <label>Move</label>
           <input
             type="checkbox"

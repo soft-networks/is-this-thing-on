@@ -3,21 +3,24 @@ import { darlaSpinnerDoc, roomDoc } from "../locations";
 import { addStickerInstance } from "../stickers";
 
 // const waitingPeriod = 5 * 60 * 1000;
- const waitingPeriod = 30 * 1000;
+ const waitingPeriod = 2 * 1000;
+ const distFromCenter = 0.2;
+ const maxLength = 0.5; 
 
-export async function addDarlaStickers(stickerType: string) {
-  const maxStickers = Math.floor(Math.random() * 10 + 10);
+export async function addDarlaStickers(stickerType: string, size?: number) {
+  const maxStickers = Math.floor(Math.random() * 3 + 7);
 
   let angle = 0; 
+
+  const s = size || 0.1;
   for (let i=0; i< maxStickers; i++) {
-    
-    const wobbledRadius = Math.random() * 0.2 + 0.3;
+    const wobbledRadius = distFromCenter + Math.random() * (maxLength - distFromCenter);
     const x = 0.5 + wobbledRadius * Math.cos(angle);
     const y = 0.5 + wobbledRadius * Math.sin(angle);
     const stickerInstance: StickerInstance ={
       cdnID: stickerType,
-      position: [x, y],
-      size: 0.1,
+      position: [x - s/2, y - s/2],
+      size: s ,
       timestamp: Date.now(),
       zIndex: 1,
     }

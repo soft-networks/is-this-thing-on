@@ -273,13 +273,17 @@ p {
 .hide {
   display: none;
 }
-.showOnHover{
-  opacity: 0;
-  transition: opacity 300ms;
+.showOnHover, .showOnHoverSelfTrigger {
+  opacity: 0.4;
+  filter: blur(3px) grayscale(1);
+  transition: all 300ms;
 }
-.showOnHoverTrigger:hover .showOnHover{
+
+.showOnHoverTrigger:hover .showOnHover, .showOnHoverSelfTrigger:hover {
   opacity: 1;
+  filter: blur(0px) grayscale(0);
 }
+
 .overflowVisible {
   overflow: visible;
 }
@@ -638,7 +642,7 @@ a:hover,
   color: var(--black);
 }
 
-.contrastFill\:hover:hover {
+.contrastFill.contrastFill\:hover:hover {
   background: yellow !important;
 }
 
@@ -830,10 +834,6 @@ footer .clickable:hover{
   background: var(--contrast);
 } */
 
-input {
-  all: unset;
-  font-size: var(--s0);
-}
 
 input,
 input::placeholder {
@@ -841,6 +841,9 @@ input::placeholder {
     font: var(--s0);
 }
 
+input:focus{
+  outline: none;
+}
 @media screen and (min-width: 1300px)  {
 
 

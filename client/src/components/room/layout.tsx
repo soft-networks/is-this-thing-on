@@ -8,9 +8,10 @@ import { logCallbackDestroyed, logCallbackSetup } from "../../lib/logger";
 
 //TODO: Currently we have a listener for each ringNode. Can simplify, requires DB refactor.
 
-const Layout: React.FunctionComponent<{ hideChat?: boolean; hideFooter?: boolean }> = ({
+const Layout: React.FunctionComponent<{ hideChat?: boolean; hideFooter?: boolean, roomColor?: string}> = ({
   children,
   hideFooter,
+  roomColor
 }) => {
   const initializeRing = useRingStore(useCallback((s) => s.initializeRing, []));
   const updateRingStatus = useRingStore(useCallback((s) => s.updateStatus, []));
@@ -28,7 +29,7 @@ const Layout: React.FunctionComponent<{ hideChat?: boolean; hideFooter?: boolean
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="fullBleed lightFill relative" key="layout">
+    <div className="fullBleed lightFill relative" key="layout" style={roomColor ? {"--roomColor": roomColor} as React.CSSProperties : {}}>
       <ClickGate>
       {children}
       {!hideFooter && <Footer />}

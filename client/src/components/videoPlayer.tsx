@@ -52,7 +52,7 @@ const VideoPlayerInternal: React.FunctionComponent<{
       {!hideMuteButton && (
         <div className="highestLayer padded" style={{ position: "fixed", top: "0px", right: "0px" }}>
           <div
-            className="border-thin whiteFill padded:s-2 clickable contrastFill:hover"
+            className="border-thin whiteFill padded:s-2 clickable contrastFill:hover showOnHoverSelfTrigger"
             onClick={() => setMuted(!mute)}
           >
             {mute ? "unmute" : "mute"}

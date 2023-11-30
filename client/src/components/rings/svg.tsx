@@ -111,7 +111,7 @@ export const NodeLink: React.FC<NodeLinkProps> = ({ link, className, noNav, id})
 
   const text = useMemo(() => `${link.roomName} is ${link.streamStatus.includes('active') ? 'online' : 'offline'}`, [link.roomName, link.streamStatus]);
   return (
-    <div className={`border padded:s-2 center-text ${className}`} style={{ backgroundColor: link.streamStatus.includes('active') ? link.roomColor : "#eee" }}>
+    <div className={`border padded:s-2 center-text ${className}`} style={{ backgroundColor: link.streamStatus.includes('active') ? "var(--roomColor)" : "var(--white)" }}>
       { !noNav && link.streamStatus == 'active' ?  <a href={roomIDToHREF(id)} target="_blank" rel="noreferrer"> {text} </a> :<span> {text} </span>}
     </div>
   );
