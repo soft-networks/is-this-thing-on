@@ -22,7 +22,7 @@ const Index: NextPage = () => {
         <Head>
           <title>THING</title>
         </Head>
-        <div className="fullBleed">
+        <div className="fullBleed noOverflow">
           <DomRing/>
           <div className="center:absolute videoLayer center-text">is this thing on <br/>returns on Dec 14</div>
         </div>

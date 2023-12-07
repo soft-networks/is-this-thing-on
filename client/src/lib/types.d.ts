@@ -71,7 +71,8 @@ interface StickerInstance {
   size?: number,
   timestamp: number
   cdnID: string,
-  zIndex: number
+  zIndex: number,
+  text?: string
 }
 interface EnergyAccount {
   userID: UserID,

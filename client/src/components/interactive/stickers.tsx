@@ -35,7 +35,7 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
     return undefined;
   }, [adminForIDs, roomID]);
 
-  const addSticker = (pos: Pos, cdnID: string, scale?: number) => {
+  const addSticker = (pos: Pos, cdnID: string, scale?: number, text?: string) => {
     if (!roomID) return;
     logInfo("Adding sticker and performing transaction");
     addStickerInstance(roomID, {
@@ -44,6 +44,7 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
       cdnID: cdnID,
       size: scale,
       zIndex: 200,
+      text: text,
     });
     performTransaction({
       amount: 1,

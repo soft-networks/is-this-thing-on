@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 import { useUserStore } from "../../stores/userStore";
+import classNames from "classnames";
 
 const AccountButton: React.FunctionComponent = () => {
   const displayName = useUserStore(useCallback((state) => state.displayName, []));
@@ -10,13 +11,24 @@ const AccountButton: React.FunctionComponent = () => {
 
   return pathname !== "/account" ? (
     <Link href="/account" passHref>
-      <div className="whiteFill border contrastFill:hover padded:s-2 clickable clickable:link" suppressHydrationWarning>
-        {currentUser ? currentUser.displayName || currentUser.email : `${displayName}`}
+      <div
+        className={classNames(
+          "whiteFill border contrastFill:hover padded:s-2 clickable clickable:link",
+          { showOnHoverSelfTrigger: pathname !== "/ " }
+        )}
+        suppressHydrationWarning
+      >
+        {currentUser
+          ? currentUser.displayName || currentUser.email
+          : `${displayName}`}
       </div>
     </Link>
   ) : (
     <div className="horizontal-stack">
-      <div className="whiteFill border contrastFill:hover padded:s-2 clickable clickable:link" onClick={() => back()}>
+      <div
+        className="whiteFill border contrastFill:hover padded:s-2 clickable clickable:link"
+        onClick={() => back()}
+      >
         close
       </div>
     </div>

@@ -114,6 +114,9 @@ a, a:visited, .clickable\:link {
   cursor: crosshair;
 }
 
+.typeCursor{
+  cursor: text;
+}
 .closeCursor {
   cursor: alias;  
 }
@@ -247,6 +250,9 @@ p {
 }
 .padded\:s-2 {
   padding: var(--s-2);
+}
+.padded\:s-3 {
+  padding: var(--s-3);
 }
 .padded\:custom {
   padding: var(--spacing);
@@ -764,7 +770,7 @@ a:hover,
 .chat .contrastColor\:hover:hover {
   color: var(--chatAuthorColor);
 }
-.chat * {
+.chatBubble * {
   border-color:  var(--chatBorderColor) !important;
 }
 
@@ -843,6 +849,7 @@ input::placeholder {
 
 input:focus{
   outline: none;
+
 }
 @media screen and (min-width: 1300px)  {
 

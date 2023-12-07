@@ -6,10 +6,11 @@ import useRingStore from "../../stores/ringStore";
 import { useRoomStore } from "../../stores/roomStore";
 import { useUserStore } from "../../stores/userStore";
 import { logCallbackDestroyed, logCallbackSetup, logError, logFirebaseUpdate, logInfo } from "../../lib/logger";
+import classNames from "classnames";
 
-const DEFAULT_STYLE = (roomColor: string) =>
+const DEFAULT_STYLE = (roomColor: string, globalStyle: boolean) =>
   ({
-    "--chatAuthorColor": "var(--contrast)",
+    "--chatAuthorColor": globalStyle ? "yellow" : "var(--contrast)",
     "--chatMessageColor": "var(--black)",
     "--chatContainerBackground": "none",
     "--chatBorderColor": "var(--gray)",
@@ -69,7 +70,14 @@ export const Chat: React.FC<RoomUIProps> = ({ className, style = {} }) => {
   return (
     <div
       className={(className || "") + " chat uiLayer"}
-      style={{ ...DEFAULT_STYLE(roomColor || "gray"), ...style }}
+      style={
+        filterRoom
+          ? { ...DEFAULT_STYLE(roomColor || "gray", filterRoom), ...style }
+          : ({
+              ...DEFAULT_STYLE("gray", true),
+              "--roomColor": "yellow",
+            } as React.CSSProperties)
+      }
       ref={chatRef}
       id="chat"
     >
@@ -98,15 +106,29 @@ export const Chat: React.FC<RoomUIProps> = ({ className, style = {} }) => {
             return <RenderChat id={id} chat={chat} key={`chat-${id}`} />;
           })}
       </div>
-      <div className="horizontal-stack:s-2">
+      <div className="stack:s-2">
         <ChatInput onSubmit={sendNewMessage} />
         {roomID && (
-          <div
-            className="clickable whiteFill border contrastFill:hover"
-            onClick={() => setFilterRoom(!filterRoom)}
-            style={{ padding: "6px" }}
-          >
-            {filterRoom ? "🌎" : "🏠"}
+          <div className="horizontal-stack:noGap fullWidth">
+            <div
+              className={classNames(
+                "flex-1 clickable whiteFill border  center-text padded:s-3",
+                { contrastFill: filterRoom }
+              )}
+              onClick={() => setFilterRoom(true)}
+              style={{ borderRight: 0 }}
+            >
+              room chat
+            </div>
+            <div
+              className={classNames(
+                "flex-1 clickable whiteFill border center-text padded:s-3",
+                { contrastFill: !filterRoom }
+              )}
+              onClick={() => setFilterRoom(false)}
+            >
+              global chat
+            </div>
           </div>
         )}
       </div>
@@ -130,7 +152,7 @@ const RenderChat: React.FC<{ id: string; chat: ChatMessage }> = ({ chat, id }) =
   const myRoom = useMemo(() => links[chat.roomID], [links, chat]);
 
   return (
-    <div className="stack:noGap fullWidth align-start relative" style={{marginBlockStart: "var(--s-2)"}}>
+    <div className="stack:noGap fullWidth align-start relative chatBubble" style={{marginBlockStart: "var(--s-2)"}}>
       <div className="caption backgroundFill border-radius border" style={{ top: "-17px", padding: "4px" }}>
         <em>{chat.username || "unknown"}</em>
       </div>
@@ -163,7 +185,7 @@ const ChatInput: React.FC<{ onSubmit: (chat: { message: string; timestamp: numbe
     setCurrentMessage("");
   }, [currentMessage, displayName, onSubmit]);
   return (
-    <div className="fullWidth horizontal-stack:noGap align-middle chatInputContainer">
+    <div className="fullWidth horizontal-stack:noGap align-middle chatInputContainer bod">
       <input
         value={currentMessage}
         placeholder={`chat as ${displayName}`}
@@ -179,7 +201,7 @@ const ChatInput: React.FC<{ onSubmit: (chat: { message: string; timestamp: numbe
       />
       <div
         onClick={submitMessage}
-        className="clickable padded:s-1 backgroundFill border contrastFill:hover"
+        className="clickable padded:s-1 backgroundFill border contrastFill"
         style={{ borderLeft: "none" }}
       >
         send
