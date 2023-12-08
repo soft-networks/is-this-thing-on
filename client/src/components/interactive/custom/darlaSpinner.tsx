@@ -91,13 +91,13 @@ const Spinner: React.FC = () => {
         }}
       >
         {isIncomplete ? (
-          <div className="uiLayer padded whiteFill noEvents">
+          <div className="uiLayer padded:s-2 whiteFill noEvents border">
             <div
-              className=" caption contrastFill"
+              className="caption backgroundFill padded:s-2 border-radius border"
               style={{
                 position: "absolute",
-                bottom: "calc(0* var(--s0)",
-                left: "calc(-1 * var(--s0)",
+                bottom: "calc(-1 * var(--s1) - 2px)",
+                left: "calc(-1 * var(--s1))",
               }}
             >
               last spin: {lastSpinWinner}

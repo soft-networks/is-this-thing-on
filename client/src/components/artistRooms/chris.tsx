@@ -8,13 +8,11 @@ const Chris: React.FC = () => {
   return (
     <main className="fullBleed noOverflow relative chrisyRoom" style={{"--stickerGlowShadow": "none"} as React.CSSProperties}>
       <Chat
-        className=" absoluteOrigin"
         key="chat"
         style={
           {
-            "--chatContainerBackground": "rgba(0,0,0,0.1)",
             "--chatBorderColor": "rgba(0,0,0,0.1)",
-            "--chatMessageColor": "var(--white)",
+            "--chatMessageColor": "var(--black)",
             "--chatAuthorColor": "magenta",
           } as React.CSSProperties
         }

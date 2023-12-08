@@ -205,11 +205,11 @@ export const PopupStickerAdder: React.FC<StickerAdderProps> = ({
     <>
       {!chooserOpen && (
         <div
-          className="uiLayer padded:s-1 whiteFill contrastFill:hover absoluteOrigin border clickable"
+          className="uiLayer padded:s-1 contrastFill contrastFill:hover absoluteOrigin border clickable"
           style={{
-            top: "85%",
+            top: "var(--s0)",
             left: "50%",
-            transform: "translate(-50%, -50%)",
+            transform: "translate(-50%, 0%)",
           }}
           onClick={() => setChooserOpen(!chooserOpen)}
         >
@@ -228,7 +228,7 @@ export const PopupStickerAdder: React.FC<StickerAdderProps> = ({
           <DefaultChooseStickerType
             cdn={cdn}
             typeSelected={typeChosen}
-            className="grid:s-2 padded lightFill"
+            className="grid:s-2 padded whiteFill border"
             style={
               {
                 maxWidth: "100%",
@@ -252,11 +252,11 @@ const DefaultChooseStickerType: React.FC<{
     <>
       <div
         className={
-          "uiLayer " + (className || "grid:s-2 skrimFill border-radius padded")
+          "uiLayer " + (className || "grid:s-2 grayFill padded:s-2 border")
         }
       >
         <div
-          className="lightFill border contrastFill:hover padded:s-2 clickable"
+          className="contrastFill border contrastFill:hover padded:s-2 clickable"
           style={{
             position: "absolute",
             top: "calc(-1 * var(--s1))",

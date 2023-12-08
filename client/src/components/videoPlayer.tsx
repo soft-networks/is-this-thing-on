@@ -50,12 +50,12 @@ const VideoPlayerInternal: React.FunctionComponent<{
   return (
     <div className="fullBleed" key="videoPlayer" id="videoPlayer">
       {!hideMuteButton && (
-        <div className="highestLayer padded" style={{ position: "fixed", top: "0px", right: "0px" }}>
+        <div className="highestLayer padded" style={{ position: "fixed", left: "0px", top: "0px" }}>
           <div
             className="border-thin whiteFill padded:s-2 clickable contrastFill:hover showOnHoverSelfTrigger"
             onClick={() => setMuted(!mute)}
           >
-            {mute ? "unmute" : "mute"}
+            {mute ? "unmute video" : "mute video"}
           </div>
         </div>
       )}

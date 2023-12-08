@@ -18,13 +18,25 @@ const Index: NextPage = () => {
 
   return (
     <Layout>
-      <div className="fullBleed relative stack backgroundFIll">
+      <div
+        className="fullBleed lightFill  relative stack backgroundFIll"
+        style={{ "--roomColor": "yellow" } as React.CSSProperties}
+      >
         <Head>
           <title>THING</title>
         </Head>
         <div className="fullBleed noOverflow">
-          <DomRing/>
-          <div className="center:absolute videoLayer center-text">is this thing on <br/>returns on Dec 14</div>
+          <DomRing />
+          <div className="center:absolute highestLayer center-text">
+            is this thing on <br />
+            <Link
+              href={
+                "https://partiful.com/e/dkAWBCDQfVtmnL4q6jb7?utm_source=substack&utm_medium=email"
+              }
+            >
+              returns on Dec 14
+            </Link>
+          </div>
         </div>
         <Chat key="index-chat" />
       </div>

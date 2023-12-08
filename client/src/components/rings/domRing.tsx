@@ -55,7 +55,7 @@ const OnlineElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number }> = ({
       }
       onClick={() => router.push(roomIDToHREF(roomInfo.roomID))}
     >
-      <div className="homepageVideo border">
+      <div className="homepageVideo noOverflow border">
         <VideoPreview
           localMuted={true}
           iLink={roomInfo}

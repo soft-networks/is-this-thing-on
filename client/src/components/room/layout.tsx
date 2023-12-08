@@ -29,7 +29,7 @@ const Layout: React.FunctionComponent<{ hideChat?: boolean; hideFooter?: boolean
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="fullBleed lightFill relative" key="layout" style={roomColor ? {"--roomColor": roomColor} as React.CSSProperties : {}}>
+    <div className="fullBleed crazyFill relative" key="layout" style={roomColor ? {"--roomColor": roomColor} as React.CSSProperties : {}}>
       <ClickGate>
       {children}
       {!hideFooter && <Footer />}

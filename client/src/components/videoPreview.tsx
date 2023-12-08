@@ -23,10 +23,10 @@ const VideoPreview: React.FC<{ iLink: RoomLinkInfo; localMuted: boolean; isTest:
       url={streamLink}
       playing={true}
       muted={localMuted}
-      style={{ width: "100%", height: "100%" }}
-      className="noEvents fullBleed videoAspect"
-      width={"100%"}
-      height={"100%"}
+      className="noEvents "
+      width={"302px"}
+      height={"169px"}
+      style={{margin: "-1px"}}
     />
   ) : (
     <div></div>

@@ -3,7 +3,7 @@ import { darlaSpinnerDoc, roomDoc } from "../locations";
 import { addStickerInstance } from "../stickers";
 
 // const waitingPeriod = 5 * 60 * 1000;
- const waitingPeriod = 2 * 1000;
+ const waitingPeriod = 30 * 1000;
  const distFromCenter = 0.2;
  const maxLength = 0.5; 
 

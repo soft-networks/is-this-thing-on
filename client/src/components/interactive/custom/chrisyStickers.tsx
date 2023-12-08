@@ -163,8 +163,9 @@ const ChrisyStickerAdminController: React.FC = () => {
       className="align:center highertThanStickerLayer horizontal-stack"
     >
       <div
-        className={classnames("uiLayer whiteFill padded:s-2 border-thin clickable contrastFill:hover", {
-          blue: behaviorOverride == undefined,
+        className={classnames("uiLayer whiteFill padded:s-2 border-thin clickable ", {
+          contrastFill: behaviorOverride == undefined,
+          "contrastFill:hover": behaviorOverride !== undefined,
         })}
         onClick={() => setBehaviorOverride(undefined)}
         key="NORMAL-CLICKER"
@@ -172,8 +173,9 @@ const ChrisyStickerAdminController: React.FC = () => {
         {"HIMS"} MODE
       </div>
       <div
-        className={classnames("uiLayer whiteFill padded:s-2 border-thin clickable contrastFill:hover", {
-          blue: behaviorOverride == "MOVE",
+        className={classnames("uiLayer whiteFill padded:s-2 border-thin clickable ", {
+          contrastFill: behaviorOverride == "MOVE",
+          "contrastFill:hover": behaviorOverride !== "MOVE",
         })}
         onClick={() => setBehaviorOverride("MOVE")}
         key="MOVE-CLICKER"
@@ -181,8 +183,9 @@ const ChrisyStickerAdminController: React.FC = () => {
         {"RUB"} MODE
       </div>
       <div
-        className={classnames("uiLayer whiteFill padded:s-2 border-thin clickable contrastFill:hover", {
-          blue: behaviorOverride == "DELETE",
+        className={classnames("uiLayer whiteFill padded:s-2 border-thin clickable ", {
+          contrastFill: behaviorOverride == "DELETE",
+          "contrastFill:hover": behaviorOverride !== "DELETE",
         })}
         onClick={() => setBehaviorOverride("DELETE")}
         key={"DELETE-CLICKER"}

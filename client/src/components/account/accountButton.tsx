@@ -14,7 +14,7 @@ const AccountButton: React.FunctionComponent = () => {
       <div
         className={classNames(
           "whiteFill border contrastFill:hover padded:s-2 clickable clickable:link",
-          { showOnHoverSelfTrigger: pathname !== "/ " }
+          { showOnHoverSelfTrigger: pathname !== "/" }
         )}
         suppressHydrationWarning
       >

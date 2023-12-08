@@ -7,7 +7,6 @@ const Molly: React.FC = () => {
     <DefaultRoomView
       stickerChooser={PopupStickerAdder}
       chatStyle={{
-        "--chatContainerBackground": "pink",
         "--chatBorderColor": "hotpink",
         "--chatMessageColor": "var(--black)",
         "--chatAuthorColor": "black"
