@@ -1,11 +1,24 @@
 import { Unsubscribe } from "firebase/firestore";
-import React, { createRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  createRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Draggable from "react-draggable";
 import { addChatMessageDB, syncChat } from "../../lib/firestore";
 import useRingStore from "../../stores/ringStore";
 import { useRoomStore } from "../../stores/roomStore";
 import { useUserStore } from "../../stores/userStore";
-import { logCallbackDestroyed, logCallbackSetup, logError, logFirebaseUpdate, logInfo } from "../../lib/logger";
+import {
+  logCallbackDestroyed,
+  logCallbackSetup,
+  logError,
+  logFirebaseUpdate,
+  logInfo,
+} from "../../lib/logger";
 import classNames from "classnames";
 
 const DEFAULT_STYLE = (roomColor: string, globalStyle: boolean) =>
@@ -33,7 +46,6 @@ const getRoomNameForChat = (roomName: string) => {
   return rn;
 };
 
-
 export const Chat: React.FC<RoomUIProps> = ({ className, style = {} }) => {
   let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
   let chatRef = createRef<HTMLDivElement>();
@@ -42,7 +54,10 @@ export const Chat: React.FC<RoomUIProps> = ({ className, style = {} }) => {
   let roomName = useRoomStore((state) => state.roomInfo?.roomName);
   let unsubRef = useRef<Unsubscribe>();
   let [filterRoom, setFilterRoom] = useState<boolean>(true);
-  let [lastRecalculationUpdate, setLastRecalculationUpdate] = useState<number>(Date.now());
+  let [lastRecalculationUpdate, setLastRecalculationUpdate] = useState<number>(
+    Date.now()
+  );
+  let [minimizeChat, setMinimizeChat] = useState<boolean>(false);
 
   useEffect(() => {
     setLastRecalculationUpdate(Date.now());
@@ -54,7 +69,6 @@ export const Chat: React.FC<RoomUIProps> = ({ className, style = {} }) => {
       npc[cID] = chat;
       return npc;
     });
-
   }, []);
   const chatWasRemoved = useCallback((cID) => {
     logFirebaseUpdate("ChatMessage removed");
@@ -101,55 +115,73 @@ export const Chat: React.FC<RoomUIProps> = ({ className, style = {} }) => {
       ref={chatRef}
       id="chat"
     >
-      <div
-        className="stack:s-2 scrollOnHover"
-        style={
-          {
-            "--spacing": "var(--s-2)",
-            flexDirection: "column-reverse",
-            maxHeight: `${CHAT_HEIGHT*100}vh`,
-            paddingBottom: "var(--s-1)",
-            paddingTop: "var(--s1)",
-          } as React.CSSProperties
-        }
-        onScroll={() => {console.log("SCROLLING"); setLastRecalculationUpdate(Date.now())}}
-
-      >
-        {Object.entries(chatList)
-          .sort((a, b) => b[1].timestamp - a[1].timestamp)
-          .map(([id, chat]) => {
-            if (roomID && filterRoom && chat.roomID !== roomID) {
-              return null;
-            }
-            if (!filterRoom && chat.roomID !== "home") {
-              return null;
-            }
-            return <RenderChat id={id} chat={chat} key={`chat-${id}`} lastRecalculationUpdate={lastRecalculationUpdate} />;
-          })}
-      </div>
+      {!minimizeChat && (
+        <div
+          className="stack:s-2 scrollOnHover"
+          style={
+            {
+              "--spacing": "var(--s-2)",
+              flexDirection: "column-reverse",
+              maxHeight: `${CHAT_HEIGHT * 100}vh`,
+              paddingBottom: "var(--s-1)",
+              paddingTop: "var(--s1)",
+            } as React.CSSProperties
+          }
+          onScroll={() => {
+            console.log("SCROLLING");
+            setLastRecalculationUpdate(Date.now());
+          }}
+        >
+          {Object.entries(chatList)
+            .sort((a, b) => b[1].timestamp - a[1].timestamp)
+            .map(([id, chat]) => {
+              if (roomID && filterRoom && chat.roomID !== roomID) {
+                return null;
+              }
+              if (!filterRoom && chat.roomID !== "home") {
+                return null;
+              }
+              return (
+                <RenderChat
+                  id={id}
+                  chat={chat}
+                  key={`chat-${id}`}
+                  lastRecalculationUpdate={lastRecalculationUpdate}
+                />
+              );
+            })}
+        </div>
+      )}
       <div className="stack:s-2">
-        <ChatInput onSubmit={sendNewMessage} />
+        {!minimizeChat && <ChatInput onSubmit={sendNewMessage} />}
         {roomID && (
-          <div className="horizontal-stack:noGap fullWidth">
-            <div
-              className={classNames(
-                "flex-1 clickable whiteFill border  center-text padded:s-3",
-                { contrastFill: filterRoom }
-              )}
-              onClick={() => setFilterRoom(true)}
-              style={{ borderRight: 0 }}
-            >
-              {roomName ? getRoomNameForChat(roomName): "room"} chat
+          <div className="horizontal-stack:s-2">
+            <div className="clickable whiteFill border  center-text padded:s-3 contrastFill:hover" onClick={() => setMinimizeChat(!minimizeChat)}>
+              {minimizeChat ? "open chat" : "minimize"}
             </div>
-            <div
-              className={classNames(
-                "flex-1 clickable whiteFill border center-text padded:s-3",
-                { contrastFill: !filterRoom }
-              )}
-              onClick={() => setFilterRoom(false)}
-            >
-              thing chat
-            </div>
+            {!minimizeChat && (
+              <div className="horizontal-stack:noGap fullWidth">
+                <div
+                  className={classNames(
+                    "flex-1 clickable whiteFill border  center-text padded:s-3",
+                    { contrastFill: filterRoom }
+                  )}
+                  onClick={() => setFilterRoom(true)}
+                  style={{ borderRight: 0 }}
+                >
+                  {roomName ? getRoomNameForChat(roomName) : "room"} chat
+                </div>
+                <div
+                  className={classNames(
+                    "flex-1 clickable whiteFill border center-text padded:s-3",
+                    { contrastFill: !filterRoom }
+                  )}
+                  onClick={() => setFilterRoom(false)}
+                >
+                  thing chat
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -157,13 +189,22 @@ export const Chat: React.FC<RoomUIProps> = ({ className, style = {} }) => {
   );
 };
 
-
 //Write a simple value remapping function like p5.js map
-function remap(value: number, start1: number, stop1: number, start2: number, stop2: number) {
-  return  start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
+function remap(
+  value: number,
+  start1: number,
+  stop1: number,
+  start2: number,
+  stop2: number
+) {
+  return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
 }
 
-const RenderChat: React.FC<{ id: string; chat: ChatMessage, lastRecalculationUpdate: number }> = ({ chat, id, lastRecalculationUpdate}) => {
+const RenderChat: React.FC<{
+  id: string;
+  chat: ChatMessage;
+  lastRecalculationUpdate: number;
+}> = ({ chat, id, lastRecalculationUpdate }) => {
   const links = useRingStore((s) => s.links);
   const myRoom = useMemo(() => links[chat.roomID], [links, chat]);
   const [myBlurPercentage, setMyBlurPercentage] = useState<number>(0);
@@ -173,15 +214,21 @@ const RenderChat: React.FC<{ id: string; chat: ChatMessage, lastRecalculationUpd
   useEffect(() => {
     if (myRef.current) {
       const y = myRef.current.getBoundingClientRect().top;
-      const percentage = remap(y, (CHAT_HEIGHT - 0.05) * window.innerHeight, window.innerHeight - 400, 0, 1);
+      const percentage = remap(
+        y,
+        (CHAT_HEIGHT - 0.05) * window.innerHeight,
+        window.innerHeight - 400,
+        0,
+        1
+      );
       setMyBlurPercentage(percentage);
     }
-  }, [myRef.current, lastRecalculationUpdate])
+  }, [myRef.current, lastRecalculationUpdate]);
 
   return (
     <div
       className="stack:noGap fullWidth align-start relative chatBubble"
-      style={{ marginBlockStart: "var(--s-2)", opacity: myBlurPercentage}}
+      style={{ marginBlockStart: "var(--s-2)", opacity: myBlurPercentage }}
       ref={myRef}
     >
       <div
@@ -205,9 +252,13 @@ const RenderChat: React.FC<{ id: string; chat: ChatMessage, lastRecalculationUpd
   );
 };
 
-const ChatInput: React.FC<{ onSubmit: (chat: { message: string; timestamp: number; username: string }) => void }> = ({
-  onSubmit,
-}) => {
+const ChatInput: React.FC<{
+  onSubmit: (chat: {
+    message: string;
+    timestamp: number;
+    username: string;
+  }) => void;
+}> = ({ onSubmit }) => {
   const displayName = useUserStore((state) => state.displayName);
   //const numOnline = useRoomStore((state) => state.roomInfo?.numOnline);
 

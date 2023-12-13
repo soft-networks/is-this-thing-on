@@ -21,7 +21,7 @@
   --light: #ececec;
   --black: rgb(10, 38, 42);
   --white: white;
-  --faintWhite: rgba(255, 255, 255, 0.9);
+  --faintWhite: rgba(255, 255, 255, 0.68);
   --contrast: #FCFF54;
   --backgroundColor: #F3F3F3;
   --roomColor: white;
@@ -150,8 +150,9 @@ a, a:visited, .clickable\:link {
 
 iframe html, iframe body {
   overflow: hidden !important;
-
 }
+
+
 /* (Optional) Apply a "closed-hand" cursor during drag operation. */
 .draggable.active {
   cursor: grabbing;
@@ -286,27 +287,14 @@ p {
 }
 .showOnHover, .showOnHoverSelfTrigger {
   /* //animation: blurmyself 0.1s 1s forwards; */
+  opacity: 0.5;
   transition: all 300ms;
-  opacity: 0.4;
-  filter: blur(3px) grayscale(1);  
-
 }
 
-@keyframes blurmyself {
-  0% {
-    opacity: 1;
-    filter: blur(0px) grayscale(0);
-  }
-  100% {
-    opacity: 0.4;
-    filter: blur(3px) grayscale(1);  
-  }
-}
+
 
 .showOnHoverTrigger:hover .showOnHover, .showOnHoverSelfTrigger:hover {
-  opacity: 1 !important;
-  filter: blur(0px) grayscale(0) !important;
-  animation: none;
+  opacity: 1;
 }
 
 .overflowVisible {

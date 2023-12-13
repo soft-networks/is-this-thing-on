@@ -25,9 +25,9 @@ const Footer: React.FC = () => {
 const HomeButton : React.FC = () => {
   const { pathname, back } = useRouter();
   return pathname == "/" ? (
-    <Link href={"/about"} passHref ><div className="padded:s-2 border clickable whiteFill contrastFill:hover">about</div></Link>
+    <Link href={"/about"} passHref ><div className="padded:s-3 border clickable whiteFill contrastFill:hover">about</div></Link>
   ) : (
-    <Link href={"/"} passHref ><div className="padded:s-2 border clickable whiteFill contrastFill:hover showOnHoverSelfTrigger">home</div></Link>
+    <Link href={"/"} passHref ><div className="padded:s-3 border clickable whiteFill contrastFill:hover showOnHoverSelfTrigger">home</div></Link>
   )
 }
 

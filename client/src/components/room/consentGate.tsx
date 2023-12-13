@@ -27,11 +27,11 @@ const ConsentGateInternal: React.FC<{ roomID: string; consentURL: string }> = ({
     <>{children}</>
   ) : (
     <div className="fullBleed absolute faintWhiteFill highestLayer">
-      <div className="center:absolute stack padded" style={{ width: "80%", height: "70%" }}>
+      <div className="center:absolute stack padded" style={{ width: "80vw", height: "85vh" }}>
         <iframe src={consentURL} className="flex-1" style={{ border: "1px solid black" }} />
-        <div className="horizontal-stack">
+        <div className="horizontal-stack ">
           <div
-            className="clickable padded lightFill border contrastFill:hover"
+            className="clickable padded lightFill border contrastFill contrastFill:hover"
             onClick={() => {
               console.log("SETTING", roomID);
               setConsent(roomID);

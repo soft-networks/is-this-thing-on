@@ -20,6 +20,7 @@ export function sanitizeRoomInfo(data: DocumentData, id: string): RoomInfo {
     energy: data["energy"] || 0,
     forceSeason0: data["forceSeason0"] || false,
     consentURL: data["consentURL"] || undefined,
+    previewOverlay: data["preview_overlay"] || undefined
   };
 }
 

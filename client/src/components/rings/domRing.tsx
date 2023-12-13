@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
 import VideoPreview from "../videoPreview";
 import { roomIsActive } from "../../stores/roomStore";
@@ -44,6 +44,7 @@ const OnlineElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number }> = ({
   offsetN,
 }) => {
   const router = useRouter();
+  const [isHovering, setIsHovering] = useState<boolean>(false);
   return (
     <div
       className="homepageVideo antiRotate largeElementOnEllipse relative clickable"
@@ -54,10 +55,15 @@ const OnlineElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number }> = ({
         } as React.CSSProperties
       }
       onClick={() => router.push(roomIDToHREF(roomInfo.roomID))}
+      onMouseOver={() => setIsHovering(true)}
+      onMouseOut={() => setIsHovering(false)}
     >
       <div className="homepageVideo noOverflow border">
+        {roomInfo.previewOverlay && <div className="absoluteOrigin fullBleed highestLayer">
+          <img src={roomInfo.previewOverlay} className="fullBleed absoluteOrigin noEvents noSelect"/>
+        </div>}
         <VideoPreview
-          localMuted={true}
+          localMuted={!isHovering}
           iLink={roomInfo}
           isTest={roomInfo.streamStatus.includes("test")}
         />
