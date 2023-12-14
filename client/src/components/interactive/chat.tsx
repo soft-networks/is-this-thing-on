@@ -137,7 +137,7 @@ export const Chat: React.FC<RoomUIProps & {whiteText?: boolean}> = ({ className,
         >
           {Object.entries(chatList)
             .sort((a, b) => b[1].timestamp - a[1].timestamp)
-            .map(([id, chat]) => {
+            .map(([id, chat], index) => {
               if (roomID && filterRoom && chat.roomID !== roomID) {
                 return null;
               }
@@ -146,6 +146,7 @@ export const Chat: React.FC<RoomUIProps & {whiteText?: boolean}> = ({ className,
               }
               return (
                 <RenderChat
+                  alwaysShow={index <= 4}
                   id={id}
                   chat={chat}
                   key={`chat-${id}`}
@@ -207,7 +208,8 @@ const RenderChat: React.FC<{
   id: string;
   chat: ChatMessage;
   lastRecalculationUpdate: number;
-}> = ({ chat, id, lastRecalculationUpdate }) => {
+  alwaysShow?: boolean;
+}> = ({ chat, id, lastRecalculationUpdate, alwaysShow }) => {
   const links = useRingStore((s) => s.links);
   const myRoom = useMemo(() => links[chat.roomID], [links, chat]);
   const [myBlurPercentage, setMyBlurPercentage] = useState<number>(0);
@@ -217,13 +219,14 @@ const RenderChat: React.FC<{
   useEffect(() => {
     if (myRef.current) {
       const y = myRef.current.getBoundingClientRect().top;
-      const percentage = remap(
+      let percentage = remap(
         y,
         (CHAT_HEIGHT - 0.05) * window.innerHeight,
         window.innerHeight - 400,
         0,
         1
       );
+      //percentage = 0;
       setMyBlurPercentage(percentage);
     }
   }, [myRef.current, lastRecalculationUpdate]);
@@ -231,7 +234,7 @@ const RenderChat: React.FC<{
   return (
     <div
       className="stack:noGap fullWidth align-start relative chatBubble"
-      style={{ marginBlockStart: "var(--s-2)", opacity: myBlurPercentage }}
+      style={{ marginBlockStart: "var(--s-2)", opacity: alwaysShow ? 1 : myBlurPercentage }}
       ref={myRef}
     >
       <div
