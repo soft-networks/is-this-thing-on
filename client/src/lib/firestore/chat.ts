@@ -1,4 +1,4 @@
-import { addDoc, limit, onSnapshot, orderBy, query } from "firebase/firestore";
+import { addDoc, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import { validateRoomName } from "./converters";
 import { chatCollection, roomDoc } from "./locations";
 
@@ -7,7 +7,8 @@ export async function syncChat(
   removeChat: (id: string) => void
 ) {
   const chats = chatCollection();
-  const q = query(chats, orderBy("timestamp", "desc"), limit(100))
+  
+  let q = query(chats, orderBy("timestamp", "desc"), limit(150));
   const unsub = onSnapshot(q, (docs) => {
     docs.docChanges().forEach((change) => {
       let chat = change.doc;

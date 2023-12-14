@@ -101,6 +101,9 @@ body {
   font-size: max(2.1vw, 24px);
   letter-spacing: -1px;
 }
+.h3 {
+  font-size: var(--s1);
+}
 
 a, a:visited, .clickable\:link {
   color: var(--black);
@@ -647,6 +650,7 @@ a:hover,
 .scale\:hover:hover {
   scale: 1.2;
 }
+
 .whiteFill {
   background: var(--white);
 }

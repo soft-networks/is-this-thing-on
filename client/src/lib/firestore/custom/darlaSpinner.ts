@@ -2,8 +2,8 @@ import { collection, doc, onSnapshot, setDoc } from "firebase/firestore";
 import { darlaSpinnerDoc, roomDoc } from "../locations";
 import { addStickerInstance } from "../stickers";
 
-// const waitingPeriod = 5 * 60 * 1000;
- const waitingPeriod = 30 * 1000;
+  const waitingPeriod = 284 * 1000;
+ //const waitingPeriod = 30 * 1000;
  const distFromCenter = 0.2;
  const maxLength = 0.5; 
 

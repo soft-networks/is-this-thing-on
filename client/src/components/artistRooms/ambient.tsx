@@ -6,14 +6,13 @@ import AdminPanel from "../account/adminPanel";
 const Ambient: React.FC = () => {
   return (
     <main className="fullBleed noOverflow relative" style={{ background: "#edf3f4" }}>
-      <iframe className="ambience absoluteOrigin fullBleed interactiveStickerLayer" src="https://ambient.institute/sounds" />
-      <Chat key="chat" style={{
+      <Chat key="chat"  whiteText style={{
           "--chatContainerBackground": "rgba(0,0,0,0)",
           "--chatBorderColor": "rgba(0,0,0,0)",
           "--chatMessageBackgroundColor": "rgba(0,0,0,0)",
           "--chatMessageColor": "var(--white)",
-          "--chatAuthorColor": "var(--white)"
-        } as React.CSSProperties}/>
+          "--chatAuthorColor": "var(--white)",
+          "--backgroundColor": "rgba(0,0,0,0)" } as React.CSSProperties}/>
       <VideoPlayer
         muteOverride={true}
         hideMuteButton={true}

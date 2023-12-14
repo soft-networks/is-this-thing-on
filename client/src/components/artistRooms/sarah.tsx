@@ -6,7 +6,7 @@ const Sarah: React.FC = () => {
   return (
     <main className="fullBleed noOverflow relative">
       <DefaultRoom
-        stickerChooser={TypingStickerAdder}
+        stickerChooser={EmptyChooser}
       />
     </main>
   );

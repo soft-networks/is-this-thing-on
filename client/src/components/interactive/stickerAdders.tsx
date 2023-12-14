@@ -205,7 +205,7 @@ export const PopupStickerAdder: React.FC<StickerAdderProps> = ({
     <>
       {!chooserOpen && (
         <div
-          className="uiLayer padded:s-1 contrastFill contrastFill:hover absoluteOrigin border clickable"
+          className="uiLayer padded:s-1 contrastFill contrastFill:hover absoluteOrigin border clickable h3"
           style={{
             top: "var(--s0)",
             left: "50%",

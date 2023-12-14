@@ -47,7 +47,7 @@ const getRoomNameForChat = (roomName: string) => {
   return rn;
 };
 
-export const Chat: React.FC<RoomUIProps> = ({ className, style = {} }) => {
+export const Chat: React.FC<RoomUIProps & {whiteText?: boolean}> = ({ className, style = {}, whiteText}) => {
   let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
   let chatRef = createRef<HTMLDivElement>();
   let roomID = useRoomStore((state) => state.currentRoomID);
@@ -103,7 +103,7 @@ export const Chat: React.FC<RoomUIProps> = ({ className, style = {} }) => {
       if (unsubRef.current) unsubRef.current();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [filterRoom]);
   return (
     <div
       className={(className || "") + " chat uiLayer"}
@@ -155,11 +155,11 @@ export const Chat: React.FC<RoomUIProps> = ({ className, style = {} }) => {
             })}
         </div>
       )}
-      <div className="stack:s-2">
+      <div className="stack:s-2" style={whiteText ? {color: "black"} : {}}>
         {!minimizeChat && <ChatInput onSubmit={sendNewMessage} />}
         {roomID && (
-          <div className="horizontal-stack:s-2">
-            <div className="clickable whiteFill border  center-text padded:s-3 contrastFill:hover" onClick={() => setMinimizeChat(!minimizeChat)}>
+          <div className="horizontal-stack:s-2" >
+            <div className={classNames("clickable whiteFill border center-text padded:s-3 contrastFill:hover")} onClick={() => setMinimizeChat(!minimizeChat)}>
               {minimizeChat ? "open chat" : "minimize"}
             </div>
             {!minimizeChat && (

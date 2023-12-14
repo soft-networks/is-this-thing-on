@@ -60,7 +60,7 @@ const Spinner: React.FC = () => {
         className="uiLayer"
         style={{
           position: "absolute",
-          bottom: "300px",
+          bottom: "20vw",
           right: "20px",
           width: "20vw",
         }}
@@ -70,7 +70,7 @@ const Spinner: React.FC = () => {
           style={{ position: "absolute", top: "-2vw", width: "100%", zIndex: -1}}
         ></img>
         <img
-          src="https://storage.googleapis.com/is-this-thing-on/darla/spinfront.png"
+          src="https://storage.googleapis.com/is-this-thing-on/darla/sprinfront.png"
           alt="Spinning wheel"
           className="animateTransform noEvents"
           style={{
@@ -115,7 +115,7 @@ const Spinner: React.FC = () => {
           </div>
         ) : (
           <div
-            className="padded:s-2 contrastFill clickable contrastFill:hover border"
+            className="h3 padded:s-2 contrastFill clickable contrastFill:hover border"
             onClick={() => doSpin()}
           >
             spin the wheel!!!
