@@ -965,3 +965,24 @@ input:focus{
     offset-distance: var(--animEnd);
   }
 }
+
+@media screen and (max-width: 800px) {
+  #mobileMessage {
+    visibility: visible;
+    opacity: 1;
+  }
+  #desktopMessage{
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+@media screen and (min-width: 801px) {
+  #desktopMessage {
+    visibility: visible;
+    opacity: 1;
+  }
+  #mobileMessage{
+    visibility: hidden;
+    opacity: 0;
+  }
+}

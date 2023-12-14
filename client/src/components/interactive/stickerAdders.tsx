@@ -1,9 +1,10 @@
 import classnames from "classnames";
-import { MouseEventHandler, useCallback, useRef, useState } from "react";
+import { MouseEventHandler, useCallback, useEffect, useRef, useState } from "react";
 import { RectReadOnly } from "react-use-measure";
 import { StickerImage } from "./stickerRenderHelpers";
 import { logError } from "../../lib/logger";
 import { useAdminStore } from "../../stores/adminStore";
+import { useRouter } from "next/router";
 
 export interface StickerAdderProps {
   addSticker: (pos: Pos, cdnID: string, scale?: number, text?: string) => void;
@@ -248,6 +249,8 @@ const DefaultChooseStickerType: React.FC<{
   style?: React.CSSProperties;
   className?: string;
 }> = ({ cdn, typeSelected, style, className }) => {
+
+
   return (
     <>
       <div
@@ -273,7 +276,7 @@ const DefaultChooseStickerType: React.FC<{
                 className="clickable:opacity"
                 key={`choosesticker-${k}`}
                 onClick={(e) => typeSelected(k)}
-                style={{ width: "5ch", display: "inline-block" }}
+                style={{ width: Object.keys(cdn).includes("away") ? "12ch" : "5ch", display: "inline-block" }}
               >
                 <StickerImage url={cdn[k].imageURL} />
               </div>
@@ -283,3 +286,4 @@ const DefaultChooseStickerType: React.FC<{
     </>
   );
 };
+

@@ -3,6 +3,7 @@ import DefaultRoomview from "./defaultRoom";
 import Draggable from "react-draggable";
 import VideoPlayer from "../videoPlayer";
 import { Chat } from "../interactive/chat";
+import AdminPanel from "../account/adminPanel";
 
 const Soft: React.FC = () => {
   return (
@@ -10,14 +11,15 @@ const Soft: React.FC = () => {
       className="fullBleed noOverflow relative"
       style={{ background: "#edf3f4" }}
     >
+      <AdminPanel/>
       <VideoPlayer />
       <Chat />
       <AppWrapper
-        appname="dev website"
+        appname="preview website"
         style={{left: "40%", top: "5%" }}
       >
         <iframe
-          src="https://7pg39n-3000.csb.app/"
+          src="https://livecode--is-this-thing-on.netlify.app/"
           style={{ width: "50vw", height: "50vh", border: 0 }}
           title="soft-networks/is-this-thing-on/draft/staging-cookies preview"
           allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
@@ -25,7 +27,7 @@ const Soft: React.FC = () => {
         />
       </AppWrapper>
       <AppWrapper
-        appname="requests"
+        appname="maintainance log"
         style={{top: "30%", left: "55%" }}
       >
         <iframe

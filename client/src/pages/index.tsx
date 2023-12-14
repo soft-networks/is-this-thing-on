@@ -28,14 +28,7 @@ const Index: NextPage = () => {
         <div className="fullBleed noOverflow">
           <DomRing />
           <div className="center:absolute highestLayer center-text">
-            dev? <br />
-            <Link
-              href={
-                "https://partiful.com/e/dkAWBCDQfVtmnL4q6jb7?utm_source=substack&utm_medium=email"
-              }
-            >
-              returns on Dec 14
-            </Link>
+            dev?
           </div>
         </div>
         <Chat key="index-chat" />
