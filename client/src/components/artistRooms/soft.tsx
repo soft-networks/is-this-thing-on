@@ -14,11 +14,11 @@ const Soft: React.FC = () => {
       <Chat />
       <AppWrapper
         appname="dev website"
-        style={{left: "40%", top: "10%" }}
+        style={{left: "40%", top: "5%" }}
       >
         <iframe
           src="https://7pg39n-3000.csb.app/"
-          style={{ width: "30vw", height: "30vh", border: 0 }}
+          style={{ width: "50vw", height: "50vh", border: 0 }}
           title="soft-networks/is-this-thing-on/draft/staging-cookies preview"
           allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
           sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
@@ -52,7 +52,7 @@ const AppWrapper: React.FC<{
       >
         <div
           className="horizontal-stack:noGap contrastFill clickable "
-          style={{ borderBottom: "1px solid black" }}
+          style={isOpen ? { borderBottom: "1px solid black" } : {}}
         > 
           <div className="contrastFill:hover padded:s-3" onClick={() => setIsOpen(!isOpen)}> {isOpen ? "x" : "+"}</div>
           <div className="handle padded:s-3 flex-1 center-text">{appname}</div>
