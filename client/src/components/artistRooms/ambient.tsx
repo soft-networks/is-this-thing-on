@@ -14,8 +14,6 @@ const Ambient: React.FC = () => {
           "--chatAuthorColor": "var(--white)",
           "--backgroundColor": "rgba(0,0,0,0)" } as React.CSSProperties}/>
       <VideoPlayer
-        muteOverride={true}
-        hideMuteButton={true}
       />
       <AdminPanel/>
     </main>

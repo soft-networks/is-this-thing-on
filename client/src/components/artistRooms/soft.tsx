@@ -17,7 +17,7 @@ const Soft: React.FC = () => {
         style={{left: "40%", top: "5%" }}
       >
         <iframe
-          src="https://7pg39n-3000.csb.app/"
+          src="https://livecode--is-this-thing-on.netlify.app/"
           style={{ width: "50vw", height: "50vh", border: 0 }}
           title="soft-networks/is-this-thing-on/draft/staging-cookies preview"
           allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
