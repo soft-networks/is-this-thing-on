@@ -20,6 +20,7 @@ import {
   logInfo,
 } from "../../lib/logger";
 import classNames from "classnames";
+import { useRouter } from "next/router";
 
 const DEFAULT_STYLE = (roomColor: string, globalStyle: boolean) =>
   ({
@@ -52,13 +53,15 @@ export const Chat: React.FC<RoomUIProps> = ({ className, style = {} }) => {
   let roomID = useRoomStore((state) => state.currentRoomID);
   let roomColor = useRoomStore((state) => state.roomInfo?.roomColor);
   let roomName = useRoomStore((state) => state.roomInfo?.roomName);
+  const { pathname, back } = useRouter();
   let unsubRef = useRef<Unsubscribe>();
-  let [filterRoom, setFilterRoom] = useState<boolean>(true);
+  let [filterRoom, setFilterRoom] = useState<boolean>(pathname !== "/");
   let [lastRecalculationUpdate, setLastRecalculationUpdate] = useState<number>(
     Date.now()
   );
   let [minimizeChat, setMinimizeChat] = useState<boolean>(false);
 
+  
   useEffect(() => {
     setLastRecalculationUpdate(Date.now());
   }, [chatList]);

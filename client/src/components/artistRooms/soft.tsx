@@ -15,7 +15,7 @@ const Soft: React.FC = () => {
 
       <AppWrapper
         appname="website"
-        style={{ width: "40%", height: "60%", left: "2%", top: "5%" }}
+        style={{ width: "30%", height: "40%", left: "2%", top: "5%" }}
       >
         <iframe
           src="https://codesandbox.io/p/github/soft-networks/is-this-thing-on/draft/staging-cookies?view=editor&hidesidebar=1"
@@ -27,7 +27,7 @@ const Soft: React.FC = () => {
       </AppWrapper>
       <AppWrapper
         appname="dev website"
-        style={{ width: "30%", height: "30%", top: "10%", left: "35%" }}
+        style={{ width: "40%", height: "40%", top: "10%", left: "25%" }}
       >
         <iframe
           src="https://7pg39n-3000.csb.app/"
