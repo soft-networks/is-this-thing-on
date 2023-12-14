@@ -95,7 +95,7 @@ export const Chat: React.FC<RoomUIProps & {whiteText?: boolean}> = ({ className,
         unsubRef.current();
       }
       logCallbackSetup(`Chat ${roomID || "home"}`);
-      unsubRef.current = await syncChat(chatWasAdded, chatWasRemoved);
+      unsubRef.current = await syncChat(chatWasAdded, chatWasRemoved, filterRoom ? (roomID || "home") : "home");
     }
     setupDB();
     return () => {
