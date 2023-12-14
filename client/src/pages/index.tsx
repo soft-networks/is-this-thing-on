@@ -28,7 +28,7 @@ const Index: NextPage = () => {
         <div className="fullBleed noOverflow">
           <DomRing />
           <div className="center:absolute highestLayer center-text">
-            DEV! <br />
+            dev? <br />
             <Link
               href={
                 "https://partiful.com/e/dkAWBCDQfVtmnL4q6jb7?utm_source=substack&utm_medium=email"
