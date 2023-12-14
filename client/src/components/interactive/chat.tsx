@@ -83,9 +83,9 @@ export const Chat: React.FC<RoomUIProps & {whiteText?: boolean}> = ({ className,
   }, []);
   const sendNewMessage = useCallback(
     (c: { message: string; timestamp: number; username: string }) => {
-      addChatMessageDB({ ...c, roomID: roomID || "home" });
+      addChatMessageDB({ ...c, roomID: filterRoom ? (roomID || "home") : "home" });
     },
-    [roomID]
+    [filterRoom, roomID]
   );
   useEffect(() => {
     logInfo("ChatClient restarting");
