@@ -15,24 +15,12 @@ const Soft: React.FC = () => {
       <VideoPlayer />
       <Chat />
       <AppWrapper
-        appname="preview website"
-        style={{left: "40%", top: "5%" }}
-      >
-        <iframe
-          src="https://livecode--is-this-thing-on.netlify.app/"
-          style={{ width: "50vw", height: "50vh", border: 0 }}
-          title="soft-networks/is-this-thing-on/draft/staging-cookies preview"
-          allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-          sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-        />
-      </AppWrapper>
-      <AppWrapper
         appname="maintainance log"
-        style={{top: "30%", left: "55%" }}
+        style={{top: "var(--s0)", left: "43%" }}
       >
         <iframe
           src="https://docs.google.com/document/d/1m-g5SJLJdEuDKItA1SjtXZ7lT6QU1bjedLHFj_vIYDE/edit"
-          style={{ width: "40vw", height: "65vh", border: 0 }}
+          style={{ width: "40vw", height: "65vh", minWidth: "800px", border: 0 }}
         ></iframe>
       </AppWrapper>
     </main>
