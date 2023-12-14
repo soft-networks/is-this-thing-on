@@ -103,7 +103,7 @@ export async function updateStickerInstancePos(
   stickerID: string,
   pos: Pos
 ) {
-  if (pos[0] <= 0 || pos[1] <= 0 || pos[0] >= 1 || pos[1] >= 1) {
+  if (pos[0] <= -0.5 || pos[1] <= -0.5 || pos[0] >= 1.5 || pos[1] >= 1.5) {
     return;
   }
   const stickerInstances = stickerInstanceCollection(roomDoc(roomName));

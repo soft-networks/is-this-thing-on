@@ -85,7 +85,7 @@ const MoveableSticker: React.FC<StickerRenderProps> = ({ sticker, pos, id, conta
     <Draggable
       onStop={dragEnded}
       onStart={() => setIsDragging(true)}
-      bounds={{ left: containerBounds.left, top: containerBounds.top, right: 0.9 * containerBounds.width , bottom: containerBounds.bottom}}
+      bounds={{ left: containerBounds.left - 0.1 * containerBounds.width, top: containerBounds.top - 0.1 * containerBounds.height, right: 0.9 * containerBounds.width , bottom: containerBounds.bottom}}
       position={{ x: pos[0] * containerBounds.width, y: pos[1] * containerBounds.height }}
       nodeRef={myRef}
     >
