@@ -13,7 +13,7 @@ const Soft: React.FC = () => {
       <VideoPlayer />
       <Chat />
       <AppWrapper
-        appname="dev website"
+        appname="preview website"
         style={{left: "40%", top: "5%" }}
       >
         <iframe
@@ -25,7 +25,7 @@ const Soft: React.FC = () => {
         />
       </AppWrapper>
       <AppWrapper
-        appname="requests"
+        appname="maintainance log"
         style={{top: "30%", left: "55%" }}
       >
         <iframe
