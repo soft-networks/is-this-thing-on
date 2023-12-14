@@ -3,6 +3,7 @@ import DefaultRoomview from "./defaultRoom";
 import Draggable from "react-draggable";
 import VideoPlayer from "../videoPlayer";
 import { Chat } from "../interactive/chat";
+import AdminPanel from "../account/adminPanel";
 
 const Soft: React.FC = () => {
   return (
@@ -10,6 +11,7 @@ const Soft: React.FC = () => {
       className="fullBleed noOverflow relative"
       style={{ background: "#edf3f4" }}
     >
+      <AdminPanel/>
       <VideoPlayer />
       <Chat />
       <AppWrapper
