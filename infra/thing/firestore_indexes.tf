@@ -33,12 +33,12 @@ resource "google_firestore_index" "presence_roomid" {
 
   fields {
     field_path = "timestamp"
-    order      = "DESCENDING"
+    order      = "ASCENDING"
   }
 
   fields {
     field_path = "__name__"
-    order      = "DESCENDING"
+    order      = "ASCENDING"
   }
 }
 
@@ -54,11 +54,11 @@ resource "google_firestore_index" "energy_transactions_status" {
 
   fields {
     field_path = "timestamp"
-    order      = "DESCENDING"
+    order      = "ASCENDING"
   }
 
   fields {
     field_path = "__name__"
-    order      = "DESCENDING"
+    order      = "ASCENDING"
   }
 }
