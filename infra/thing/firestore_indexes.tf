@@ -41,3 +41,24 @@ resource "google_firestore_index" "presence_roomid" {
     order      = "DESCENDING"
   }
 }
+
+resource "google_firestore_index" "energy_transactions_status" {
+  project    = google_firebase_project.thing.project
+  database   = google_firestore_database.main.name
+  collection = "energy_transactions"
+
+  fields {
+    field_path = "status"
+    order      = "ASCENDING"
+  }
+
+  fields {
+    field_path = "timestamp"
+    order      = "DESCENDING"
+  }
+
+  fields {
+    field_path = "__name__"
+    order      = "DESCENDING"
+  }
+}
