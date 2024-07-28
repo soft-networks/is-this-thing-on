@@ -26,6 +26,7 @@ app.get("/", (req, res) => {
 app.get("/stream-key/:id", createAndReturnStreamKey);
 app.post("/mux-hook", muxAuthHelper, muxUpdateWasReceived);
 app.get("/reset-room/:id", async (req,res) => {
+  logUpdate(`Resetting room ${req.params.id}`);
   try {
     const roomID = req.params.id;
     await resetMuxFirestoreRelationship(roomID);
@@ -43,5 +44,4 @@ httpServer.listen(port, () => {
 });
 
 presenceProcessor();
-//chrisStickerScaler();
 
