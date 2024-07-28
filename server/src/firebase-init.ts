@@ -1,5 +1,14 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { initializeApp, cert } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
+
+
+
+import serviceAccountKey from "./serviceAccountKey.json";
+
+initializeApp({
+  credential: cert(serviceAccountKey as any),
+  databaseURL: "https://is-this-thing-on-320a7-default-rtdb.firebaseio.com"
+});
 
 export const firebaseConfig = {
   apiKey: "AIzaSyDEELIQs6LfHdFCnqUUNluk7tXKodeHIwE",
