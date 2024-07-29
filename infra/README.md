@@ -42,3 +42,11 @@ This should create all the required resources in your Google Cloud account. It w
 ## 2. Enable Authentication
 
 To avoid billing setup within Google Cloud, authentication is not enabled through Terraform. You must go to the Google Cloud UI and manually enable Email/Password authentication.
+
+## Destroying your Firebase Project
+
+If you'd like to destroy your Firebase project, you can run the following command using your custom project name:
+
+```sh
+terraform destroy --var project_name=isto-test
+```
