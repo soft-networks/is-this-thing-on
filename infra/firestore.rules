@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Rooms collection rules
+    match /rooms/{roomId} {
+      // Allow read access to all authenticated users
+      allow read: if true;
+
+      // Allow write access to the 'stickers' field publically
+      allow write: if true && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['stickers']);
+
+      // All other fields are either written by the server directly OR manually in admin console
+      allow write: if false;
+    }
+
+ 		// MUX ID collection rules
+    match /mux_id/{document=**} {
+      allow read, write: if false; // Only the server can write to this collection
+    }
+    
+    match /energy_transactions/{document=**} {
+    	allow read: if true;
+      allow write: if false;// Only the server can write to this collection
+    }
+    
+    
+    // Other collections (presence, chat, testing) are public read/write
+    match /{collection}/{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
