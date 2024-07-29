@@ -25,7 +25,7 @@ By default, the application connects to the existing Firebase application. To ru
 npm install && npm run dev
 ```
 
-You can also configure your own personal Firebase application. Create one manually or use the instructions in [/infra/README.md] to set one up automatically and generate an .env.local file.
+You can also configure your own personal Firebase application. Create one manually or use the instructions in [infra/README.md](/infra/README.md) to set one up automatically and generate an .env.local file.
 
 # Notes
 
