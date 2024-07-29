@@ -21,8 +21,9 @@ Key components:
 
 By default, the application connects to the existing Firebase application. To run locally:
 
-- Get access to firebase from @soft_networks
-- Run the client application with `npm install && npm run dev`.
+```sh
+npm install && npm run dev
+```
 
 You can also configure your own personal Firebase application. Create one manually or use the instructions in [/infra/README.md] to set one up automatically and generate an .env.local file.
 
