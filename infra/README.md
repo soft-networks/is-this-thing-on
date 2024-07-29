@@ -42,3 +42,11 @@ This should create all the required resources in your Google Cloud account. It w
 ## 2. Enable Authentication
 
 To avoid billing setup within Google Cloud, authentication is not enabled through Terraform. You must go to the Google Cloud UI and manually enable Email/Password authentication.
+
+# Mux Setup
+
+- Sign up for a Mux account
+- Create API Token and .env file in server folder
+- Tunneling with ngrok (brew install ngrok/ngrok/ngrok)
+- ngrok http http://localhost:4000
+- Webhooks Setup: Go to Settings > Webhooks and add your ephemeral domain (`https://<id>.ngrok-free.app/mux-hook`)
