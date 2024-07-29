@@ -5,6 +5,7 @@
 resource "local_file" "foo" {
   filename = "${path.module}/../../client/.env.local"
   content  = <<EOF
+NEXT_PUBLIC_USE_PROD_SERVER=false
 NEXT_PUBLIC_PROJECT_ID=${google_firebase_project.thing.project}
 NEXT_PUBLIC_APP_ID=${google_firebase_web_app.client.app_id}
 NEXT_PUBLIC_API_KEY=${data.google_firebase_web_app_config.client.api_key}
