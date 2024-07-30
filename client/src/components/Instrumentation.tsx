@@ -20,8 +20,8 @@ export default function Observability() {
       instrumentations: [
         getWebAutoInstrumentations({
           // Disable these for now since they generate a lot of events and have questionable utility.
-          //   "@opentelemetry/instrumentation-xml-http-request": configDefaults,
-          //   "@opentelemetry/instrumentation-fetch": configDefaults,
+          "@opentelemetry/instrumentation-xml-http-request": { enabled: false },
+          "@opentelemetry/instrumentation-fetch": { enabled: false },
           "@opentelemetry/instrumentation-document-load": configDefaults,
         }),
       ],

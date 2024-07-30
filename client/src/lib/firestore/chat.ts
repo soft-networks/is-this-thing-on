@@ -43,6 +43,8 @@ export async function syncChat(
   return unsub;
 }
 export async function addChatMessageDB(chat: ChatMessage) {
-  const chats = chatCollection();
-  await addDoc(chats, chat);
+  trace("add-chat", () => {
+    const chats = chatCollection();
+    return addDoc(chats, chat);
+  });
 }

@@ -4,7 +4,8 @@
 
 resource "local_file" "foo" {
   filename = "${path.module}/../../client/.env.local"
-  content  = <<EOF
+
+  content = <<EOF
 NEXT_PUBLIC_USE_PROD_SERVER=false
 
 NEXT_PUBLIC_HONEYCOMB_INGEST_API_KEY=replace-me
