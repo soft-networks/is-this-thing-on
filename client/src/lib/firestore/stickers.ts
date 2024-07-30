@@ -2,28 +2,27 @@ import {
   addDoc,
   deleteDoc,
   doc,
-  getDoc,
   getDocs,
   onSnapshot,
-  query,
   setDoc,
-  where,
 } from "firebase/firestore";
+import {
+  roomDoc,
+  stickerCDNCollection,
+  stickerInstanceCollection,
+  stickerInstanceDoc,
+} from "./locations";
 import {
   sanitizeStickerCDNFromDB,
   sanitizeStickerInstanceForDB,
   sanitizeStickerInstanceFromDB,
   validateRoomName,
 } from "./converters";
-import {
-  stickerInstanceCollection,
-  roomDoc,
-  stickerCDNCollection,
-  stickerInstanceDoc,
-} from "./locations";
+
 import { MollyAssetsJson } from "./custom/mollyAssets";
 import { MollyDeleteAssets } from "./custom/mollyAssetsDeleteOnly";
-import { logError, logFirebaseUpdate } from "../logger";
+import { logFirebaseUpdate } from "../logger";
+import { trace } from "../tracers";
 
 export async function getStickerCDN(
   roomName: string,
@@ -63,28 +62,30 @@ export function syncStickerInstances(
   // const q = query(elements, where("behavior_type", "==", behaviorType));
 
   const unsub = onSnapshot(dbStickers, (docs) => {
-    docs.docChanges().forEach((change) => {
-      let element = change.doc;
-      if (change.type === "added") {
-        const sanitizedStickerInstance = sanitizeStickerInstanceFromDB(
-          change.doc.data()
-        );
-        stickerAdded(element.id, sanitizedStickerInstance);
-      }
-      if (change.type === "modified") {
-        let stickerData = element.data();
-        if (stickerData.position) {
-          stickerPosUpdated(
-            element.id,
-            stickerData.position,
-            stickerData.size,
-            stickerData.zIndex
+    trace("sync-stickers", () => {
+      docs.docChanges().forEach((change) => {
+        let element = change.doc;
+        if (change.type === "added") {
+          const sanitizedStickerInstance = sanitizeStickerInstanceFromDB(
+            change.doc.data()
           );
+          stickerAdded(element.id, sanitizedStickerInstance);
         }
-      }
-      if (change.type === "removed") {
-        stickerRemoved(element.id);
-      }
+        if (change.type === "modified") {
+          let stickerData = element.data();
+          if (stickerData.position) {
+            stickerPosUpdated(
+              element.id,
+              stickerData.position,
+              stickerData.size,
+              stickerData.zIndex
+            );
+          }
+        }
+        if (change.type === "removed") {
+          stickerRemoved(element.id);
+        }
+      });
     });
   });
   return unsub;
@@ -94,8 +95,10 @@ export async function addStickerInstance(
   roomName: string,
   element: StickerInstance
 ) {
-  const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
-  await addDoc(stickerInstances, sanitizeStickerInstanceForDB(element));
+  trace("add-sticker", () => {
+    const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
+    return addDoc(stickerInstances, sanitizeStickerInstanceForDB(element));
+  });
 }
 
 export async function updateStickerInstancePos(
@@ -106,45 +109,53 @@ export async function updateStickerInstancePos(
   if (pos[0] <= -0.5 || pos[1] <= -0.5 || pos[0] >= 1.5 || pos[1] >= 1.5) {
     return;
   }
-  const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
-  const stickerInstance = stickerInstanceDoc(stickerInstances, stickerID);
-  setDoc(stickerInstance, { position: pos }, { merge: true });
+
+  trace("update-sticker-pos", () => {
+    const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
+    const stickerInstance = stickerInstanceDoc(stickerInstances, stickerID);
+    return setDoc(stickerInstance, { position: pos }, { merge: true });
+  });
 }
 export async function updateStickerInstanceScale(
   roomName: string,
   stickerID: string,
   size: number
 ) {
-  const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
-  const stickerInstance = stickerInstanceDoc(stickerInstances, stickerID);
-  setDoc(stickerInstance, { size: size }, { merge: true });
+  trace("update-sticker-scale", () => {
+    const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
+    const stickerInstance = stickerInstanceDoc(stickerInstances, stickerID);
+    return setDoc(stickerInstance, { size: size }, { merge: true });
+  });
 }
 export async function updateStickerInstanceZIndex(
   roomName: string,
   stickerID: string,
   zIndex: number
 ) {
-  const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
-  const stickerInstance = stickerInstanceDoc(stickerInstances, stickerID);
-  setDoc(stickerInstance, { zIndex: zIndex }, { merge: true });
+  trace("update-sticker-z-index", () => {
+    const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
+    const stickerInstance = stickerInstanceDoc(stickerInstances, stickerID);
+    return setDoc(stickerInstance, { zIndex: zIndex }, { merge: true });
+  });
 }
 export async function deleteStickerInstance(
   roomName: string,
   stickerID: string
 ) {
-  const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
-  const stickerInstance = stickerInstanceDoc(stickerInstances, stickerID);
-
-  deleteDoc(stickerInstance);
+  trace("delete-sticker", async () => {
+    const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
+    const stickerInstance = stickerInstanceDoc(stickerInstances, stickerID);
+    return deleteDoc(stickerInstance);
+  });
 }
 
 export async function resetStickers(roomName: string) {
-  
   logFirebaseUpdate("About to reset stickers for " + roomName);
   if (roomName == "chrisy") {
     logFirebaseUpdate("Chrisy is not allowed to reset stickers");
     return;
   }
+
   if (roomName == "compromised") {
     populateHerdimasCDN();
   }

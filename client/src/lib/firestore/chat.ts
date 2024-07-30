@@ -1,6 +1,15 @@
-import { addDoc, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
-import { validateRoomName } from "./converters";
-import { chatCollection, roomDoc } from "./locations";
+import {
+  addDoc,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
+
+import { chatCollection } from "./locations";
+import { logInfo } from "../logger";
+import { trace } from "../tracers";
 
 export async function syncChat(
   addChat: (id: string, chat: ChatMessage) => void,
@@ -9,23 +18,31 @@ export async function syncChat(
 ) {
   const chats = chatCollection();
 
-  let q = query(chats, orderBy("timestamp", "desc"), where("roomID", "==", roomID), limit(100));
+  let q = query(
+    chats,
+    orderBy("timestamp", "desc"),
+    where("roomID", "==", roomID),
+    limit(100)
+  );
   const unsub = onSnapshot(q, (docs) => {
-    docs.docChanges().forEach((change) => {
-      let chat = change.doc;
-      if (change.type === "added") {
-        addChat(chat.id, change.doc.data() as ChatMessage);
-      }
-      if (change.type === "modified") {
-      }
-      if (change.type === "removed") {
-        removeChat(chat.id);
-      }
+    logInfo("syncing chat");
+    trace("sync-chat", () => {
+      docs.docChanges().forEach((change) => {
+        let chat = change.doc;
+        if (change.type === "added") {
+          addChat(chat.id, change.doc.data() as ChatMessage);
+        }
+        if (change.type === "modified") {
+        }
+        if (change.type === "removed") {
+          removeChat(chat.id);
+        }
+      });
     });
   });
   return unsub;
 }
 export async function addChatMessageDB(chat: ChatMessage) {
   const chats = chatCollection();
-  await addDoc(chats,  chat);
+  await addDoc(chats, chat);
 }
