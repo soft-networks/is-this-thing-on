@@ -1,3 +1,4 @@
+// Set up a firebase project and web app for THING.
 resource "google_firebase_project" "thing" {
   provider = google-beta
   project  = google_project.main.project_id
