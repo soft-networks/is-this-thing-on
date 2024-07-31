@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express, { Application } from "express";
 import { createServer } from "http";
-import { chrisStickerScaler, managePresenceInDB,  presenceProcessor,  resetMuxFirestoreRelationship,  transactionProcessor } from "./firestore-api.js";
+import { managePresenceInDB,  presenceProcessor,  resetMuxFirestoreRelationship } from "./firestore-api.js";
 import bodyParser from "body-parser"
 import { logUpdate } from "./logger.js";
 import { muxAuthHelper, createAndReturnStreamKey } from "./muxAPI.js";
@@ -26,6 +26,7 @@ app.get("/", (req, res) => {
 app.get("/stream-key/:id", createAndReturnStreamKey);
 app.post("/mux-hook", muxAuthHelper, muxUpdateWasReceived);
 app.get("/reset-room/:id", async (req,res) => {
+  logUpdate(`Resetting room ${req.params.id}`);
   try {
     const roomID = req.params.id;
     await resetMuxFirestoreRelationship(roomID);
@@ -43,6 +44,4 @@ httpServer.listen(port, () => {
 });
 
 presenceProcessor();
-transactionProcessor();
-//chrisStickerScaler();
 

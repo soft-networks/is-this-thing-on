@@ -1,5 +1,6 @@
 
-import { doc, getDoc, setDoc, collection, query, where, getDocs, deleteDoc, updateDoc, deleteField, onSnapshot, orderBy, QueryDocumentSnapshot, DocumentData} from "firebase/firestore";
+import { QueryDocumentSnapshot, DocumentData,Timestamp, FieldValue} from "firebase-admin/firestore";
+
 import { firestore } from './firebase-init.js';
 import { logError, logInfo, logUpdate, logWarning } from './logger.js';
 
@@ -9,7 +10,7 @@ const PRESENCE_LENGTH =  5 * 1000;
 
 //Helpers
 function roomDoc(roomID: string) {
-  return doc(firestore, "rooms", roomID);
+  return firestore.collection("rooms").doc(roomID);
 }
 
 /**
@@ -20,9 +21,9 @@ function roomDoc(roomID: string) {
  */
 const getRoom = async (roomID: string) => {
   const roomRef = roomDoc(roomID);
-  const room = await getDoc(roomRef);
+  const room = await roomRef.get()
 
-  if (room.exists()) {
+  if (room.exists) {
     return room.data();
   } else {
     throw Error(`Room ${room} doesn't exist`);
@@ -38,7 +39,7 @@ export const getStreamKey = async (roomID: string) => {
   try {
     const roomData = await getRoom(roomID);
     logInfo(`found data for ${roomID}: `, roomData);
-    return roomData['stream_key'];
+    return roomData?.['stream_key'];
 
   } catch (e) {
     logError("Error in getting stream key from database for room: ", roomID);
@@ -58,11 +59,11 @@ export const writeNewStreamToDB = async (roomID: string, muxID: string, streamKe
   await writeStreamKeyToDB(roomID, streamKey);
 }
 const writeRoomIDToMUXID = async (roomID: string, muxID: string) => {
-  let docRef = await setDoc(doc(firestore, "mux_id", muxID ), { room_id: roomID});
+  await firestore.collection("mux_id").doc(muxID).set({ room_id: roomID });
 }
 
 const writeStreamKeyToDB = async (roomID: string, streamKey: string) => {
-  let docRef = await setDoc(roomDoc(roomID), {stream_key: streamKey}, {merge: true});
+  await roomDoc(roomID).set({ stream_key: streamKey }, { merge: true });
 }
 
 
@@ -74,10 +75,10 @@ const writeStreamKeyToDB = async (roomID: string, streamKey: string) => {
  */
 
 export const getRoomIDFromMUXID = async (muxID: string) => {
-  let docRef = doc(firestore, "mux_id", muxID);
-  let muxDoc = await getDoc(docRef);
+  let docRef = firestore.collection("mux_id").doc(muxID);
+  let muxDoc = await docRef.get();
   let muxData = muxDoc.data();
-  if (!muxDoc.exists() || !muxData || !muxData['room_id']) {
+  if (!muxDoc.exists || !muxData || !muxData['room_id']) {
     throw Error(`no room matching ${muxID}`);
   }
   logInfo(`Found room id ${muxData['room_id']} for muxID ${muxID}`);
@@ -85,141 +86,56 @@ export const getRoomIDFromMUXID = async (muxID: string) => {
 }
 
 export const writeStreamStateToDB = async (roomID: string, streamStatus: string) => {
-  let docRef = await setDoc(roomDoc(roomID), {stream_status: streamStatus}, {merge: true});
-
+  await roomDoc(roomID).set({ stream_status: streamStatus }, { merge: true });
 }
 
 export const writePlaybackIDToDB = async (roomID: string, playbackID: string) => {
-  let docRef = await setDoc(roomDoc(roomID), {stream_playback_id:  playbackID}, {merge: true});
+  await roomDoc(roomID).set({ stream_playback_id: playbackID }, { merge: true });
 }
 
 export const resetMuxFirestoreRelationship = async (roomID: string) => {  
   
   let roomRef = roomDoc(roomID);
-  await updateDoc(roomRef, {
-    stream_playback_id: deleteField(),
-    stream_status: deleteField(),
-    stream_key: deleteField()
-  })
-
-  let muxQuery = query(collection(firestore, "mux_id"), where("room_id", "==", roomID));
-  const muxSnapshot = await getDocs(muxQuery);
-  muxSnapshot.forEach(async (muxDoc) => {
-    deleteDoc( doc( firestore, "mux_id", muxDoc.id))
+  await roomRef.update({
+    stream_playback_id: FieldValue.delete(),
+    stream_status: FieldValue.delete(),
+    stream_key: FieldValue.delete()
   });
-  
+  let muxQuery = firestore.collection("mux_id").where("room_id", "==", roomID);
+  const muxSnapshot = await muxQuery.get();
+  muxSnapshot.forEach(async (muxDoc) => {
+    await muxDoc.ref.delete();
+  });
 }
 
 
 /**  */
 export async function managePresenceInDB(allRoomNames: string[]) {
-  const presenceRef = collection(firestore, "presence");
+  const presenceRef = firestore.collection("presence");
   
   const currentlyOnline = await Promise.all(allRoomNames.map(async (streamName) => {
-    let q = query(presenceRef, where("room_id", "==", streamName), where("timestamp", ">=",  Date.now() - (1.2  * PRESENCE_LENGTH) ));
-    const querySnapshot = await getDocs(q);
+    let q = presenceRef.where("room_id", "==", streamName).where("timestamp", ">=", Timestamp.fromMillis(Date.now() - (1.2 * PRESENCE_LENGTH)));
+    const querySnapshot = await q.get();
     let numResults = querySnapshot.size;
     
     return {roomID: streamName, numOnline: numResults}
   }));
-  currentlyOnline.forEach(({roomID, numOnline}) => {
-    setDoc(roomDoc(roomID), {num_online: numOnline}, {merge: true});
-  })
+  
+  await Promise.all(currentlyOnline.map(({roomID, numOnline}) => 
+    roomDoc(roomID).set({num_online: numOnline}, {merge: true})
+  ));
+  
   setTimeout(() => managePresenceInDB(allRoomNames), PRESENCE_LENGTH);
 } 
 
 async function setTransaction(id: string, status: string) {
-  await setDoc(doc(firestore, "energy_transactions", id), {status: status}, {merge: true});
-}
-async function transact(transaction: any, id: string ) {
-  let {status} = transaction;
-
-  console.log("PROCESSING NEW TX");
-
-  if (status == "SUCCESS" || status == "FAILED") {
-    // TODO: Update this so its less reads mannnn
-    logInfo("skipping since its already processed");
-    return;
-  }
-  let { from, to, amount, timestamp} = transaction;
-  if (! from || !to || ! amount || !timestamp) {
-    logWarning("Transaction failing because the transaction doesnt have what it needs ", transaction);
-    await setTransaction(id, 'FAILED');
-    return;
-  } 
-
-  try {
-    let room = await getRoom(to);
-    let roomEnergy = room['energy'] || 0;
-    await setDoc(roomDoc(to), {energy: roomEnergy + amount}, {merge: true})
-    await setTransaction(id, 'SUCCESS');
-    
-    logUpdate("Transaction succeeded");
-  } catch (e) {
-    await setTransaction(id, 'FAILED');
-    return;
-  }
-  
-}
-
-
-//Optimization: Group BY and then process each room together.
-export async function transactionProcessor() {
-
-  const transactionRef = collection(firestore, "energy_transactions");
-  const q = query(transactionRef, where("status", "==", "PENDING"), orderBy("timestamp", "asc"));
-
-  const newTransactions = await getDocs(q);
-
-  if (newTransactions.size > 0) {
-    console.log("Processing ...  new transactions #: ",  newTransactions.size);
-    let processArray:QueryDocumentSnapshot<DocumentData>[] = []; 
-    newTransactions.forEach((transactionDoc) => {
-        processArray.push(transactionDoc);
-    });
-    
-    await Promise.all(processArray.map(async (transactionDoc) => {
-      await transact(transactionDoc.data(), transactionDoc.id);
-    }))
-  }
-
-  setTimeout(transactionProcessor, 3000);
+  await firestore.collection("energy_transactions").doc(id).set({status: status}, {merge: true});
 }
 
 export async function presenceProcessor() {
-
-  let collectionRef =  collection(firestore, "rooms");;
-  let docs = await getDocs(collectionRef);
-  
+  let collectionRef = firestore.collection("rooms");
+  let docs = await collectionRef.listDocuments();
   let docNames: string[] = [];
   docs.forEach((d) => docNames.push(d.id));
   managePresenceInDB(docNames);
-}
-
-export async function chrisStickerScaler() {
-  const roomRef = roomDoc("chrisy");
-
-  const room = await getDoc(roomRef);
-  const roomData = room.data();
-  if (roomData && roomData.stream_status == "active") {
-    //console.log("Messing with chrissy's stickers");
-    const stickerRef = collection(roomRef, "stickers");
-    const currentStickers = await getDocs(stickerRef);
-    let processArray:QueryDocumentSnapshot<DocumentData>[] = []; 
-    currentStickers.forEach((sticker) => {
-        processArray.push(sticker);
-    });
-    await Promise.all(processArray.map(async (sticker) => {
-      let data = sticker.data();
-      //data.size = undefined;
-      let nextSize = (data.size || 0.02) + 0.008;
-      nextSize = Math.min(nextSize, 0.75);
-      return setDoc(sticker.ref, { size: nextSize}, {merge: true});
-    }))
-    setTimeout(chrisStickerScaler, 1500);
-  } else {
-    setTimeout(chrisStickerScaler, 5000);
-  }
-
-  
 }
