@@ -1,4 +1,4 @@
-export const USE_PROD_SERVER = true;
+export const USE_PROD_SERVER = process.env.NEXT_PUBLIC_USE_PROD_SERVER != "false";
 export const SERVER_URL = USE_PROD_SERVER ? "https://isto-server.fly.dev" : "http://localhost:4000" ;
 export const STREAM_NAME_ENDPOINT = `${SERVER_URL}/stream-names`;
 export const STREAMS_ENDPOINT = `${SERVER_URL}/stream`;
