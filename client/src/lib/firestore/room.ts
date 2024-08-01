@@ -15,6 +15,7 @@ export async function syncRoomInfoDB(roomName: string, callback: (roomInfo: Room
 }
 
 export async function getRoomsWhereUserISAdmin(userID: string) {
+  console.log(userID);
   const q = query(roomsCollection(), where("admins", "array-contains", userID));
   const querySnapshot = await getDocs(q);
   let numResults = querySnapshot.size;
