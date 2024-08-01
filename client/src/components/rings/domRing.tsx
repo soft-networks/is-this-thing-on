@@ -1,19 +1,17 @@
 import { useCallback, useMemo, useState } from "react";
 import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
 import VideoPreview from "../videoPreview";
-import { roomIsActive } from "../../stores/roomStore";
+import { roomIsActive, visibleRooms } from "../../stores/roomStore";
 import { useRouter } from "next/router";
 
 const DomRing = () => {
   const ring = useRingStore(useCallback((s) => s.links, []));
 
   const domElements = useMemo(() => {
-    const visibleRooms = Object.entries(ring).filter(
-      ([_roomID, roomInfo]) => !roomInfo.hidden
-    );
+    const rooms = visibleRooms(ring);
 
-    const spacePerElement = 100 / visibleRooms.length;
-    const elements = visibleRooms.map(([roomID, roomInfo], index) => {
+    const spacePerElement = 100 / Object.keys(rooms).length;
+    const elements = Object.entries(rooms).map(([roomID, roomInfo], index) => {
       return (
         <NodeElement
           roomInfo={roomInfo}

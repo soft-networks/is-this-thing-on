@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
 import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
-import { useRoomStore } from "../../stores/roomStore";
+import { useRoomStore, visibleRooms } from "../../stores/roomStore";
 import { NodeLink, SVGRingSeparate } from "./svg";
 import { useRouter } from "next/router";
 
@@ -12,46 +12,57 @@ const SmallRing: React.FC<RingProps> = ({ collapsed, noNav }) => {
   const ring = useRingStore(useCallback((s) => s.links, []));
   const roomID = useRoomStore(useCallback((s) => s.currentRoomID, []));
 
-  return ring && roomID ? <FooterLogo ring={ring} roomID={roomID} /> : <div> no links </div>;
-};
-
-const FooterLogo: React.FC<{ ring: WebRing, roomID: string}> = ({ ring, roomID}) => {
-  const {push} = useRouter();
-  const indexSelected = useMemo(() => {
-    if (!roomID) return;
-    let i = Object.keys(ring).indexOf(roomID);
-    return i > -1 ? i : undefined;
-  }, [ring, roomID]);
-  const navStream = useCallback((n : number) => {
-    const visibleRoomKeys = Object.entries(ring).filter(
-      ([_roomID, roomInfo]) => !roomInfo.hidden
-    ).map((roomID, _roomInfo) => roomID);
-
-    n = n < 0 ? visibleRoomKeys.length - 1 : n;
-    let nextKey = visibleRoomKeys[n % visibleRoomKeys.length][0];
-    push(roomIDToHREF(nextKey));
-  }, [push, ring]);
-  const ringParts = useMemo(() => SVGRingSeparate({ring, currentlySelected: indexSelected}), [indexSelected, ring]);
-  return (
-    <div className="centerh relative">
-        <div className="horizontal-stack:s-2">
-          <div
-            className="whiteFill clickable clickable:link border padded:s-3 contrastFill:hover"
-            onClick={() => indexSelected !== undefined && navStream(indexSelected - 1)}
-          >
-            prev
-          </div>
-          <NodeLink link={ring[roomID]} id={roomID} noNav />
-          <div
-            className="whiteFill clickable clickable:link border padded:s-3 contrastFill:hover"
-            onClick={() => indexSelected !== undefined && navStream(indexSelected + 1)}
-          >
-            next
-          </div>
-        </div>
-    </div>
+  return ring && roomID ? (
+    <FooterLogo ring={ring} roomID={roomID} />
+  ) : (
+    <div> no links </div>
   );
 };
 
+const FooterLogo: React.FC<{ ring: WebRing; roomID: string }> = ({
+  ring,
+  roomID,
+}) => {
+  const { push } = useRouter();
+  const indexSelected = useMemo(() => {
+    if (!roomID) return;
+    let i = Object.keys(visibleRooms(ring)).indexOf(roomID);
+    return i > -1 ? i : undefined;
+  }, [ring, roomID]);
+  const navStream = useCallback(
+    (n: number) => {
+      const roomKeys = Object.keys(visibleRooms(ring));
+
+      n = n < 0 ? roomKeys.length - 1 : n;
+      let nextKey = roomKeys[n % roomKeys.length];
+      push(roomIDToHREF(nextKey));
+    },
+    [push, ring]
+  );
+
+  return (
+    <div className="centerh relative">
+      <div className="horizontal-stack:s-2">
+        <div
+          className="whiteFill clickable clickable:link border padded:s-3 contrastFill:hover"
+          onClick={() =>
+            indexSelected !== undefined && navStream(indexSelected - 1)
+          }
+        >
+          prev
+        </div>
+        <NodeLink link={ring[roomID]} id={roomID} noNav />
+        <div
+          className="whiteFill clickable clickable:link border padded:s-3 contrastFill:hover"
+          onClick={() =>
+            indexSelected !== undefined && navStream(indexSelected + 1)
+          }
+        >
+          next
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default SmallRing;
