@@ -1,6 +1,4 @@
-import { Unsubscribe } from "firebase/firestore";
-import { useCallback, useEffect, useMemo, useRef } from "react";
-import { syncWebRing } from "../../lib/firestore";
+import { useCallback, useMemo } from "react";
 import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
 import { useRoomStore } from "../../stores/roomStore";
 import { NodeLink, SVGRingSeparate } from "./svg";
@@ -25,9 +23,12 @@ const FooterLogo: React.FC<{ ring: WebRing, roomID: string}> = ({ ring, roomID})
     return i > -1 ? i : undefined;
   }, [ring, roomID]);
   const navStream = useCallback((n : number) => {
-    let keys = Object.keys(ring);
-    n = n < 0 ? keys.length - 1 : n;
-    let nextKey = keys[n % keys.length];
+    const visibleRoomKeys = Object.entries(ring).filter(
+      ([_roomID, roomInfo]) => !roomInfo.hidden
+    ).map((roomID, _roomInfo) => roomID);
+
+    n = n < 0 ? visibleRoomKeys.length - 1 : n;
+    let nextKey = visibleRoomKeys[n % visibleRoomKeys.length][0];
     push(roomIDToHREF(nextKey));
   }, [push, ring]);
   const ringParts = useMemo(() => SVGRingSeparate({ring, currentlySelected: indexSelected}), [indexSelected, ring]);
