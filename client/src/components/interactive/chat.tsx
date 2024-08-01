@@ -210,8 +210,6 @@ const RenderChat: React.FC<{
   lastRecalculationUpdate: number;
   alwaysShow?: boolean;
 }> = ({ chat, id, lastRecalculationUpdate, alwaysShow }) => {
-  const links = useRingStore((s) => s.links);
-  const myRoom = useMemo(() => links[chat.roomID], [links, chat]);
   const [myBlurPercentage, setMyBlurPercentage] = useState<number>(0);
   //Create a ref to reference the dom
   const myRef = useRef<HTMLDivElement>(null);

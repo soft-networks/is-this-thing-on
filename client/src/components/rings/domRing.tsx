@@ -8,17 +8,21 @@ const DomRing = () => {
   const ring = useRingStore(useCallback((s) => s.links, []));
 
   const domElements = useMemo(() => {
-    const numKeys = Object.keys(ring).length;
-    const spacePerElement = 100 / numKeys;
-    const elements = Object.keys(ring).map((key, index) => {
+    const visibleRooms = Object.entries(ring).filter(
+      ([_roomID, roomInfo]) => !roomInfo.hidden
+    );
+
+    const spacePerElement = 100 / visibleRooms.length;
+    const elements = visibleRooms.map(([roomID, roomInfo], index) => {
       return (
         <NodeElement
-          roomInfo={ring[key]}
-          key={key}
+          roomInfo={roomInfo}
+          key={roomID}
           offsetN={index * spacePerElement}
         />
       );
     });
+
     return elements;
   }, [ring]);
 

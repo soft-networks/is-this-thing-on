@@ -1,11 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import { NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
 import React, { useEffect } from "react";
 import { useRoomStore } from "../stores/roomStore";
 import Layout from "../components/room/layout";
-import BigRing from "../components/rings/bigRing";
 import { Chat } from "../components/interactive/chat";
 import DomRing from "../components/rings/domRing";
 

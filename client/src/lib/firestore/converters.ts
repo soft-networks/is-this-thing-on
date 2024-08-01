@@ -15,12 +15,13 @@ export function sanitizeRoomInfo(data: DocumentData, id: string): RoomInfo {
     streamOwner: "bhavik",
     streamStatus: sanitizeStreamStatus(data["stream_status"]),
     numOnline: data["num_online"] || 0,
-    roomName: data['room_name'] || id,
+    roomName: data["room_name"] || id,
     roomColor: data["room_color"] || "#FCFF54",
     energy: data["energy"] || 0,
     forceSeason0: data["forceSeason0"] || false,
     consentURL: data["consentURL"] || undefined,
-    previewOverlay: data["preview_overlay"] || undefined
+    previewOverlay: data["preview_overlay"] || undefined,
+    hidden: data["hidden"] || false,
   };
 }
 

@@ -50,17 +50,17 @@ export async function syncWebRing(initRing: (ring: WebRing) => void, linkUpdate:
       roomColor: "white",
       streamStatus: "disconnected",
       consentURL: data.consentURL,
-    }
+      hidden: data.hidden,
+    };
     let unsub = onSnapshot(doc.ref, (doc) => {
       let data = doc.data();
       if (data && doc.id) {
         let sanitized = sanitizeRoomInfo(data, doc.id);
         linkUpdate(doc.id, sanitized);
       }
-    })
+    });
     unsubUpdates.push(unsub);
-  })
+  });
   initRing(ring);
   return unsubUpdates;
-  
 }
