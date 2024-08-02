@@ -60,9 +60,8 @@ const AccountManager: React.FC<{ currentUser: User }> = ({ currentUser }) => {
       <div className="stack padded border-thin" key="username">
         <em> change username </em>
         <p>
-          {" "}
           you can change your user name - but this will only apply for future
-          chats.{" "}
+          chats.
         </p>
         <ChangeUsername />
       </div>

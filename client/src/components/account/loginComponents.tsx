@@ -40,8 +40,7 @@ export const SignUp: React.FC = () => {
   return (
     <div className="stack padded  border-thin">
       <div>
-        {" "}
-        <em>sign up</em>{" "}
+        <em>sign up</em>
       </div>
       <div className="stack:s-2">
         <label className="caption">email</label>

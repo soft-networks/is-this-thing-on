@@ -62,8 +62,7 @@ const RoomAdminUI: React.FC<{ roomID: string; uid: string }> = ({
   return (
     <div className="stack padded border-thin">
       <div>
-        {" "}
-        <span>{roomID}</span>{" "}
+        <span>{roomID}</span>
       </div>
       <div>
         stream key: <br /> <span className="contrastFill">{streamKey}</span>
