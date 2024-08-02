@@ -59,9 +59,14 @@ const OnlineElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number }> = ({
       onMouseOut={() => setIsHovering(false)}
     >
       <div className="homepageVideo noOverflow border">
-        {roomInfo.previewOverlay && <div className="absoluteOrigin fullBleed highestLayer">
-          <img src={roomInfo.previewOverlay} className="fullBleed absoluteOrigin noEvents noSelect"/>
-        </div>}
+        {roomInfo.previewOverlay && (
+          <div className="absoluteOrigin fullBleed highestLayer">
+            <img
+              src={roomInfo.previewOverlay}
+              className="fullBleed absoluteOrigin noEvents noSelect"
+            />
+          </div>
+        )}
         <VideoPreview
           localMuted={!isHovering}
           iLink={roomInfo}

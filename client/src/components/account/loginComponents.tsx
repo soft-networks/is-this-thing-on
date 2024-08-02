@@ -8,7 +8,9 @@ export const SignUp: React.FC = () => {
 
   const [error, setError] = useState("");
   const signUp = useUserStore(useCallback((state) => state.signUp, []));
-  const updateDisplayname = useUserStore(useCallback((state) => state.updateDisplayname, []));
+  const updateDisplayname = useUserStore(
+    useCallback((state) => state.updateDisplayname, []),
+  );
 
   const signUpComplete = useCallback(
     (success: boolean, error?: Error) => {
@@ -20,7 +22,7 @@ export const SignUp: React.FC = () => {
         setError(error?.message || "There was an error signing up sorry");
       }
     },
-    [setEmailValue, setPasswordValue, setError]
+    [setEmailValue, setPasswordValue, setError],
   );
 
   const onSubmit = () => {
@@ -29,7 +31,9 @@ export const SignUp: React.FC = () => {
       return;
     }
     console.log("signing up with password", passwordValue);
-    signUp(emailValue, passwordValue, () => updateDisplayname(usernameValue, signUpComplete));
+    signUp(emailValue, passwordValue, () =>
+      updateDisplayname(usernameValue, signUpComplete),
+    );
   };
 
   return (
@@ -94,7 +98,7 @@ export const SignIn: React.FC = () => {
         setError(error || "There was an unknown error signing in sorry");
       }
     },
-    [setUsernameValue, setPasswordValue, setError]
+    [setUsernameValue, setPasswordValue, setError],
   );
   const onSubmit = () => {
     if (usernameValue == "" || passwordValue == "") {
@@ -130,4 +134,3 @@ export const SignIn: React.FC = () => {
     </div>
   );
 };
-

@@ -29,7 +29,7 @@ const DEFAULT_STYLE = (roomColor: string, globalStyle: boolean) =>
     "--chatContainerBackground": "none",
     "--chatBorderColor": "var(--gray)",
     "--chatMessageBackgroundColor": "var(--roomColor)",
-  } as React.CSSProperties);
+  }) as React.CSSProperties;
 
 //TODO: Fix the Chat Filter: so it actually creates/destroys callbacks.
 //TODO: Don't load 100 chats. Filter by timestamp maybe. Or see if you can batch???
@@ -47,7 +47,11 @@ const getRoomNameForChat = (roomName: string) => {
   return rn;
 };
 
-export const Chat: React.FC<RoomUIProps & {whiteText?: boolean}> = ({ className, style = {}, whiteText}) => {
+export const Chat: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
+  className,
+  style = {},
+  whiteText,
+}) => {
   let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
   let chatRef = createRef<HTMLDivElement>();
   let roomID = useRoomStore((state) => state.currentRoomID);
@@ -57,11 +61,10 @@ export const Chat: React.FC<RoomUIProps & {whiteText?: boolean}> = ({ className,
   let unsubRef = useRef<Unsubscribe>();
   let [filterRoom, setFilterRoom] = useState<boolean>(pathname !== "/");
   let [lastRecalculationUpdate, setLastRecalculationUpdate] = useState<number>(
-    Date.now()
+    Date.now(),
   );
   let [minimizeChat, setMinimizeChat] = useState<boolean>(false);
 
-  
   useEffect(() => {
     setLastRecalculationUpdate(Date.now());
   }, [chatList]);
@@ -83,9 +86,12 @@ export const Chat: React.FC<RoomUIProps & {whiteText?: boolean}> = ({ className,
   }, []);
   const sendNewMessage = useCallback(
     (c: { message: string; timestamp: number; username: string }) => {
-      addChatMessageDB({ ...c, roomID: filterRoom ? (roomID || "home") : "home" });
+      addChatMessageDB({
+        ...c,
+        roomID: filterRoom ? roomID || "home" : "home",
+      });
     },
-    [filterRoom, roomID]
+    [filterRoom, roomID],
   );
   useEffect(() => {
     logInfo("ChatClient restarting");
@@ -95,7 +101,11 @@ export const Chat: React.FC<RoomUIProps & {whiteText?: boolean}> = ({ className,
         unsubRef.current();
       }
       logCallbackSetup(`Chat ${roomID || "home"}`);
-      unsubRef.current = await syncChat(chatWasAdded, chatWasRemoved, filterRoom ? (roomID || "home") : "home");
+      unsubRef.current = await syncChat(
+        chatWasAdded,
+        chatWasRemoved,
+        filterRoom ? roomID || "home" : "home",
+      );
     }
     setupDB();
     return () => {
@@ -156,11 +166,16 @@ export const Chat: React.FC<RoomUIProps & {whiteText?: boolean}> = ({ className,
             })}
         </div>
       )}
-      <div className="stack:s-2" style={whiteText ? {color: "black"} : {}}>
+      <div className="stack:s-2" style={whiteText ? { color: "black" } : {}}>
         {!minimizeChat && <ChatInput onSubmit={sendNewMessage} />}
         {roomID && (
-          <div className="horizontal-stack:s-2" >
-            <div className={classNames("clickable whiteFill border center-text padded:s-3 contrastFill:hover")} onClick={() => setMinimizeChat(!minimizeChat)}>
+          <div className="horizontal-stack:s-2">
+            <div
+              className={classNames(
+                "clickable whiteFill border center-text padded:s-3 contrastFill:hover",
+              )}
+              onClick={() => setMinimizeChat(!minimizeChat)}
+            >
               {minimizeChat ? "open chat" : "minimize"}
             </div>
             {!minimizeChat && (
@@ -168,7 +183,7 @@ export const Chat: React.FC<RoomUIProps & {whiteText?: boolean}> = ({ className,
                 <div
                   className={classNames(
                     "flex-1 clickable whiteFill border  center-text padded:s-3",
-                    { contrastFill: filterRoom }
+                    { contrastFill: filterRoom },
                   )}
                   onClick={() => setFilterRoom(true)}
                   style={{ borderRight: 0 }}
@@ -178,7 +193,7 @@ export const Chat: React.FC<RoomUIProps & {whiteText?: boolean}> = ({ className,
                 <div
                   className={classNames(
                     "flex-1 clickable whiteFill border center-text padded:s-3",
-                    { contrastFill: !filterRoom }
+                    { contrastFill: !filterRoom },
                   )}
                   onClick={() => setFilterRoom(false)}
                 >
@@ -199,7 +214,7 @@ function remap(
   start1: number,
   stop1: number,
   start2: number,
-  stop2: number
+  stop2: number,
 ) {
   return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
 }
@@ -224,7 +239,7 @@ const RenderChat: React.FC<{
         (CHAT_HEIGHT - 0.05) * window.innerHeight,
         window.innerHeight - 400,
         0,
-        1
+        1,
       );
       //percentage = 0;
       setMyBlurPercentage(percentage);
@@ -234,7 +249,10 @@ const RenderChat: React.FC<{
   return (
     <div
       className="stack:noGap fullWidth align-start relative chatBubble"
-      style={{ marginBlockStart: "var(--s-2)", opacity: alwaysShow ? 1 : myBlurPercentage }}
+      style={{
+        marginBlockStart: "var(--s-2)",
+        opacity: alwaysShow ? 1 : myBlurPercentage,
+      }}
       ref={myRef}
     >
       <div

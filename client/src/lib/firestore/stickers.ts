@@ -26,7 +26,7 @@ import { trace } from "../tracers";
 
 export async function getStickerCDN(
   roomName: string,
-  initStickerCDN: (cdn: { [key: string]: Sticker }) => void
+  initStickerCDN: (cdn: { [key: string]: Sticker }) => void,
 ) {
   if (!validateRoomName(roomName)) {
     return;
@@ -52,8 +52,8 @@ export function syncStickerInstances(
     id: string,
     pos: Pos,
     size: number,
-    zIndex: number
-  ) => void
+    zIndex: number,
+  ) => void,
 ) {
   if (!validateRoomName(roomName)) {
     return;
@@ -67,7 +67,7 @@ export function syncStickerInstances(
         let element = change.doc;
         if (change.type === "added") {
           const sanitizedStickerInstance = sanitizeStickerInstanceFromDB(
-            change.doc.data()
+            change.doc.data(),
           );
           stickerAdded(element.id, sanitizedStickerInstance);
         }
@@ -78,7 +78,7 @@ export function syncStickerInstances(
               element.id,
               stickerData.position,
               stickerData.size,
-              stickerData.zIndex
+              stickerData.zIndex,
             );
           }
         }
@@ -93,7 +93,7 @@ export function syncStickerInstances(
 
 export async function addStickerInstance(
   roomName: string,
-  element: StickerInstance
+  element: StickerInstance,
 ) {
   trace("add-sticker", () => {
     const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
@@ -104,7 +104,7 @@ export async function addStickerInstance(
 export async function updateStickerInstancePos(
   roomName: string,
   stickerID: string,
-  pos: Pos
+  pos: Pos,
 ) {
   if (pos[0] <= -0.5 || pos[1] <= -0.5 || pos[0] >= 1.5 || pos[1] >= 1.5) {
     return;
@@ -119,7 +119,7 @@ export async function updateStickerInstancePos(
 export async function updateStickerInstanceScale(
   roomName: string,
   stickerID: string,
-  size: number
+  size: number,
 ) {
   trace("update-sticker-scale", () => {
     const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
@@ -130,7 +130,7 @@ export async function updateStickerInstanceScale(
 export async function updateStickerInstanceZIndex(
   roomName: string,
   stickerID: string,
-  zIndex: number
+  zIndex: number,
 ) {
   trace("update-sticker-z-index", () => {
     const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
@@ -140,7 +140,7 @@ export async function updateStickerInstanceZIndex(
 }
 export async function deleteStickerInstance(
   roomName: string,
-  stickerID: string
+  stickerID: string,
 ) {
   trace("delete-sticker", async () => {
     const stickerInstances = stickerInstanceCollection(roomDoc(roomName));

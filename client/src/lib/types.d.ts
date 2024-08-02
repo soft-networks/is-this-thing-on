@@ -11,14 +11,14 @@ interface SarahQuestion {
   status?: "ACCEPTED";
 }
 
-type UserID = string; 
+type UserID = string;
 
 type StickerCDN = { [key: string]: Sticker };
 interface ChatMessage {
-  timestamp: number,
-  message: string,
-  username: string,
-  roomID: string
+  timestamp: number;
+  message: string;
+  username: string;
+  roomID: string;
 }
 
 interface Collective {
@@ -35,75 +35,73 @@ interface StreamNames {
 type STREAM_STATUS_TYPE = "active" | "disconnected" | "active-test";
 
 interface RoomLinkInfo {
-  roomID: string,
-  roomName: string,
-  roomColor: string,
-  streamStatus: STREAM_STATUS_TYPE,
-  season0URL?: string,
-  season0Href?: string,
-  streamPlaybackID?: string,
-  forceSeason0?: boolean,
-  consentURL?: string,
-  previewOverlay?: string
+  roomID: string;
+  roomName: string;
+  roomColor: string;
+  streamStatus: STREAM_STATUS_TYPE;
+  season0URL?: string;
+  season0Href?: string;
+  streamPlaybackID?: string;
+  forceSeason0?: boolean;
+  consentURL?: string;
+  previewOverlay?: string;
 }
-type WebRing = {[key:string] : RoomLinkInfo};
+type WebRing = { [key: string]: RoomLinkInfo };
 
 type RoomInfo = RoomLinkInfo & {
-  streamOwner: string,
-  numOnline: number,
-  energy: number,
-}
-
-
+  streamOwner: string;
+  numOnline: number;
+  energy: number;
+};
 
 type Pos = [number, number];
 
 type BEHAVIOR_TYPES = "MOVE" | "DELETE";
 
 interface Sticker {
-  behaviorType: BEHAVIOR_TYPES,
-  cdnID: string,
-  imageURL: string,
-  noGift: string,
-  size?: number
+  behaviorType: BEHAVIOR_TYPES;
+  cdnID: string;
+  imageURL: string;
+  noGift: string;
+  size?: number;
 }
 interface StickerInstance {
-  position: Pos,
-  size?: number,
-  timestamp: number
-  cdnID: string,
-  zIndex: number,
-  text?: string
+  position: Pos;
+  size?: number;
+  timestamp: number;
+  cdnID: string;
+  zIndex: number;
+  text?: string;
 }
 interface EnergyAccount {
-  userID: UserID,
-  energy:  number
+  userID: UserID;
+  energy: number;
 }
 
 interface EnergyTransaction {
-  from: UserID,
-  to: UserID,
-  amount: number,
-  timestamp: number
+  from: UserID;
+  to: UserID;
+  amount: number;
+  timestamp: number;
 }
 
 interface EnergyTransactionPosted extends EnergyTransaction {
-  status: TransactionStatus,
-  id: string
+  status: TransactionStatus;
+  id: string;
 }
 
-type TransactionStatusTypes = "ERROR" | "SUCCESS" | "PENDING"
+type TransactionStatusTypes = "ERROR" | "SUCCESS" | "PENDING";
 interface TransactionStatus {
-  type: TransactionStatusTypes ,
-  code?: string
+  type: TransactionStatusTypes;
+  code?: string;
 }
 
 interface TransactionError extends TransactionStatus {
-  type: "ERROR",
-  code: "INSUFFICIENT_BALANCE" | "NETWORK_ERROR" | "TIMEOUT"
+  type: "ERROR";
+  code: "INSUFFICIENT_BALANCE" | "NETWORK_ERROR" | "TIMEOUT";
 }
 
 interface RoomUIProps {
-  className?: string
-  style?: React.CSSProperties
+  className?: string;
+  style?: React.CSSProperties;
 }

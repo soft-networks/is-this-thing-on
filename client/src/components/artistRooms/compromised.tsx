@@ -4,10 +4,11 @@ import { CompromisedStickerAdder } from "../interactive/custom/compromisedSticke
 
 const Compromised: React.FC = () => {
   return (
-    <main className="fullBleed noOverflow relative" style={{ background: "black" }}>
-      <DefaultRoom
-        stickerChooser={CompromisedStickerAdder}
-      />
+    <main
+      className="fullBleed noOverflow relative"
+      style={{ background: "black" }}
+    >
+      <DefaultRoom stickerChooser={CompromisedStickerAdder} />
     </main>
   );
 };

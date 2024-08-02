@@ -31,7 +31,9 @@ const VideoOnlyPageInternal = ({ roomID }: { roomID: string }) => {
         if (unsubscribeFromRoomInfo.current) {
           unsubscribeFromRoomInfo.current();
         }
-        unsubscribeFromRoomInfo.current = await syncRoomInfoDB(roomID, (r) => changeRoom(roomID as string, r));
+        unsubscribeFromRoomInfo.current = await syncRoomInfoDB(roomID, (r) =>
+          changeRoom(roomID as string, r),
+        );
       }
     }
     subscribeToRoomInfo();
@@ -54,12 +56,12 @@ const VideoOnlyPageInternal = ({ roomID }: { roomID: string }) => {
             )}
             {userClicked && roomInfo && (
               <>
-                <VideoPlayer
-                  streamPlaybackID={roomInfo.streamPlaybackID}
-                />
+                <VideoPlayer streamPlaybackID={roomInfo.streamPlaybackID} />
               </>
             )}
-            {userClicked && !roomInfo && <div className="centerh"> loading </div>}
+            {userClicked && !roomInfo && (
+              <div className="centerh"> loading </div>
+            )}
           </div>
         </RoomStatusGate>
       </RoomNameGate>

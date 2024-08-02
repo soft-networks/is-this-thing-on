@@ -4,14 +4,17 @@ import useRingStore from "../../stores/ringStore";
 import { roomIsActive, useRoomStore } from "../../stores/roomStore";
 import ConsentGate from "./consentGate";
 const loadingDiv = <div className="center:absolute"> loading...</div>;
-const RoomNameGate: React.FunctionComponent<{ id: string }> = ({ id, children }) => {
+const RoomNameGate: React.FunctionComponent<{ id: string }> = ({
+  id,
+  children,
+}) => {
   const ring = useRingStore(useCallback((room) => room.links, []));
   const isValidName = useMemo(() => {
     if (ring == undefined || Object.keys(ring).length == 0) {
       return loadingDiv;
     }
     const streamNames = Object.keys(ring);
-    return streamNames.includes(id)
+    return streamNames.includes(id);
   }, [ring, id]);
   return isValidName ? <> {children} </> : <div> whoops, ur lost. </div>;
 };

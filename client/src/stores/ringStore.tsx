@@ -25,7 +25,6 @@ const useRingStore = create<RingState>((set) => ({
 
 export const roomIDToHREF = (id: string) => {
   return `/${slugify(id)}`;
-}
-
+};
 
 export default useRingStore;

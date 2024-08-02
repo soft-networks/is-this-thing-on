@@ -6,7 +6,10 @@ import AdminPanel from "../account/adminPanel";
 
 const Chris: React.FC = () => {
   return (
-    <main className="fullBleed noOverflow relative chrisyRoom" style={{"--stickerGlowShadow": "none"} as React.CSSProperties}>
+    <main
+      className="fullBleed noOverflow relative chrisyRoom"
+      style={{ "--stickerGlowShadow": "none" } as React.CSSProperties}
+    >
       <Chat
         key="chat"
         style={
@@ -19,7 +22,7 @@ const Chris: React.FC = () => {
       />
       <VideoPlayer />
       <ChrisyStickers />
-      <AdminPanel/>
+      <AdminPanel />
     </main>
   );
 };

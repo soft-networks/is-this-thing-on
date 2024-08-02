@@ -13,9 +13,13 @@ export const useAdminStore = create<AdminStore>((set) => ({
   isAdmin: false,
   setIsAdmin: (isAdmin: boolean) => {
     if (!isAdmin) {
-      set({ stickerBehaviorOverride: undefined, hideVideo: false, isAdmin: false });
+      set({
+        stickerBehaviorOverride: undefined,
+        hideVideo: false,
+        isAdmin: false,
+      });
     } else {
-      set({ isAdmin: true })
+      set({ isAdmin: true });
     }
   },
   hideVideo: false,

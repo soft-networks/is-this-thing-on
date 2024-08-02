@@ -1,26 +1,47 @@
 /* eslint-disable @next/next/no-img-element */
 import { Unsubscribe } from "firebase/firestore";
-import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
 import useMeasure, { RectReadOnly } from "react-use-measure";
-import { addStickerInstance, performTransaction, resetStickers, syncStickerInstances } from "../../lib/firestore";
+import {
+  addStickerInstance,
+  performTransaction,
+  resetStickers,
+  syncStickerInstances,
+} from "../../lib/firestore";
 import { useRoomStore } from "../../stores/roomStore";
 import useStickerCDNStore from "../../stores/stickerStore";
 import { useUserStore } from "../../stores/userStore";
 import { StickerAdderProps, DefaultStickerAdder } from "./stickerAdders";
 import { StickerRenderer } from "./stickerRenderHelpers";
-import { logCallbackDestroyed, logCallbackSetup, logFirebaseUpdate, logInfo } from "../../lib/logger";
+import {
+  logCallbackDestroyed,
+  logCallbackSetup,
+  logFirebaseUpdate,
+  logInfo,
+} from "../../lib/logger";
 
 interface StickersProps {
   StickerChooser?: React.FC<StickerAdderProps>;
   style?: React.CSSProperties;
 }
-const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdder }) => {
-  
+const Stickers: React.FC<StickersProps> = ({
+  StickerChooser = DefaultStickerAdder,
+}) => {
   //Stores
   const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));
-  const stickerCDN = useStickerCDNStore(useCallback((state) => state.stickerCDN, []));
+  const stickerCDN = useStickerCDNStore(
+    useCallback((state) => state.stickerCDN, []),
+  );
   const adminForIDs = useUserStore(useCallback((s) => s.adminFor, []));
-  const displayName = useUserStore(useCallback((state) => state.displayName, []));
+  const displayName = useUserStore(
+    useCallback((state) => state.displayName, []),
+  );
 
   //Local
   const [stickerStyle, setStickerStyle] = useState<React.CSSProperties>();
@@ -35,7 +56,12 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
     return undefined;
   }, [adminForIDs, roomID]);
 
-  const addSticker = (pos: Pos, cdnID: string, scale?: number, text?: string) => {
+  const addSticker = (
+    pos: Pos,
+    cdnID: string,
+    scale?: number,
+    text?: string,
+  ) => {
     if (!roomID) return;
     logInfo("Adding sticker and performing transaction");
     addStickerInstance(roomID, {
@@ -63,7 +89,11 @@ const Stickers: React.FC<StickersProps> = ({ StickerChooser = DefaultStickerAdde
       <div className="videoAspectElement">
         {stickerCDN && (
           <>
-            <StickerChooser addSticker={addSticker} cdn={stickerCDN} containerBounds={bounds} />
+            <StickerChooser
+              addSticker={addSticker}
+              cdn={stickerCDN}
+              containerBounds={bounds}
+            />
             <ServerStickers
               roomID={roomID}
               key={`${roomID}-sscoins`}
@@ -82,7 +112,9 @@ const ServerStickers: React.FC<{
   cdn: StickerCDN;
   containerBounds: RectReadOnly;
 }> = ({ roomID, cdn, containerBounds }) => {
-  let [serverSideCoins, setServerSideCoins] = useState<{ [key: string]: StickerInstance }>({});
+  let [serverSideCoins, setServerSideCoins] = useState<{
+    [key: string]: StickerInstance;
+  }>({});
   const unsub = useRef<Unsubscribe>();
   const stickerUpdated = useCallback(
     (cID, pos, scale, z) => {
@@ -95,7 +127,7 @@ const ServerStickers: React.FC<{
         return npc;
       });
     },
-    [setServerSideCoins]
+    [setServerSideCoins],
   );
 
   const stickerAdded = useCallback(
@@ -107,7 +139,7 @@ const ServerStickers: React.FC<{
         return npc;
       });
     },
-    [setServerSideCoins]
+    [setServerSideCoins],
   );
   const stickerRemoved = useCallback(
     (cID) => {
@@ -118,22 +150,25 @@ const ServerStickers: React.FC<{
         return npc;
       });
     },
-    [setServerSideCoins]
+    [setServerSideCoins],
   );
   useEffect(() => {
     async function setupServerSync() {
       logCallbackSetup("StickerInstances");
-      unsub.current = syncStickerInstances(roomID, stickerAdded, stickerRemoved, stickerUpdated);
+      unsub.current = syncStickerInstances(
+        roomID,
+        stickerAdded,
+        stickerRemoved,
+        stickerUpdated,
+      );
     }
     setupServerSync();
     return () => {
-      logCallbackDestroyed("StickerInstances")
+      logCallbackDestroyed("StickerInstances");
       unsub.current && unsub.current();
-    }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-
 
   //TODO URGENT: BEST PRACTICES FOR RENDERING A DICTIONARY LIKE THIS (don't re-render everything??)
   return (

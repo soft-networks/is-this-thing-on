@@ -1,6 +1,12 @@
 import classNames from "classnames";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { roomIDToHREF } from "../../stores/ringStore";
 import { roomIsActive, useRoomStore } from "../../stores/roomStore";
 
@@ -9,28 +15,38 @@ const ELLIPSE_PATH =
 
 const GLOBAL_ANIM_LENGTH = 100;
 
-
-
 interface SVGRingProps {
   ring: WebRing;
   currentlySelected?: number;
   onNodeClick?: (nodeIndex: number) => void;
 }
-export const SVGRingSeparate = (props: SVGRingProps & {returnWithoutWrapping?: boolean}) => {
-  const pieces = [<path key="path-outline"  fill={"none"} d={ELLIPSE_PATH} id="ellipsePath"/>, <SVGNodes key="path-nodes" {...props} />]
+export const SVGRingSeparate = (
+  props: SVGRingProps & { returnWithoutWrapping?: boolean },
+) => {
+  const pieces = [
+    <path key="path-outline" fill={"none"} d={ELLIPSE_PATH} id="ellipsePath" />,
+    <SVGNodes key="path-nodes" {...props} />,
+  ];
   if (props.returnWithoutWrapping) {
     return pieces;
   }
   const wrapSVG = (child: JSX.Element) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="centerh homeLogoWidth" viewBox="-50 -50 550 450">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="centerh homeLogoWidth"
+      viewBox="-50 -50 550 450"
+    >
       {child}
     </svg>
-  )
+  );
   return pieces.map((p) => wrapSVG(p));
-  
-}
+};
 
-const SVGNodes: React.FC<SVGRingProps> = ({ring, currentlySelected, onNodeClick}) => {
+const SVGNodes: React.FC<SVGRingProps> = ({
+  ring,
+  currentlySelected,
+  onNodeClick,
+}) => {
   const nodes = useMemo(() => {
     const numKeys = Object.keys(ring).length;
     const ANIM_OFFSET = GLOBAL_ANIM_LENGTH / numKeys;
@@ -48,14 +64,14 @@ const SVGNodes: React.FC<SVGRingProps> = ({ring, currentlySelected, onNodeClick}
           selected={currentlySelected == i}
           onClick={onNodeClick}
           ANIM_LENGTH={GLOBAL_ANIM_LENGTH}
-        />
+        />,
       );
     }
     return nodeDom;
   }, [currentlySelected, onNodeClick, ring]);
 
-  return <>{nodes}</>
-}
+  return <>{nodes}</>;
+};
 interface SVGRingNodeProps {
   index: number;
   myColor: string;
@@ -64,8 +80,8 @@ interface SVGRingNodeProps {
   ANIM_LENGTH: number;
   selected?: boolean;
   onClick?: (myIndex: number) => void;
-  hoverBehavior?: boolean,
-  name?: string
+  hoverBehavior?: boolean;
+  name?: string;
 }
 export const SVGRingNode: React.FC<SVGRingNodeProps> = ({
   index,
@@ -79,9 +95,16 @@ export const SVGRingNode: React.FC<SVGRingNodeProps> = ({
   name,
 }) => {
   return (
-    <g key={`node-${index}`} className={classNames({showOnHoverTrigger: hoverBehavior})}>
+    <g
+      key={`node-${index}`}
+      className={classNames({ showOnHoverTrigger: hoverBehavior })}
+    >
       <rect
-        className={classNames({ stroke: true, selected: selected, clickable: onClick !== undefined })}
+        className={classNames({
+          stroke: true,
+          selected: selected,
+          clickable: onClick !== undefined,
+        })}
         width="80"
         height="20"
         fill={showColor ? myColor : "#fff"}
@@ -89,11 +112,20 @@ export const SVGRingNode: React.FC<SVGRingNodeProps> = ({
         onClick={() => onClick && onClick(index)}
         vectorEffect="non-scaling-stroke"
       ></rect>
-      <animateMotion dur={`${ANIM_LENGTH}s`} begin={`${index * -ANIM_OFFSET}s`} repeatCount="indefinite">
+      <animateMotion
+        dur={`${ANIM_LENGTH}s`}
+        begin={`${index * -ANIM_OFFSET}s`}
+        repeatCount="indefinite"
+      >
         <mpath xlinkHref="#ellipsePath" />
       </animateMotion>
       {name && (
-        <text className={classNames({ showOnHover: hoverBehavior })} textAnchor="middle" transform="translate(0, -40)"  style={{ filter: `drop-shadow(0px 0px 2px ${myColor || "white"})` }}>
+        <text
+          className={classNames({ showOnHover: hoverBehavior })}
+          textAnchor="middle"
+          transform="translate(0, -40)"
+          style={{ filter: `drop-shadow(0px 0px 2px ${myColor || "white"})` }}
+        >
           {name}
         </text>
       )}
@@ -102,18 +134,39 @@ export const SVGRingNode: React.FC<SVGRingNodeProps> = ({
 };
 
 interface NodeLinkProps {
-  link: RoomLinkInfo,
+  link: RoomLinkInfo;
   className?: string;
   noNav?: boolean;
-  id:string;
+  id: string;
 }
-export const NodeLink: React.FC<NodeLinkProps> = ({ link, className, noNav, id}) => {
-
-  const text = useMemo(() => `${link.roomName} is ${link.streamStatus.includes('active') ? 'online' : 'offline'}`, [link.roomName, link.streamStatus]);
+export const NodeLink: React.FC<NodeLinkProps> = ({
+  link,
+  className,
+  noNav,
+  id,
+}) => {
+  const text = useMemo(
+    () =>
+      `${link.roomName} is ${link.streamStatus.includes("active") ? "online" : "offline"}`,
+    [link.roomName, link.streamStatus],
+  );
   return (
-    <div className={`border padded:s-3 center-text ${className}`} style={{ backgroundColor: link.streamStatus.includes('active') ? "var(--roomColor)" : "var(--white)" }}>
-      { !noNav && link.streamStatus == 'active' ?  <a href={roomIDToHREF(id)} target="_blank" rel="noreferrer"> {text} </a> :<span> {text} </span>}
+    <div
+      className={`border padded:s-3 center-text ${className}`}
+      style={{
+        backgroundColor: link.streamStatus.includes("active")
+          ? "var(--roomColor)"
+          : "var(--white)",
+      }}
+    >
+      {!noNav && link.streamStatus == "active" ? (
+        <a href={roomIDToHREF(id)} target="_blank" rel="noreferrer">
+          {" "}
+          {text}{" "}
+        </a>
+      ) : (
+        <span> {text} </span>
+      )}
     </div>
   );
 };
-
