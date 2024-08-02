@@ -56,7 +56,7 @@ export async function syncWebRing(
 ) {
   let collectionRef = roomsCollection();
   let docs = await getDocs(query(collectionRef, where("hidden", "!=", true)));
-  console.log(docs);
+
   const unsubUpdates: Unsubscribe[] = [];
   const ring: WebRing = {};
 
