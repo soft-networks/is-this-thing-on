@@ -70,7 +70,7 @@ resource "google_firestore_index" "rooms_admins_hidden" {
 
   fields {
     field_path = "admins"
-    order      = "ARRAYS"
+    array_config = "CONTAINS"
   }
 
   fields {
