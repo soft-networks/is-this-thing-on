@@ -17,7 +17,7 @@ export async function syncRoomInfoDB(
     return;
   }
   const unsub = onSnapshot(roomDoc(roomName), (doc) => {
-    let data = doc.data();
+    const data = doc.data();
     data && callback(sanitizeRoomInfo(data, doc.id));
   });
   return unsub;
@@ -26,22 +26,22 @@ export async function syncRoomInfoDB(
 export async function getRoomsWhereUserISAdmin(userID: string) {
   const q = query(roomsCollection(), where("admins", "array-contains", userID));
   const querySnapshot = await getDocs(q);
-  let numResults = querySnapshot.size;
+  const numResults = querySnapshot.size;
 
   if (numResults == 0) {
     return undefined;
   }
 
-  let roomInfo: RoomInfo[] = [];
+  const roomInfo: RoomInfo[] = [];
   querySnapshot.forEach((doc) =>
     roomInfo.push(sanitizeRoomInfo(doc.data(), doc.id)),
   );
   return roomInfo;
 }
 export async function getRoomAdmins(roomID: string) {
-  let roomRef = roomDoc(roomID);
-  let roomDocument = await getDoc(roomRef);
-  let data = roomDocument.data();
+  const roomRef = roomDoc(roomID);
+  const roomDocument = await getDoc(roomRef);
+  const data = roomDocument.data();
   return data && data["admins"] ? data["admins"] : [];
 }
 
@@ -49,13 +49,13 @@ export async function syncWebRing(
   initRing: (ring: WebRing) => void,
   linkUpdate: (roomName: string, update: RoomLinkInfo) => void,
 ) {
-  let collectionRef = roomsCollection();
-  let docs = await getDocs(collectionRef);
+  const collectionRef = roomsCollection();
+  const docs = await getDocs(collectionRef);
   const unsubUpdates: Unsubscribe[] = [];
   const ring: WebRing = {};
 
   docs.forEach((doc) => {
-    let data = sanitizeRoomInfo(doc.data(), doc.id);
+    const data = sanitizeRoomInfo(doc.data(), doc.id);
 
     ring[doc.id] = {
       roomID: data.roomID,
@@ -64,10 +64,10 @@ export async function syncWebRing(
       streamStatus: "disconnected",
       consentURL: data.consentURL,
     };
-    let unsub = onSnapshot(doc.ref, (doc) => {
-      let data = doc.data();
+    const unsub = onSnapshot(doc.ref, (doc) => {
+      const data = doc.data();
       if (data && doc.id) {
-        let sanitized = sanitizeRoomInfo(data, doc.id);
+        const sanitized = sanitizeRoomInfo(data, doc.id);
         linkUpdate(doc.id, sanitized);
       }
     });

@@ -28,14 +28,14 @@ const FooterLogo: React.FC<{ ring: WebRing; roomID: string }> = ({
   const { push } = useRouter();
   const indexSelected = useMemo(() => {
     if (!roomID) return;
-    let i = Object.keys(ring).indexOf(roomID);
+    const i = Object.keys(ring).indexOf(roomID);
     return i > -1 ? i : undefined;
   }, [ring, roomID]);
   const navStream = useCallback(
     (n: number) => {
-      let keys = Object.keys(ring);
+      const keys = Object.keys(ring);
       n = n < 0 ? keys.length - 1 : n;
-      let nextKey = keys[n % keys.length];
+      const nextKey = keys[n % keys.length];
       push(roomIDToHREF(nextKey));
     },
     [push, ring],

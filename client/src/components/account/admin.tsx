@@ -14,7 +14,7 @@ const Admin: React.FC<AdminViewProps> = ({ uid }) => {
   const [rooms, setRooms] = useState<undefined | RoomInfo[]>(undefined);
   useEffect(() => {
     async function getRooms() {
-      let rooms = await getRoomsWhereUserISAdmin(uid);
+      const rooms = await getRoomsWhereUserISAdmin(uid);
       setRooms(rooms);
     }
     getRooms();
@@ -46,12 +46,12 @@ const RoomAdminUI: React.FC<{ roomID: string; uid: string }> = ({
   roomID,
   uid,
 }) => {
-  let [streamKey, setStreamKey] = useState<string>();
+  const [streamKey, setStreamKey] = useState<string>();
 
   useEffect(() => {
     //TODO: Send UID here to authenticate with server
     async function getSK() {
-      let sk = await getStreamKey(roomID);
+      const sk = await getStreamKey(roomID);
       setStreamKey(sk);
     }
     getSK();

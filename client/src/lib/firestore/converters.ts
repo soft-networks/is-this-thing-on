@@ -72,7 +72,7 @@ export function sanitizeTransactionForDB(transaction: EnergyTransaction) {
 }
 
 export function sanitizeStickerInstanceForDB(stickerInstance: StickerInstance) {
-  let instance: {
+  const instance: {
     position: Pos;
     cdn_id: string;
     timestamp: number;

@@ -12,7 +12,7 @@ const AdminPanel = () => {
 
 const AdminPanelInternal: React.FC<{}> = () => {
   const roomName = useRoomStore(useCallback((s) => s.roomInfo?.roomID, []));
-  let panelRef = createRef<HTMLDivElement>();
+  const panelRef = createRef<HTMLDivElement>();
 
   return (
     <Draggable handle=".handle" nodeRef={panelRef}>

@@ -8,7 +8,7 @@ const RoomPage: NextPage = () => {
   if (!id || typeof id !== "string") {
     return <div className="fullBleed darkFill"> something went wrong </div>;
   }
-  return <Room roomID={id as string} season={1} />;
+  return <Room roomID={id} season={1} />;
 };
 
 export default RoomPage;

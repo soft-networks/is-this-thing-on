@@ -55,7 +55,7 @@ const ChrisyStickerViewerController: React.FC<{
   cdn: StickerCDN;
   containerBounds: RectReadOnly;
 }> = ({ roomID, cdn, containerBounds }) => {
-  let [serverSideCoins, setServerSideCoins] = useState<{
+  const [serverSideCoins, setServerSideCoins] = useState<{
     [key: string]: StickerInstance;
   }>({});
   const unsub = useRef<Unsubscribe>();
@@ -64,7 +64,7 @@ const ChrisyStickerViewerController: React.FC<{
   const stickerUpdated = useCallback(
     (cID, pos, scale, z) => {
       setServerSideCoins((pc) => {
-        let npc = { ...pc };
+        const npc = { ...pc };
         if (npc[cID].position != pos) npc[cID].position = pos;
         if (npc[cID].size != scale) npc[cID].size = scale;
         if (npc[cID].zIndex != z) npc[cID].zIndex = z;
@@ -78,7 +78,7 @@ const ChrisyStickerViewerController: React.FC<{
   const stickerAdded = useCallback(
     (cID, element) => {
       setServerSideCoins((pc) => {
-        let npc = { ...pc };
+        const npc = { ...pc };
         npc[cID] = element;
         return npc;
       });
@@ -88,7 +88,7 @@ const ChrisyStickerViewerController: React.FC<{
   const stickerRemoved = useCallback(
     (cID) =>
       setServerSideCoins((pc) => {
-        let npc = { ...pc };
+        const npc = { ...pc };
         delete npc[cID];
         return npc;
       }),

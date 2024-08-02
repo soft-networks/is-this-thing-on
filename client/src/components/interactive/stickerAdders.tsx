@@ -33,8 +33,8 @@ export const TypingStickerAdder: React.FC<StickerAdderProps> = ({
 
   const clicked: MouseEventHandler<HTMLDivElement> = (e) => {
     if (containerBounds && !inputOpen) {
-      let x = (e.clientX - containerBounds.left) / containerBounds.width;
-      let y = (e.clientY - containerBounds.top) / containerBounds.height;
+      const x = (e.clientX - containerBounds.left) / containerBounds.width;
+      const y = (e.clientY - containerBounds.top) / containerBounds.height;
       currentPosChosen.current = [x, y];
 
       setInputOpen(true);
@@ -102,8 +102,8 @@ export const RandomStickerAdder: React.FC<StickerAdderProps> = ({
   const currentPosChosen = useRef<Pos>();
   const clicked: MouseEventHandler<HTMLDivElement> = (e) => {
     if (containerBounds && cdn && Object.keys(cdn).length > 0) {
-      let x = (e.clientX - containerBounds.left) / containerBounds.width;
-      let y = (e.clientY - containerBounds.top) / containerBounds.height;
+      const x = (e.clientX - containerBounds.left) / containerBounds.width;
+      const y = (e.clientY - containerBounds.top) / containerBounds.height;
       currentPosChosen.current = [x, y];
 
       addSticker(
@@ -131,8 +131,8 @@ export const DefaultStickerAdder: React.FC<StickerAdderProps> = ({
   const clicked: MouseEventHandler<HTMLDivElement> = (e) => {
     if (!showStickerTypePicker) {
       if (containerBounds && cdn && Object.keys(cdn).length > 0) {
-        let x = (e.clientX - containerBounds.left) / containerBounds.width;
-        let y = (e.clientY - containerBounds.top) / containerBounds.height;
+        const x = (e.clientX - containerBounds.left) / containerBounds.width;
+        const y = (e.clientY - containerBounds.top) / containerBounds.height;
         currentPosChosen.current = [x, y];
         setShowStickerTypePicker(true);
       }

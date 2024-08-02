@@ -22,7 +22,7 @@ const BigRing: React.FC = () => {
     const numKeys = Object.keys(ring).length;
     const ANIM_OFFSET = ANIM_LENGTH / numKeys;
     Object.keys(ring).forEach((key, i) => {
-      let roomLinkDetails = ring[key];
+      const roomLinkDetails = ring[key];
       nodes.push(
         <BigRingNode
           roomLinkDetails={roomLinkDetails}

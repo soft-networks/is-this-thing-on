@@ -42,7 +42,7 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({
         }
         logCallbackSetup(`RoomInfo ${roomID}`);
         unsubscribeFromRoomInfo.current = await syncRoomInfoDB(roomID, (r) =>
-          changeRoom(roomID as string, r),
+          changeRoom(roomID, r),
         );
         //TODO: This is a weird place to do this, it should be after the gate.. but its okay for now.
         initializeRoomStickerCDN(roomID);
@@ -66,7 +66,7 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({
 
   return (
     <Layout roomColor={roomColor}>
-      <RoomNameGate id={roomID as string}>
+      <RoomNameGate id={roomID}>
         <RoomStatusGate>
           <ArtistRoom roomID={roomID} />
         </RoomStatusGate>

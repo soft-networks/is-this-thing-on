@@ -1,4 +1,4 @@
-let debug = true;
+const debug = true;
 
 export function logCallbackSetup(message: any, optionalParams?: any[]) {
   logger("🟢 " + message, optionalParams);

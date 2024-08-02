@@ -16,7 +16,7 @@ const VideoOnlyPage: NextPage = () => {
     return <div className="fullBleed darkFill"> something went wrong </div>;
   }
   console.log(id);
-  return <VideoOnlyPageInternal roomID={id as string} />;
+  return <VideoOnlyPageInternal roomID={id} />;
 };
 
 const VideoOnlyPageInternal = ({ roomID }: { roomID: string }) => {
@@ -32,7 +32,7 @@ const VideoOnlyPageInternal = ({ roomID }: { roomID: string }) => {
           unsubscribeFromRoomInfo.current();
         }
         unsubscribeFromRoomInfo.current = await syncRoomInfoDB(roomID, (r) =>
-          changeRoom(roomID as string, r),
+          changeRoom(roomID, r),
         );
       }
     }

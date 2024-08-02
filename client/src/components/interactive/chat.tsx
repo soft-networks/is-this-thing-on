@@ -52,18 +52,18 @@ export const Chat: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
   style = {},
   whiteText,
 }) => {
-  let [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
-  let chatRef = createRef<HTMLDivElement>();
-  let roomID = useRoomStore((state) => state.currentRoomID);
-  let roomColor = useRoomStore((state) => state.roomInfo?.roomColor);
-  let roomName = useRoomStore((state) => state.roomInfo?.roomName);
+  const [chatList, setChatList] = useState<{ [key: string]: ChatMessage }>({});
+  const chatRef = createRef<HTMLDivElement>();
+  const roomID = useRoomStore((state) => state.currentRoomID);
+  const roomColor = useRoomStore((state) => state.roomInfo?.roomColor);
+  const roomName = useRoomStore((state) => state.roomInfo?.roomName);
   const { pathname, back } = useRouter();
-  let unsubRef = useRef<Unsubscribe>();
-  let [filterRoom, setFilterRoom] = useState<boolean>(pathname !== "/");
-  let [lastRecalculationUpdate, setLastRecalculationUpdate] = useState<number>(
+  const unsubRef = useRef<Unsubscribe>();
+  const [filterRoom, setFilterRoom] = useState<boolean>(pathname !== "/");
+  const [lastRecalculationUpdate, setLastRecalculationUpdate] = useState<number>(
     Date.now(),
   );
-  let [minimizeChat, setMinimizeChat] = useState<boolean>(false);
+  const [minimizeChat, setMinimizeChat] = useState<boolean>(false);
 
   useEffect(() => {
     setLastRecalculationUpdate(Date.now());
@@ -71,7 +71,7 @@ export const Chat: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
   const chatWasAdded = useCallback((cID, chat) => {
     logFirebaseUpdate("ChatMessage added");
     setChatList((pc) => {
-      let npc = { ...pc };
+      const npc = { ...pc };
       npc[cID] = chat;
       return npc;
     });
@@ -79,7 +79,7 @@ export const Chat: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
   const chatWasRemoved = useCallback((cID) => {
     logFirebaseUpdate("ChatMessage removed");
     setChatList((pc) => {
-      let npc = { ...pc };
+      const npc = { ...pc };
       delete npc[cID];
       return npc;
     });
@@ -234,7 +234,7 @@ const RenderChat: React.FC<{
   useEffect(() => {
     if (myRef.current) {
       const y = myRef.current.getBoundingClientRect().top;
-      let percentage = remap(
+      const percentage = remap(
         y,
         (CHAT_HEIGHT - 0.05) * window.innerHeight,
         window.innerHeight - 400,

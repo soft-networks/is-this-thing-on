@@ -16,8 +16,8 @@ export const CompromisedStickerAdder: React.FC<StickerAdderProps> = ({
   const clicked: MouseEventHandler<HTMLDivElement> = (e) => {
     if (!showStickerTypePicker) {
       if (containerBounds && cdn && Object.keys(cdn).length > 0) {
-        let x = (e.clientX - containerBounds.left) / containerBounds.width;
-        let y = (e.clientY - containerBounds.top) / containerBounds.height;
+        const x = (e.clientX - containerBounds.left) / containerBounds.width;
+        const y = (e.clientY - containerBounds.top) / containerBounds.height;
         currentPosChosen.current = [x, y];
         console.log(
           e.pageX,

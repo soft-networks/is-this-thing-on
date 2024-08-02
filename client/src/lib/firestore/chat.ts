@@ -18,7 +18,7 @@ export async function syncChat(
 ) {
   const chats = chatCollection();
 
-  let q = query(
+  const q = query(
     chats,
     orderBy("timestamp", "desc"),
     where("roomID", "==", roomID),
@@ -28,7 +28,7 @@ export async function syncChat(
     logInfo("syncing chat");
     trace("sync-chat", () => {
       docs.docChanges().forEach((change) => {
-        let chat = change.doc;
+        const chat = change.doc;
         if (change.type === "added") {
           addChat(chat.id, change.doc.data() as ChatMessage);
         }

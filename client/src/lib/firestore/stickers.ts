@@ -64,7 +64,7 @@ export function syncStickerInstances(
   const unsub = onSnapshot(dbStickers, (docs) => {
     trace("sync-stickers", () => {
       docs.docChanges().forEach((change) => {
-        let element = change.doc;
+        const element = change.doc;
         if (change.type === "added") {
           const sanitizedStickerInstance = sanitizeStickerInstanceFromDB(
             change.doc.data(),
@@ -72,7 +72,7 @@ export function syncStickerInstances(
           stickerAdded(element.id, sanitizedStickerInstance);
         }
         if (change.type === "modified") {
-          let stickerData = element.data();
+          const stickerData = element.data();
           if (stickerData.position) {
             stickerPosUpdated(
               element.id,
@@ -189,7 +189,7 @@ export async function populateHerdimasCDN() {
   const dbStickerCDN = stickerCDNCollection(roomDocRef);
 
   for (let i = 1; i < 33; i++) {
-    let assetDoc = doc(dbStickerCDN, i.toString());
+    const assetDoc = doc(dbStickerCDN, i.toString());
     setDoc(assetDoc, {
       url: `https://storage.googleapis.com/is-this-thing-on/compromised/${i}.png`,
     });
@@ -201,10 +201,10 @@ export function populateMollyCDN() {
   const dbStickerCDN = stickerCDNCollection(roomDocRef);
 
   for (let i = 0; i < MollyAssetsJson.length; i++) {
-    let asset = MollyAssetsJson[i];
-    let id = asset.id;
+    const asset = MollyAssetsJson[i];
+    const id = asset.id;
 
-    let assetDoc = doc(dbStickerCDN, id);
+    const assetDoc = doc(dbStickerCDN, id);
     setDoc(assetDoc, {
       url: asset.url,
       type: asset.type,
@@ -215,8 +215,8 @@ export function populateMollyCDN() {
 
 export async function populateMollyAllInstances() {
   for (let i = 0; i < MollyAssetsJson.length; i++) {
-    let asset = MollyAssetsJson[i];
-    let id = asset.id;
+    const asset = MollyAssetsJson[i];
+    const id = asset.id;
 
     const stickerInstances = stickerInstanceCollection(roomDoc("molly"));
     await addDoc(stickerInstances, {
@@ -231,8 +231,8 @@ export async function populateMollyAllInstances() {
 
 export async function repopulateOnlyDeletedAssetsMolly() {
   for (let i = 0; i < MollyDeleteAssets.length; i++) {
-    let asset = MollyDeleteAssets[i];
-    let id = asset.id;
+    const asset = MollyDeleteAssets[i];
+    const id = asset.id;
 
     const stickerInstances = stickerInstanceCollection(roomDoc("molly"));
     await addDoc(stickerInstances, {

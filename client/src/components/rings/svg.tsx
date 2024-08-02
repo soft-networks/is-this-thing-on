@@ -50,10 +50,10 @@ const SVGNodes: React.FC<SVGRingProps> = ({
   const nodes = useMemo(() => {
     const numKeys = Object.keys(ring).length;
     const ANIM_OFFSET = GLOBAL_ANIM_LENGTH / numKeys;
-    let nodeDom = [];
-    let keys = Object.keys(ring);
+    const nodeDom = [];
+    const keys = Object.keys(ring);
     for (let i = 0; i < numKeys; i++) {
-      let iLink = ring[keys[i]];
+      const iLink = ring[keys[i]];
       nodeDom.push(
         <SVGRingNode
           index={i}

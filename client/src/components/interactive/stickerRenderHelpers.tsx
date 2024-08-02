@@ -103,7 +103,7 @@ const MoveableSticker: React.FC<StickerRenderProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const dragEnded: DraggableEventHandler = (e, data) => {
     setIsDragging(false);
-    let newPos: Pos = [
+    const newPos: Pos = [
       data.x / containerBounds.width,
       data.y / containerBounds.height,
     ];
