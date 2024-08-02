@@ -5,6 +5,7 @@ import Head from "next/head";
 import React, { useEffect } from "react";
 
 import { Chat } from "../components/interactive/chat";
+import BigRing from "../components/rings/bigRing";
 import DomRing from "../components/rings/domRing";
 import Layout from "../components/room/layout";
 import { useRoomStore } from "../stores/roomStore";

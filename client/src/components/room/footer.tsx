@@ -2,11 +2,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 
+import useRingStore from "../../stores/ringStore";
 import { useRoomStore } from "../../stores/roomStore";
 import AccountButton from "../account/accountButton";
 import Ring from "../rings/smallRing";
-import RoomEnergy from "./roomEnergy";
-import useRingStore from "../../stores/ringStore";
 
 const Footer: React.FC = () => {
   const ring = useRingStore(useCallback((s) => s.links, []));
