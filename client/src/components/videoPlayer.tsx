@@ -1,21 +1,29 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { roomIsActive, roomIsTest, useRoomStore } from "../stores/roomStore";
 import MuxPlayer from "@mux/mux-player-react/lazy";
+import ReactPlayer from "react-player";
+
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
 import { logError, logVideo } from "../lib/logger";
 import { generateStreamLink } from "../lib/server-api";
 import { useAdminStore } from "../stores/adminStore";
-import ReactPlayer from "react-player";
 import useLocalMutedStore from "../stores/localMuteStore";
-
+import { roomIsActive, roomIsTest, useRoomStore } from "../stores/roomStore";
 
 interface VideoPlayerProps {
   streamPlaybackID?: string;
   muteOverride?: boolean;
   hideMuteButton?: boolean;
 }
-const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({ hideMuteButton , muteOverride}) => {
-  const streamPlaybackID = useRoomStore(useCallback((s) => s.roomInfo?.streamPlaybackID, []));
-  const streamStatus = useRoomStore(useCallback((s) => s.roomInfo?.streamStatus, []));
+const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
+  hideMuteButton,
+  muteOverride,
+}) => {
+  const streamPlaybackID = useRoomStore(
+    useCallback((s) => s.roomInfo?.streamPlaybackID, []),
+  );
+  const streamStatus = useRoomStore(
+    useCallback((s) => s.roomInfo?.streamStatus, []),
+  );
   const hideVideo = useAdminStore(useCallback((s) => s.hideVideo, []));
   return (
     <>
@@ -27,9 +35,11 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({ hideMuteButton
           isTest={roomIsTest(streamStatus)}
         />
       )}
-      {!hideVideo && streamStatus == "active" && streamPlaybackID == undefined && (
-        <div>something went wrong with the stream...</div>
-      )}
+      {!hideVideo &&
+        streamStatus == "active" &&
+        streamPlaybackID == undefined && (
+          <div>something went wrong with the stream...</div>
+        )}
     </>
   );
 };
@@ -40,17 +50,21 @@ const VideoPlayerInternal: React.FunctionComponent<{
   muteOverride?: boolean;
   isTest?: boolean;
 }> = ({ streamPlaybackID, hideMuteButton, isTest, muteOverride }) => {
-  const mute = useLocalMutedStore(useCallback((s) => s.localMuted, []));;
-  const setMuted = useLocalMutedStore(useCallback((s) => s.setLocalMuted, []));;
+  const mute = useLocalMutedStore(useCallback((s) => s.localMuted, []));
+  const setMuted = useLocalMutedStore(useCallback((s) => s.setLocalMuted, []));
 
   useEffect(() => {
-    streamPlaybackID && logVideo(` stream: `, generateStreamLink(streamPlaybackID));
+    streamPlaybackID &&
+      logVideo(` stream: `, generateStreamLink(streamPlaybackID));
   }, [streamPlaybackID]);
 
   return (
     <div className="fullBleed" key="videoPlayer" id="videoPlayer">
       {!hideMuteButton && (
-        <div className="highestLayer padded" style={{ position: "fixed", left: "0px", top: "0px" }}>
+        <div
+          className="highestLayer padded"
+          style={{ position: "fixed", left: "0px", top: "0px" }}
+        >
           <div
             className="border-thin whiteFill padded:s-3 clickable contrastFill:hover showOnHoverSelfTrigger"
             onClick={() => setMuted(!mute)}
@@ -73,16 +87,16 @@ const VideoPlayerInternal: React.FunctionComponent<{
           )}
           {isTest && (
             <div className="videoAspectElement">
-            <ReactPlayer
-              url={
-                "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"
-              }
-              playing={true}
-              muted={mute || muteOverride}
-              className="noEvents testPlayer "
-              height={"inherit"}
-              width={"inherit"}
-            />
+              <ReactPlayer
+                url={
+                  "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"
+                }
+                playing={true}
+                muted={mute || muteOverride}
+                className="noEvents testPlayer "
+                height={"inherit"}
+                width={"inherit"}
+              />
             </div>
           )}
         </div>

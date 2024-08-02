@@ -1,11 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import { NextPage } from "next";
+
 import Head from "next/head";
 import React, { useEffect } from "react";
-import { useRoomStore } from "../stores/roomStore";
-import Layout from "../components/room/layout";
+
 import { Chat } from "../components/interactive/chat";
 import DomRing from "../components/rings/domRing";
+import Layout from "../components/room/layout";
+import { useRoomStore } from "../stores/roomStore";
 
 const Index: NextPage = () => {
   const changeRoom = useRoomStore((s) => s.changeRoom);

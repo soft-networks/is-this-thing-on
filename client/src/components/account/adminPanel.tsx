@@ -1,9 +1,11 @@
 import classnames from "classnames";
-import { useAdminStore } from "../../stores/adminStore";
-import { createRef, useCallback } from "react";
-import { resetStickers } from "../../lib/firestore";
-import { useRoomStore } from "../../stores/roomStore";
 import Draggable from "react-draggable";
+
+import { createRef, useCallback } from "react";
+
+import { resetStickers } from "../../lib/firestore";
+import { useAdminStore } from "../../stores/adminStore";
+import { useRoomStore } from "../../stores/roomStore";
 
 const AdminPanel = () => {
   const isAdmin = useAdminStore(useCallback((s) => s.isAdmin, []));
@@ -18,12 +20,17 @@ const AdminPanelInternal: React.FC<{}> = () => {
     <Draggable handle=".handle" nodeRef={panelRef}>
       <div
         className="stack:s-2 grayFill relative border uiLayer showOnHoverSelfTrigger "
-        style={{ position: "fixed", top: "var(--s3)" , right: "var(--s1)" }}
+        style={{ position: "fixed", top: "var(--s3)", right: "var(--s1)" }}
         ref={panelRef}
       >
         <div
           className="handle horizontal-stack padded:s-2 caption"
-          style={{ minHeight: "var(--sp0)", height: "var(--sp0)", background: "black", color: "white" }}
+          style={{
+            minHeight: "var(--sp0)",
+            height: "var(--sp0)",
+            background: "black",
+            color: "white",
+          }}
         >
           <div>...</div>
           <div>Admin Panel</div>
@@ -33,7 +40,9 @@ const AdminPanelInternal: React.FC<{}> = () => {
           <VideoOverride />
           {roomName && (
             <div
-              className={classnames("padded:s-2 whiteFill clickable contrastFill:hover")}
+              className={classnames(
+                "padded:s-2 whiteFill clickable contrastFill:hover",
+              )}
               onClick={() => resetStickers(roomName)}
             >
               ⚠️ Reset Stickers
@@ -46,14 +55,16 @@ const AdminPanelInternal: React.FC<{}> = () => {
 };
 
 const StickerOverride: React.FC = () => {
-  const stickerBehaviorOverride = useAdminStore(useCallback((s) => s.stickerBehaviorOverride, []));
-  const setStickerBehaviorOverride = useAdminStore(useCallback((s) => s.setStickerBehaviorOverride, []));
+  const stickerBehaviorOverride = useAdminStore(
+    useCallback((s) => s.stickerBehaviorOverride, []),
+  );
+  const setStickerBehaviorOverride = useAdminStore(
+    useCallback((s) => s.setStickerBehaviorOverride, []),
+  );
 
   return (
     <div className="highestLayer stack:s-2 whiteFill padded:s-2 ">
-      <div>
-        Special Sticker Behavior
-      </div>
+      <div>Special Sticker Behavior</div>
       <div className="horizontal-stack">
         <div className="horizontal-stack:s-2 everest">
           <label>Move</label>
@@ -86,10 +97,14 @@ const StickerOverride: React.FC = () => {
 
 const VideoOverride: React.FC = () => {
   const hideVideo = useAdminStore(useCallback((s) => s.hideVideo, []));
-  const setVideoOverride = useAdminStore(useCallback((s) => s.setHideVideo, []));
+  const setVideoOverride = useAdminStore(
+    useCallback((s) => s.setHideVideo, []),
+  );
   return (
     <div
-      className={classnames("padded:s-2 whiteFill clickable contrastFill:hover")}
+      className={classnames(
+        "padded:s-2 whiteFill clickable contrastFill:hover",
+      )}
       onClick={() => setVideoOverride(!hideVideo)}
     >
       {hideVideo ? "🙃 Show video" : "🫥 Hide video"}

@@ -1,26 +1,25 @@
-import { useCallback, useMemo, useState } from "react";
-import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
-import VideoPreview from "../videoPreview";
-import { roomIsActive, visibleRooms } from "../../stores/roomStore";
 import { useRouter } from "next/router";
+import { useCallback, useMemo, useState } from "react";
+
+import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
+import { roomIsActive } from "../../stores/roomStore";
+import VideoPreview from "../videoPreview";
 
 const DomRing = () => {
   const ring = useRingStore(useCallback((s) => s.links, []));
 
   const domElements = useMemo(() => {
-    const rooms = visibleRooms(ring);
-
-    const spacePerElement = 100 / Object.keys(rooms).length;
-    const elements = Object.entries(rooms).map(([roomID, roomInfo], index) => {
+    const numKeys = Object.keys(ring).length;
+    const spacePerElement = 100 / numKeys;
+    const elements = Object.keys(ring).map((key, index) => {
       return (
         <NodeElement
-          roomInfo={roomInfo}
-          key={roomID}
+          roomInfo={ring[key]}
+          key={key}
           offsetN={index * spacePerElement}
         />
       );
     });
-
     return elements;
   }, [ring]);
 
@@ -61,9 +60,14 @@ const OnlineElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number }> = ({
       onMouseOut={() => setIsHovering(false)}
     >
       <div className="homepageVideo noOverflow border">
-        {roomInfo.previewOverlay && <div className="absoluteOrigin fullBleed highestLayer">
-          <img src={roomInfo.previewOverlay} className="fullBleed absoluteOrigin noEvents noSelect"/>
-        </div>}
+        {roomInfo.previewOverlay && (
+          <div className="absoluteOrigin fullBleed highestLayer">
+            <img
+              src={roomInfo.previewOverlay}
+              className="fullBleed absoluteOrigin noEvents noSelect"
+            />
+          </div>
+        )}
         <VideoPreview
           localMuted={!isHovering}
           iLink={roomInfo}

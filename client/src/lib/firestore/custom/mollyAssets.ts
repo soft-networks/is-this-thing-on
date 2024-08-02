@@ -502,5 +502,5 @@ export const MollyAssetsJson = [
     position: { x: 608, y: -17 },
     size: 0.269270833333333,
     zIndex: 60,
-  }
+  },
 ];

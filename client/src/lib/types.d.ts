@@ -11,14 +11,14 @@ interface SarahQuestion {
   status?: "ACCEPTED";
 }
 
-type UserID = string; 
+type UserID = string;
 
 type StickerCDN = { [key: string]: Sticker };
 interface ChatMessage {
-  timestamp: number,
-  message: string,
-  username: string,
-  roomID: string
+  timestamp: number;
+  message: string;
+  username: string;
+  roomID: string;
 }
 
 interface Collective {
@@ -45,7 +45,6 @@ interface RoomLinkInfo {
   forceSeason0?: boolean;
   consentURL?: string;
   previewOverlay?: string;
-  hidden?: boolean;
 }
 type WebRing = { [key: string]: RoomLinkInfo };
 

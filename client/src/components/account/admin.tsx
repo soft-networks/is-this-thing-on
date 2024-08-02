@@ -1,8 +1,7 @@
-import { updateProfile, User} from "firebase/auth";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
 import { getRoomsWhereUserISAdmin } from "../../lib/firestore";
 import { getStreamKey, resetRoom } from "../../lib/server-api";
-import { useUserStore } from "../../stores/userStore";
 
 /**
  * AdminView renders RoomAdminUI for each room that a user id admin for
@@ -22,18 +21,19 @@ const Admin: React.FC<AdminViewProps> = ({ uid }) => {
 
   return rooms ? (
     <div className="stack padded border-thin lightFill">
-      <em>
-        Rooms you manage
-      </em>
+      <em>Rooms you manage</em>
       <p>
-        All streams should point to <br/> <span className="contrastFill">rtmps://global-live.mux.com:443/app</span>
+        All streams should point to <br />{" "}
+        <span className="contrastFill">
+          rtmps://global-live.mux.com:443/app
+        </span>
       </p>
-      {rooms.filter((room) => !room.hidden).map((r) => (
-        <RoomAdminUI roomID={r.roomID} key={r.roomName + "-adminView"} uid={uid} />
-      ))}
-      <p>Hidden Rooms</p>
-      {rooms.filter((room) => room.hidden).map((r) => (
-        <RoomAdminUI roomID={r.roomID} key={r.roomName + "-adminView"} uid={uid} />
+      {rooms.map((r) => (
+        <RoomAdminUI
+          roomID={r.roomID}
+          key={r.roomName + "-adminView"}
+          uid={uid}
+        />
       ))}
     </div>
   ) : (
@@ -41,8 +41,10 @@ const Admin: React.FC<AdminViewProps> = ({ uid }) => {
   );
 };
 
-
-const RoomAdminUI: React.FC<{ roomID: string; uid: string }> = ({ roomID, uid }) => {
+const RoomAdminUI: React.FC<{ roomID: string; uid: string }> = ({
+  roomID,
+  uid,
+}) => {
   let [streamKey, setStreamKey] = useState<string>();
 
   useEffect(() => {
@@ -56,8 +58,12 @@ const RoomAdminUI: React.FC<{ roomID: string; uid: string }> = ({ roomID, uid })
 
   return (
     <div className="stack padded border-thin">
-      <div> <span>{roomID}</span> </div>
-      <div>stream key: <br/> <span className="contrastFill">{streamKey}</span></div>
+      <div>
+        <span>{roomID}</span>
+      </div>
+      <div>
+        stream key: <br /> <span className="contrastFill">{streamKey}</span>
+      </div>
       <div
         onClick={() => {
           resetRoom(roomID);

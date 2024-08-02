@@ -1,10 +1,18 @@
 import classnames from "classnames";
-import { MouseEventHandler, useCallback, useEffect, useRef, useState } from "react";
 import { RectReadOnly } from "react-use-measure";
-import { StickerImage } from "./stickerRenderHelpers";
+
+import { useRouter } from "next/router";
+import {
+  MouseEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
 import { logError } from "../../lib/logger";
 import { useAdminStore } from "../../stores/adminStore";
-import { useRouter } from "next/router";
+import { StickerImage } from "./stickerRenderHelpers";
 
 export interface StickerAdderProps {
   addSticker: (pos: Pos, cdnID: string, scale?: number, text?: string) => void;
@@ -30,10 +38,10 @@ export const TypingStickerAdder: React.FC<StickerAdderProps> = ({
       let x = (e.clientX - containerBounds.left) / containerBounds.width;
       let y = (e.clientY - containerBounds.top) / containerBounds.height;
       currentPosChosen.current = [x, y];
-      
+
       setInputOpen(true);
       setInputText("");
-    } 
+    }
     if (inputOpen) {
       setInputOpen(false);
       setInputText("");
@@ -41,14 +49,14 @@ export const TypingStickerAdder: React.FC<StickerAdderProps> = ({
   };
   //USE EFFECT WHEN INPUT IS OPEN SET KEYBOARD LISTNERE
   const receiveInput = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    console.log("RECEIVED INPUT")
+    console.log("RECEIVED INPUT");
     if (!inputOpen) return;
     if (e.key === "Enter") {
       addSticker(
         currentPosChosen.current || [0, 0],
         "text",
         undefined,
-        inputText
+        inputText,
       );
       setInputOpen(false);
     } else if (e.key === "Escape") {
@@ -61,7 +69,9 @@ export const TypingStickerAdder: React.FC<StickerAdderProps> = ({
   };
   return (
     <div
-      className={classnames("fullBleed absoluteOrigin", {typeCursor: !inputOpen})}
+      className={classnames("fullBleed absoluteOrigin", {
+        typeCursor: !inputOpen,
+      })}
       onClick={clicked}
       onKeyPress={receiveInput}
     >
@@ -69,7 +79,7 @@ export const TypingStickerAdder: React.FC<StickerAdderProps> = ({
         <div
           className="absoluteOrigin uiLayer"
           style={{
-            top: `${ currentPosChosen.current ? currentPosChosen.current[1] * 100 : 80}%`,
+            top: `${currentPosChosen.current ? currentPosChosen.current[1] * 100 : 80}%`,
             left: `${currentPosChosen.current ? currentPosChosen.current[0] * 100 : 50}%`,
           }}
         >
@@ -100,7 +110,7 @@ export const RandomStickerAdder: React.FC<StickerAdderProps> = ({
 
       addSticker(
         currentPosChosen.current || [0, 0],
-        Object.keys(cdn)[Math.floor(Math.random() * Object.keys(cdn).length)]
+        Object.keys(cdn)[Math.floor(Math.random() * Object.keys(cdn).length)],
       );
     }
   };
@@ -198,7 +208,7 @@ export const PopupStickerAdder: React.FC<StickerAdderProps> = ({
       addSticker(
         [Math.random(), 0.5 + Math.random() / 2],
         id,
-        cdn[id].size || 0.1
+        cdn[id].size || 0.1,
       );
     }
   };
@@ -249,8 +259,6 @@ const DefaultChooseStickerType: React.FC<{
   style?: React.CSSProperties;
   className?: string;
 }> = ({ cdn, typeSelected, style, className }) => {
-
-
   return (
     <>
       <div
@@ -276,14 +284,16 @@ const DefaultChooseStickerType: React.FC<{
                 className="clickable:opacity"
                 key={`choosesticker-${k}`}
                 onClick={(e) => typeSelected(k)}
-                style={{ width: Object.keys(cdn).includes("away") ? "12ch" : "5ch", display: "inline-block" }}
+                style={{
+                  width: Object.keys(cdn).includes("away") ? "12ch" : "5ch",
+                  display: "inline-block",
+                }}
               >
                 <StickerImage url={cdn[k].imageURL} />
               </div>
-            )
+            ),
         )}
       </div>
     </>
   );
 };
-

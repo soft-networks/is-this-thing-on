@@ -1,8 +1,12 @@
-import { useCallback, useMemo } from "react";
-import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
-import { useRoomStore, visibleRooms } from "../../stores/roomStore";
-import { NodeLink, SVGRingSeparate } from "./svg";
+import { Unsubscribe } from "firebase/firestore";
+
 import { useRouter } from "next/router";
+import { useCallback, useEffect, useMemo, useRef } from "react";
+
+import { syncWebRing } from "../../lib/firestore";
+import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
+import { useRoomStore } from "../../stores/roomStore";
+import { NodeLink, SVGRingSeparate } from "./svg";
 
 interface RingProps {
   collapsed?: boolean;
@@ -26,20 +30,22 @@ const FooterLogo: React.FC<{ ring: WebRing; roomID: string }> = ({
   const { push } = useRouter();
   const indexSelected = useMemo(() => {
     if (!roomID) return;
-    let i = Object.keys(visibleRooms(ring)).indexOf(roomID);
+    let i = Object.keys(ring).indexOf(roomID);
     return i > -1 ? i : undefined;
   }, [ring, roomID]);
   const navStream = useCallback(
     (n: number) => {
-      const roomKeys = Object.keys(visibleRooms(ring));
-
-      n = n < 0 ? roomKeys.length - 1 : n;
-      let nextKey = roomKeys[n % roomKeys.length];
+      let keys = Object.keys(ring);
+      n = n < 0 ? keys.length - 1 : n;
+      let nextKey = keys[n % keys.length];
       push(roomIDToHREF(nextKey));
     },
-    [push, ring]
+    [push, ring],
   );
-
+  const ringParts = useMemo(
+    () => SVGRingSeparate({ ring, currentlySelected: indexSelected }),
+    [indexSelected, ring],
+  );
   return (
     <div className="centerh relative">
       <div className="horizontal-stack:s-2">

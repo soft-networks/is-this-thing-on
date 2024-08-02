@@ -1,6 +1,11 @@
-import { collection, CollectionReference, doc, DocumentReference } from "firebase/firestore";
+import {
+  collection,
+  CollectionReference,
+  doc,
+  DocumentReference,
+} from "firebase/firestore";
 
-import db from './init';
+import db from "./init";
 
 export function roomsCollection() {
   return collection(db, "rooms");
@@ -36,7 +41,10 @@ export function stickerInstanceResetCollection(roomDoc: DocumentReference) {
 export function stickerInstanceCollection(roomDoc: DocumentReference) {
   return collection(roomDoc, "stickers");
 }
-export function stickerInstanceDoc(stickerInstanceCollection: CollectionReference, id: string) {
+export function stickerInstanceDoc(
+  stickerInstanceCollection: CollectionReference,
+  id: string,
+) {
   return doc(stickerInstanceCollection, id);
 }
 export function transactionCollection() {

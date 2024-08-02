@@ -8,19 +8,18 @@ interface ConsentStore {
   setConsent: (consent: string) => void;
 }
 
-const useConsentStore = create<ConsentStore>(
-    (set) => ({
-      consent: [],
-      setConsent: (c) =>
-        set((p) => {
-          if (!p.consent.includes(c)) {
-            console.log("updating consent");
-            return { consent: [...p.consent, c] };
-          } else {
-            console.log("duplicate consent");;
-            return {};
-          }
-        }),
-    }));
+const useConsentStore = create<ConsentStore>((set) => ({
+  consent: [],
+  setConsent: (c) =>
+    set((p) => {
+      if (!p.consent.includes(c)) {
+        console.log("updating consent");
+        return { consent: [...p.consent, c] };
+      } else {
+        console.log("duplicate consent");
+        return {};
+      }
+    }),
+}));
 
 export default useConsentStore;

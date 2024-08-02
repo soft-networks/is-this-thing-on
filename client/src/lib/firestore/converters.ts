@@ -21,7 +21,6 @@ export function sanitizeRoomInfo(data: DocumentData, id: string): RoomInfo {
     forceSeason0: data["forceSeason0"] || false,
     consentURL: data["consentURL"] || undefined,
     previewOverlay: data["preview_overlay"] || undefined,
-    hidden: data["hidden"] || false,
   };
 }
 
@@ -41,7 +40,9 @@ export function sanitizeChatForDB(chat: ChatMessage) {
   return chat;
 }
 
-export function sanitizeTransactionFromDB(transaction: any): EnergyTransactionPosted {
+export function sanitizeTransactionFromDB(
+  transaction: any,
+): EnergyTransactionPosted {
   const statusType = transaction["status"];
   let status: TransactionStatus | undefined;
   switch (statusType) {
@@ -59,7 +60,7 @@ export function sanitizeTransactionFromDB(transaction: any): EnergyTransactionPo
   return {
     id: transaction["id"] || "null",
     timestamp: transaction["timestamp"] || 0,
-    status: status || {type: "ERROR", code: "SERVER_ERROR"},
+    status: status || { type: "ERROR", code: "SERVER_ERROR" },
     to: transaction["to"] || "null",
     from: transaction["from"] || "null",
     amount: transaction["amount"] || 0,
@@ -71,45 +72,53 @@ export function sanitizeTransactionForDB(transaction: EnergyTransaction) {
 }
 
 export function sanitizeStickerInstanceForDB(stickerInstance: StickerInstance) {
-  let instance: { position: Pos, cdn_id: string, timestamp: number, size?: number, text?: string} = {
+  let instance: {
+    position: Pos;
+    cdn_id: string;
+    timestamp: number;
+    size?: number;
+    text?: string;
+  } = {
     position: stickerInstance.position,
     cdn_id: stickerInstance.cdnID,
-    timestamp: stickerInstance.timestamp
+    timestamp: stickerInstance.timestamp,
   };
   if (stickerInstance.size) {
-    instance["size"] = stickerInstance.size
+    instance["size"] = stickerInstance.size;
   }
   if (stickerInstance.text) {
-    instance["text"] = stickerInstance.text
+    instance["text"] = stickerInstance.text;
   }
   return instance;
 }
 
 function sanitizePosition(n?: [number, number]): Pos {
-  if (n == undefined) return [0,0];
+  if (n == undefined) return [0, 0];
   if (n[0] <= 2) {
-    return n
+    return n;
   } else {
-    return [n[0]/1920, n[1]/1080]
+    return [n[0] / 1920, n[1] / 1080];
   }
 }
 
-export function sanitizeStickerInstanceFromDB(stickerInstance: any): StickerInstance {
+export function sanitizeStickerInstanceFromDB(
+  stickerInstance: any,
+): StickerInstance {
   return {
-    position:  sanitizePosition(stickerInstance["position"]),
+    position: sanitizePosition(stickerInstance["position"]),
     cdnID: stickerInstance["cdn_id"] || undefined,
     timestamp: stickerInstance["timestamp"] || 0,
     size: stickerInstance["size"],
-    zIndex: stickerInstance["zIndex"] || 100
+    zIndex: stickerInstance["zIndex"] || 100,
   };
 }
 
-export function sanitizeStickerCDNFromDB(sticker: any, id:string): Sticker {
+export function sanitizeStickerCDNFromDB(sticker: any, id: string): Sticker {
   return {
-    cdnID: id ,
+    cdnID: id,
     behaviorType: sticker["type"] || "NORMAL",
     imageURL: sticker["url"],
     noGift: sticker["noGift"],
-    size: sticker["size"] || undefined, 
-  }
+    size: sticker["size"] || undefined,
+  };
 }

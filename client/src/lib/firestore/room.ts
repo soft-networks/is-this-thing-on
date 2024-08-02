@@ -1,9 +1,19 @@
+import {
+  getDoc,
+  getDocs,
+  onSnapshot,
+  query,
+  Unsubscribe,
+  where,
+} from "firebase/firestore";
 
-import { getDoc, getDocs, onSnapshot, query, Unsubscribe, where } from "firebase/firestore";
 import { sanitizeRoomInfo, validateRoomName } from "./converters";
 import { roomDoc, roomsCollection } from "./locations";
 
-export async function syncRoomInfoDB(roomName: string, callback: (roomInfo: RoomInfo) => void) {
+export async function syncRoomInfoDB(
+  roomName: string,
+  callback: (roomInfo: RoomInfo) => void,
+) {
   if (!validateRoomName(roomName)) {
     return;
   }
@@ -15,8 +25,11 @@ export async function syncRoomInfoDB(roomName: string, callback: (roomInfo: Room
 }
 
 export async function getRoomsWhereUserISAdmin(userID: string) {
-  console.log(userID);
-  const q = query(roomsCollection(), where("admins", "array-contains", userID));
+  const q = query(
+    roomsCollection(),
+    where("admins", "array-contains", userID),
+    where("hidden", "!=", true),
+  );
   const querySnapshot = await getDocs(q);
   let numResults = querySnapshot.size;
 
@@ -24,8 +37,10 @@ export async function getRoomsWhereUserISAdmin(userID: string) {
     return undefined;
   }
 
-  let roomInfo : RoomInfo[] = [];
-  querySnapshot.forEach((doc) => roomInfo.push(sanitizeRoomInfo(doc.data(), doc.id)));
+  let roomInfo: RoomInfo[] = [];
+  querySnapshot.forEach((doc) =>
+    roomInfo.push(sanitizeRoomInfo(doc.data(), doc.id)),
+  );
   return roomInfo;
 }
 export async function getRoomAdmins(roomID: string) {
@@ -35,12 +50,15 @@ export async function getRoomAdmins(roomID: string) {
   return data && data["admins"] ? data["admins"] : [];
 }
 
-export async function syncWebRing(initRing: (ring: WebRing) => void, linkUpdate: (roomName: string, update: RoomLinkInfo) => void) {
-
+export async function syncWebRing(
+  initRing: (ring: WebRing) => void,
+  linkUpdate: (roomName: string, update: RoomLinkInfo) => void,
+) {
   let collectionRef = roomsCollection();
-  let docs = await getDocs(collectionRef);
+  let docs = await getDocs(query(collectionRef, where("hidden", "!=", true)));
+  console.log(docs);
   const unsubUpdates: Unsubscribe[] = [];
-  const ring : WebRing= {};
+  const ring: WebRing = {};
 
   docs.forEach((doc) => {
     let data = sanitizeRoomInfo(doc.data(), doc.id);
@@ -51,7 +69,6 @@ export async function syncWebRing(initRing: (ring: WebRing) => void, linkUpdate:
       roomColor: "white",
       streamStatus: "disconnected",
       consentURL: data.consentURL,
-      hidden: data.hidden,
     };
     let unsub = onSnapshot(doc.ref, (doc) => {
       let data = doc.data();

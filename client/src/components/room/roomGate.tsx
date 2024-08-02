@@ -1,9 +1,9 @@
-import { roomIsActive, useRoomStore } from "../../stores/roomStore";
+import Head from "next/head";
 import { useCallback, useMemo } from "react";
 
-import ConsentGate from "./consentGate";
-import Head from "next/head";
 import useRingStore from "../../stores/ringStore";
+import { roomIsActive, useRoomStore } from "../../stores/roomStore";
+import ConsentGate from "./consentGate";
 
 const loadingDiv = <div className="center:absolute"> loading...</div>;
 const RoomNameGate: React.FunctionComponent<{ id: string }> = ({
@@ -15,16 +15,10 @@ const RoomNameGate: React.FunctionComponent<{ id: string }> = ({
     if (ring == undefined || Object.keys(ring).length == 0) {
       return loadingDiv;
     }
-
-    let room = ring[id];
-    return room && !room.hidden;
+    const streamNames = Object.keys(ring);
+    return streamNames.includes(id);
   }, [ring, id]);
-
-  return isValidName ? (
-    <> {children} </>
-  ) : (
-    <div className="center:absolute">whoops, ur lost.</div>
-  );
+  return isValidName ? <> {children} </> : <div> whoops, ur lost. </div>;
 };
 export const RoomStatusGate: React.FunctionComponent = ({ children }) => {
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));

@@ -1,12 +1,16 @@
 import React from "react";
-import VideoPlayer from "../videoPlayer";
-import ChrisyStickers from "../interactive/custom/chrisyStickers";
-import { Chat } from "../interactive/chat";
+
 import AdminPanel from "../account/adminPanel";
+import { Chat } from "../interactive/chat";
+import ChrisyStickers from "../interactive/custom/chrisyStickers";
+import VideoPlayer from "../videoPlayer";
 
 const Chris: React.FC = () => {
   return (
-    <main className="fullBleed noOverflow relative chrisyRoom" style={{"--stickerGlowShadow": "none"} as React.CSSProperties}>
+    <main
+      className="fullBleed noOverflow relative chrisyRoom"
+      style={{ "--stickerGlowShadow": "none" } as React.CSSProperties}
+    >
       <Chat
         key="chat"
         style={
@@ -19,7 +23,7 @@ const Chris: React.FC = () => {
       />
       <VideoPlayer />
       <ChrisyStickers />
-      <AdminPanel/>
+      <AdminPanel />
     </main>
   );
 };

@@ -1,12 +1,18 @@
+import classNames from "classnames";
+
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
+
 import { useUserStore } from "../../stores/userStore";
-import classNames from "classnames";
 
 const AccountButton: React.FunctionComponent = () => {
-  const displayName = useUserStore(useCallback((state) => state.displayName, []));
-  const currentUser = useUserStore(useCallback((state) => state.currentUser, []));
+  const displayName = useUserStore(
+    useCallback((state) => state.displayName, []),
+  );
+  const currentUser = useUserStore(
+    useCallback((state) => state.currentUser, []),
+  );
   const { pathname, back } = useRouter();
 
   return pathname !== "/account" ? (
@@ -14,7 +20,7 @@ const AccountButton: React.FunctionComponent = () => {
       <div
         className={classNames(
           "whiteFill border contrastFill:hover padded:s-3 clickable clickable:link",
-          { showOnHoverSelfTrigger: pathname !== "/" }
+          { showOnHoverSelfTrigger: pathname !== "/" },
         )}
         suppressHydrationWarning
       >

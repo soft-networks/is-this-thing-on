@@ -1,12 +1,19 @@
-import { MouseEventHandler, useMemo, useRef, useState } from "react";
-import { StickerAdderProps } from "../stickerAdders";
 import classnames from "classnames";
+
+import { MouseEventHandler, useMemo, useRef, useState } from "react";
+
+import { StickerAdderProps } from "../stickerAdders";
 import { StickerImage } from "../stickerRenderHelpers";
 
 /** Future note: this is bascially the default adder word for word, with a different type chooser. can abstract */
 
-export const CompromisedStickerAdder: React.FC<StickerAdderProps> = ({ addSticker, cdn, containerBounds }) => {
-  const [showStickerTypePicker, setShowStickerTypePicker] = useState<boolean>(false);
+export const CompromisedStickerAdder: React.FC<StickerAdderProps> = ({
+  addSticker,
+  cdn,
+  containerBounds,
+}) => {
+  const [showStickerTypePicker, setShowStickerTypePicker] =
+    useState<boolean>(false);
   const currentPosChosen = useRef<Pos>();
   const clicked: MouseEventHandler<HTMLDivElement> = (e) => {
     if (!showStickerTypePicker) {
@@ -14,7 +21,12 @@ export const CompromisedStickerAdder: React.FC<StickerAdderProps> = ({ addSticke
         let x = (e.clientX - containerBounds.left) / containerBounds.width;
         let y = (e.clientY - containerBounds.top) / containerBounds.height;
         currentPosChosen.current = [x, y];
-        console.log(e.pageX, e.pageY, containerBounds, currentPosChosen.current);
+        console.log(
+          e.pageX,
+          e.pageY,
+          containerBounds,
+          currentPosChosen.current,
+        );
         setShowStickerTypePicker(true);
       }
     } else {
@@ -47,19 +59,22 @@ export const CompromisedStickerAdder: React.FC<StickerAdderProps> = ({ addSticke
             left: `${currentPosChosen.current ? currentPosChosen.current[0] * 100 : 50}%`,
           }}
         >
-          <ChooseType cdn={cdn} typeSelected={typeChosen}/>
+          <ChooseType cdn={cdn} typeSelected={typeChosen} />
         </div>
       ) : null}
     </div>
   );
 };
 
-const ChooseType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: string) => void }> = ({ cdn, typeSelected }) => {
+const ChooseType: React.FC<{
+  cdn: StickerCDN;
+  typeSelected: (id?: string) => void;
+}> = ({ cdn, typeSelected }) => {
   const grid = useMemo(() => {
     const masterArr: string[][] = [];
     let arr: string[] = [];
     const keys = Object.keys(cdn);
-    let n =0;
+    let n = 0;
     for (let i = 0; i < keys.length; i++) {
       n++;
       arr.push(keys[i]);
@@ -81,7 +96,11 @@ const ChooseType: React.FC<{ cdn: StickerCDN; typeSelected: (id?: string) => voi
       >
         <div
           className="lightFill border contrastFill:hover padded:s-2 clickable "
-          style={{ position: "absolute", top: "calc(-1 * var(--s1)", left: "calc(-1 * var(--s1)" }}
+          style={{
+            position: "absolute",
+            top: "calc(-1 * var(--s1)",
+            left: "calc(-1 * var(--s1)",
+          }}
           onClick={(e) => typeSelected(undefined)}
         >
           cancel

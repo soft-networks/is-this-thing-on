@@ -16,7 +16,7 @@ export const useRoomStore = create<RoomState>((set) => ({
 }));
 
 export const roomIsActive = (
-  roomInfo: RoomInfo | RoomLinkInfo | undefined | STREAM_STATUS_TYPE
+  roomInfo: RoomInfo | RoomLinkInfo | undefined | STREAM_STATUS_TYPE,
 ) => {
   if (typeof roomInfo == "string") {
     if (roomInfo && roomInfo.includes("active")) {
@@ -42,12 +42,4 @@ export const roomIsTest = (roomStatus?: string) => {
   } else {
     return false;
   }
-};
-
-export const visibleRooms = (ring: WebRing): WebRing => {
-  const visibleRooms = Object.fromEntries(
-    Object.entries(ring).filter(([_roomID, roomInfo]) => !roomInfo.hidden)
-  );
-
-  return visibleRooms;
 };

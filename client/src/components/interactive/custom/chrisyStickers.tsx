@@ -1,25 +1,43 @@
 /* eslint-disable @next/next/no-img-element */
 
+import classnames from "classnames";
 import { Unsubscribe } from "firebase/firestore";
-import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import useMeasure, { RectReadOnly } from "react-use-measure";
-import { addStickerInstance, performTransaction, syncStickerInstances } from "../../../lib/firestore";
+
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+
+import {
+  addStickerInstance,
+  performTransaction,
+  syncStickerInstances,
+} from "../../../lib/firestore";
+import { useAdminStore } from "../../../stores/adminStore";
 import { useRoomStore } from "../../../stores/roomStore";
 import useStickerCDNStore from "../../../stores/stickerStore";
 import { useUserStore } from "../../../stores/userStore";
 import { DefaultStickerAdder, RandomStickerAdder } from "../stickerAdders";
 import { StickerRenderer } from "../stickerRenderHelpers";
-import classnames from "classnames";
-import { useAdminStore } from "../../../stores/adminStore";
 
 const ChrisyStickers: React.FC = () => {
   const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));
 
   const [ref, bounds] = useMeasure({ scroll: true });
-  const stickerCDN = useStickerCDNStore(useCallback((state) => state.stickerCDN, []));
+  const stickerCDN = useStickerCDNStore(
+    useCallback((state) => state.stickerCDN, []),
+  );
 
   return roomID ? (
-    <div className={"fullBleed absoluteOrigin relative stickerLayer"} id="sticker-overlay" ref={ref}>
+    <div
+      className={"fullBleed absoluteOrigin relative stickerLayer"}
+      id="sticker-overlay"
+      ref={ref}
+    >
       {stickerCDN && (
         <>
           <ChrisyStickerViewerController
@@ -39,7 +57,9 @@ const ChrisyStickerViewerController: React.FC<{
   cdn: StickerCDN;
   containerBounds: RectReadOnly;
 }> = ({ roomID, cdn, containerBounds }) => {
-  let [serverSideCoins, setServerSideCoins] = useState<{ [key: string]: StickerInstance }>({});
+  let [serverSideCoins, setServerSideCoins] = useState<{
+    [key: string]: StickerInstance;
+  }>({});
   const unsub = useRef<Unsubscribe>();
   const [behaviorOverride, setBehaviorOverride] = useState<BEHAVIOR_TYPES>();
 
@@ -54,7 +74,7 @@ const ChrisyStickerViewerController: React.FC<{
         return npc;
       });
     },
-    [setServerSideCoins]
+    [setServerSideCoins],
   );
 
   const stickerAdded = useCallback(
@@ -65,7 +85,7 @@ const ChrisyStickerViewerController: React.FC<{
         return npc;
       });
     },
-    [setServerSideCoins]
+    [setServerSideCoins],
   );
   const stickerRemoved = useCallback(
     (cID) =>
@@ -74,11 +94,16 @@ const ChrisyStickerViewerController: React.FC<{
         delete npc[cID];
         return npc;
       }),
-    [setServerSideCoins]
+    [setServerSideCoins],
   );
   useEffect(() => {
     async function setupServerSync() {
-      unsub.current = syncStickerInstances(roomID, stickerAdded, stickerRemoved, stickerUpdated);
+      unsub.current = syncStickerInstances(
+        roomID,
+        stickerAdded,
+        stickerRemoved,
+        stickerUpdated,
+      );
     }
     setupServerSync();
     return () => unsub.current && unsub.current();
@@ -87,7 +112,6 @@ const ChrisyStickerViewerController: React.FC<{
 
   return (
     <>
-
       {Object.entries(serverSideCoins).map(([id, stickerInstance]) => {
         if (!cdn[stickerInstance.cdnID]) {
           console.log("No sticker", stickerInstance.cdnID);
@@ -118,8 +142,9 @@ const ChrisyStickerViewerController: React.FC<{
       <ChrisyStickerAdder
         roomID={roomID}
         cdn={cdn}
-        containerBounds={containerBounds} />
-      <ChrisyStickerAdminController/>
+        containerBounds={containerBounds}
+      />
+      <ChrisyStickerAdminController />
     </>
   );
 };
@@ -129,8 +154,12 @@ const ChrisyStickerAdder: React.FC<{
   cdn: StickerCDN;
   containerBounds: RectReadOnly;
 }> = ({ roomID, cdn, containerBounds }) => {
-  const behaviorOverride = useAdminStore(useCallback((s) => s.stickerBehaviorOverride, []));
-  const displayName = useUserStore(useCallback((state) => state.displayName, []));
+  const behaviorOverride = useAdminStore(
+    useCallback((s) => s.stickerBehaviorOverride, []),
+  );
+  const displayName = useUserStore(
+    useCallback((state) => state.displayName, []),
+  );
   const addSticker = (pos: Pos, cdnID: string, scale?: number) => {
     if (!roomID) return;
     addStickerInstance(roomID, {
@@ -149,44 +178,67 @@ const ChrisyStickerAdder: React.FC<{
   };
 
   return behaviorOverride == undefined ? (
-    <RandomStickerAdder addSticker={addSticker} cdn={cdn} containerBounds={containerBounds} />
+    <RandomStickerAdder
+      addSticker={addSticker}
+      cdn={cdn}
+      containerBounds={containerBounds}
+    />
   ) : null;
 };
 
 const ChrisyStickerAdminController: React.FC = () => {
-  const behaviorOverride = useAdminStore(useCallback((s) => s.stickerBehaviorOverride, []));
-  const setBehaviorOverride = useAdminStore(useCallback((s) => s.setStickerBehaviorOverride, []));
+  const behaviorOverride = useAdminStore(
+    useCallback((s) => s.stickerBehaviorOverride, []),
+  );
+  const setBehaviorOverride = useAdminStore(
+    useCallback((s) => s.setStickerBehaviorOverride, []),
+  );
 
   return (
     <div
-      style={{ position: "fixed", top: "var(--s0)", width: "100%" } as React.CSSProperties}
+      style={
+        {
+          position: "fixed",
+          top: "var(--s0)",
+          width: "100%",
+        } as React.CSSProperties
+      }
       className="align:center highertThanStickerLayer horizontal-stack"
     >
       <div
-        className={classnames("uiLayer whiteFill padded:s-2 border-thin clickable ", {
-          contrastFill: behaviorOverride == undefined,
-          "contrastFill:hover": behaviorOverride !== undefined,
-        })}
+        className={classnames(
+          "uiLayer whiteFill padded:s-2 border-thin clickable ",
+          {
+            contrastFill: behaviorOverride == undefined,
+            "contrastFill:hover": behaviorOverride !== undefined,
+          },
+        )}
         onClick={() => setBehaviorOverride(undefined)}
         key="NORMAL-CLICKER"
       >
         {"HIMS"} MODE
       </div>
       <div
-        className={classnames("uiLayer whiteFill padded:s-2 border-thin clickable ", {
-          contrastFill: behaviorOverride == "MOVE",
-          "contrastFill:hover": behaviorOverride !== "MOVE",
-        })}
+        className={classnames(
+          "uiLayer whiteFill padded:s-2 border-thin clickable ",
+          {
+            contrastFill: behaviorOverride == "MOVE",
+            "contrastFill:hover": behaviorOverride !== "MOVE",
+          },
+        )}
         onClick={() => setBehaviorOverride("MOVE")}
         key="MOVE-CLICKER"
       >
         {"RUB"} MODE
       </div>
       <div
-        className={classnames("uiLayer whiteFill padded:s-2 border-thin clickable ", {
-          contrastFill: behaviorOverride == "DELETE",
-          "contrastFill:hover": behaviorOverride !== "DELETE",
-        })}
+        className={classnames(
+          "uiLayer whiteFill padded:s-2 border-thin clickable ",
+          {
+            contrastFill: behaviorOverride == "DELETE",
+            "contrastFill:hover": behaviorOverride !== "DELETE",
+          },
+        )}
         onClick={() => setBehaviorOverride("DELETE")}
         key={"DELETE-CLICKER"}
       >
