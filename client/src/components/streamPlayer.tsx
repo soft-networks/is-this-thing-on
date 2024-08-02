@@ -37,7 +37,6 @@ const LivestreamView = ({
   console.log({ isLive, participants, liveParticipants });
 
   if (isLive && liveParticipants.length > 0) {
-    console.log("YES VIDEOa");
     return (
       <>
         <ParticipantView
@@ -48,7 +47,6 @@ const LivestreamView = ({
       </>
     );
   } else {
-    console.log("NO VIDEO");
     return (
       <div className="center:absolute whiteFill border padded:s1 highestLayer">
         no video yet

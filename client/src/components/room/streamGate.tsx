@@ -87,6 +87,9 @@ const StreamGate: React.FunctionComponent<{ children: any }> = ({
 
     console.log({ state, message: "....JOINING CALL...." });
 
+    // Ensure camera is disabled on initial load.
+    state.call.camera.disable();
+
     state.call
       .join()
       .then(() => {
@@ -97,9 +100,9 @@ const StreamGate: React.FunctionComponent<{ children: any }> = ({
       });
 
     return () => {
-      // state.call.leave().catch((e) => {
-      //   logError("Failed to leave call", e);
-      // });
+      state.call.leave().catch((e) => {
+        logError("Failed to leave call", e);
+      });
       // setState(undefined);
       // setJoined(false);
     };

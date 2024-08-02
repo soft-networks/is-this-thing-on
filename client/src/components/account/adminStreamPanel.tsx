@@ -1,5 +1,6 @@
 import {
   Call,
+  ParticipantView,
   StreamCall,
   StreamVideo,
   StreamVideoClient,
@@ -8,6 +9,7 @@ import {
 } from "@stream-io/video-react-sdk";
 import { createRef, useCallback, useEffect, useMemo, useState } from "react";
 
+import StreamPlayer from "../streamPlayer";
 import classNames from "classnames";
 import { getStreamAdminCredentials } from "../../lib/server-api";
 import { logError } from "../../lib/logger";
@@ -56,19 +58,17 @@ const handleGoLive = async (call: Call) => {
 const SelectStreamType = ({ setStreamType }: { setStreamType: any }) => {
   return (
     <>
-      <span>Start streaming with:</span>
-      <br />
       <button
         className="padded:s-2 clickable whiteFill greenFill:hover"
         onClick={() => setStreamType("RTMPS")}
       >
-        RTMPS
+        Show RTMPS Info
       </button>
       <button
         className="padded:s-2 clickable whiteFill greenFill:hover"
         onClick={() => setStreamType("Browser")}
       >
-        Browser
+        Enable browser video
       </button>
     </>
   );
@@ -91,8 +91,6 @@ const RtmpsStreamDetails = ({
 
   return (
     <>
-      <span>1a. Set up RTMPS streaming:</span>
-      <br />
       <span
         style={{
           maxWidth: "500px",
@@ -133,6 +131,10 @@ const BrowserStreamDetails = ({ call }: { call: Call }) => {
     Promise.all([cam.enable(), mic.enable()]).then(() => {
       call.get();
     });
+
+    return () => {
+      Promise.all([cam.disable(), mic.disable()]);
+    };
   }, []);
 
   useEffect(() => {
@@ -189,8 +191,7 @@ const LivestreamView = ({
   rtmpsDetails: RtmpsDetails | null;
 }) => {
   const call = useCall();
-  const { useIsCallLive, useParticipants, useCallIngress, useCallEgress } =
-    useCallStateHooks();
+  const { useIsCallLive, useParticipants } = useCallStateHooks();
 
   const isLive = useIsCallLive();
 
@@ -204,6 +205,8 @@ const LivestreamView = ({
   const liveParticipants = participants.filter((p) =>
     p.publishedTracks.includes(VIDEO),
   );
+
+  const liveReady = liveParticipants.length > 0;
 
   console.log({
     streamType,
@@ -247,19 +250,34 @@ const LivestreamView = ({
           >
             Back
           </button>
-          <br />
-          <hr />
-          <br />
         </>
       )}
       {streamInfo}
-      {streamType != null && (
+      {isLive || liveReady ? (
         <>
           <br />
           <hr />
           <br />
-          <span>2. Begin streaming to the public:</span>
-          <br />
+          {!isLive && (
+            <>
+              <span>
+                {liveParticipants.length} video input
+                {liveParticipants.length > 1 ? "s" : ""} ready.
+              </span>
+              <br />
+              <div
+                className="videoAspectContainer"
+                style={{ width: "302px", height: "169px" }}
+              >
+                <ParticipantView
+                  participant={liveParticipants[0]}
+                  muteAudio={true}
+                  className="noEvents stream-player videoAspect"
+                />
+              </div>
+              <br />
+            </>
+          )}
           <button
             className={classNames(
               "padded:s-2 clickable",
@@ -270,6 +288,8 @@ const LivestreamView = ({
             {isLive ? "Stop Livestream" : "Start livestream"}
           </button>
         </>
+      ) : (
+        <br />
       )}
     </>
   );
