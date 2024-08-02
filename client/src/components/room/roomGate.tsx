@@ -18,7 +18,11 @@ const RoomNameGate: React.FunctionComponent<{ id: string }> = ({
     const streamNames = Object.keys(ring);
     return streamNames.includes(id);
   }, [ring, id]);
-  return isValidName ? <> {children} </> : <div> whoops, ur lost. </div>;
+  return isValidName ? (
+    <> {children} </>
+  ) : (
+    <div className="center:absolute"> whoops, ur lost. </div>
+  );
 };
 export const RoomStatusGate: React.FunctionComponent = ({ children }) => {
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
