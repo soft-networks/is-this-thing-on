@@ -7,9 +7,9 @@ import {
   where,
 } from "firebase/firestore";
 
-import { chatCollection } from "./locations";
 import { logInfo } from "../logger";
 import { trace } from "../tracers";
+import { chatCollection } from "./locations";
 
 export async function syncChat(
   addChat: (id: string, chat: ChatMessage) => void,

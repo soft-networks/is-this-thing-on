@@ -1,8 +1,10 @@
 import type { NextPage } from "next";
+
 import Head from "next/head";
 import { useEffect } from "react";
-import { useRoomStore } from "../stores/roomStore";
+
 import Ring from "../components/rings/smallRing";
+import { useRoomStore } from "../stores/roomStore";
 
 const About: NextPage = () => {
   const changeRoom = useRoomStore((s) => s.changeRoom);

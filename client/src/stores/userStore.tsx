@@ -1,16 +1,17 @@
-import create from "zustand";
-import { persist } from "zustand/middleware";
 import {
-  getAuth,
   createUserWithEmailAndPassword,
-  User,
+  getAuth,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
+  User,
 } from "firebase/auth";
+import create from "zustand";
+import { persist } from "zustand/middleware";
 
-import { app } from "../lib/firestore/init";
 import { getRoomsWhereUserISAdmin } from "../lib/firestore";
+import { app } from "../lib/firestore/init";
+
 const auth = getAuth(app);
 
 const randomName = () => `anon-${Math.floor(Math.random() * 1000)}`;

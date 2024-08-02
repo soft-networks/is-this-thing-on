@@ -1,7 +1,8 @@
 import React from "react";
-import VideoPlayer from "../videoPlayer";
-import { Chat } from "../interactive/chat";
+
 import AdminPanel from "../account/adminPanel";
+import { Chat } from "../interactive/chat";
+import VideoPlayer from "../videoPlayer";
 
 const Ambient: React.FC = () => {
   return (

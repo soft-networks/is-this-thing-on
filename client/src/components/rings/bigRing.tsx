@@ -1,11 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-import { NextRouter, useRouter } from "next/router";
-import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
 import MuxPlayer from "@mux/mux-player-react";
+
+import { NextRouter, useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
-import { SVGRingNode, SVGRingSeparate } from "./svg";
-import VideoPreview from "../videoPreview";
+
+import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
 import { roomIsActive } from "../../stores/roomStore";
+import VideoPreview from "../videoPreview";
+import { SVGRingNode, SVGRingSeparate } from "./svg";
 
 const iframeSize = [160, 90];
 

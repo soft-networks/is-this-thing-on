@@ -1,5 +1,6 @@
 import slugify from "slugify";
 import create from "zustand";
+
 import { logFirebaseUpdate } from "../lib/logger";
 
 interface RingState {

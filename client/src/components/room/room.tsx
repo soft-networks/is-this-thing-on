@@ -1,19 +1,21 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
-import { useRoomStore } from "../../stores/roomStore";
-import { syncRoomInfoDB } from "../../lib/firestore";
 import { Unsubscribe } from "firebase/auth";
-import RoomNameGate, { RoomStatusGate } from "./roomGate";
-import useStickerCDNStore from "../../stores/stickerStore";
-import Layout from "./layout";
+
+import { useCallback, useEffect, useMemo, useRef } from "react";
+
+import { syncRoomInfoDB } from "../../lib/firestore";
 import {
   logCallbackDestroyed,
   logCallbackSetup,
   logError,
   logInfo,
 } from "../../lib/logger";
-import ArtistRoom from "../artistRooms/artistRoom";
-import { useUserStore } from "../../stores/userStore";
 import { useAdminStore } from "../../stores/adminStore";
+import { useRoomStore } from "../../stores/roomStore";
+import useStickerCDNStore from "../../stores/stickerStore";
+import { useUserStore } from "../../stores/userStore";
+import ArtistRoom from "../artistRooms/artistRoom";
+import Layout from "./layout";
+import RoomNameGate, { RoomStatusGate } from "./roomGate";
 
 const Room: React.FC<{ roomID: string; season?: number }> = ({
   roomID,

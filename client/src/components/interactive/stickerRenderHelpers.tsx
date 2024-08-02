@@ -1,13 +1,15 @@
-import { createRef, useCallback, useMemo, useState } from "react";
+import classnames from "classnames";
 import Draggable, { DraggableEventHandler } from "react-draggable";
 import { RectReadOnly } from "react-use-measure";
-import { useRoomStore } from "../../stores/roomStore";
+
+import { createRef, useCallback, useMemo, useState } from "react";
+
 import {
   deleteStickerInstance,
   updateStickerInstancePos,
 } from "../../lib/firestore";
-import classnames from "classnames";
 import { useAdminStore } from "../../stores/adminStore";
+import { useRoomStore } from "../../stores/roomStore";
 
 interface StickerRenderProps {
   sticker: Sticker;

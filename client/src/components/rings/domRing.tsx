@@ -1,8 +1,9 @@
-import { useCallback, useMemo, useState } from "react";
-import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
-import VideoPreview from "../videoPreview";
-import { roomIsActive } from "../../stores/roomStore";
 import { useRouter } from "next/router";
+import { useCallback, useMemo, useState } from "react";
+
+import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
+import { roomIsActive } from "../../stores/roomStore";
+import VideoPreview from "../videoPreview";
 
 const DomRing = () => {
   const ring = useRingStore(useCallback((s) => s.links, []));

@@ -1,6 +1,8 @@
-import { MouseEventHandler, useMemo, useRef, useState } from "react";
-import { StickerAdderProps } from "../stickerAdders";
 import classnames from "classnames";
+
+import { MouseEventHandler, useMemo, useRef, useState } from "react";
+
+import { StickerAdderProps } from "../stickerAdders";
 import { StickerImage } from "../stickerRenderHelpers";
 
 /** Future note: this is bascially the default adder word for word, with a different type chooser. can abstract */

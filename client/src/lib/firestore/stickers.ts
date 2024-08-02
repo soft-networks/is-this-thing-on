@@ -6,23 +6,23 @@ import {
   onSnapshot,
   setDoc,
 } from "firebase/firestore";
-import {
-  roomDoc,
-  stickerCDNCollection,
-  stickerInstanceCollection,
-  stickerInstanceDoc,
-} from "./locations";
+
+import { logFirebaseUpdate } from "../logger";
+import { trace } from "../tracers";
 import {
   sanitizeStickerCDNFromDB,
   sanitizeStickerInstanceForDB,
   sanitizeStickerInstanceFromDB,
   validateRoomName,
 } from "./converters";
-
 import { MollyAssetsJson } from "./custom/mollyAssets";
 import { MollyDeleteAssets } from "./custom/mollyAssetsDeleteOnly";
-import { logFirebaseUpdate } from "../logger";
-import { trace } from "../tracers";
+import {
+  roomDoc,
+  stickerCDNCollection,
+  stickerInstanceCollection,
+  stickerInstanceDoc,
+} from "./locations";
 
 export async function getStickerCDN(
   roomName: string,

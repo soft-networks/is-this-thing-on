@@ -1,4 +1,8 @@
+import classNames from "classnames";
 import { Unsubscribe } from "firebase/firestore";
+import Draggable from "react-draggable";
+
+import { useRouter } from "next/router";
 import React, {
   createRef,
   useCallback,
@@ -7,11 +11,8 @@ import React, {
   useRef,
   useState,
 } from "react";
-import Draggable from "react-draggable";
+
 import { addChatMessageDB, syncChat } from "../../lib/firestore";
-import useRingStore from "../../stores/ringStore";
-import { useRoomStore } from "../../stores/roomStore";
-import { useUserStore } from "../../stores/userStore";
 import {
   logCallbackDestroyed,
   logCallbackSetup,
@@ -19,8 +20,9 @@ import {
   logFirebaseUpdate,
   logInfo,
 } from "../../lib/logger";
-import classNames from "classnames";
-import { useRouter } from "next/router";
+import useRingStore from "../../stores/ringStore";
+import { useRoomStore } from "../../stores/roomStore";
+import { useUserStore } from "../../stores/userStore";
 
 const DEFAULT_STYLE = (roomColor: string, globalStyle: boolean) =>
   ({

@@ -1,5 +1,7 @@
 import { updateProfile, User } from "firebase/auth";
+
 import { useCallback, useEffect, useState } from "react";
+
 import { getRoomsWhereUserISAdmin } from "../../lib/firestore";
 import { getStreamKey, resetRoom } from "../../lib/server-api";
 import { useUserStore } from "../../stores/userStore";

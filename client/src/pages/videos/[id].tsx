@@ -1,13 +1,15 @@
+import { Unsubscribe } from "firebase/firestore";
 import { NextPage } from "next";
+
 import { useRouter } from "next/router";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+import Layout from "../../components/room/layout";
 import Room from "../../components/room/room";
 import RoomNameGate, { RoomStatusGate } from "../../components/room/roomGate";
-import Layout from "../../components/room/layout";
 import VideoPlayer from "../../components/videoPlayer";
-import { useRoomStore } from "../../stores/roomStore";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Unsubscribe } from "firebase/firestore";
 import { syncRoomInfoDB } from "../../lib/firestore";
+import { useRoomStore } from "../../stores/roomStore";
 
 const VideoOnlyPage: NextPage = () => {
   const router = useRouter();

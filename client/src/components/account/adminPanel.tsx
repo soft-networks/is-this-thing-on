@@ -1,9 +1,11 @@
 import classnames from "classnames";
-import { useAdminStore } from "../../stores/adminStore";
-import { createRef, useCallback } from "react";
-import { resetStickers } from "../../lib/firestore";
-import { useRoomStore } from "../../stores/roomStore";
 import Draggable from "react-draggable";
+
+import { createRef, useCallback } from "react";
+
+import { resetStickers } from "../../lib/firestore";
+import { useAdminStore } from "../../stores/adminStore";
+import { useRoomStore } from "../../stores/roomStore";
 
 const AdminPanel = () => {
   const isAdmin = useAdminStore(useCallback((s) => s.isAdmin, []));

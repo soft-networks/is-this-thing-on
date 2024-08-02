@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import useConsentStore from "../../stores/consentStore";
+
 import { logInfo } from "../../lib/logger";
+import useConsentStore from "../../stores/consentStore";
 import { useRoomStore } from "../../stores/roomStore";
 
 const ConsentGate: React.FC<{ roomID: string; consentURL?: string }> = ({

@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
-import DefaultRoom from "./defaultRoom";
+
 import { CompromisedStickerAdder } from "../interactive/custom/compromisedStickerAdder";
+import DefaultRoom from "./defaultRoom";
 
 const Compromised: React.FC = () => {
   return (

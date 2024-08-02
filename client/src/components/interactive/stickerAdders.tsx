@@ -1,4 +1,7 @@
 import classnames from "classnames";
+import { RectReadOnly } from "react-use-measure";
+
+import { useRouter } from "next/router";
 import {
   MouseEventHandler,
   useCallback,
@@ -6,11 +9,10 @@ import {
   useRef,
   useState,
 } from "react";
-import { RectReadOnly } from "react-use-measure";
-import { StickerImage } from "./stickerRenderHelpers";
+
 import { logError } from "../../lib/logger";
 import { useAdminStore } from "../../stores/adminStore";
-import { useRouter } from "next/router";
+import { StickerImage } from "./stickerRenderHelpers";
 
 export interface StickerAdderProps {
   addSticker: (pos: Pos, cdnID: string, scale?: number, text?: string) => void;

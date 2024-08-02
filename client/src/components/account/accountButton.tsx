@@ -1,8 +1,10 @@
+import classNames from "classnames";
+
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
+
 import { useUserStore } from "../../stores/userStore";
-import classNames from "classnames";
 
 const AccountButton: React.FunctionComponent = () => {
   const displayName = useUserStore(

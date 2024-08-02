@@ -1,4 +1,5 @@
 import { doc, setDoc } from "firebase/firestore";
+
 import { presenceCollection } from "./locations";
 
 const PRESENCE_LENGTH = 5 * 1000;

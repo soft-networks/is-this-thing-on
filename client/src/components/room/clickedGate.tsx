@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from "react";
+
 import useDidClick from "../../stores/clickedStore";
 
 const ClickGate: React.FunctionComponent = ({ children }) => {

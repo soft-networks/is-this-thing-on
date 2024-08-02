@@ -1,26 +1,28 @@
 /* eslint-disable @next/next/no-img-element */
 
+import classnames from "classnames";
 import { Unsubscribe } from "firebase/firestore";
+import useMeasure, { RectReadOnly } from "react-use-measure";
+
 import React, {
+  useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
-  useCallback,
-  useMemo,
 } from "react";
-import useMeasure, { RectReadOnly } from "react-use-measure";
+
 import {
   addStickerInstance,
   performTransaction,
   syncStickerInstances,
 } from "../../../lib/firestore";
+import { useAdminStore } from "../../../stores/adminStore";
 import { useRoomStore } from "../../../stores/roomStore";
 import useStickerCDNStore from "../../../stores/stickerStore";
 import { useUserStore } from "../../../stores/userStore";
 import { DefaultStickerAdder, RandomStickerAdder } from "../stickerAdders";
 import { StickerRenderer } from "../stickerRenderHelpers";
-import classnames from "classnames";
-import { useAdminStore } from "../../../stores/adminStore";
 
 const ChrisyStickers: React.FC = () => {
   const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));

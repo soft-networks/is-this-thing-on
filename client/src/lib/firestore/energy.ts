@@ -5,6 +5,7 @@ import {
   onSnapshot,
   setDoc,
 } from "firebase/firestore";
+
 import { sanitizeTransactionForDB } from "./converters";
 import { transactionCollection } from "./locations";
 

@@ -1,8 +1,10 @@
 import Head from "next/head";
 import { useCallback, useMemo } from "react";
+
 import useRingStore from "../../stores/ringStore";
 import { roomIsActive, useRoomStore } from "../../stores/roomStore";
 import ConsentGate from "./consentGate";
+
 const loadingDiv = <div className="center:absolute"> loading...</div>;
 const RoomNameGate: React.FunctionComponent<{ id: string }> = ({
   id,

@@ -1,10 +1,11 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useCallback } from "react";
+
+import { useRoomStore } from "../../stores/roomStore";
 import AccountButton from "../account/accountButton";
 import Ring from "../rings/smallRing";
 import RoomEnergy from "./roomEnergy";
-import { useRoomStore } from "../../stores/roomStore";
-import { useRouter } from "next/router";
 
 const Footer: React.FC = () => {
   const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));

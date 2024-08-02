@@ -1,5 +1,7 @@
 import classnames from "classnames";
+
 import { useCallback, useEffect, useRef, useState } from "react";
+
 import { useRoomStore } from "../../stores/roomStore";
 
 const RoomEnergy: React.FC<{ roomID: string }> = ({ roomID }) => {

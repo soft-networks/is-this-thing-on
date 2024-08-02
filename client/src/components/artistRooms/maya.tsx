@@ -1,12 +1,13 @@
 import React from "react";
-import VideoPlayer from "../videoPlayer";
-import Stickers from "../interactive/stickers";
+
+import AdminPanel from "../account/adminPanel";
+import { Chat } from "../interactive/chat";
 import {
   DefaultStickerAdder,
   EmptyChooser,
 } from "../interactive/stickerAdders";
-import { Chat } from "../interactive/chat";
-import AdminPanel from "../account/adminPanel";
+import Stickers from "../interactive/stickers";
+import VideoPlayer from "../videoPlayer";
 
 const Maya: React.FC = () => {
   return (

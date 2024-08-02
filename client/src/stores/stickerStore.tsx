@@ -1,4 +1,5 @@
 import create from "zustand";
+
 import { getStickerCDN } from "../lib/firestore";
 
 interface StickerStoreState {

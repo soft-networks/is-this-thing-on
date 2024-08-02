@@ -1,30 +1,32 @@
 /* eslint-disable @next/next/no-img-element */
 import { Unsubscribe } from "firebase/firestore";
+import useMeasure, { RectReadOnly } from "react-use-measure";
+
 import React, {
+  useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
-  useCallback,
-  useMemo,
 } from "react";
-import useMeasure, { RectReadOnly } from "react-use-measure";
+
 import {
   addStickerInstance,
   performTransaction,
   resetStickers,
   syncStickerInstances,
 } from "../../lib/firestore";
-import { useRoomStore } from "../../stores/roomStore";
-import useStickerCDNStore from "../../stores/stickerStore";
-import { useUserStore } from "../../stores/userStore";
-import { StickerAdderProps, DefaultStickerAdder } from "./stickerAdders";
-import { StickerRenderer } from "./stickerRenderHelpers";
 import {
   logCallbackDestroyed,
   logCallbackSetup,
   logFirebaseUpdate,
   logInfo,
 } from "../../lib/logger";
+import { useRoomStore } from "../../stores/roomStore";
+import useStickerCDNStore from "../../stores/stickerStore";
+import { useUserStore } from "../../stores/userStore";
+import { DefaultStickerAdder, StickerAdderProps } from "./stickerAdders";
+import { StickerRenderer } from "./stickerRenderHelpers";
 
 interface StickersProps {
   StickerChooser?: React.FC<StickerAdderProps>;

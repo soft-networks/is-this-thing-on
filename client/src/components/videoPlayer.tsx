@@ -1,11 +1,13 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { roomIsActive, roomIsTest, useRoomStore } from "../stores/roomStore";
 import MuxPlayer from "@mux/mux-player-react/lazy";
+import ReactPlayer from "react-player";
+
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
 import { logError, logVideo } from "../lib/logger";
 import { generateStreamLink } from "../lib/server-api";
 import { useAdminStore } from "../stores/adminStore";
-import ReactPlayer from "react-player";
 import useLocalMutedStore from "../stores/localMuteStore";
+import { roomIsActive, roomIsTest, useRoomStore } from "../stores/roomStore";
 
 interface VideoPlayerProps {
   streamPlaybackID?: string;

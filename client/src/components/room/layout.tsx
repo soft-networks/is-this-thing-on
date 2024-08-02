@@ -1,10 +1,12 @@
 import { Unsubscribe } from "firebase/firestore";
+
 import { useCallback, useEffect, useRef } from "react";
+
 import { syncWebRing } from "../../lib/firestore";
-import useRingStore from "../../stores/ringStore";
-import Footer from "./footer";
-import ClickGate from "./clickedGate";
 import { logCallbackDestroyed, logCallbackSetup } from "../../lib/logger";
+import useRingStore from "../../stores/ringStore";
+import ClickGate from "./clickedGate";
+import Footer from "./footer";
 
 //TODO: Currently we have a listener for each ringNode. Can simplify, requires DB refactor.
 

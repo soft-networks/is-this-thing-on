@@ -1,7 +1,9 @@
 import ReactPlayer from "react-player";
-import { generateStreamLink } from "../lib/server-api";
+
 import { useEffect, useMemo } from "react";
+
 import { logVideo } from "../lib/logger";
+import { generateStreamLink } from "../lib/server-api";
 
 const VideoPreview: React.FC<{
   iLink: RoomLinkInfo;
