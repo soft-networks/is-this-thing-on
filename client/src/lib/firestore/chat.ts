@@ -7,14 +7,14 @@ import {
   where,
 } from "firebase/firestore";
 
-import { chatCollection } from "./locations";
 import { logInfo } from "../logger";
 import { trace } from "../tracers";
+import { chatCollection } from "./locations";
 
 export async function syncChat(
   addChat: (id: string, chat: ChatMessage) => void,
   removeChat: (id: string) => void,
-  roomID: string
+  roomID: string,
 ) {
   const chats = chatCollection();
 
@@ -22,7 +22,7 @@ export async function syncChat(
     chats,
     orderBy("timestamp", "desc"),
     where("roomID", "==", roomID),
-    limit(100)
+    limit(100),
   );
   const unsub = onSnapshot(q, (docs) => {
     logInfo("syncing chat");

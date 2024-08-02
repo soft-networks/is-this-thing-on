@@ -1,7 +1,8 @@
 import { doc, setDoc } from "firebase/firestore";
+
 import { presenceCollection } from "./locations";
 
-const PRESENCE_LENGTH =  5 * 1000;
+const PRESENCE_LENGTH = 5 * 1000;
 
 let activeTimeout: NodeJS.Timeout | undefined;
 async function setPresenceDB(userID: string, roomName: string) {
@@ -17,5 +18,8 @@ export async function setUserHeartbeat(userID: string, roomName: string) {
   }
   //console.log(" Setting user presence " , roomName)
   await setPresenceDB(userID, roomName);
-  activeTimeout = setTimeout(() => setUserHeartbeat(userID, roomName), PRESENCE_LENGTH);
+  activeTimeout = setTimeout(
+    () => setUserHeartbeat(userID, roomName),
+    PRESENCE_LENGTH,
+  );
 }

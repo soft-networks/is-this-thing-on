@@ -1,23 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { Unsubscribe } from "firebase/auth";
+import Countdown from "react-countdown";
+import Draggable from "react-draggable";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+
 import {
   addDarlaStickers,
   resetNextSpinTime,
   syncSpin,
 } from "../../../lib/firestore/custom/darlaSpinner";
-import Countdown from "react-countdown";
-import { useCallback, useEffect, useRef, useState } from "react";
 import { logError, logInfo } from "../../../lib/logger";
+import { useAdminStore } from "../../../stores/adminStore";
 import useStickerCDNStore from "../../../stores/stickerStore";
 import { useUserStore } from "../../../stores/userStore";
-import { useAdminStore } from "../../../stores/adminStore";
-import Draggable from "react-draggable";
 
 const Spinner: React.FC = () => {
   const [nextTime, setNextTime] = useState<number>();
   const [isIncomplete, setIsIncomplete] = useState<boolean>(
-    nextTime ? nextTime > Date.now() : false
+    nextTime ? nextTime > Date.now() : false,
   );
   const [nextSpinLocation, setNextSpinLocation] = useState<number>(0);
   const [lastSpinWinner, setLastSpinWinner] = useState<string>();
@@ -35,7 +37,7 @@ const Spinner: React.FC = () => {
       logInfo("Next spin for Darla's room");
       setNextSpinLocation(nextSpinAmount);
     },
-    []
+    [],
   );
   useEffect(() => {
     unsub.current = syncSpin(spinHappened);
@@ -67,7 +69,12 @@ const Spinner: React.FC = () => {
       >
         <img
           src="https://storage.googleapis.com/is-this-thing-on/darla/spinback.png"
-          style={{ position: "absolute", top: "-2vw", width: "100%", zIndex: -1}}
+          style={{
+            position: "absolute",
+            top: "-2vw",
+            width: "100%",
+            zIndex: -1,
+          }}
         ></img>
         <img
           src="https://storage.googleapis.com/is-this-thing-on/darla/sprinfront.png"
@@ -75,7 +82,7 @@ const Spinner: React.FC = () => {
           className="animateTransform noEvents"
           style={{
             transform: `rotate(${Math.floor(
-              (nextSpinLocation || 0) * 360
+              (nextSpinLocation || 0) * 360,
             )}deg)`,
             width: "100%",
             height: "auto",

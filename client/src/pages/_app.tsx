@@ -1,6 +1,7 @@
 import "../styles/globals.css";
 
 import App from "next/app";
+
 import Instrumentation from "../components/Instrumentation";
 
 class MyApp extends App {

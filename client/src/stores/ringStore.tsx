@@ -1,5 +1,6 @@
 import slugify from "slugify";
 import create from "zustand";
+
 import { logFirebaseUpdate } from "../lib/logger";
 
 interface RingState {
@@ -25,7 +26,6 @@ const useRingStore = create<RingState>((set) => ({
 
 export const roomIDToHREF = (id: string) => {
   return `/${slugify(id)}`;
-}
-
+};
 
 export default useRingStore;

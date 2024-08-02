@@ -10,28 +10,28 @@ import Soft from "./soft";
 
 const ArtistRoom = ({ roomID }: { roomID: string }) => {
   if (roomID == "compromised") {
-    return <Compromised/>
+    return <Compromised />;
   }
   if (roomID == "maya") {
-    return <Maya/>
+    return <Maya />;
   }
   if (roomID == "ambient") {
-    return <Ambient/>
+    return <Ambient />;
   }
   if (roomID == "chrisy") {
-    return <Chris/>
+    return <Chris />;
   }
   if (roomID == "molly") {
-    return <Molly/>
+    return <Molly />;
   }
-  if (roomID == "sarah")  {
-    return <Sarah/>
+  if (roomID == "sarah") {
+    return <Sarah />;
   }
   if (roomID == "messydarla") {
-    return <Darla/>
+    return <Darla />;
   }
   if (roomID == "soft") {
-    return <Soft/>
+    return <Soft />;
   }
   return <DefaultRoom />;
 };
