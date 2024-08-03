@@ -73,11 +73,8 @@ export function syncStickerInstances(
             logFirebaseUpdate("StickerInstance updated");
             let stickerData = element.data();
             if (stickerData.pos) {
-              if (npc[element.id].position !== stickerData.pos)
                 npc[element.id].position = stickerData.pos;
-              if (npc[element.id].size !== stickerData.scale)
                 npc[element.id].size = stickerData.scale;
-              if (npc[element.id].zIndex !== stickerData.z)
                 npc[element.id].zIndex = stickerData.z;
             }
           }
