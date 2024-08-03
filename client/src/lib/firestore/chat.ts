@@ -7,13 +7,14 @@ import {
   where,
 } from "firebase/firestore";
 
-import { logInfo } from "../logger";
+import { logFirebaseUpdate, logInfo } from "../logger";
 import { trace } from "../tracers";
 import { chatCollection } from "./locations";
 
 export async function syncChat(
-  addChat: (id: string, chat: ChatMessage) => void,
-  removeChat: (id: string) => void,
+  setChatList: React.Dispatch<
+    React.SetStateAction<{ [key: string]: ChatMessage }>
+  >,
   roomID: string,
 ) {
   const chats = chatCollection();
@@ -24,22 +25,30 @@ export async function syncChat(
     where("roomID", "==", roomID),
     limit(100),
   );
+
   const unsub = onSnapshot(q, (docs) => {
     logInfo("syncing chat");
     trace("sync-chat", () => {
-      docs.docChanges().forEach((change) => {
-        let chat = change.doc;
-        if (change.type === "added") {
-          addChat(chat.id, change.doc.data() as ChatMessage);
-        }
-        if (change.type === "modified") {
-        }
-        if (change.type === "removed") {
-          removeChat(chat.id);
-        }
+      setChatList((pc) => {
+        let npc = { ...pc };
+        docs.docChanges().forEach((change) => {
+          let chat = change.doc;
+          if (change.type === "added") {
+            logFirebaseUpdate("ChatMessage added");
+            npc[chat.id] = change.doc.data() as ChatMessage;
+          }
+          if (change.type === "modified") {
+          }
+          if (change.type === "removed") {
+            logFirebaseUpdate("ChatMessage removed");
+            delete npc[chat.id];
+          }
+        });
+        return npc;
       });
     });
   });
+
   return unsub;
 }
 export async function addChatMessageDB(chat: ChatMessage) {
