@@ -87,7 +87,7 @@ export function syncStickerInstances(
       });
     });
   });
-  return () => trace("unsub-stickers", unsub);
+  return unsub;
 }
 
 export async function addStickerInstance(
