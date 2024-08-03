@@ -62,3 +62,24 @@ resource "google_firestore_index" "energy_transactions_status" {
     order      = "ASCENDING"
   }
 }
+
+resource "google_firestore_index" "rooms_admins_hidden" {
+  project    = google_firebase_project.thing.project
+  database   = google_firestore_database.main.name
+  collection = "rooms"
+
+  fields {
+    field_path = "admins"
+    array_config = "CONTAINS"
+  }
+
+  fields {
+    field_path = "hidden"
+    order      = "ASCENDING"
+  }
+
+  fields {
+    field_path = "__name__"
+    order      = "ASCENDING"
+  }
+}

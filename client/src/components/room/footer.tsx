@@ -2,16 +2,17 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 
+import useRingStore from "../../stores/ringStore";
 import { useRoomStore } from "../../stores/roomStore";
 import AccountButton from "../account/accountButton";
 import Ring from "../rings/smallRing";
-import RoomEnergy from "./roomEnergy";
 
 const Footer: React.FC = () => {
+  const ring = useRingStore(useCallback((s) => s.links, []));
   const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));
   return (
     <footer className="align-end:fixed fullWidth uiLayer">
-      {roomID && (
+      {ring && roomID && ring[roomID] && (
         <div className="uiLayer padded:s-1 centerh:absolute align-end:absolute  overflowVisible showOnHoverSelfTrigger ">
           <Ring collapsed />
         </div>

@@ -25,7 +25,11 @@ export async function syncRoomInfoDB(
 }
 
 export async function getRoomsWhereUserISAdmin(userID: string) {
-  const q = query(roomsCollection(), where("admins", "array-contains", userID));
+  const q = query(
+    roomsCollection(),
+    where("admins", "array-contains", userID),
+    where("hidden", "!=", true),
+  );
   const querySnapshot = await getDocs(q);
   let numResults = querySnapshot.size;
 
@@ -51,7 +55,8 @@ export async function syncWebRing(
   linkUpdate: (roomName: string, update: RoomLinkInfo) => void,
 ) {
   let collectionRef = roomsCollection();
-  let docs = await getDocs(collectionRef);
+  let docs = await getDocs(query(collectionRef, where("hidden", "!=", true)));
+
   const unsubUpdates: Unsubscribe[] = [];
   const ring: WebRing = {};
 

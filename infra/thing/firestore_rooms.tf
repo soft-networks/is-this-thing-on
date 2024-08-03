@@ -25,6 +25,7 @@ resource "google_firestore_document" "artist_rooms" {
   }
 
   fields = jsonencode({
+    "hidden": { "booleanValue": false },
     "admins" : { "arrayValue" : { "values" : [] } },
     "room_color" : { "stringValue" : each.value.room_color },
     "room_name" : { "stringValue" : each.key },
