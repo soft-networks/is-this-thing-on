@@ -2,7 +2,12 @@ import classnames from "classnames";
 import Draggable, { DraggableEventHandler } from "react-draggable";
 import { RectReadOnly } from "react-use-measure";
 
-import React, { createRef, useCallback, useMemo, useState } from "react";
+import React, {
+  createRef,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 
 import {
   deleteStickerInstance,
@@ -110,9 +115,10 @@ const MoveableSticker: React.FC<StickerRenderProps> = ({
       data.x / containerBounds.width,
       data.y / containerBounds.height,
     ];
-    setCurrPos(newPos);
     roomID && updateStickerInstancePos(roomID, id, newPos);
+    setCurrPos(newPos);
   };
+
   return roomID && containerBounds ? (
     <Draggable
       onStop={dragEnded}

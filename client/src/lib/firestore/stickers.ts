@@ -70,12 +70,12 @@ export function syncStickerInstances(
             npc[element.id] = sanitizedStickerInstance;
           }
           if (change.type === "modified") {
-            logFirebaseUpdate("StickerInstance updated");
+            logFirebaseUpdate(`StickerInstance updated for ID ${element.id}`);
             let stickerData = element.data();
-            if (stickerData.pos) {
-                npc[element.id].position = stickerData.pos;
-                npc[element.id].size = stickerData.scale;
-                npc[element.id].zIndex = stickerData.z;
+            if (stickerData.position) {
+              npc[element.id].position = stickerData.position;
+              npc[element.id].size = stickerData.size;
+              npc[element.id].zIndex = stickerData.zIndex;
             }
           }
           if (change.type === "removed") {
