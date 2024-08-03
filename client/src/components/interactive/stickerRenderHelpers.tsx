@@ -2,7 +2,7 @@ import classnames from "classnames";
 import Draggable, { DraggableEventHandler } from "react-draggable";
 import { RectReadOnly } from "react-use-measure";
 
-import { createRef, useCallback, useMemo, useState } from "react";
+import React, { createRef, useCallback, useMemo, useState } from "react";
 
 import {
   deleteStickerInstance,
@@ -100,6 +100,7 @@ const MoveableSticker: React.FC<StickerRenderProps> = ({
   size,
   zIndex,
 }) => {
+  const [currPos, setCurrPos] = useState<Pos>([pos[0], pos[1]]);
   const myRef = createRef<HTMLDivElement>();
   const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));
   const [isDragging, setIsDragging] = useState(false);
@@ -109,6 +110,7 @@ const MoveableSticker: React.FC<StickerRenderProps> = ({
       data.x / containerBounds.width,
       data.y / containerBounds.height,
     ];
+    setCurrPos(newPos);
     roomID && updateStickerInstancePos(roomID, id, newPos);
   };
   return roomID && containerBounds ? (
@@ -122,8 +124,8 @@ const MoveableSticker: React.FC<StickerRenderProps> = ({
         bottom: containerBounds.bottom,
       }}
       position={{
-        x: pos[0] * containerBounds.width,
-        y: pos[1] * containerBounds.height,
+        x: currPos[0] * containerBounds.width,
+        y: currPos[1] * containerBounds.height,
       }}
       nodeRef={myRef}
     >

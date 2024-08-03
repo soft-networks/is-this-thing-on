@@ -63,47 +63,9 @@ const ChrisyStickerViewerController: React.FC<{
   const unsub = useRef<Unsubscribe>();
   const [behaviorOverride, setBehaviorOverride] = useState<BEHAVIOR_TYPES>();
 
-  const stickerUpdated = useCallback(
-    (cID, pos, scale, z) => {
-      setServerSideCoins((pc) => {
-        let npc = { ...pc };
-        if (npc[cID].position != pos) npc[cID].position = pos;
-        if (npc[cID].size != scale) npc[cID].size = scale;
-        if (npc[cID].zIndex != z) npc[cID].zIndex = z;
-        //console.log(JSON.stringify(npc));
-        return npc;
-      });
-    },
-    [setServerSideCoins],
-  );
-
-  const stickerAdded = useCallback(
-    (cID, element) => {
-      setServerSideCoins((pc) => {
-        let npc = { ...pc };
-        npc[cID] = element;
-        return npc;
-      });
-    },
-    [setServerSideCoins],
-  );
-  const stickerRemoved = useCallback(
-    (cID) =>
-      setServerSideCoins((pc) => {
-        let npc = { ...pc };
-        delete npc[cID];
-        return npc;
-      }),
-    [setServerSideCoins],
-  );
   useEffect(() => {
     async function setupServerSync() {
-      unsub.current = syncStickerInstances(
-        roomID,
-        stickerAdded,
-        stickerRemoved,
-        stickerUpdated,
-      );
+      unsub.current = syncStickerInstances(roomID, setServerSideCoins);
     }
     setupServerSync();
     return () => unsub.current && unsub.current();

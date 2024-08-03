@@ -118,51 +118,11 @@ const ServerStickers: React.FC<{
     [key: string]: StickerInstance;
   }>({});
   const unsub = useRef<Unsubscribe>();
-  const stickerUpdated = useCallback(
-    (cID, pos, scale, z) => {
-      logFirebaseUpdate("StickerInstance updated");
-      setServerSideCoins((pc) => {
-        let npc = { ...pc };
-        if (npc[cID].position != pos) npc[cID].position = pos;
-        if (npc[cID].size != scale) npc[cID].size = scale;
-        if (npc[cID].zIndex != z) npc[cID].zIndex = z;
-        return npc;
-      });
-    },
-    [setServerSideCoins],
-  );
 
-  const stickerAdded = useCallback(
-    (cID, element) => {
-      logFirebaseUpdate("StickerInstance Added");
-      setServerSideCoins((pc) => {
-        let npc = { ...pc };
-        npc[cID] = element;
-        return npc;
-      });
-    },
-    [setServerSideCoins],
-  );
-  const stickerRemoved = useCallback(
-    (cID) => {
-      logFirebaseUpdate("StickerInstance removed");
-      setServerSideCoins((pc) => {
-        let npc = { ...pc };
-        delete npc[cID];
-        return npc;
-      });
-    },
-    [setServerSideCoins],
-  );
   useEffect(() => {
     async function setupServerSync() {
       logCallbackSetup("StickerInstances");
-      unsub.current = syncStickerInstances(
-        roomID,
-        stickerAdded,
-        stickerRemoved,
-        stickerUpdated,
-      );
+      unsub.current = syncStickerInstances(roomID, setServerSideCoins);
     }
     setupServerSync();
     return () => {
