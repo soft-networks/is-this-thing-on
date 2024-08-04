@@ -1,4 +1,3 @@
-import "dotenv/config";
 import express, { Application } from "express";
 import { createServer } from "http";
 import { managePresenceInDB,  presenceProcessor,  resetMuxFirestoreRelationship } from "./firestore-api.js";
