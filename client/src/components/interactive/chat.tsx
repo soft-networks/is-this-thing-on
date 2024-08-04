@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import { Unsubscribe } from "firebase/firestore";
-import Draggable from "react-draggable";
 
 import { useRouter } from "next/router";
 import React, {
@@ -17,7 +16,6 @@ import {
   logCallbackDestroyed,
   logCallbackSetup,
   logError,
-  logFirebaseUpdate,
   logInfo,
 } from "../../lib/logger";
 import useRingStore from "../../stores/ringStore";
@@ -59,7 +57,7 @@ export const Chat: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
   let roomID = useRoomStore((state) => state.currentRoomID);
   let roomColor = useRoomStore((state) => state.roomInfo?.roomColor);
   let roomName = useRoomStore((state) => state.roomInfo?.roomName);
-  const { pathname, back } = useRouter();
+  const { pathname } = useRouter();
   let unsubRef = useRef<Unsubscribe>();
   let [filterRoom, setFilterRoom] = useState<boolean>(pathname !== "/");
   let [lastRecalculationUpdate, setLastRecalculationUpdate] = useState<number>(
@@ -70,22 +68,7 @@ export const Chat: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
   useEffect(() => {
     setLastRecalculationUpdate(Date.now());
   }, [chatList]);
-  const chatWasAdded = useCallback((cID, chat) => {
-    logFirebaseUpdate("ChatMessage added");
-    setChatList((pc) => {
-      let npc = { ...pc };
-      npc[cID] = chat;
-      return npc;
-    });
-  }, []);
-  const chatWasRemoved = useCallback((cID) => {
-    logFirebaseUpdate("ChatMessage removed");
-    setChatList((pc) => {
-      let npc = { ...pc };
-      delete npc[cID];
-      return npc;
-    });
-  }, []);
+
   const sendNewMessage = useCallback(
     (c: { message: string; timestamp: number; username: string }) => {
       addChatMessageDB({
@@ -104,8 +87,7 @@ export const Chat: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
       }
       logCallbackSetup(`Chat ${roomID || "home"}`);
       unsubRef.current = await syncChat(
-        chatWasAdded,
-        chatWasRemoved,
+        setChatList,
         filterRoom ? roomID || "home" : "home",
       );
     }

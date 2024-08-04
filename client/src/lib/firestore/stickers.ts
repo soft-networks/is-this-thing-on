@@ -46,14 +46,9 @@ export async function getStickerCDN(
 
 export function syncStickerInstances(
   roomName: string,
-  stickerAdded: (id: string, element: StickerInstance) => void,
-  stickerRemoved: (id: string) => void,
-  stickerPosUpdated: (
-    id: string,
-    pos: Pos,
-    size: number,
-    zIndex: number,
-  ) => void,
+  setServerSideCoins: React.Dispatch<
+    React.SetStateAction<{ [key: string]: StickerInstance }>
+  >,
 ) {
   if (!validateRoomName(roomName)) {
     return;
@@ -63,28 +58,32 @@ export function syncStickerInstances(
 
   const unsub = onSnapshot(dbStickers, (docs) => {
     trace("sync-stickers", () => {
-      docs.docChanges().forEach((change) => {
-        let element = change.doc;
-        if (change.type === "added") {
-          const sanitizedStickerInstance = sanitizeStickerInstanceFromDB(
-            change.doc.data(),
-          );
-          stickerAdded(element.id, sanitizedStickerInstance);
-        }
-        if (change.type === "modified") {
-          let stickerData = element.data();
-          if (stickerData.position) {
-            stickerPosUpdated(
-              element.id,
-              stickerData.position,
-              stickerData.size,
-              stickerData.zIndex,
+      setServerSideCoins((pc) => {
+        let npc = { ...pc };
+        docs.docChanges().forEach((change) => {
+          let element = change.doc;
+          if (change.type === "added") {
+            logFirebaseUpdate("StickerInstance Added");
+            const sanitizedStickerInstance = sanitizeStickerInstanceFromDB(
+              change.doc.data(),
             );
+            npc[element.id] = sanitizedStickerInstance;
           }
-        }
-        if (change.type === "removed") {
-          stickerRemoved(element.id);
-        }
+          if (change.type === "modified") {
+            logFirebaseUpdate(`StickerInstance updated for ID ${element.id}`);
+            let stickerData = element.data();
+            if (stickerData.position) {
+              npc[element.id].position = stickerData.position;
+              npc[element.id].size = stickerData.size;
+              npc[element.id].zIndex = stickerData.zIndex;
+            }
+          }
+          if (change.type === "removed") {
+            logFirebaseUpdate("StickerInstance removed");
+            delete npc[element.id];
+          }
+        });
+        return npc;
       });
     });
   });

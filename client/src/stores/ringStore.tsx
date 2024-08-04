@@ -15,7 +15,7 @@ const useRingStore = create<RingState>((set) => ({
     set({ links: ring });
   },
   updateStatus: (roomName, updatedLink) => {
-    logFirebaseUpdate("RingSync Updated");
+    logFirebaseUpdate(`RingSync Updated for ${roomName}`);
     set((s) => {
       let ns = { ...s.links };
       ns[roomName] = updatedLink;
