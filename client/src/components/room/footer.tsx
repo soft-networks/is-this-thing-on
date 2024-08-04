@@ -21,8 +21,10 @@ const Footer: React.FC = () => {
         className="uiLayer horizontal-stack:s-2 padded:s-1 "
         style={{ position: "absolute", bottom: 0, right: 0 }}
       >
+        <NumOnline />
         <HomeButton />
         <AccountButton />
+        
       </div>
     </footer>
   );
@@ -43,6 +45,11 @@ const HomeButton: React.FC = () => {
       </div>
     </Link>
   );
+};
+
+const NumOnline: React.FC = () => {
+  const numOnline = useRoomStore(useCallback((state) => state.roomInfo?.numOnline, []));
+  return <div className="padded:s-3 border whiteFill">{numOnline} in room</div>;
 };
 
 export default Footer;
