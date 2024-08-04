@@ -12,6 +12,7 @@ const useRingStore = create<RingState>((set) => ({
   links: {},
   initializeRing: (ring) => {
     logFirebaseUpdate("RingSync initialized");
+    console.log(ring);
     set({ links: ring });
   },
   updateStatus: (roomName, updatedLink) => {

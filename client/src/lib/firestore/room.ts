@@ -19,6 +19,7 @@ export async function syncRoomInfoDB(
   }
   const unsub = onSnapshot(roomDoc(roomName), (doc) => {
     let data = doc.data();
+    console.log("syncRoomInfoDB", data);
     data && callback(sanitizeRoomInfo(data, doc.id));
   });
   return unsub;

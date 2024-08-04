@@ -46,7 +46,7 @@ export async function getStickerCDN(
 
 export function syncStickerInstances(
   roomName: string,
-  setServerSideCoins: React.Dispatch<
+  setServerSideStickerInstances: React.Dispatch<
     React.SetStateAction<{ [key: string]: StickerInstance }>
   >,
 ) {
@@ -58,7 +58,7 @@ export function syncStickerInstances(
 
   const unsub = onSnapshot(dbStickers, (docs) => {
     trace("sync-stickers", () => {
-      setServerSideCoins((pc) => {
+      setServerSideStickerInstances((pc) => {
         let npc = { ...pc };
         docs.docChanges().forEach((change) => {
           let element = change.doc;

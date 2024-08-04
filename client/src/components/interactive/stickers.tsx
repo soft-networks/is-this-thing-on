@@ -12,7 +12,6 @@ import React, {
 
 import {
   addStickerInstance,
-  performTransaction,
   resetStickers,
   syncStickerInstances,
 } from "../../lib/firestore";
@@ -74,12 +73,6 @@ const Stickers: React.FC<StickersProps> = ({
       zIndex: 200,
       text: text,
     });
-    performTransaction({
-      amount: 1,
-      from: displayName || "unknown",
-      to: roomID,
-      timestamp: Date.now(),
-    });
   };
   return roomID ? (
     <div
@@ -98,7 +91,7 @@ const Stickers: React.FC<StickersProps> = ({
             />
             <ServerStickers
               roomID={roomID}
-              key={`${roomID}-sscoins`}
+              key={`${roomID}-sssi`}
               cdn={stickerCDN}
               containerBounds={bounds}
             />
@@ -114,7 +107,7 @@ const ServerStickers: React.FC<{
   cdn: StickerCDN;
   containerBounds: RectReadOnly;
 }> = ({ roomID, cdn, containerBounds }) => {
-  let [serverSideCoins, setServerSideCoins] = useState<{
+  let [serverSideStickerInstances, setServerSideStickerInstances] = useState<{
     [key: string]: StickerInstance;
   }>({});
   const unsub = useRef<Unsubscribe>();
@@ -122,7 +115,7 @@ const ServerStickers: React.FC<{
   useEffect(() => {
     async function setupServerSync() {
       logCallbackSetup("StickerInstances");
-      unsub.current = syncStickerInstances(roomID, setServerSideCoins);
+      unsub.current = syncStickerInstances(roomID, setServerSideStickerInstances);
     }
     setupServerSync();
     return () => {
@@ -135,11 +128,11 @@ const ServerStickers: React.FC<{
   //TODO URGENT: BEST PRACTICES FOR RENDERING A DICTIONARY LIKE THIS (don't re-render everything??)
   return (
     <>
-      {Object.entries(serverSideCoins).map(([id, stickerInstance]) => {
+      {Object.entries(serverSideStickerInstances).map(([id, stickerInstance]) => {
         return (
           cdn[stickerInstance.cdnID] && (
             <StickerRenderer
-              key={`servercoin-${id}`}
+              key={`serverstickerinstance-${id}`}
               pos={stickerInstance.position}
               size={stickerInstance.size}
               sticker={cdn[stickerInstance.cdnID]}

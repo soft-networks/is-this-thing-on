@@ -1,9 +1,5 @@
-import { Unsubscribe } from "firebase/firestore";
-
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo, useRef } from "react";
-
-import { syncWebRing } from "../../lib/firestore";
+import { useCallback, useMemo, } from "react";
 import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
 import { useRoomStore } from "../../stores/roomStore";
 import { NodeLink, SVGRingSeparate } from "./svg";
