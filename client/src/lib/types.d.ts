@@ -21,12 +21,6 @@ interface ChatMessage {
   roomID: string;
 }
 
-interface Collective {
-  rewards: number;
-  addReward: (amt: number) => void;
-  user: string | undefined;
-  createUser: (str: string) => void;
-}
 
 interface StreamNames {
   names?: string[];
@@ -39,10 +33,7 @@ interface RoomLinkInfo {
   roomName: string;
   roomColor: string;
   streamStatus: STREAM_STATUS_TYPE;
-  season0URL?: string;
-  season0Href?: string;
   streamPlaybackID?: string;
-  forceSeason0?: boolean;
   consentURL?: string;
   previewOverlay?: string;
 }
@@ -51,7 +42,6 @@ type WebRing = { [key: string]: RoomLinkInfo };
 type RoomInfo = RoomLinkInfo & {
   streamOwner: string;
   numOnline: number;
-  energy: number;
 };
 
 type Pos = [number, number];
@@ -72,33 +62,6 @@ interface StickerInstance {
   cdnID: string;
   zIndex: number;
   text?: string;
-}
-interface EnergyAccount {
-  userID: UserID;
-  energy: number;
-}
-
-interface EnergyTransaction {
-  from: UserID;
-  to: UserID;
-  amount: number;
-  timestamp: number;
-}
-
-interface EnergyTransactionPosted extends EnergyTransaction {
-  status: TransactionStatus;
-  id: string;
-}
-
-type TransactionStatusTypes = "ERROR" | "SUCCESS" | "PENDING";
-interface TransactionStatus {
-  type: TransactionStatusTypes;
-  code?: string;
-}
-
-interface TransactionError extends TransactionStatus {
-  type: "ERROR";
-  code: "INSUFFICIENT_BALANCE" | "NETWORK_ERROR" | "TIMEOUT";
 }
 
 interface RoomUIProps {

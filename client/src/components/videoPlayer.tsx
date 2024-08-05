@@ -27,7 +27,7 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
   const hideVideo = useAdminStore(useCallback((s) => s.hideVideo, []));
   return (
     <>
-      {!hideVideo && streamPlaybackID && roomIsActive(streamStatus) && (
+      {!hideVideo && roomIsActive(streamStatus) && (
         <VideoPlayerInternal
           streamPlaybackID={streamPlaybackID}
           hideMuteButton={hideMuteButton}
@@ -35,17 +35,12 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
           isTest={roomIsTest(streamStatus)}
         />
       )}
-      {!hideVideo &&
-        streamStatus == "active" &&
-        streamPlaybackID == undefined && (
-          <div>something went wrong with the stream...</div>
-        )}
     </>
   );
 };
 
 const VideoPlayerInternal: React.FunctionComponent<{
-  streamPlaybackID: string;
+  streamPlaybackID?: string;
   hideMuteButton?: boolean;
   muteOverride?: boolean;
   isTest?: boolean;
@@ -76,15 +71,18 @@ const VideoPlayerInternal: React.FunctionComponent<{
       {
         <div className="videoLayer videoAspectContainer">
           {!isTest && (
-            <MuxPlayer
-              playbackId={streamPlaybackID}
-              autoPlay={"any"}
-              muted={mute || muteOverride}
-              className="noEvents videoAspectElement"
-              nohotkeys={true}
-              onError={(e) => logError(e)}
-            />
-          )}
+            streamPlaybackID ?
+              (<MuxPlayer
+                playbackId={streamPlaybackID}
+                autoPlay={"any"}
+                muted={mute || muteOverride}
+                className="noEvents videoAspectElement"
+                nohotkeys={true}
+                onError={(e) => logError(e)}
+              />) : (
+                <div>something went wrong with the stream...</div>)
+          )
+          }
           {isTest && (
             <div className="videoAspectElement">
               <ReactPlayer

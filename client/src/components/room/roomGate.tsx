@@ -41,7 +41,7 @@ export const RoomStatusGate: React.FunctionComponent = ({ children }) => {
           {children}
         </ConsentGate>
       )}
-      {roomInfo && roomIsActive(roomInfo) && (
+      {roomInfo && !roomIsActive(roomInfo) && (
         <div className="center:absolute"> offline... for now</div>
       )}
     </>

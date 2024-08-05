@@ -14,7 +14,6 @@ import React, {
 
 import {
   addStickerInstance,
-  performTransaction,
   syncStickerInstances,
 } from "../../../lib/firestore";
 import { useAdminStore } from "../../../stores/adminStore";
@@ -42,7 +41,7 @@ const ChrisyStickers: React.FC = () => {
         <>
           <ChrisyStickerViewerController
             roomID={roomID}
-            key={`${roomID}-sscoins`}
+            key={`${roomID}-ssi`}
             cdn={stickerCDN}
             containerBounds={bounds}
           />
@@ -57,7 +56,7 @@ const ChrisyStickerViewerController: React.FC<{
   cdn: StickerCDN;
   containerBounds: RectReadOnly;
 }> = ({ roomID, cdn, containerBounds }) => {
-  let [serverSideCoins, setServerSideCoins] = useState<{
+  let [serverSideStickerInstances, setServerSideStickerInstances] = useState<{
     [key: string]: StickerInstance;
   }>({});
   const unsub = useRef<Unsubscribe>();
@@ -65,7 +64,7 @@ const ChrisyStickerViewerController: React.FC<{
 
   useEffect(() => {
     async function setupServerSync() {
-      unsub.current = syncStickerInstances(roomID, setServerSideCoins);
+      unsub.current = syncStickerInstances(roomID, setServerSideStickerInstances);
     }
     setupServerSync();
     return () => unsub.current && unsub.current();
@@ -74,7 +73,7 @@ const ChrisyStickerViewerController: React.FC<{
 
   return (
     <>
-      {Object.entries(serverSideCoins).map(([id, stickerInstance]) => {
+      {Object.entries(serverSideStickerInstances).map(([id, stickerInstance]) => {
         if (!cdn[stickerInstance.cdnID]) {
           console.log("No sticker", stickerInstance.cdnID);
         }
@@ -86,10 +85,10 @@ const ChrisyStickerViewerController: React.FC<{
                 deleteCursor: behaviorOverride == "DELETE",
                 moveCursor: behaviorOverride == "MOVE",
               })}
-              key={`servercoin-${id}`}
+              key={`serversidestickerinstance-${id}`}
             >
               <StickerRenderer
-                key={`servercoin-${id}`}
+                key={`serversidestickerinstance-sticker-${id}`}
                 pos={stickerInstance.position}
                 size={stickerInstance.size}
                 sticker={cdn[stickerInstance.cdnID]}
@@ -130,12 +129,6 @@ const ChrisyStickerAdder: React.FC<{
       cdnID: cdnID,
       size: cdn[cdnID].size,
       zIndex: 200,
-    });
-    performTransaction({
-      amount: 1,
-      from: displayName || "unknown",
-      to: roomID,
-      timestamp: Date.now(),
     });
   };
 
