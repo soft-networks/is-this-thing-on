@@ -5,8 +5,7 @@ import { firestore } from './firebase-init.js';
 import { logError, logInfo, logUpdate, logWarning } from './logger.js';
 
 
-const PRESENCE_LENGTH =  5 * 1000;
-// const PRESENCE_LENGTH = 999999999;
+const PRESENCE_CLEANUP_LENGTH =  5 * 1000;
 
 
 //Helpers
@@ -111,27 +110,23 @@ export const resetMuxFirestoreRelationship = async (roomID: string) => {
 
 
 /**  */
-export async function managePresenceInDB(allRoomNames: string[]) {
+export function setupPresenceListener(allRoomNames: string[]) {
   const presenceRef = firestore.collection("presence");
-  const currentlyOnline = await Promise.all(allRoomNames.map(async (streamName) => {
-    //let q = presenceRef.where("room_id", "==", streamName).where("timestamp", ">=", Timestamp.fromMillis(Date.now() - (1.2 * PRESENCE_LENGTH)));
-    const lastValidTimestamp = Date.now() - PRESENCE_LENGTH;
-    console.log("Filtering out timestamps older than", lastValidTimestamp);
-    let q = presenceRef.where("room_id", "==", streamName).where("timestamp", ">=", lastValidTimestamp);
-    const querySnapshot = await q.get();
-    let numResults = querySnapshot.size;
-    
-    return {roomID: streamName, numOnline: numResults}
-  }));
 
-  console.log("currently online", currentlyOnline)
-  
-  await Promise.all(currentlyOnline.map(({roomID, numOnline}) => 
-    roomDoc(roomID).set({num_online: numOnline}, {merge: true})
-  ));
-  
-  setTimeout(() => managePresenceInDB(allRoomNames), PRESENCE_LENGTH);
-} 
+  // Set up a listener for changes in the presence collection
+  presenceRef.onSnapshot(async (snapshot) => {
+    const currentlyOnline = await Promise.all(allRoomNames.map(async (streamName) => {
+      const lastValidTimestamp = Date.now() - PRESENCE_CLEANUP_LENGTH;
+      let q = presenceRef.where("room_id", "==", streamName).where("timestamp", ">=", lastValidTimestamp);
+      const querySnapshot = await q.get();
+      let numResults = querySnapshot.size;
+      return {roomID: streamName, numOnline: numResults}
+    }));
+    await Promise.all(currentlyOnline.map(({roomID, numOnline}) => 
+      roomDoc(roomID).set({num_online: numOnline}, {merge: true})
+    ));
+  });
+}
 
 async function setTransaction(id: string, status: string) {
   await firestore.collection("energy_transactions").doc(id).set({status: status}, {merge: true});
@@ -142,5 +137,7 @@ export async function presenceProcessor() {
   let docs = await collectionRef.listDocuments();
   let docNames: string[] = [];
   docs.forEach((d) => docNames.push(d.id));
-  managePresenceInDB(docNames);
+  setupPresenceListener(docNames);
+  
 }
+
