@@ -36,12 +36,12 @@ interface RoomLinkInfo {
   streamPlaybackID?: string;
   consentURL?: string;
   previewOverlay?: string;
+  numOnline: number;
 }
 type WebRing = { [key: string]: RoomLinkInfo };
 
 type RoomInfo = RoomLinkInfo & {
   streamOwner: string;
-  numOnline: number;
 };
 
 type Pos = [number, number];
