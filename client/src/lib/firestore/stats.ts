@@ -10,6 +10,7 @@ interface TotalOnline {
 export function syncTotalOnline(callback: (stats: number) => void) {
   const totalOnline = doc(statsCollection(), "total_online");
 
+  
   const unsubscribe = onSnapshot(totalOnline, (docSnapshot) => {
     if (docSnapshot.exists()) {
       const data = docSnapshot.data() as TotalOnline;
