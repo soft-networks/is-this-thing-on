@@ -6,6 +6,7 @@ import { logError, logInfo, logUpdate, logWarning } from './logger.js';
 
 
 const PRESENCE_LENGTH =  5 * 1000;
+const PRESENCE_CLEANUP_FREQUENCY = 10 * 1000;
 
 
 //Helpers
@@ -110,23 +111,39 @@ export const resetMuxFirestoreRelationship = async (roomID: string) => {
 
 
 /**  */
-export async function managePresenceInDB(allRoomNames: string[]) {
+export function setupPresenceListener(allRoomNames: string[]) {
   const presenceRef = firestore.collection("presence");
-  
-  const currentlyOnline = await Promise.all(allRoomNames.map(async (streamName) => {
-    let q = presenceRef.where("room_id", "==", streamName).where("timestamp", ">=", Timestamp.fromMillis(Date.now() - (1.2 * PRESENCE_LENGTH)));
-    const querySnapshot = await q.get();
-    let numResults = querySnapshot.size;
+
+  // Set up a listener for changes in the presence collection
+  presenceRef.onSnapshot(async (snapshot) => {
+    const currentlyOnline = await Promise.all(allRoomNames.map(async (streamName) => {
+      const lastValidTimestamp = Date.now() - PRESENCE_LENGTH;
+      let q = presenceRef.where("room_id", "==", streamName).where("timestamp", ">=", lastValidTimestamp);
+      const querySnapshot = await q.get();
+      let numResults = querySnapshot.size;
+      return {roomID: streamName, numOnline: numResults}
+    }));
+    // Calculate the total number of people online across all rooms
+    const totalOnline = currentlyOnline.reduce((sum, { numOnline }) => sum + numOnline, 0);
     
-    return {roomID: streamName, numOnline: numResults}
-  }));
-  
-  await Promise.all(currentlyOnline.map(({roomID, numOnline}) => 
-    roomDoc(roomID).set({num_online: numOnline}, {merge: true})
-  ));
-  
-  setTimeout(() => managePresenceInDB(allRoomNames), PRESENCE_LENGTH);
-} 
+    // Update a separate document in Firestore with the total online count
+    await Promise.all(currentlyOnline.map(({roomID, numOnline}) => 
+      roomID !== "home" &&roomDoc(roomID).set({num_online: numOnline}, {merge: true})
+    ));
+    await firestore.collection("stats").doc("total_online").set({ total: totalOnline }, { merge: true });
+  });
+}
+
+async function cleanupOldPresence(allRoomNames: string[]) {
+  const presenceRef = firestore.collection("presence");
+  const lastValidTimestamp = Date.now() - PRESENCE_LENGTH;
+  let q = presenceRef.where("timestamp", "<=", lastValidTimestamp);
+  const querySnapshot = await q.get();
+  querySnapshot.forEach((doc) => {
+    doc.ref.delete();
+  });
+  setTimeout(() => cleanupOldPresence(allRoomNames), PRESENCE_CLEANUP_FREQUENCY);
+}
 
 async function setTransaction(id: string, status: string) {
   await firestore.collection("energy_transactions").doc(id).set({status: status}, {merge: true});
@@ -135,7 +152,9 @@ async function setTransaction(id: string, status: string) {
 export async function presenceProcessor() {
   let collectionRef = firestore.collection("rooms");
   let docs = await collectionRef.listDocuments();
-  let docNames: string[] = [];
+  let docNames: string[] = ["home"];
   docs.forEach((d) => docNames.push(d.id));
-  managePresenceInDB(docNames);
+  setupPresenceListener(docNames);
+  cleanupOldPresence(docNames);
 }
+

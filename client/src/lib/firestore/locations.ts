@@ -32,6 +32,9 @@ export function darlaSpinnerDoc() {
   return spinnerRef;
 }
 
+export function statsCollection() {
+  return collection(db, "stats");
+}
 export function stickerCDNCollection(roomDoc: DocumentReference) {
   return collection(roomDoc, "sticker_cdn");
 }

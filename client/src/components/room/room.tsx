@@ -2,7 +2,7 @@ import { Unsubscribe } from "firebase/auth";
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
 
-import { syncRoomInfoDB } from "../../lib/firestore";
+import { activePresenceHeartbeat, setUserPresenceHeartbeat, syncRoomInfoDB } from "../../lib/firestore";
 import {
   logCallbackDestroyed,
   logCallbackSetup,
@@ -32,6 +32,7 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({
   const adminForIDs = useUserStore(useCallback((s) => s.adminFor, []));
   const setIsAdmin = useAdminStore(useCallback((s) => s.setIsAdmin, []));
   const roomColor = useRoomStore(useCallback((s) => s.roomInfo?.roomColor, []));
+  const displayName = useUserStore(useCallback((s) => s.displayName, []))
 
   useEffect(() => {
     async function subscribeToRoomInfo() {
@@ -66,6 +67,20 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomID]);
 
+
+  useEffect(() => {
+    if (displayName && roomID) {
+      setUserPresenceHeartbeat(displayName, roomID);
+    }
+    return () => {
+      // Clear the active timeout when unmounting or changing rooms
+      if (activePresenceHeartbeat) {
+        clearTimeout(activePresenceHeartbeat);
+      }
+    };
+  }, [displayName, roomID]);
+
+
   return (
     <Layout roomColor={roomColor}>
       <RoomNameGate id={roomID as string}>
@@ -76,5 +91,6 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({
     </Layout>
   );
 };
+
 
 export default Room;
