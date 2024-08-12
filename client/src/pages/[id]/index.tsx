@@ -2,7 +2,7 @@ import { NextPage } from "next";
 
 import { useRouter } from "next/router";
 
-import Room from "../components/room/room";
+import Room from "../../components/room/room";
 
 const RoomPage: NextPage = () => {
   const router = useRouter();

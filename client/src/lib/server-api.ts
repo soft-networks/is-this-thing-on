@@ -1,11 +1,10 @@
-export const USE_PROD_SERVER =
-  process.env.NEXT_PUBLIC_USE_PROD_SERVER != "false";
-export const SERVER_URL = USE_PROD_SERVER
+const USE_PROD_SERVER = process.env.NEXT_PUBLIC_USE_PROD_SERVER != "false";
+const SERVER_URL = USE_PROD_SERVER
   ? "https://isto-server.fly.dev"
   : "http://localhost:4000";
-export const STREAM_NAME_ENDPOINT = `${SERVER_URL}/stream-names`;
-export const STREAMS_ENDPOINT = `${SERVER_URL}/stream`;
-export const STREAMS_KEY_ENDPOINT = `${SERVER_URL}/stream-key`;
+
+const STREAM_ENDPOINT = `${SERVER_URL}/stream`;
+const STREAMS_KEY_ENDPOINT = `${SERVER_URL}/stream-key`;
 
 export const generateStreamLink = (playbackID: string) => {
   return `https://stream.mux.com/${playbackID}.m3u8`;
@@ -43,3 +42,18 @@ export const getStreamKey = async (streamName: string) => {
 export const resetRoom = async (roomID: string) => {
   await fetch(SERVER_URL + "/reset-room/" + roomID);
 };
+
+interface StreamAdminCredentials {
+  userId: string;
+  token: string;
+}
+
+export const getStreamAdminCredentials: () => Promise<StreamAdminCredentials> =
+  async () => {
+    const streamTokenResponse = await fetchResponse(`${STREAM_ENDPOINT}/token`);
+    const resp = await streamTokenResponse.json();
+    return {
+      userId: resp["userId"],
+      token: resp["token"],
+    } as StreamAdminCredentials;
+  };
