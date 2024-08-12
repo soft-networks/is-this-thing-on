@@ -1,12 +1,12 @@
+import { createAndReturnStreamKey, muxAuthHelper } from "./muxAPI.js";
 import express, { Application } from "express";
-import { createServer } from "http";
-import { presenceProcessor,  resetMuxFirestoreRelationship } from "./firestore-api.js";
+import { presenceProcessor, resetMuxFirestoreRelationship } from "./firestore-api.js";
+
 import bodyParser from "body-parser"
+import { createServer } from "http";
+import { createStreamAdminToken } from "./streamAPI.js";
 import { logUpdate } from "./logger.js";
-import { muxAuthHelper, createAndReturnStreamKey } from "./muxAPI.js";
 import { muxUpdateWasReceived } from "./processUpdate.js";
-
-
 
 const app: Application = express();
 app.use(bodyParser.json());
@@ -24,6 +24,7 @@ app.get("/", (req, res) => {
 });
 app.get("/stream-key/:id", createAndReturnStreamKey);
 app.post("/mux-hook", muxAuthHelper, muxUpdateWasReceived);
+app.get("/stream/token", createStreamAdminToken)
 app.get("/reset-room/:id", async (req,res) => {
   logUpdate(`Resetting room ${req.params.id}`);
   try {

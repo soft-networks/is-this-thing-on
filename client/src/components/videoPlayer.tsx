@@ -1,13 +1,13 @@
-import MuxPlayer from "@mux/mux-player-react/lazy";
 import ReactPlayer from "react-player";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { logError, logVideo } from "../lib/logger";
+import { logVideo } from "../lib/logger";
 import { generateStreamLink } from "../lib/server-api";
 import { useAdminStore } from "../stores/adminStore";
 import useLocalMutedStore from "../stores/localMuteStore";
 import { roomIsActive, roomIsTest, useRoomStore } from "../stores/roomStore";
+import StreamPlayer from "./streamPlayer";
 
 interface VideoPlayerProps {
   streamPlaybackID?: string;
@@ -70,19 +70,23 @@ const VideoPlayerInternal: React.FunctionComponent<{
       )}
       {
         <div className="videoLayer videoAspectContainer">
-          {!isTest && (
-            streamPlaybackID ?
-              (<MuxPlayer
-                playbackId={streamPlaybackID}
-                autoPlay={"any"}
-                muted={mute || muteOverride}
-                className="noEvents videoAspectElement"
-                nohotkeys={true}
-                onError={(e) => logError(e)}
-              />) : (
-                <div>something went wrong with the stream...</div>)
-          )
-          }
+          {!isTest &&
+            (streamPlaybackID ? (
+              <StreamPlayer
+                muted={mute || muteOverride || false}
+                streamCallId={streamPlaybackID}
+              />
+            ) : (
+              // <MuxPlayer
+              //   playbackId={streamPlaybackID}
+              //   autoPlay={"any"}
+              //   muted={mute || muteOverride}
+              //   className="noEvents videoAspectElement"
+              //   nohotkeys={true}
+              //   onError={(e) => logError(e)}
+              // />
+              <div>something went wrong with the stream...</div>
+            ))}
           {isTest && (
             <div className="videoAspectElement">
               <ReactPlayer
