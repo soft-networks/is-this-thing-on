@@ -5,7 +5,6 @@ import {
   StreamVideo,
   StreamVideoClient,
   useCallStateHooks,
-  User,
 } from "@stream-io/video-react-sdk";
 
 import { useRouter } from "next/router";
@@ -23,7 +22,12 @@ interface StreamConfig {
 
 const StreamLive = () => {
   const router = useRouter();
-  const [roomInfo, setRoomInfo] = useState<RoomInfo | undefined>();
+  const [roomInfo, setRoomInfo] = useState<{
+    info?: RoomInfo;
+    isLoading: boolean;
+  }>({
+    isLoading: true,
+  });
 
   const currentUser = useUserStore(
     useCallback((state) => state.currentUser, []),
@@ -35,21 +39,38 @@ const StreamLive = () => {
     }
 
     getRoomsWhereUserISAdmin(currentUser.uid).then((rooms) => {
-      setRoomInfo(rooms?.find((room) => room.roomID === router.query.id));
+      setRoomInfo({
+        info: rooms?.find((room) => room.roomID === router.query.id),
+        isLoading: false,
+      });
     });
   }, [router.query, currentUser]);
 
   if (!router.query.id || typeof router.query.id !== "string") {
-    return <div className="fullBleed darkFill"> something went wrong </div>;
+    return (
+      <div className="fullBleed center:children">
+        <p>something went wrong</p>
+      </div>
+    );
   }
-
   console.log({ roomInfo });
-
-  return roomInfo ? (
-    <AdminStreamPanel streamPlaybackID={roomInfo.streamPlaybackID} />
-  ) : (
-    <p>Access is denied.</p>
-  );
+  if (roomInfo.isLoading) {
+    return (
+      <div className="fullBleed center:children">
+        <p>Loading room info...</p>
+      </div>
+    );
+  } else if (!roomInfo.info) {
+    return (
+      <div className="fullBleed center:children">
+        <p>oops! you're lost.</p>
+      </div>
+    );
+  } else {
+    return (
+      <AdminStreamPanel streamPlaybackID={roomInfo.info.streamPlaybackID} />
+    );
+  }
 };
 
 const AdminStreamPanel: React.FC<{ streamPlaybackID: string | undefined }> = ({
@@ -59,6 +80,8 @@ const AdminStreamPanel: React.FC<{ streamPlaybackID: string | undefined }> = ({
     client: StreamVideoClient;
     call: Call;
   }>();
+
+  const [error, setError] = useState<Error>();
 
   useEffect(() => {
     if (state) {
@@ -84,7 +107,10 @@ const AdminStreamPanel: React.FC<{ streamPlaybackID: string | undefined }> = ({
         const myCall = myClient.call("livestream", streamId);
         setState({ client: myClient, call: myCall });
       })
-      .catch((err) => logError(err));
+      .catch((err: Error) => {
+        logError(err);
+        setError(err);
+      });
   }, []);
 
   useEffect(() => {
@@ -95,8 +121,9 @@ const AdminStreamPanel: React.FC<{ streamPlaybackID: string | undefined }> = ({
     state.call
       .join({ create: true })
       .then()
-      .catch((e) => {
+      .catch((e: Error) => {
         console.error("Failed to join call", e);
+        setError(e);
       });
 
     console.log(state.call);
@@ -109,7 +136,16 @@ const AdminStreamPanel: React.FC<{ streamPlaybackID: string | undefined }> = ({
     };
   }, [state]);
 
-  if (!state || !state.client || !state.call) return <div>{state}</div>;
+  if (error) {
+    return <div className="center:absolute">{error.message}</div>;
+  }
+
+  if (!state || !state.client || !state.call)
+    return (
+      <div className="fullBleed center:children">
+        <p>Loading...</p>
+      </div>
+    );
 
   return (
     <StreamVideo client={state.client}>
@@ -137,11 +173,14 @@ const LivestreamView = ({ call }: { call: Call }) => {
   console.log({ participants, liveParticipants });
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+    <div className="fullBleed center:children">
       {liveParticipants.length > 0 ? (
-        <ParticipantView participant={liveParticipants[0]} />
+        <ParticipantView
+          participant={liveParticipants[0]}
+          ParticipantViewUI={null}
+        />
       ) : (
-        <div>The host hasn't joined yet</div>
+        <div>Attempting to join the livestream as host...</div>
       )}
       <div style={{ display: "flex", gap: "4px" }}>
         <button onClick={() => (isLive ? call.stopLive() : call.goLive())}>
