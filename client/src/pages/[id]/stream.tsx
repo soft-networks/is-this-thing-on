@@ -72,7 +72,7 @@ const StreamLive = () => {
   } else if (!roomInfo.info) {
     return (
       <div className="fullBleed center:children">
-        <p>oops! you're lost.</p>
+        <p>oops! ur lost.</p>
       </div>
     );
   } else {
