@@ -65,8 +65,10 @@ export const getStreamAdminCredentials: (
     `${STREAM_ENDPOINT}/${roomID}/token`,
   );
   const resp = await streamTokenResponse.json();
+
   return {
     userId: resp["userId"],
     token: resp["token"],
+    callId: resp["callId"],
   } as StreamAdminCredentials;
 };

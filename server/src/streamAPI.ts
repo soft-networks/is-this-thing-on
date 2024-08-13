@@ -1,5 +1,5 @@
-import { getRoom, getStreamKey, writePlaybackIDToDB } from './firestore-api';
-import { logError, logInfo, logUpdate } from './logger.js'
+import { getRoom, writePlaybackIDToDB } from './firestore-api.js';
+import { logError, logUpdate } from './logger.js'
 
 import { RequestHandler } from 'express';
 import { StreamClient } from '@stream-io/node-sdk';
@@ -16,7 +16,7 @@ function getErrorMessage(error: unknown) {
 	return String(error)
 }
 
-export const createStreamAdminToken: RequestHandler = (req, res) => {
+export const createStreamAdminToken: RequestHandler = async (req, res) => {
     const roomId = req.params.id;
 
     if (!roomId) {
@@ -29,7 +29,7 @@ export const createStreamAdminToken: RequestHandler = (req, res) => {
         const exp = Math.round(new Date().getTime() / 1000) + 60 * 60;
         const token = client.createToken(adminUserId, exp);
 
-        const callId = getOrCreateCall(roomId);
+        const callId = await getOrCreateCall(roomId);
         res.send({ userId: adminUserId, callId, token});
     } catch (e) {
         logError(getErrorMessage(e));
