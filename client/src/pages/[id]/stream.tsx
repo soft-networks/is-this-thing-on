@@ -43,7 +43,7 @@ const StreamLive = () => {
   );
 
   useEffect(() => {
-    if (!currentUser || !router.query.id) {
+    if (!currentUser || !router.query.id || !roomInfo.isLoading) {
       return;
     }
 
@@ -54,14 +54,6 @@ const StreamLive = () => {
       });
     });
   }, [router.query, currentUser]);
-
-  if (!router.query.id || typeof router.query.id !== "string") {
-    return (
-      <div className="fullBleed center:children">
-        <p>something went wrong</p>
-      </div>
-    );
-  }
 
   if (roomInfo.isLoading) {
     return (
