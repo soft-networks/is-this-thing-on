@@ -1,14 +1,14 @@
 import "dotenv/config";
+
+import { createAndReturnStreamKey, muxAuthHelper } from "./muxAPI.js";
 import express, { Application } from "express";
-import { createServer } from "http";
-import { presenceProcessor,  resetMuxFirestoreRelationship } from "./firestore-api.js";
+import { presenceProcessor, resetMuxFirestoreRelationship } from "./firestore-api.js";
+
 import bodyParser from "body-parser"
+import { createServer } from "http";
 import { logUpdate } from "./logger.js";
-import { muxAuthHelper, createAndReturnStreamKey } from "./muxAPI.js";
 import { muxUpdateWasReceived } from "./processUpdate.js";
 import { verifyThingAdmin } from "./middleware.js";
-
-
 
 const app: Application = express();
 app.use(bodyParser.json());
@@ -18,7 +18,7 @@ const httpServer = createServer(app);
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
 });
 app.get("/", (req, res) => {

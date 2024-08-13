@@ -1,4 +1,4 @@
-import { getAuth, getIdToken, User } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 
 import { useEffect, useState } from "react";
 
@@ -28,7 +28,9 @@ const Admin: React.FC<AdminViewProps> = ({ uid }) => {
       setState({ rooms, userToken });
     }
     getRooms();
-  }, [uid]);
+  }, [auth.currentUser, uid]);
+
+  console.log(state);
 
   return state.rooms && state.userToken ? (
     <div className="stack padded border-thin lightFill">

@@ -8,13 +8,13 @@ export const verifyThingAdmin: RequestHandler = async (req, res, next) => {
 
     if (!bearer) {
         logError("No ID token provided for request");
-        return res.send(403).json({error: "unauthorized"});
+        return res.sendStatus(403);
     }
 
     const parts = bearer.split("Bearer ");
     if (parts.length <= 1) {
         logError("Invalid ID token provided for request");
-        return res.send(403).json({error: "unauthorized"});
+        return res.sendStatus(403);
     }
 
     const idToken = parts[1];
@@ -33,5 +33,5 @@ export const verifyThingAdmin: RequestHandler = async (req, res, next) => {
         logError(`Failed to verify auth token: ${err}`)
     }
 
-    return res.send(403).json({error: "authorized"});
+    return res.sendStatus(403);
   }
