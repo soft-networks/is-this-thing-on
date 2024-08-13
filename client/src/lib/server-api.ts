@@ -29,12 +29,21 @@ export const getStreamKey = async (streamName: string) => {
       `${STREAMS_KEY_ENDPOINT}/${streamName}`,
     );
     const streamKeys = await streamKeyResponse.json();
-    if (streamKeys["key"]) {
-      return streamKeys["key"];
-    }
-    return undefined;
+    return streamKeys["key"];
   } catch (e) {
     console.log("Error getting stream names", (e as Error).message);
+    return undefined;
+  }
+};
+
+export const getStreamCall = async (streamName: string) => {
+  try {
+    const resp = await fetchResponse(`${STREAM_ENDPOINT}/call/${streamName}`);
+    const json = await resp.json();
+
+    return json["key"];
+  } catch (e) {
+    console.log("Error getting stream call", (e as Error).message);
     return undefined;
   }
 };

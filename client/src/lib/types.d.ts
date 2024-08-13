@@ -21,7 +21,6 @@ interface ChatMessage {
   roomID: string;
 }
 
-
 interface StreamNames {
   names?: string[];
 }

@@ -1,16 +1,13 @@
 import ReactPlayer from "react-player";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 
-import { logVideo } from "../lib/logger";
-import { generateStreamLink } from "../lib/server-api";
 import { useAdminStore } from "../stores/adminStore";
 import useLocalMutedStore from "../stores/localMuteStore";
 import { roomIsActive, roomIsTest, useRoomStore } from "../stores/roomStore";
 import StreamPlayer from "./streamPlayer";
 
 interface VideoPlayerProps {
-  streamPlaybackID?: string;
   muteOverride?: boolean;
   hideMuteButton?: boolean;
 }
@@ -48,11 +45,6 @@ const VideoPlayerInternal: React.FunctionComponent<{
   const mute = useLocalMutedStore(useCallback((s) => s.localMuted, []));
   const setMuted = useLocalMutedStore(useCallback((s) => s.setLocalMuted, []));
 
-  useEffect(() => {
-    streamPlaybackID &&
-      logVideo(` stream: `, generateStreamLink(streamPlaybackID));
-  }, [streamPlaybackID]);
-
   return (
     <div className="fullBleed" key="videoPlayer" id="videoPlayer">
       {!hideMuteButton && (
@@ -68,41 +60,31 @@ const VideoPlayerInternal: React.FunctionComponent<{
           </div>
         </div>
       )}
-      {
-        <div className="videoLayer videoAspectContainer">
-          {!isTest &&
-            (streamPlaybackID ? (
-              <StreamPlayer
-                muted={mute || muteOverride || false}
-                streamCallId={streamPlaybackID}
-              />
-            ) : (
-              // <MuxPlayer
-              //   playbackId={streamPlaybackID}
-              //   autoPlay={"any"}
-              //   muted={mute || muteOverride}
-              //   className="noEvents videoAspectElement"
-              //   nohotkeys={true}
-              //   onError={(e) => logError(e)}
-              // />
-              <div>something went wrong with the stream...</div>
-            ))}
-          {isTest && (
-            <div className="videoAspectElement">
-              <ReactPlayer
-                url={
-                  "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"
-                }
-                playing={true}
-                muted={mute || muteOverride}
-                className="noEvents testPlayer "
-                height={"inherit"}
-                width={"inherit"}
-              />
-            </div>
-          )}
-        </div>
-      }
+      <div className="videoLayer videoAspectContainer">
+        {!isTest && streamPlaybackID && (
+          <StreamPlayer
+            muted={mute || muteOverride || false}
+            streamCallId={streamPlaybackID}
+          />
+        )}
+        {!isTest && !streamPlaybackID && (
+          <div>something went wrong with the stream...</div>
+        )}
+        {isTest && (
+          <div className="videoAspectElement">
+            <ReactPlayer
+              url={
+                "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"
+              }
+              playing={true}
+              muted={mute || muteOverride}
+              className="noEvents testPlayer "
+              height={"inherit"}
+              width={"inherit"}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
