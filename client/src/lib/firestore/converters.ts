@@ -36,7 +36,6 @@ export function sanitizeChatForDB(chat: ChatMessage) {
   return chat;
 }
 
-
 export function sanitizeStickerInstanceForDB(stickerInstance: StickerInstance) {
   let instance: {
     position: Pos;

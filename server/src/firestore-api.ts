@@ -1,9 +1,7 @@
-
-import { QueryDocumentSnapshot, DocumentData,Timestamp, FieldValue} from "firebase-admin/firestore";
-
-import { firestore } from './firebase-init.js';
+import { DocumentData, FieldValue, QueryDocumentSnapshot, Timestamp } from "firebase-admin/firestore";
 import { logError, logInfo, logUpdate, logWarning } from './logger.js';
 
+import { firestore } from './firebase-init.js';
 
 const PRESENCE_LENGTH =  5 * 1000;
 const PRESENCE_CLEANUP_FREQUENCY = 10 * 1000;
@@ -66,7 +64,6 @@ const writeRoomIDToMUXID = async (roomID: string, muxID: string) => {
 const writeStreamKeyToDB = async (roomID: string, streamKey: string) => {
   await roomDoc(roomID).set({ stream_key: streamKey }, { merge: true });
 }
-
 
 /**
  * Finds a matching Room ID given a MUX ID by reading firebase
