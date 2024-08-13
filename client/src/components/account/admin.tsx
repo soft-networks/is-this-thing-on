@@ -30,8 +30,6 @@ const Admin: React.FC<AdminViewProps> = ({ uid }) => {
     getRooms();
   }, [auth.currentUser, uid]);
 
-  console.log(state);
-
   return state.rooms && state.userToken ? (
     <div className="stack padded border-thin lightFill">
       <em>Rooms you manage</em>
