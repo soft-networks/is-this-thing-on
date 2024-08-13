@@ -18,7 +18,7 @@ function roomDoc(roomID: string) {
  * @returns dictionary of room data 
  * @throws Error if room doesnt exist
  */
-const getRoom = async (roomID: string) => {
+export const getRoom = async (roomID: string) => {
   const roomRef = roomDoc(roomID);
   const room = await roomRef.get()
 

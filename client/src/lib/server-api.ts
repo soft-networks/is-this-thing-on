@@ -38,10 +38,10 @@ export const getStreamKey = async (streamName: string) => {
 
 export const getStreamCall = async (streamName: string) => {
   try {
-    const resp = await fetchResponse(`${STREAM_ENDPOINT}/call/${streamName}`);
+    const resp = await fetchResponse(`${STREAM_ENDPOINT}/${streamName}/call`);
     const json = await resp.json();
 
-    return json["key"];
+    return json["callId"];
   } catch (e) {
     console.log("Error getting stream call", (e as Error).message);
     return undefined;
@@ -55,14 +55,18 @@ export const resetRoom = async (roomID: string) => {
 interface StreamAdminCredentials {
   userId: string;
   token: string;
+  callId: string;
 }
 
-export const getStreamAdminCredentials: () => Promise<StreamAdminCredentials> =
-  async () => {
-    const streamTokenResponse = await fetchResponse(`${STREAM_ENDPOINT}/token`);
-    const resp = await streamTokenResponse.json();
-    return {
-      userId: resp["userId"],
-      token: resp["token"],
-    } as StreamAdminCredentials;
-  };
+export const getStreamAdminCredentials: (
+  roomID: string,
+) => Promise<StreamAdminCredentials> = async (roomID) => {
+  const streamTokenResponse = await fetchResponse(
+    `${STREAM_ENDPOINT}/${roomID}/token`,
+  );
+  const resp = await streamTokenResponse.json();
+  return {
+    userId: resp["userId"],
+    token: resp["token"],
+  } as StreamAdminCredentials;
+};
