@@ -126,7 +126,6 @@ const AdminStreamPanel: React.FC<{
       state.call.leave().catch((e) => {
         logError(`Failed to leave call: ${e}`);
       });
-      setState(undefined);
     };
   }, [state]);
 
