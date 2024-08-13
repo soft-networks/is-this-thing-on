@@ -3,6 +3,10 @@ import { firebaseAuth } from "./firebase-init.js";
 import { isAdminForAnyRoom } from "./firestore-api.js";
 import { logError } from "./logger.js";
 
+/**
+ * Middleware to ensure that the caller has provided admin credentials.
+ * An admin is any user who has been assigned as an admin to any room in Firestore.
+ */
 export const verifyThingAdmin: RequestHandler = async (req, res, next) => {
     const bearer = req.headers.authorization;
 
