@@ -54,7 +54,7 @@ const RoomAdminUI: React.FC<{
       </div>
       <div>
         Stream Call ID: <br />{" "}
-        <span className="contrastFill">{playbackID}</span>
+        <span className="contrastFill">{playbackID || "N/A"}</span>
       </div>
       <div
         onClick={() => {

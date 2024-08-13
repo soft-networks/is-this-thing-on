@@ -24,8 +24,8 @@ app.get("/", (req, res) => {
 });
 app.get("/stream-key/:id", createAndReturnStreamKey);
 app.post("/mux-hook", muxAuthHelper, muxUpdateWasReceived);
-app.get("/stream/token", createStreamAdminToken)
-app.get("stream/call/:id", getOrCreateStreamCall);
+app.get("/stream/:id/token", createStreamAdminToken)
+app.get("stream/:id/call", getOrCreateStreamCall);
 app.get("/reset-room/:id", async (req,res) => {
   logUpdate(`Resetting room ${req.params.id}`);
   try {

@@ -53,7 +53,7 @@ const StreamLive = () => {
       </div>
     );
   }
-  console.log({ roomInfo });
+
   if (roomInfo.isLoading) {
     return (
       <div className="fullBleed center:children">
@@ -68,14 +68,18 @@ const StreamLive = () => {
     );
   } else {
     return (
-      <AdminStreamPanel streamPlaybackID={roomInfo.info.streamPlaybackID} />
+      <AdminStreamPanel
+        roomID={roomInfo.info.roomID}
+        streamPlaybackID={roomInfo.info.streamPlaybackID}
+      />
     );
   }
 };
 
-const AdminStreamPanel: React.FC<{ streamPlaybackID: string | undefined }> = ({
-  streamPlaybackID,
-}) => {
+const AdminStreamPanel: React.FC<{
+  roomID: string;
+  streamPlaybackID: string | undefined;
+}> = ({ roomID, streamPlaybackID }) => {
   const [state, setState] = useState<{
     client: StreamVideoClient;
     call: Call;
@@ -94,7 +98,7 @@ const AdminStreamPanel: React.FC<{ streamPlaybackID: string | undefined }> = ({
     };
 
     // TODO: error handling
-    getStreamAdminCredentials()
+    getStreamAdminCredentials(roomID)
       .then((creds) => {
         const myClient = new StreamVideoClient({
           user: { id: creds.userId, name: "Admin" },
@@ -102,9 +106,7 @@ const AdminStreamPanel: React.FC<{ streamPlaybackID: string | undefined }> = ({
           token: creds.token,
         });
 
-        const streamId = streamPlaybackID || crypto.randomUUID();
-        logInfo(`Generated new livestream with ID ${streamId}`);
-        const myCall = myClient.call("livestream", streamId);
+        const myCall = myClient.call("livestream", creds.callId);
         setState({ client: myClient, call: myCall });
       })
       .catch((err: Error) => {
@@ -117,27 +119,25 @@ const AdminStreamPanel: React.FC<{ streamPlaybackID: string | undefined }> = ({
     if (!state) {
       return;
     }
-    console.log("creating or rejoining call");
+
     state.call
-      .join({ create: true })
+      .join()
       .then()
       .catch((e: Error) => {
-        console.error("Failed to join call", e);
+        logError(`Failed to join call: ${e}`);
         setError(e);
       });
 
-    console.log(state.call);
-
     return () => {
       state.call.leave().catch((e) => {
-        console.error("Failed to leave call", e);
+        logError(`Failed to leave call: ${e}`);
       });
       setState(undefined);
     };
   }, [state]);
 
   if (error) {
-    return <div className="center:absolute">{error.message}</div>;
+    return <div className="fullBleed center:children">{error.message}</div>;
   }
 
   if (!state || !state.client || !state.call)

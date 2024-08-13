@@ -1,4 +1,4 @@
-import { getStreamKey, writePlaybackIDToDB } from './firestore-api';
+import { getRoom, getStreamKey, writePlaybackIDToDB } from './firestore-api';
 import { logError, logInfo, logUpdate } from './logger.js'
 
 import { RequestHandler } from 'express';
@@ -11,40 +11,59 @@ const client = new StreamClient(apiKey, apiSecret);
 
 const adminUserId = process.env.STREAM_ADMIN_USER_ID!;
 
+function getErrorMessage(error: unknown) {
+	if (error instanceof Error) return error.message
+	return String(error)
+}
+
 export const createStreamAdminToken: RequestHandler = (req, res) => {
+    const roomId = req.params.id;
+
+    if (!roomId) {
+        res.status(400).send("No room ID provided");
+        return;
+    }
+    
     try {
         // exp is optional (by default the token is valid for an hour)
         const exp = Math.round(new Date().getTime() / 1000) + 60 * 60;
         const token = client.createToken(adminUserId, exp);
-        res.send({ userId: adminUserId, token});
+
+        const callId = getOrCreateCall(roomId);
+        res.send({ userId: adminUserId, callId, token});
     } catch (e) {
-        logError((e as Error).message);
+        logError(getErrorMessage(e));
         res.status(500).send("Error creating stream admin token");
     }
 }
 
 export const getOrCreateStreamCall: RequestHandler = async (req, res) => {
     const roomId = req.params.id;
-    logInfo("** [GET] /stream/call/" + roomId);
   
     if (!roomId) {
         res.status(400).send("No room ID provided");
         return;
     }
+
+    try {
+        const callId = getOrCreateCall(roomId);
+        res.send({callId: callId});
+    } catch (e) {
+        logError(getErrorMessage(e));
+        res.status(500).send("Error creating Stream call");
+        return;
+    }
+}
+
+const getOrCreateCall = async (roomId: string) => {
+    const roomData = await getRoom(roomId);
+    let callId = roomData?.['stream_playback_id'];
   
-    let key = await getStreamKey(roomId);
-  
-    if (!key) {
-        try {
-            key = generateNewStreamCall(roomId);
-        } catch(e){
-            logError((e as Error).message);
-            res.status(500).send("Error creating stream key");
-            return;
-        }
+    if (!callId) {
+        callId = generateNewStreamCall(roomId);
     }
     
-    res.send({key: key});
+    return callId;
 }
 
 const generateNewStreamCall = async (roomId: string) => {
