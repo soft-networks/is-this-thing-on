@@ -1,7 +1,8 @@
+import { NextPage } from "next";
+
 import { useCallback, useEffect } from "react";
 
 import Auth from "../components/account/auth";
-import { NextPage } from "next";
 import { useRoomStore } from "../stores/roomStore";
 
 const Account: NextPage = () => {
