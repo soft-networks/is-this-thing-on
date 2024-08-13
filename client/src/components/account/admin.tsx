@@ -1,8 +1,12 @@
+import { getAuth, getIdToken, User } from "firebase/auth";
+
 import { useEffect, useState } from "react";
 
 import { getRoomsWhereUserISAdmin } from "../../lib/firestore";
+import { app } from "../../lib/firestore/init";
 import { getStreamKey, resetRoom } from "../../lib/server-api";
 
+const auth = getAuth(app);
 /**
  * AdminView renders RoomAdminUI for each room that a user id admin for
  */
@@ -10,16 +14,23 @@ interface AdminViewProps {
   uid: string;
 }
 const Admin: React.FC<AdminViewProps> = ({ uid }) => {
-  const [rooms, setRooms] = useState<undefined | RoomInfo[]>(undefined);
+  const [state, setState] = useState<{
+    rooms?: RoomInfo[];
+    userToken?: string;
+  }>({});
+
   useEffect(() => {
     async function getRooms() {
-      let rooms = await getRoomsWhereUserISAdmin(uid);
-      setRooms(rooms);
+      let [rooms, userToken] = await Promise.all([
+        getRoomsWhereUserISAdmin(uid),
+        auth.currentUser?.getIdToken(),
+      ]);
+      setState({ rooms, userToken });
     }
     getRooms();
   }, [uid]);
 
-  return rooms ? (
+  return state.rooms && state.userToken ? (
     <div className="stack padded border-thin lightFill">
       <em>Rooms you manage</em>
       <p>
@@ -28,11 +39,11 @@ const Admin: React.FC<AdminViewProps> = ({ uid }) => {
           rtmps://global-live.mux.com:443/app
         </span>
       </p>
-      {rooms.map((r) => (
+      {state.rooms.map((r) => (
         <RoomAdminUI
           roomID={r.roomID}
           key={r.roomName + "-adminView"}
-          uid={uid}
+          userToken={state.userToken || ""}
         />
       ))}
     </div>
@@ -41,16 +52,15 @@ const Admin: React.FC<AdminViewProps> = ({ uid }) => {
   );
 };
 
-const RoomAdminUI: React.FC<{ roomID: string; uid: string }> = ({
+const RoomAdminUI: React.FC<{ roomID: string; userToken: string }> = ({
   roomID,
-  uid,
+  userToken,
 }) => {
   let [streamKey, setStreamKey] = useState<string>();
 
   useEffect(() => {
-    //TODO: Send UID here to authenticate with server
     async function getSK() {
-      let sk = await getStreamKey(roomID);
+      let sk = await getStreamKey(userToken, roomID);
       setStreamKey(sk);
     }
     getSK();
@@ -66,7 +76,7 @@ const RoomAdminUI: React.FC<{ roomID: string; uid: string }> = ({
       </div>
       <div
         onClick={() => {
-          resetRoom(roomID);
+          resetRoom(userToken, roomID);
           setStreamKey("");
         }}
         className="button"

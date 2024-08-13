@@ -1,11 +1,12 @@
 import "dotenv/config";
 import express, { Application } from "express";
 import { createServer } from "http";
-import { managePresenceInDB,  presenceProcessor,  resetMuxFirestoreRelationship } from "./firestore-api.js";
+import { presenceProcessor,  resetMuxFirestoreRelationship } from "./firestore-api.js";
 import bodyParser from "body-parser"
 import { logUpdate } from "./logger.js";
 import { muxAuthHelper, createAndReturnStreamKey } from "./muxAPI.js";
 import { muxUpdateWasReceived } from "./processUpdate.js";
+import { verifyThingAdmin } from "./middleware.js";
 
 
 
@@ -23,9 +24,9 @@ app.use(function(req, res, next) {
 app.get("/", (req, res) => {
   res.send("Server?");
 });
-app.get("/stream-key/:id", createAndReturnStreamKey);
+app.get("/stream-key/:id", verifyThingAdmin, createAndReturnStreamKey);
 app.post("/mux-hook", muxAuthHelper, muxUpdateWasReceived);
-app.get("/reset-room/:id", async (req,res) => {
+app.get("/reset-room/:id", verifyThingAdmin, async (req,res) => {
   logUpdate(`Resetting room ${req.params.id}`);
   try {
     const roomID = req.params.id;

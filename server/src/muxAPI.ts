@@ -1,10 +1,11 @@
 import Mux, { CreateLiveStreamParams } from "@mux/mux-node";
-import auth from "basic-auth";
-import { Request, RequestHandler } from "express";
+import { getStreamKey, writeNewStreamToDB } from "./firestore-api.js";
 import { logError, logInfo } from "./logger.js";
 
+import { RequestHandler } from "express";
+import auth from "basic-auth";
+
 const { Video } = new Mux(process.env.MUX_TOKEN_ID, process.env.MUX_TOKEN_SECRET);
-import { getStreamKey, writeNewStreamToDB } from "./firestore-api.js";
 
 export const createAndReturnStreamKey : RequestHandler = async (req, res) => {
   const roomID = req.params.id;

@@ -42,6 +42,7 @@ export const useUserStore = create<UserState>()(
       currentUser: undefined,
       displayName: randomName(),
       updateDisplayname: (displayName, callback) => {
+        console.log(auth.currentUser);
         let currentUser = auth.currentUser;
         if (!currentUser) {
           callback(false, new Error("there wasn't a user"));

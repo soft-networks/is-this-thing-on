@@ -1,9 +1,7 @@
-
-import { QueryDocumentSnapshot, DocumentData,Timestamp, FieldValue} from "firebase-admin/firestore";
+import { FieldValue, Timestamp } from "firebase-admin/firestore";
+import { logError, logInfo, logUpdate } from './logger.js';
 
 import { firestore } from './firebase-init.js';
-import { logError, logInfo, logUpdate, logWarning } from './logger.js';
-
 
 const PRESENCE_LENGTH =  5 * 1000;
 
@@ -28,6 +26,12 @@ const getRoom = async (roomID: string) => {
   } else {
     throw Error(`Room ${room} doesn't exist`);
   }
+}
+
+export async function isAdminForAnyRoom(userID: string) {
+  const q = firestore.collection("rooms").where("admins", "array-contains", userID).where("hidden", "!=", true).count();
+  const result = await q.get();
+  return result.data().count > 0;
 }
 
 /**
