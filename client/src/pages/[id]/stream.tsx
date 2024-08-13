@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
 import { getRoomsWhereUserISAdmin } from "../../lib/firestore";
-import { logError, logInfo } from "../../lib/logger";
+import { logError } from "../../lib/logger";
 import { getStreamAdminCredentials } from "../../lib/server-api";
 import { useUserStore } from "../../stores/userStore";
 
@@ -20,6 +20,15 @@ interface StreamConfig {
   userId: string;
 }
 
+/**
+ * This page allows room administrators to create (or rejoin) a livestream and stream their audio/video directly from the browser using WebRTC.
+ * This is noticably faster than traditional RTMP.
+ *
+ * When this page is opened, it calls the server API to:
+ *   1. Generate a short-lived Stream admin user token. This is necessary to stream from the account.
+ *   2. Get or generate the Stream call ID. If the stream_playback_id is set in Firestore, we will use that; otherwise we start a new Livestream call.
+ *
+ */
 const StreamLive = () => {
   const router = useRouter();
   const [roomInfo, setRoomInfo] = useState<{
@@ -67,19 +76,13 @@ const StreamLive = () => {
       </div>
     );
   } else {
-    return (
-      <AdminStreamPanel
-        roomID={roomInfo.info.roomID}
-        streamPlaybackID={roomInfo.info.streamPlaybackID}
-      />
-    );
+    return <AdminStreamPanel roomID={roomInfo.info.roomID} />;
   }
 };
 
 const AdminStreamPanel: React.FC<{
   roomID: string;
-  streamPlaybackID: string | undefined;
-}> = ({ roomID, streamPlaybackID }) => {
+}> = ({ roomID }) => {
   const [state, setState] = useState<{
     client: StreamVideoClient;
     call: Call;
@@ -97,7 +100,6 @@ const AdminStreamPanel: React.FC<{
       userId: process.env.NEXT_PUBLIC_STREAM_ADMIN_USER_ID!,
     };
 
-    // TODO: error handling
     getStreamAdminCredentials(roomID)
       .then((creds) => {
         const myClient = new StreamVideoClient({
@@ -170,7 +172,6 @@ const LivestreamView = ({ call }: { call: Call }) => {
   const liveParticipants = participants.filter((p) =>
     p.publishedTracks.includes(VIDEO),
   );
-  console.log({ participants, liveParticipants });
 
   return (
     <div className="fullBleed center:children">
