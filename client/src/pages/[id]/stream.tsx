@@ -33,6 +33,7 @@ const StreamLive = () => {
   const router = useRouter();
   const [roomInfo, setRoomInfo] = useState<{
     info?: RoomInfo;
+    error?: Error;
     isLoading: boolean;
   }>({
     isLoading: true,
@@ -43,22 +44,48 @@ const StreamLive = () => {
   );
 
   useEffect(() => {
-    if (!currentUser || !router.query.id || !roomInfo.isLoading) {
+    if (!router.query.id || !roomInfo.isLoading) {
+      console.log({
+        routerQueryId: router?.query?.id,
+        roomInfo,
+      });
+
       return;
     }
 
-    getRoomsWhereUserISAdmin(currentUser.uid).then((rooms) => {
+    if (!currentUser) {
       setRoomInfo({
-        info: rooms?.find((room) => room.roomID === router.query.id),
+        error: new Error("You must log in to visit this page."),
         isLoading: false,
       });
-    });
+      return;
+    }
+
+    getRoomsWhereUserISAdmin(currentUser.uid)
+      .then((rooms) => {
+        setRoomInfo({
+          info: rooms?.find((room) => room.roomID === router.query.id),
+          isLoading: false,
+        });
+      })
+      .catch((err) => {
+        setRoomInfo({
+          error: err,
+          isLoading: false,
+        });
+      });
   }, [router.query, currentUser]);
 
   if (roomInfo.isLoading) {
     return (
       <div className="fullBleed center:children">
         <p>Loading room info...</p>
+      </div>
+    );
+  } else if (roomInfo.error) {
+    return (
+      <div className="fullBleed center:children">
+        <p>{roomInfo.error.message}</p>
       </div>
     );
   } else if (!roomInfo.info) {
@@ -175,7 +202,11 @@ const LivestreamView = ({ call }: { call: Call }) => {
         <div>Attempting to join the livestream as host...</div>
       )}
       <div style={{ display: "flex", gap: "4px" }}>
-        <button onClick={() => (isLive ? call.stopLive() : call.goLive())}>
+        <button
+          onClick={() =>
+            isLive ? call.stopLive() : call.goLive({ start_recording: true })
+          }
+        >
           {isLive ? "Stop Live" : "Go Live"}
         </button>
         <button onClick={() => cam.toggle()}>
