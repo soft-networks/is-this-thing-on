@@ -45,13 +45,34 @@ export const getStreamKey = async (roomID: string) => {
   }
 }
 
+/* API's to Connect RoomID to Stream Call ID */
+
+export const connectStreamRoomDB = async (roomID: string, streamCallID: string) => {
+  console.log("Connecting roomID: ", roomID, " to streamCallID: ", streamCallID);
+  await writeRoomIDToStreamCallID(roomID, streamCallID);
+}
+
+const writeRoomIDToStreamCallID = async (roomID: string, streamCallID: string) => {
+  await firestore.collection("stream_call_id").doc(streamCallID).set({ room_id: roomID });
+}
+
+export const getRoomIDFromStreamCallID = async (streamCallID: string) => {
+  let docRef = firestore.collection("stream_call_id").doc(streamCallID);
+  let streamCallDoc = await docRef.get();
+  let streamCallData = streamCallDoc.data();
+  if (!streamCallDoc.exists || !streamCallData || !streamCallData['room_id']) {
+    throw Error(`no room matching ${streamCallID}`);
+  }
+  logInfo(`Found room id ${streamCallData['room_id']} for streamCall ${streamCallID}`);
+  return streamCallData['room_id'];
+}
 /**
  * Creates a new relationship in DB between MUXID, roomID and Stream key. 
  * @param roomID 
  * @param muxID 
  * @param streamKey 
  */
-export const writeNewStreamToDB = async (roomID: string, muxID: string, streamKey: string) => {
+export const connectMuxRoomDB = async (roomID: string, muxID: string, streamKey: string) => {
   logUpdate(`Tying MUX ID ${muxID} to roomID ${roomID} with key ${streamKey}`)
   await writeRoomIDToMUXID(roomID, muxID);
   await writeStreamKeyToDB(roomID, streamKey);
