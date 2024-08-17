@@ -1,9 +1,18 @@
 import { initializeApp, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import dotenv from "dotenv";
+import { existsSync } from 'fs';
+import { resolve } from 'path';
 
-// Load environment variables
-dotenv.config();
+const envLocalPath = resolve(process.cwd(), '.env.local');
+const envPath = resolve(process.cwd(), '.env');
+if (existsSync(envLocalPath)) {
+  dotenv.config({ path: envLocalPath });
+} else {
+  dotenv.config({ path: envPath });
+}
+
+console.log("SETUP FIREBASE WITH PROJECT ID" , process.env.FIREBASE_PROJECT_ID)
 
 export const app = initializeApp({
   credential: cert({
