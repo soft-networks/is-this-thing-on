@@ -14,7 +14,6 @@ export function syncTotalOnline(callback: (stats: number) => void) {
   const unsubscribe = onSnapshot(totalOnline, (docSnapshot) => {
     if (docSnapshot.exists()) {
       const data = docSnapshot.data() as TotalOnline;
-      console.log("ASDADASDADADASDAD", data);
       callback(data.total);
     } else {
       logInfo("No online stats document found");

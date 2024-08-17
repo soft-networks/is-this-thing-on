@@ -69,7 +69,6 @@ export async function syncWebRing(
       roomColor: "white",
       streamStatus: "disconnected",
       consentURL: data.consentURL,
-      numOnline: data.numOnline,
     };
     let unsub = onSnapshot(doc.ref, (doc) => {
       let data = doc.data();
