@@ -6,13 +6,12 @@ import {
   StreamVideoClient,
   useCallStateHooks,
 } from "@stream-io/video-react-sdk";
-
-import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
 import { getRoomsWhereUserISAdmin } from "../../lib/firestore";
-import { logError } from "../../lib/logger";
 import { getStreamAdminCredentials } from "../../lib/server-api";
+import { logError } from "../../lib/logger";
+import { useRouter } from "next/router";
 import { useUserStore } from "../../stores/userStore";
 
 interface StreamConfig {
@@ -183,6 +182,10 @@ const handleStopLive = (call: Call) => {
     callId: call.id,
   });
 };
+const handleGoLive = (call: Call) => {
+  call.goLive({ start_hls: true, start_recording: false });
+  call.startHLS();
+};
 
 const LivestreamView = ({ call }: { call: Call }) => {
   const { useCameraState, useMicrophoneState, useIsCallLive, useParticipants } =
@@ -211,11 +214,7 @@ const LivestreamView = ({ call }: { call: Call }) => {
       )}
       <div style={{ display: "flex", gap: "4px" }}>
         <button
-          onClick={() =>
-            isLive
-              ? handleStopLive(call)
-              : call.goLive({ start_hls: true, start_recording: true })
-          }
+          onClick={() => (isLive ? handleStopLive(call) : handleGoLive(call))}
         >
           {isLive ? "Stop Live" : "Go Live"}
         </button>
