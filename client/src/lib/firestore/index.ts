@@ -4,3 +4,4 @@ export * from "./stickers";
 export * from "./presence";
 export * from "./room";
 export * from "./chat";
+export * from "./stats";

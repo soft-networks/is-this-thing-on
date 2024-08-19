@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import useRingStore from "../../stores/ringStore";
 import { useRoomStore } from "../../stores/roomStore";
 import AccountButton from "../account/accountButton";
 import Ring from "../rings/smallRing";
+import { syncTotalOnline } from "../../lib/firestore";
 
 const Footer: React.FC = () => {
   const ring = useRingStore(useCallback((s) => s.links, []));
@@ -21,8 +22,10 @@ const Footer: React.FC = () => {
         className="uiLayer horizontal-stack:s-2 padded:s-1 "
         style={{ position: "absolute", bottom: 0, right: 0 }}
       >
+        {roomID ? <NumOnlineRoom /> : <NumOnlineTotal />}
         <HomeButton />
         <AccountButton />
+        
       </div>
     </footer>
   );
@@ -43,6 +46,28 @@ const HomeButton: React.FC = () => {
       </div>
     </Link>
   );
+};
+
+const NumOnlineRoom: React.FC = () => {
+  const numOnline = useRoomStore(useCallback((state) => state.roomInfo?.numOnline, []));
+  return <div className="padded:s-3 border whiteFill">{numOnline} in room</div>;
+};
+
+const NumOnlineTotal: React.FC = () => {
+  const [numOnline, setNumOnline] = useState<number>(0);
+
+  useEffect(() => {
+    const unsubscribe = syncTotalOnline((stats: number) => {
+      setNumOnline(stats);
+    });
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, []);
+  return <div className="padded:s-3 border whiteFill">{numOnline} on thing</div>;
 };
 
 export default Footer;

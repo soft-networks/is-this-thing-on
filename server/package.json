@@ -8,7 +8,7 @@
     "start": "node build/server.js",
     "build": "rm -rf build && tsc",
     "prod": "npm run build && node build/server.js",
-    "dev": " tsc -w & nodemon --watch build build/server.js",
+    "dev": "tsc -w & nodemon --watch build build/server.js",
     "deploy": "flyctl deploy",
     "tunnel": "ssh -R istomux.lhr.rocks:80:localhost:4000 localhost.run"
   },
