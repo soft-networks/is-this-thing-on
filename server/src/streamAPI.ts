@@ -5,7 +5,6 @@ import { RequestHandler } from 'express';
 import { StreamClient } from '@stream-io/node-sdk';
 import { randomUUID } from 'crypto';
 
-
 // ... existing imports ...
 
 
@@ -42,18 +41,32 @@ export const streamUpdateWasReceived: RequestHandler = async (req, res) => {
             writeStreamStateToDB(roomID, "active");
             return res.status(200).send("Thanks for the update :) ");
         } 
-        if (eventType == "call.recording_stopped" || eventType == "call.session_ended") {
-            //TODO: There is no live_ended status, so recording_ended is the best we can do. Call.session_ended is only triggered when streamers tab is closed, so maybe fix this later.
+        if (eventType == "call.recording_stopped" || eventType == "call.session_ended" || eventType == "call_ended") {
+            // NOTE: There is no live_ended status, so these events are the best proxies for when the streamer is offline. 
+            //
+            // - call.recording_stopped: Occurs when livestream stops, if it was being recorded.
+            // - call.session_ended: Occurs when streamer's tab is closed.
+            // - call.ended: Occurs when the call itself is ended through the Stream UI.
+            // - custom: Custom event emitted when clicking the Stop Live button in client.
+            //
             const id = hook.call_cid;
             const callID = id.split(':')[1];
             logInfo(`Received ${eventType} for call ${callID}`);
-            logUpdate("> Stream went active");
+            logUpdate("> Stream went idle");
+            let roomID = await getRoomIDFromStreamCallID(callID);
+            writeStreamStateToDB(roomID, "idle");
+            return res.status(200).send("Thanks for the update :) ");
+        }
+        if (eventType == "custom" && hook.custom.type == "STOP_LIVE") {
+            const callID = hook.custom.callId;
+            logInfo(`Received ${eventType} for call ${callID}`);
             logUpdate("> Stream went idle");
             let roomID = await getRoomIDFromStreamCallID(callID);
             writeStreamStateToDB(roomID, "idle");
             return res.status(200).send("Thanks for the update :) ");
         }
         logInfo("> Ignored hook of " + eventType);
+        console.log(hook);
         return res.status(200).send("Ignored, but appreciated anyway");
     } catch (e) {
         logError(getErrorMessage(e));

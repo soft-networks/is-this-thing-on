@@ -176,6 +176,14 @@ const AdminStreamPanel: React.FC<{
   );
 };
 
+const handleStopLive = (call: Call) => {
+  call.stopLive();
+  call.sendCustomEvent({
+    type: "STOP_LIVE",
+    callId: call.id,
+  });
+};
+
 const LivestreamView = ({ call }: { call: Call }) => {
   const { useCameraState, useMicrophoneState, useIsCallLive, useParticipants } =
     useCallStateHooks();
@@ -204,7 +212,9 @@ const LivestreamView = ({ call }: { call: Call }) => {
       <div style={{ display: "flex", gap: "4px" }}>
         <button
           onClick={() =>
-            isLive ? call.stopLive() : call.goLive({ start_recording: true })
+            isLive
+              ? handleStopLive(call)
+              : call.goLive({ start_hls: true, start_recording: true })
           }
         >
           {isLive ? "Stop Live" : "Go Live"}
