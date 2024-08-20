@@ -80,7 +80,6 @@ export const streamUpdateWasReceived: RequestHandler = async (req, res) => {
             return res.status(200).send("Thanks for the update :) ");
         }
         logInfo("> Ignored hook of " + eventType);
-        console.log(hook);
         return res.status(200).send("Ignored, but appreciated anyway");
     } catch (e) {
         logError(getErrorMessage(e));
