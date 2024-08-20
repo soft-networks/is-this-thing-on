@@ -177,16 +177,24 @@ const AdminStreamPanel: React.FC<{
   );
 };
 
-const handleStopLive = (call: Call) => {
-  call.stopLive();
-  call.sendCustomEvent({
-    type: "STOP_LIVE",
-    callId: call.id,
+const handleStopLive = async (call: Call) => {
+  return Promise.all([
+    call.stopLive(),
+    call.sendCustomEvent({
+      type: "STOP_LIVE",
+      callId: call.id,
+    }),
+  ]).then(() => {
+    // Force call state refresh to ensure the UI is updated.
+    call.get();
   });
 };
 
-const handleGoLive = (call: Call) => {
-  call.goLive({ start_hls: false, start_recording: true });
+const handleGoLive = async (call: Call) => {
+  return call.goLive({ start_hls: false, start_recording: true }).then(() => {
+    // Force call state refresh to ensure the UI is updated.
+    call.get();
+  });
 };
 
 const LivestreamView = ({

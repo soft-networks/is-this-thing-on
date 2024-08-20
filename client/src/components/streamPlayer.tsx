@@ -7,9 +7,8 @@ import {
   User,
   useCallStateHooks,
 } from "@stream-io/video-react-sdk";
+import { logError, logInfo } from "../lib/logger";
 import { useEffect, useState } from "react";
-
-import { logError } from "../lib/logger";
 
 const user: User = { type: "anonymous" };
 
@@ -34,12 +33,13 @@ const StreamPlayer: React.FunctionComponent<VideoPlayerProps> = ({
     });
     const myCall = myClient.call("livestream", streamCallId);
 
-    myCall
-      .get()
-      .then(() => {
-        setState({ client: myClient, call: myCall });
-      })
-      .catch((e) => logError("Failed to retrieve call details", e));
+    // myCall
+    //   .get()
+    //   .then(() => {
+    //     logInfo("Setting state for call ID " + streamCallId);
+    setState({ client: myClient, call: myCall });
+    // })
+    // .catch((e) => logError("Failed to retrieve call details", e));
   }, [streamCallId]);
 
   useEffect(() => {
@@ -92,7 +92,9 @@ const LivestreamView = ({ muted }: { muted: boolean }) => {
       className="noEvents videoAspectElement stream-player"
     />
   ) : (
-    <div>offline</div>
+    <div className="center:absolute whiteFill border padded:s1 highestLayer">
+      offline... for now
+    </div>
   );
 };
 
