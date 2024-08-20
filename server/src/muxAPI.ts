@@ -4,7 +4,7 @@ import { Request, RequestHandler } from "express";
 import { logError, logInfo } from "./logger.js";
 
 const { Video } = new Mux(process.env.MUX_TOKEN_ID, process.env.MUX_TOKEN_SECRET);
-import { getStreamKey, writeNewStreamToDB } from "./firestore-api.js";
+import { getStreamKey, connectMuxRoomDB } from "./firestore-api.js";
 
 export const createAndReturnStreamKey : RequestHandler = async (req, res) => {
   const roomID = req.params.id;
@@ -21,7 +21,7 @@ export const createAndReturnStreamKey : RequestHandler = async (req, res) => {
       if (streamKey == undefined || muxID == undefined) {
         throw Error(`MUX Didn't create the stream key and ID for ${roomID}`);
       } 
-      await writeNewStreamToDB(roomID, muxID, streamKey);
+      await connectMuxRoomDB(roomID, muxID, streamKey);
       key = streamKey;
     } else {
       key = cachedKey;

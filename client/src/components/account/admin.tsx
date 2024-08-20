@@ -31,6 +31,7 @@ const Admin: React.FC<AdminViewProps> = ({ uid }) => {
       {rooms.map((r) => (
         <RoomAdminUI
           roomID={r.roomID}
+          playbackID={r.streamPlaybackID}
           key={r.roomName + "-adminView"}
           uid={uid}
         />
@@ -41,33 +42,23 @@ const Admin: React.FC<AdminViewProps> = ({ uid }) => {
   );
 };
 
-const RoomAdminUI: React.FC<{ roomID: string; uid: string }> = ({
-  roomID,
-  uid,
-}) => {
-  let [streamKey, setStreamKey] = useState<string>();
-
-  useEffect(() => {
-    //TODO: Send UID here to authenticate with server
-    async function getSK() {
-      let sk = await getStreamKey(roomID);
-      setStreamKey(sk);
-    }
-    getSK();
-  }, [roomID]);
-
+const RoomAdminUI: React.FC<{
+  roomID: string;
+  playbackID?: string;
+  uid: string;
+}> = ({ roomID, playbackID, uid }) => {
   return (
     <div className="stack padded border-thin">
       <div>
         <span>{roomID}</span>
       </div>
       <div>
-        stream key: <br /> <span className="contrastFill">{streamKey}</span>
+        Stream Call ID: <br />{" "}
+        <span className="contrastFill">{playbackID || "N/A"}</span>
       </div>
       <div
         onClick={() => {
           resetRoom(roomID);
-          setStreamKey("");
         }}
         className="button"
       >

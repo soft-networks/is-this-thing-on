@@ -1,5 +1,3 @@
-
-
 :root {
   --ratio: 1.4;
   --s0: 14px;
@@ -22,27 +20,26 @@
   --black: rgb(10, 38, 42);
   --white: white;
   --faintWhite: rgba(255, 255, 255, 0.68);
-  --contrast: #FCFF54;
-  --backgroundColor: #F3F3F3;
+  --contrast: #fcff54;
+  --backgroundColor: #f3f3f3;
   --roomColor: white;
+  --greenColor: #e2f3de;
 
-  --textWidth: 48ch; 
+  --textWidth: 48ch;
 
   --stickerSize: 3%;
   --stickerGlowShadow: drop-shadow(0px 0px 5px var(--contrast));
-
 }
 @font-face {
   font-family: "Manifont Grotesk";
-  src: url("/fonts/ManifontGroteskBook-webfont.woff") format('woff');
+  src: url("/fonts/ManifontGroteskBook-webfont.woff") format("woff");
 }
 
 @font-face {
   font-family: "Manifont Grotesk";
-  src: url("/fonts/ManifontGroteskBookItalic-webfont.woff") format('woff');
+  src: url("/fonts/ManifontGroteskBookItalic-webfont.woff") format("woff");
   font-style: italic;
 }
-
 
 * {
   box-sizing: border-box;
@@ -50,15 +47,15 @@
   margin: 0;
 }
 
-
-html, #__next, body {
-  width: 100%; height: 100%;
+html,
+#__next,
+body {
+  width: 100%;
+  height: 100%;
 }
-
 
 body {
   font-family: "Manifont Grotesk", monospace;
-
 }
 
 .monospace {
@@ -66,7 +63,7 @@ body {
 }
 
 ::selection {
- background: var(--contrast)
+  background: var(--contrast);
 }
 
 .selected {
@@ -80,9 +77,8 @@ body {
   stroke: blue;
 }
 .stroke.clickable:hover {
-  stroke:blue;
+  stroke: blue;
 }
-
 
 .red {
   background: orangered;
@@ -92,8 +88,8 @@ body {
 }
 
 .grow-text {
-  font-size: max(min(3.2vw, 56px), 32px); 
-  word-break:normal;
+  font-size: max(min(3.2vw, 56px), 32px);
+  word-break: normal;
   letter-spacing: -1px;
   line-height: 1.05;
 }
@@ -105,34 +101,35 @@ body {
   font-size: var(--s1);
 }
 
-a, a:visited, .clickable\:link {
+a,
+a:visited,
+.clickable\:link {
   color: var(--black);
 }
 
 .chrisyRoom .addCursor {
-  cursor:url(https://i6.cims.nyu.edu/~mr6465/chrisy/add_2.png),auto;
+  cursor: url(https://i6.cims.nyu.edu/~mr6465/chrisy/add_2.png), auto;
 }
 .addCursor {
   cursor: crosshair;
 }
 
-.typeCursor{
+.typeCursor {
   cursor: text;
 }
 .closeCursor {
-  cursor: alias;  
+  cursor: alias;
 }
 .chrisyRoom .moveCursor {
-  cursor:url(https://i6.cims.nyu.edu/~mr6465/chrisy/move_2.png),auto;
+  cursor: url(https://i6.cims.nyu.edu/~mr6465/chrisy/move_2.png), auto;
 }
 
 .chrisyRoom .deleteCursor {
-  cursor:url(https://i6.cims.nyu.edu/~mr6465/chrisy/delete_2.png),auto;
+  cursor: url(https://i6.cims.nyu.edu/~mr6465/chrisy/delete_2.png), auto;
 }
 .deleteCursor {
-   cursor:not-allowed;
+  cursor: not-allowed;
 }
-
 
 .animateTransform {
   transition: transform 1000ms;
@@ -151,10 +148,10 @@ a, a:visited, .clickable\:link {
   cursor: inherit;
 }
 
-iframe html, iframe body {
+iframe html,
+iframe body {
   overflow: hidden !important;
 }
-
 
 /* (Optional) Apply a "closed-hand" cursor during drag operation. */
 .draggable.active {
@@ -169,23 +166,27 @@ iframe html, iframe body {
   animation: loop-marque 20s linear infinite;
 }
 
-
 @keyframes loop-marque {
-  0% { left: 0%; }
-  100% { left: 100%; }
+  0% {
+    left: 0%;
+  }
+  100% {
+    left: 100%;
+  }
 }
 
 .fadeOut {
   opacity: 1;
-  animation: fadeOut forwards 1s; 
+  animation: fadeOut forwards 1s;
 }
 @keyframes fadeOut {
-  0% { opacity: 1;}
-  100% {opacity: 0;}
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
-
-
-
 
 /* Sizing */
 .fullBleed {
@@ -202,13 +203,10 @@ iframe html, iframe body {
   width: 100%;
 }
 
-
 .maxFullScreen {
   max-width: 100%;
   max-height: 100%;
 }
-
-
 
 p {
   max-inline-size: var(--textWidth);
@@ -216,10 +214,10 @@ p {
 }
 
 .inline-block {
-  display: inline-block
+  display: inline-block;
 }
 
-.wide  {
+.wide {
   --textWidth: 100%;
 }
 
@@ -261,7 +259,6 @@ p {
   padding: var(--spacing);
 }
 
-
 /* layout */
 
 .relative {
@@ -288,15 +285,15 @@ p {
 .hide {
   display: none;
 }
-.showOnHover, .showOnHoverSelfTrigger {
+.showOnHover,
+.showOnHoverSelfTrigger {
   /* //animation: blurmyself 0.1s 1s forwards; */
   opacity: 0.5;
   transition: all 300ms;
 }
 
-
-
-.showOnHoverTrigger:hover .showOnHover, .showOnHoverSelfTrigger:hover {
+.showOnHoverTrigger:hover .showOnHover,
+.showOnHoverSelfTrigger:hover {
   opacity: 1;
 }
 
@@ -309,7 +306,6 @@ p {
   margin-inline: auto;
 }
 
-
 .halfWidth {
   max-inline-size: min(80%, 1200px);
 }
@@ -318,7 +314,6 @@ p {
   max-inline-size: min(42%, 600px);
 }
 
-
 .cover {
   display: flex;
   flex-direction: column;
@@ -326,7 +321,7 @@ p {
 }
 
 .cover > .centerv {
-  margin-block: auto ;
+  margin-block: auto;
 }
 
 .relative {
@@ -337,14 +332,13 @@ p {
   position: absolute;
   top: 0;
   left: 0;
-
 }
 
 .absoluteEnd {
   position: absolute;
   top: 0;
   right: 0;
-  transform: translate(80%,50%);
+  transform: translate(80%, 50%);
 }
 
 .absoluteCaption {
@@ -352,7 +346,6 @@ p {
   bottom: 0;
   right: 0;
   transform: translate(50%, 50%);
-
 }
 
 .center\:children {
@@ -365,7 +358,7 @@ p {
   position: absolute;
   top: 50%;
   left: 50%;
-  
+
   transform: translate(-50%, -50%);
   z-index: -1;
 }
@@ -373,7 +366,6 @@ p {
   position: absolute;
   left: 50%;
   transform: translate(-50%, -0%);
-  
 }
 .align-end\:absolute {
   bottom: 0;
@@ -390,19 +382,20 @@ p {
 .stickerLayer {
   z-index: 10;
 }
-.interactiveStickerLayer{
-  z-index: 11
+.interactiveStickerLayer {
+  z-index: 11;
 }
-.uiLayer, .uiLayer > * {
+.uiLayer,
+.uiLayer > * {
   z-index: 500;
 }
 .highestLayer {
   z-index: 9000;
 }
-.everest, .everest * {
+.everest,
+.everest * {
   z-index: 99999;
 }
-
 
 .align\:center {
   display: flex;
@@ -411,7 +404,8 @@ p {
 .align-start {
   align-items: flex-start;
 }
-.align-middle, .horizontal-stack.align-middle{
+.align-middle,
+.horizontal-stack.align-middle {
   align-items: center;
 }
 .align-start\:vertical {
@@ -423,7 +417,9 @@ p {
   text-align: center;
 }
 
-.grid, .grid\:s-1, .grid\:s-2 {
+.grid,
+.grid\:s-1,
+.grid\:s-2 {
   display: flex;
   flex-wrap: wrap;
   gap: var(--s0);
@@ -437,12 +433,8 @@ p {
 }
 
 .flex-1 {
-  flex: 1
+  flex: 1;
 }
-
-
-
-
 
 .stack,
 .stack\:noGap,
@@ -459,7 +451,7 @@ p {
 .inline {
   display: inline-flex;
 }
- 
+
 .stack > * + * {
   margin-block-start: var(--s0);
 }
@@ -468,43 +460,45 @@ p {
   margin-block-start: var(--stackSpacing);
 }
 
-.stack\:noGap>*+* {
+.stack\:noGap > * + * {
   margin-block-start: 0;
 }
 
-.stack\:s-1>*+* {
+.stack\:s-1 > * + * {
   margin-block-start: var(--s-1);
 }
-.stack\:s-2>*+* {
+.stack\:s-2 > * + * {
   margin-block-start: var(--s-2);
 }
 
-
-.stack\:s1>*+* {
+.stack\:s1 > * + * {
   margin-block-start: var(--s1);
 }
 
-.stack\:s2>*+* {
+.stack\:s2 > * + * {
   margin-block-start: var(--s2);
 }
 
-.horizontal-stack , .horizontal-stack\:s-1,  .horizontal-stack\:s-2, .horizontal-stack\:noGap  {
+.horizontal-stack,
+.horizontal-stack\:s-1,
+.horizontal-stack\:s-2,
+.horizontal-stack\:noGap {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
 }
 
-.horizontal-stack\:noGap >*+*  {
+.horizontal-stack\:noGap > * + * {
   margin-left: 0;
 }
 
-.horizontal-stack >*+* {
+.horizontal-stack > * + * {
   margin-left: var(--s0);
 }
-.horizontal-stack\:s-1 >*+* {
+.horizontal-stack\:s-1 > * + * {
   margin-left: var(--s-1);
 }
-.horizontal-stack\:s-2 >*+* {
+.horizontal-stack\:s-2 > * + * {
   margin-left: var(--s-2);
 }
 
@@ -523,17 +517,14 @@ p {
   margin-left: auto;
 }
 
-
-
 /* aesthetics + interactivity */
 
 code,
 pre {
   line-height: 1.1;
   font-size: inherit;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: "Share Tech Mono", monospace;
 }
-
 
 .blue {
   color: blue;
@@ -541,7 +532,7 @@ pre {
 .border {
   border: 1px solid var(--black);
 }
-.border-thin{
+.border-thin {
   border: 1px solid var(--black);
 }
 
@@ -557,7 +548,6 @@ pre {
 .border-radius {
   border-radius: var(--s-3);
 }
-
 
 .active a {
   text-decoration: underline;
@@ -603,7 +593,6 @@ a:hover,
   pointer-events: all;
 }
 
-
 .containBG {
   background-size: contain;
   background-repeat: no-repeat;
@@ -617,20 +606,20 @@ a:hover,
   background-position: center;
 }
 
-
 .clickHover {
   cursor: pointer;
 }
 
-
-.clickable {  
+.clickable {
   cursor: pointer;
 }
 .clickable\:opacity {
   cursor: pointer;
   opacity: 0.8;
   scale: 1;
-  transition: opacity 100ms, scale 100ms;
+  transition:
+    opacity 100ms,
+    scale 100ms;
 }
 .clickable\:opacity:hover {
   opacity: 1;
@@ -678,12 +667,18 @@ a:hover,
   background: var(--black);
 }
 
-
-.contrastFill, .contrastFill\:hover:hover, .hoverTrigger:hover .contrastFill\:hover\:triggered{
+.contrastFill,
+.contrastFill\:hover:hover,
+.hoverTrigger:hover .contrastFill\:hover\:triggered {
   background: var(--roomColor);
 }
 
-.hoverTrigger:hover rect.contrastFill\:hover\:triggered{
+.greenFill,
+.greenFill\:hover:hover {
+  background: var(--greenColor);
+}
+
+.hoverTrigger:hover rect.contrastFill\:hover\:triggered {
   fill: var(--contrast);
 }
 
@@ -691,14 +686,13 @@ a:hover,
   filter: var(--stickerGlowShadow);
 }
 .skrimFill {
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
 }
 
-
-.fadeContrast  {
+.fadeContrast {
   --fadeFrom: var(--contrast);
   --fadeTo: var(--light);
-  animation: 1s fadeColor forwards ;
+  animation: 1s fadeColor forwards;
 }
 
 @keyframes fadeColor {
@@ -709,7 +703,6 @@ a:hover,
     background: var(--fadeTo);
   }
 }
-
 
 .contrastFill::selection {
   background: var(--gray);
@@ -729,9 +722,9 @@ a:hover,
 
 .videoAspect {
   width: 100%;
-  height: 100%; 
+  height: 100%;
 }
-.videoAspectElement, 
+.videoAspectElement,
 .videoAspectElement > .testPlayer {
   height: 100%;
   width: 177.77777778vh; /* 100 * 16 / 9 */
@@ -744,6 +737,10 @@ a:hover,
   transform: translate(-50%, -50%); /* % of current element */
 }
 
+.stream-player > video {
+  width: 100%;
+  height: 100%;
+}
 
 /* .muxPlayer {
   --controls: none;
@@ -756,8 +753,6 @@ a:hover,
   height: 100%;
 } */
 
-
-
 .videoMob {
   position: absolute;
   inset: 0;
@@ -765,18 +760,17 @@ a:hover,
   min-height: 100vh;
   overflow: hidden;
   object-fit: cover;
- }
-
+}
 
 .chat {
   --chatAuthorColor: var(--contrast);
   --chatMessageColor: var(--light);
-  --chatContainerBackground: var(--black); 
+  --chatContainerBackground: var(--black);
   --chatBorderColor: var(--gray);
   background: var(--chatContainerBackground);
   color: var(--chatMessageColor);
   width: max(35ch, 20vw);
-  border-color:  var(--chatBorderColor);
+  border-color: var(--chatBorderColor);
   transition: all 100ms;
   position: absolute;
   bottom: var(--s0);
@@ -786,7 +780,7 @@ a:hover,
   color: var(--chatAuthorColor);
 }
 .chatBubble * {
-  border-color:  var(--chatBorderColor) !important;
+  border-color: var(--chatBorderColor) !important;
 }
 
 .handle {
@@ -805,35 +799,34 @@ a:hover,
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: var(--gray);
-
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
-} 
+}
 
 .chatMessage {
   background: var(--chatMessageBackground);
 }
 
 .chatMessage .caption {
-  color: var(--chatAuthorColor)
+  color: var(--chatAuthorColor);
 }
 
 /* React player */
 
 .player-wrapper {
   width: auto;
-  height: auto; 
+  height: auto;
 }
 .react-player {
   padding-top: 56.25%;
-  position: relative; 
+  position: relative;
 }
 
 .react-player > div {
-  position: absolute; 
+  position: absolute;
 }
 
 .homeLogoWidth {
@@ -855,24 +848,19 @@ footer .clickable:hover{
   background: var(--contrast);
 } */
 
-
 input,
 input::placeholder {
   font-family: "Manifont Grotesk", monospace;
-    font: var(--s0);
+  font: var(--s0);
 }
 
-input:focus{
+input:focus {
   outline: none;
-
 }
-@media screen and (min-width: 1300px)  {
-
-
+@media screen and (min-width: 1300px) {
   .halfWidth {
     max-inline-size: min(80%, 1200px);
   }
-
 }
 
 @media screen and (max-width: 600px) {
@@ -884,7 +872,8 @@ input:focus{
     width: 75%;
   }
 
-  .halfWidth, .quarterWidth {
+  .halfWidth,
+  .quarterWidth {
     max-inline-size: 90%;
   }
 
@@ -892,7 +881,7 @@ input:focus{
     padding: var(--s0);
   }
 
-  .stack\:s2>*+* {
+  .stack\:s2 > * + * {
     margin-top: var(--s1);
   }
 
@@ -911,26 +900,22 @@ input:focus{
 
 /*  put stuff here if you want!  */
 
-
-
 /* chia stuff */
-.ambience{
+.ambience {
   mix-blend-mode: darken;
   opacity: 0.5;
-  background:none;
+  background: none;
   width: 100%;
   height: 100%;
 }
 
-
-
 #rotatingEllipseContainer {
- width: 100%;
- height: 100%;
- position: absolute;
- top: 0;
- left: 0;
- transform: rotate(-30deg);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotate(-30deg);
 }
 .antiRotate {
   transform: rotate(30deg);
@@ -971,7 +956,7 @@ input:focus{
     visibility: visible;
     opacity: 1;
   }
-  #desktopMessage{
+  #desktopMessage {
     visibility: hidden;
     opacity: 0;
   }
@@ -981,7 +966,7 @@ input:focus{
     visibility: visible;
     opacity: 1;
   }
-  #mobileMessage{
+  #mobileMessage {
     visibility: hidden;
     opacity: 0;
   }
