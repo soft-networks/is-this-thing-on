@@ -4,10 +4,9 @@ import {
   StreamCall,
   StreamVideo,
   StreamVideoClient,
-  useCallStateHooks,
   User,
+  useCallStateHooks,
 } from "@stream-io/video-react-sdk";
-
 import { useEffect, useState } from "react";
 
 import { logError } from "../lib/logger";
@@ -34,8 +33,14 @@ const StreamPlayer: React.FunctionComponent<VideoPlayerProps> = ({
       user,
     });
     const myCall = myClient.call("livestream", streamCallId);
-    setState({ client: myClient, call: myCall });
-  }, []);
+
+    myCall
+      .get()
+      .then(() => {
+        setState({ client: myClient, call: myCall });
+      })
+      .catch((e) => logError("Failed to retrieve call details", e));
+  }, [streamCallId]);
 
   useEffect(() => {
     if (!state) {
@@ -70,7 +75,6 @@ const StreamPlayer: React.FunctionComponent<VideoPlayerProps> = ({
 
 const LivestreamView = ({ muted }: { muted: boolean }) => {
   const { useIsCallLive, useParticipants } = useCallStateHooks();
-
   const isLive = useIsCallLive();
 
   const participants = useParticipants();
@@ -78,6 +82,8 @@ const LivestreamView = ({ muted }: { muted: boolean }) => {
   const liveParticipants = participants.filter((p) =>
     p.publishedTracks.includes(VIDEO),
   );
+
+  console.log({ isLive, participants, liveParticipants });
 
   return isLive && liveParticipants.length > 0 ? (
     <ParticipantView

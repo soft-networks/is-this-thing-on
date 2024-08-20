@@ -1,8 +1,8 @@
+import { StreamClient, VideoGetOrCreateCallResponse } from '@stream-io/node-sdk';
 import { connectStreamRoomDB, getRoom, getRoomIDFromStreamCallID, writePlaybackIDToDB, writeStreamStateToDB } from './firestore-api.js';
 import { logError, logInfo, logUpdate } from './logger.js'
 
 import { RequestHandler } from 'express';
-import { StreamClient } from '@stream-io/node-sdk';
 import { randomUUID } from 'crypto';
 
 // ... existing imports ...
@@ -38,23 +38,37 @@ export const streamUpdateWasReceived: RequestHandler = async (req, res) => {
             logInfo(`Received ${eventType} for call ${callID}`);
             logUpdate("> Stream went active");
             let roomID = await getRoomIDFromStreamCallID(callID);
-            writeStreamStateToDB(roomID, "active");
+            const result = await writeStreamStateToDB(roomID, "active");
             return res.status(200).send("Thanks for the update :) ");
-        } 
-        if (eventType == "call.recording_stopped" || eventType == "call.session_ended" || eventType == "call_ended") {
+        }
+        if (eventType == "call.session_started" || eventType == "call.session_participant_joined") {
+            const id = hook.call_cid;
+            const callID = id.split(':')[1];
+            logInfo(`Received ${eventType} for call ${callID}`);
+
+            const call = await client.video.call("livestream", callID).get();
+            if (call.call.backstage) {
+                logInfo("Ignoring session started event because call is in backstage mode.")
+            } else {
+                logUpdate("> Stream went active");
+                let roomID = await getRoomIDFromStreamCallID(callID);
+                await writeStreamStateToDB(roomID, "active");
+                return res.status(200).send("Thanks for the update :) ");
+            }
+        }
+        if (eventType == "call_ended" || eventType == "call.session_ended") {
             // NOTE: There is no live_ended status, so these events are the best proxies for when the streamer is offline. 
             //
-            // - call.recording_stopped: Occurs when livestream stops, if it was being recorded.
-            // - call.session_ended: Occurs when streamer's tab is closed.
+            // - call.session_ended: Occurs when participant leaves the call or closes their tab.
             // - call.ended: Occurs when the call itself is ended through the Stream UI.
-            // - custom: Custom event emitted when clicking the Stop Live button in client.
+            // - custom: Custom event emitted when clicking the Stop Livestreaming button in client.
             //
             const id = hook.call_cid;
             const callID = id.split(':')[1];
             logInfo(`Received ${eventType} for call ${callID}`);
             logUpdate("> Stream went idle");
             let roomID = await getRoomIDFromStreamCallID(callID);
-            writeStreamStateToDB(roomID, "idle");
+            await writeStreamStateToDB(roomID, "idle");
             return res.status(200).send("Thanks for the update :) ");
         }
         if (eventType == "custom" && hook.custom.type == "STOP_LIVE") {
@@ -62,7 +76,7 @@ export const streamUpdateWasReceived: RequestHandler = async (req, res) => {
             logInfo(`Received ${eventType} for call ${callID}`);
             logUpdate("> Stream went idle");
             let roomID = await getRoomIDFromStreamCallID(callID);
-            writeStreamStateToDB(roomID, "idle");
+            await writeStreamStateToDB(roomID, "idle");
             return res.status(200).send("Thanks for the update :) ");
         }
         logInfo("> Ignored hook of " + eventType);
@@ -87,9 +101,9 @@ export const createStreamAdminToken: RequestHandler = async (req, res) => {
         const exp = Math.round(new Date().getTime() / 1000) + 60 * 60;
         const token = client.createToken(adminUserId, exp);
 
-        const callId = await getOrCreateCall(roomId);
-        await connectStreamRoomDB(roomId, callId);
-        res.send({ userId: adminUserId, callId, token });
+        const streamCall = await getOrCreateCall(roomId);
+        await connectStreamRoomDB(roomId, streamCall.id);
+        res.send({ userId: adminUserId, call: streamCall, token });
     } catch (e) {
         logError(getErrorMessage(e));
         res.status(500).send("Error creating stream admin token");
@@ -117,15 +131,26 @@ export const getOrCreateStreamCall: RequestHandler = async (req, res) => {
 const getOrCreateCall = async (roomId: string) => {
     const roomData = await getRoom(roomId);
     let callId = roomData?.['stream_playback_id'];
+    
+    let callDetails;
 
     if (!callId) {
-        callId = generateNewStreamCall(roomId);
+        [callId, callDetails] = await generateNewStreamCall(roomId);
+    } else {
+        callDetails = await client.video.call('livestream', callId).get();
     }
 
-    return callId;
+    // Set expiration to 24 hours
+    const exp = Math.round(new Date().getTime() / 1000) + 24 * 60 * 60;
+
+    return {
+        id: callId,
+        rtmpAddress: callDetails.call.ingress.rtmp.address,
+        rtmpStreamKey: client.createToken(adminUserId, exp),
+    };
 }
 
-const generateNewStreamCall = async (roomId: string) => {
+const generateNewStreamCall = async (roomId: string): Promise<[string, VideoGetOrCreateCallResponse]> => {
     const callId = randomUUID();
     const call = client.video.call('livestream', callId);
 
@@ -136,7 +161,14 @@ const generateNewStreamCall = async (roomId: string) => {
         throw Error(`Stream with random ID ${callId} was not created for ${roomId}`);
     }
 
+    
     logUpdate(`Tying Stream Call ID ${callId} to roomID ${roomId}`)
     await writePlaybackIDToDB(roomId, callId);
-    return callId;
+    return [callId, resp];
+}
+
+interface StreamCallResponse {
+    id: string;
+    rtmpAddress: string;
+    rtmpStreamKey: string;
 }

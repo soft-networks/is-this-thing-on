@@ -105,11 +105,11 @@ export const getRoomIDFromMUXID = async (muxID: string) => {
 }
 
 export const writeStreamStateToDB = async (roomID: string, streamStatus: string) => {
-  await roomDoc(roomID).set({ stream_status: streamStatus }, { merge: true });
+  return roomDoc(roomID).set({ stream_status: streamStatus }, { merge: true });
 }
 
 export const writePlaybackIDToDB = async (roomID: string, playbackID: string) => {
-  await roomDoc(roomID).set({ stream_playback_id: playbackID }, { merge: true });
+  return roomDoc(roomID).set({ stream_playback_id: playbackID }, { merge: true });
 }
 
 export const resetMuxFirestoreRelationship = async (roomID: string) => {  

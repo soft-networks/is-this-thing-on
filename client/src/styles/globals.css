@@ -23,6 +23,7 @@
   --contrast: #fcff54;
   --backgroundColor: #f3f3f3;
   --roomColor: white;
+  --greenColor: #e2f3de;
 
   --textWidth: 48ch;
 
@@ -670,6 +671,11 @@ a:hover,
 .contrastFill\:hover:hover,
 .hoverTrigger:hover .contrastFill\:hover\:triggered {
   background: var(--roomColor);
+}
+
+.greenFill,
+.greenFill\:hover:hover {
+  background: var(--greenColor);
 }
 
 .hoverTrigger:hover rect.contrastFill\:hover\:triggered {
