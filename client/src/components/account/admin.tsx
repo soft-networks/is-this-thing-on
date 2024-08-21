@@ -1,10 +1,9 @@
-import { getAuth } from "firebase/auth";
-
+import { getStreamKey, resetRoom } from "../../lib/server-api";
 import { useEffect, useState } from "react";
 
-import { getRoomsWhereUserISAdmin } from "../../lib/firestore";
 import { app } from "../../lib/firestore/init";
-import { getStreamKey, resetRoom } from "../../lib/server-api";
+import { getAuth } from "firebase/auth";
+import { getRoomsWhereUserISAdmin } from "../../lib/firestore";
 
 const auth = getAuth(app);
 /**
@@ -42,6 +41,7 @@ const Admin: React.FC<AdminViewProps> = ({ uid }) => {
       {state.rooms.map((r) => (
         <RoomAdminUI
           roomID={r.roomID}
+          playbackID={r.streamPlaybackID}
           key={r.roomName + "-adminView"}
           userToken={state.userToken || ""}
         />
@@ -52,32 +52,23 @@ const Admin: React.FC<AdminViewProps> = ({ uid }) => {
   );
 };
 
-const RoomAdminUI: React.FC<{ roomID: string; userToken: string }> = ({
-  roomID,
-  userToken,
-}) => {
-  let [streamKey, setStreamKey] = useState<string>();
-
-  useEffect(() => {
-    async function getSK() {
-      let sk = await getStreamKey(userToken, roomID);
-      setStreamKey(sk);
-    }
-    getSK();
-  }, [roomID]);
-
+const RoomAdminUI: React.FC<{
+  roomID: string;
+  playbackID?: string;
+  userToken: string;
+}> = ({ roomID, playbackID, userToken }) => {
   return (
     <div className="stack padded border-thin">
       <div>
         <span>{roomID}</span>
       </div>
       <div>
-        stream key: <br /> <span className="contrastFill">{streamKey}</span>
+        Stream Call ID: <br />{" "}
+        <span className="contrastFill">{playbackID || "N/A"}</span>
       </div>
       <div
         onClick={() => {
           resetRoom(userToken, roomID);
-          setStreamKey("");
         }}
         className="button"
       >

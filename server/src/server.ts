@@ -1,14 +1,13 @@
-import "dotenv/config";
-
 import { createAndReturnStreamKey, muxAuthHelper } from "./muxAPI.js";
+import { createStreamAdminToken, streamUpdateWasReceived } from "./streamAPI.js";
 import express, { Application } from "express";
 import { presenceProcessor, resetMuxFirestoreRelationship } from "./firestore-api.js";
+import { verifyStreamIdentity, verifyThingAdmin } from "./middleware.js";
 
 import bodyParser from "body-parser"
 import { createServer } from "http";
 import { logUpdate } from "./logger.js";
 import { muxUpdateWasReceived } from "./processUpdate.js";
-import { verifyThingAdmin } from "./middleware.js";
 
 const app: Application = express();
 app.use(bodyParser.json());
@@ -26,6 +25,9 @@ app.get("/", (req, res) => {
 });
 app.get("/stream-key/:id", verifyThingAdmin, createAndReturnStreamKey);
 app.post("/mux-hook", muxAuthHelper, muxUpdateWasReceived);
+
+app.post("/stream-hook", verifyStreamIdentity, streamUpdateWasReceived);
+app.get("/stream/:id/token", verifyThingAdmin, createStreamAdminToken)
 app.get("/reset-room/:id", verifyThingAdmin, async (req,res) => {
   logUpdate(`Resetting room ${req.params.id}`);
   try {
@@ -38,7 +40,6 @@ app.get("/reset-room/:id", verifyThingAdmin, async (req,res) => {
     res.status(500).send("Error resetting room")
   } 
 })
-
 
 httpServer.listen(port, () => {
   logUpdate(`Server is LIVE on port ${port}`);

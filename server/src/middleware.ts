@@ -1,7 +1,9 @@
+import { logError, logWarning } from "./logger.js";
+
 import { RequestHandler } from "express";
+import { client } from "./streamAPI.js";
 import { firebaseAuth } from "./firebase-init.js";
 import { isAdminForAnyRoom } from "./firestore-api.js";
-import { logError } from "./logger.js";
 
 /**
  * Middleware to ensure that the caller has provided admin credentials.
@@ -38,4 +40,16 @@ export const verifyThingAdmin: RequestHandler = async (req, res, next) => {
     }
 
     return res.sendStatus(403);
+  }
+
+  export const verifyStreamIdentity: RequestHandler = async (req, res, next) => {
+    const signature = req.headers["x-signature"] as string;
+    const valid = signature && client.verifyWebhook(JSON.stringify(req.body), signature);
+    
+    if (!valid) {
+        logWarning("Received stream webhook with invalid signature");
+        return res.sendStatus(401);
+    }
+
+    return next();
   }

@@ -1,5 +1,5 @@
 import Mux, { CreateLiveStreamParams } from "@mux/mux-node";
-import { getStreamKey, writeNewStreamToDB } from "./firestore-api.js";
+import { connectMuxRoomDB, getStreamKey } from "./firestore-api.js";
 import { logError, logInfo } from "./logger.js";
 
 import { RequestHandler } from "express";
@@ -22,7 +22,7 @@ export const createAndReturnStreamKey : RequestHandler = async (req, res) => {
       if (streamKey == undefined || muxID == undefined) {
         throw Error(`MUX Didn't create the stream key and ID for ${roomID}`);
       } 
-      await writeNewStreamToDB(roomID, muxID, streamKey);
+      await connectMuxRoomDB(roomID, muxID, streamKey);
       key = streamKey;
     } else {
       key = cachedKey;
