@@ -27,7 +27,6 @@ export const streamUpdateWasReceived: RequestHandler = async (req, res) => {
     logInfo("** [POST] getStream HOOK")
     try {
         if (!req.body || !req.body.type) { 
-            console.log(req.body);
             throw Error("Badly formatted webhook");
          }
         const hook = req.body;
@@ -89,12 +88,12 @@ export const streamUpdateWasReceived: RequestHandler = async (req, res) => {
 
 export const createStreamAdminToken: RequestHandler = async (req, res) => {
     const roomId = req.params.id;
-
+    
     if (!roomId) {
         res.status(400).send("No room ID provided");
         return;
     }
-
+    console.log("> Creating stream admin token for room " + roomId);
     try {
         // exp is optional (by default the token is valid for an hour)
         const exp = Math.round(new Date().getTime() / 1000) + 60 * 60;
