@@ -109,24 +109,6 @@ export const createStreamAdminToken: RequestHandler = async (req, res) => {
     }
 }
 
-export const getOrCreateStreamCall: RequestHandler = async (req, res) => {
-    const roomId = req.params.id;
-
-    if (!roomId) {
-        res.status(400).send("No room ID provided");
-        return;
-    }
-
-    try {
-        const callId = getOrCreateCall(roomId);
-        res.send({ callId: callId });
-    } catch (e) {
-        logError(getErrorMessage(e));
-        res.status(500).send("Error creating Stream call");
-        return;
-    }
-}
-
 const getOrCreateCall = async (roomId: string) => {
     const roomData = await getRoom(roomId);
     let callId = roomData?.['stream_playback_id'];
