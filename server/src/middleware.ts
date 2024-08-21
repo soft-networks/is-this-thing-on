@@ -42,6 +42,9 @@ export const verifyThingAdmin: RequestHandler = async (req, res, next) => {
     return res.sendStatus(403);
   }
 
+  /**
+   * Verifies the authenticity of webhook requests from Stream.
+   */
   export const verifyStreamIdentity: RequestHandler = async (req, res, next) => {
     const signature = req.headers["x-signature"] as string;
     const valid = signature && client.verifyWebhook(JSON.stringify(req.body), signature);

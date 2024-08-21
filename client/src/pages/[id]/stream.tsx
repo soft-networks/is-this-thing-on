@@ -126,7 +126,11 @@ const AdminStreamPanel: React.FC<{
     };
 
     const setCall = async () => {
-      const adminToken = await auth.currentUser?.getIdToken();
+      if (!auth.currentUser) {
+        throw Error("Current user is unexpectedly null");
+      }
+
+      const adminToken = await auth.currentUser.getIdToken();
       const creds = await getStreamAdminCredentials(adminToken, roomID);
 
       const myClient = new StreamVideoClient({
