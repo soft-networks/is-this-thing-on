@@ -7,14 +7,19 @@ import { useRoomStore } from "../../stores/roomStore";
 import AccountButton from "../account/accountButton";
 import Ring from "../rings/smallRing";
 import { syncTotalOnline } from "../../lib/firestore";
+import classNames from "classnames";
+import { useMediaQuery } from "react-responsive";
 
 const Footer: React.FC = () => {
   const ring = useRingStore(useCallback((s) => s.links, []));
   const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));
+  const isMobile = useMediaQuery({ maxWidth: 768 });
   return (
     <footer className="align-end:fixed fullWidth uiLayer">
       {ring && roomID && ring[roomID] && (
-        <div className="uiLayer padded:s-1 centerh:absolute align-end:absolute  overflowVisible showOnHoverSelfTrigger ">
+        <div className={classNames("uiLayer padded:s-1 align-end:absolute overflowVisible", {
+          "centerh:absolute": isMobile
+        })}>
           <Ring collapsed />
         </div>
       )}
@@ -25,7 +30,6 @@ const Footer: React.FC = () => {
         {roomID ? <NumOnlineRoom /> : <NumOnlineTotal />}
         <HomeButton />
         <AccountButton />
-        
       </div>
     </footer>
   );
@@ -41,7 +45,7 @@ const HomeButton: React.FC = () => {
     </Link>
   ) : (
     <Link href={"/"} passHref>
-      <div className="padded:s-3 border clickable whiteFill contrastFill:hover showOnHoverSelfTrigger">
+      <div className="padded:s-3 border clickable whiteFill contrastFill:hover">
         home
       </div>
     </Link>

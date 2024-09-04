@@ -756,7 +756,7 @@ a:hover,
 .videoMob {
   position: absolute;
   inset: 0;
-  min-width: 100vw;
+  min-width: 100vw; 
   min-height: 100vh;
   overflow: hidden;
   object-fit: cover;
@@ -951,23 +951,23 @@ input:focus {
   }
 }
 
-@media screen and (max-width: 800px) {
-  #mobileMessage {
-    visibility: visible;
-    opacity: 1;
+@media screen and (max-width: 768px) {
+  .chat {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    padding: var(--s0);
+    display: flex;
+    flex-direction: column;
   }
-  #desktopMessage {
-    visibility: hidden;
-    opacity: 0;
+  .chat > div:first-child {
+    max-height: 100% !important;
+    flex-grow: 1;
   }
 }
 @media screen and (min-width: 801px) {
-  #desktopMessage {
-    visibility: visible;
-    opacity: 1;
-  }
-  #mobileMessage {
-    visibility: hidden;
-    opacity: 0;
-  }
+ 
 }

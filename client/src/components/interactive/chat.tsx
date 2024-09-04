@@ -21,6 +21,7 @@ import {
 import useRingStore from "../../stores/ringStore";
 import { useRoomStore } from "../../stores/roomStore";
 import { useUserStore } from "../../stores/userStore";
+import { useMediaQuery } from "react-responsive";
 
 const DEFAULT_STYLE = (roomColor: string, globalStyle: boolean) =>
   ({
@@ -63,7 +64,7 @@ export const Chat: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
   let [lastRecalculationUpdate, setLastRecalculationUpdate] = useState<number>(
     Date.now(),
   );
-  let [minimizeChat, setMinimizeChat] = useState<boolean>(false);
+  let isMobile = useMediaQuery({ maxWidth: 768 });
 
   useEffect(() => {
     setLastRecalculationUpdate(Date.now());
@@ -112,79 +113,65 @@ export const Chat: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
       ref={chatRef}
       id="chat"
     >
-      {!minimizeChat && (
-        <div
-          className="stack:s-2 scrollOnHover"
-          style={
-            {
-              "--spacing": "var(--s-2)",
-              flexDirection: "column-reverse",
-              maxHeight: `${CHAT_HEIGHT * 100}vh`,
-              paddingBottom: "var(--s-1)",
-              paddingTop: "var(--s1)",
-            } as React.CSSProperties
-          }
-          onScroll={() => {
-            console.log("SCROLLING");
-            setLastRecalculationUpdate(Date.now());
-          }}
-        >
-          {Object.entries(chatList)
-            .sort((a, b) => b[1].timestamp - a[1].timestamp)
-            .map(([id, chat], index) => {
-              if (roomID && filterRoom && chat.roomID !== roomID) {
-                return null;
-              }
-              if (!filterRoom && chat.roomID !== "home") {
-                return null;
-              }
-              return (
-                <RenderChat
-                  alwaysShow={index <= 4}
-                  id={id}
-                  chat={chat}
-                  key={`chat-${id}`}
-                  lastRecalculationUpdate={lastRecalculationUpdate}
-                />
-              );
-            })}
-        </div>
-      )}
+      <div
+        className="stack:s-2 scrollOnHover"
+        style={
+          {
+            "--spacing": "var(--s-2)",
+            flexDirection: "column-reverse",
+            maxHeight: `${CHAT_HEIGHT * 100}vh`,
+            paddingBottom: "var(--s-1)",
+            paddingTop: "var(--s1)",
+          } as React.CSSProperties
+        }
+        onScroll={() => {
+          console.log("SCROLLING");
+          setLastRecalculationUpdate(Date.now());
+        }}
+      >
+        {Object.entries(chatList)
+          .sort((a, b) => b[1].timestamp - a[1].timestamp)
+          .map(([id, chat], index) => {
+            if (roomID && filterRoom && chat.roomID !== roomID) {
+              return null;
+            }
+            if (!filterRoom && chat.roomID !== "home") {
+              return null;
+            }
+            return (
+              <RenderChat
+                alwaysShow={index <= 4}
+                id={id}
+                chat={chat}
+                key={`chat-${id}`}
+                lastRecalculationUpdate={lastRecalculationUpdate}
+              />
+            );
+          })}
+      </div>
       <div className="stack:s-2" style={whiteText ? { color: "black" } : {}}>
-        {!minimizeChat && <ChatInput onSubmit={sendNewMessage} />}
+        <ChatInput onSubmit={sendNewMessage} />
         {roomID && (
-          <div className="horizontal-stack:s-2">
+          <div className="horizontal-stack:noGap fullWidth">
             <div
               className={classNames(
-                "clickable whiteFill border center-text padded:s-3 contrastFill:hover",
+                "flex-1 clickable whiteFill border  center-text padded:s-3",
+                { contrastFill: filterRoom },
               )}
-              onClick={() => setMinimizeChat(!minimizeChat)}
+              onClick={() => setFilterRoom(true)}
+              style={{ borderRight: 0 }}
             >
-              {minimizeChat ? "open chat" : "minimize"}
+              {roomName ? getRoomNameForChat(roomName) : "room"} chat
             </div>
-            {!minimizeChat && (
-              <div className="horizontal-stack:noGap fullWidth">
-                <div
-                  className={classNames(
-                    "flex-1 clickable whiteFill border  center-text padded:s-3",
-                    { contrastFill: filterRoom },
-                  )}
-                  onClick={() => setFilterRoom(true)}
-                  style={{ borderRight: 0 }}
-                >
-                  {roomName ? getRoomNameForChat(roomName) : "room"} chat
-                </div>
-                <div
-                  className={classNames(
-                    "flex-1 clickable whiteFill border center-text padded:s-3",
-                    { contrastFill: !filterRoom },
-                  )}
-                  onClick={() => setFilterRoom(false)}
-                >
-                  thing chat
-                </div>
-              </div>
-            )}
+            <div
+              className={classNames(
+                "flex-1 clickable whiteFill border center-text padded:s-3",
+                { contrastFill: !filterRoom },
+              )}
+              onClick={() => setFilterRoom(false)}
+            >
+              thing chat
+            </div>
           </div>
         )}
       </div>
@@ -214,6 +201,7 @@ const RenderChat: React.FC<{
   const [myBlurPercentage, setMyBlurPercentage] = useState<number>(0);
   //Create a ref to reference the dom
   const myRef = useRef<HTMLDivElement>(null);
+  const isMobile = useMediaQuery({ maxWidth: 768 });
 
   useEffect(() => {
     if (myRef.current) {
@@ -226,7 +214,11 @@ const RenderChat: React.FC<{
         1,
       );
       //percentage = 0;
-      setMyBlurPercentage(percentage);
+      if (!isMobile) {
+        setMyBlurPercentage(percentage);
+      } else {
+        setMyBlurPercentage(1);
+      }
     }
   }, [myRef.current, lastRecalculationUpdate]);
 

@@ -18,10 +18,7 @@ const AccountButton: React.FunctionComponent = () => {
   return pathname !== "/account" ? (
     <Link href="/account" passHref>
       <div
-        className={classNames(
-          "whiteFill border contrastFill:hover padded:s-3 clickable clickable:link",
-          { showOnHoverSelfTrigger: pathname !== "/" },
-        )}
+        className={"whiteFill border contrastFill:hover padded:s-3 clickable clickable:link"}
         suppressHydrationWarning
       >
         {currentUser

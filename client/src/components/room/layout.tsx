@@ -7,6 +7,7 @@ import { logCallbackDestroyed, logCallbackSetup } from "../../lib/logger";
 import useRingStore from "../../stores/ringStore";
 import ClickGate from "./clickedGate";
 import Footer from "./footer";
+import { useMediaQuery } from "react-responsive";
 
 //TODO: Currently we have a listener for each ringNode. Can simplify, requires DB refactor.
 
@@ -18,6 +19,7 @@ const Layout: React.FunctionComponent<{
   const initializeRing = useRingStore(useCallback((s) => s.initializeRing, []));
   const updateRingStatus = useRingStore(useCallback((s) => s.updateStatus, []));
   const ringUnsubs = useRef<Unsubscribe[]>();
+
   useEffect(() => {
     async function setupSync() {
       logCallbackSetup("RingSyncs");

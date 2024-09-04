@@ -10,10 +10,12 @@ import Layout from "../components/room/layout";
 import { useRoomStore } from "../stores/roomStore";
 import { useUserStore } from "../stores/userStore";
 import { activePresenceHeartbeat, setUserPresenceHeartbeat } from "../lib/firestore";
+import { useMediaQuery } from "react-responsive";
 
 const Index: NextPage = () => {
   const changeRoom = useRoomStore((s) => s.changeRoom);
   const displayName = useUserStore(useCallback((s) => s.displayName, []))
+  const isMobile = useMediaQuery({ maxWidth: 768 });
 
   useEffect(() => {
     changeRoom(null);
@@ -34,22 +36,42 @@ const Index: NextPage = () => {
 
   return (
     <Layout>
-      <div
+      <Head>
+        <title>THING</title>
+      </Head>
+        {isMobile ? <IndexMobile /> : <IndexDesktop />}
+    </Layout>
+  );
+};
+
+const IndexDesktop = () => {
+  return (
+    <div
         className="fullBleed lightFill  relative stack backgroundFIll"
         style={{ "--roomColor": "yellow" } as React.CSSProperties}
       >
-        <Head>
-          <title>THING</title>
-        </Head>
-        <div className="fullBleed noOverflow">
-          <DomRing />
-          <div className="center:absolute highestLayer center-text">
-            is this thing on?
-          </div>
+      <div className="fullBleed noOverflow">
+        <DomRing />
+        <div className="center:absolute highestLayer center-text">
+          is this thing on?
         </div>
-        <Chat key="index-chat" />
       </div>
-    </Layout>
+      <Chat key="index-chat" />
+      </div>
+  );
+};
+
+const IndexMobile = () => {
+  return (
+    <div className="fullBleed stack lightFill noOverflow" style={{width: "100vw", height: "calc(100vh - 42px)" }}>
+      <div style={{height: "60%", width: "100%", position: "relative"}}>
+        <DomRing />
+        <div className="center:absolute highestLayer center-text">
+          is this thing on?
+        </div>
+      </div>
+      <Chat key={`index-chat`} />
+    </div>
   );
 };
 
