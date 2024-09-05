@@ -8,6 +8,7 @@ import useRingStore from "../../stores/ringStore";
 import ClickGate from "./clickedGate";
 import Footer from "./footer";
 import { useMediaQuery } from "react-responsive";
+import classnames from "classnames";
 
 //TODO: Currently we have a listener for each ringNode. Can simplify, requires DB refactor.
 
@@ -19,6 +20,7 @@ const Layout: React.FunctionComponent<{
   const initializeRing = useRingStore(useCallback((s) => s.initializeRing, []));
   const updateRingStatus = useRingStore(useCallback((s) => s.updateStatus, []));
   const ringUnsubs = useRef<Unsubscribe[]>();
+  const isMobile = useMediaQuery({ maxWidth: 768 });
 
   useEffect(() => {
     async function setupSync() {
@@ -34,7 +36,7 @@ const Layout: React.FunctionComponent<{
   }, []);
   return (
     <div
-      className="fullBleed crazyFill relative"
+      className={classnames("fullBleed lightFill relative", {"stack:noGap": isMobile})}
       key="layout"
       style={
         roomColor ? ({ "--roomColor": roomColor } as React.CSSProperties) : {}

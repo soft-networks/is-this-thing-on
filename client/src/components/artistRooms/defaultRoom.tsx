@@ -15,7 +15,7 @@ interface RoomViewProps {
 
 
 const DefaultRoomMobileContent = ({ chatStyle, roomInfo }: RoomViewProps & { roomInfo: any }) => (
-  <div className="fullBleed stack" style={{height: "calc(100% - 42px)"}}>
+  <div className="fullBleed stack">
     <Chat key={`${roomInfo.roomID}-chat`} style={chatStyle} />
   </div>
 );

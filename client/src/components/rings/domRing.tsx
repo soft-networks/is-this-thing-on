@@ -37,21 +37,27 @@ const NodeElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number; isMobile:
   offsetN,
   isMobile,
 }) => {
+  const router = useRouter();
+  const onClick = useCallback(() => {
+    console.log("navigating to room", roomInfo.roomID);
+    router.push(roomIDToHREF(roomInfo.roomID));
+  }, [roomInfo.roomID, router]);
+
   if (roomIsActive(roomInfo)) {
     if (isMobile) {
-      return <OnlineElementSimple roomInfo={roomInfo} offsetN={offsetN} />;
+      return <OnlineElementSimple roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />;
     } else {
-      return <OnlineElement roomInfo={roomInfo} offsetN={offsetN} />;
+      return <OnlineElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />;
     }
   } else {
-    return <OfflineElement roomInfo={roomInfo} offsetN={offsetN} />;
+    return <OfflineElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick}/>;
   }
 };
-const OnlineElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number }> = ({
+const OnlineElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number, onClick: () => void }> = ({
   roomInfo,
   offsetN,
+  onClick,
 }) => {
-  const router = useRouter();
   const [isHovering, setIsHovering] = useState<boolean>(false);
 
   return (
@@ -63,9 +69,9 @@ const OnlineElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number }> = ({
           "--animEnd": 100 + offsetN + "%",
         } as React.CSSProperties
       }
-      onClick={() => router.push(roomIDToHREF(roomInfo.roomID))}
       onMouseOver={() => setIsHovering(true)}
       onMouseOut={() => setIsHovering(false)}
+      onClick={onClick}
     >
       <div className="homepageVideo noOverflow border">
         {roomInfo.previewOverlay && (
@@ -95,10 +101,12 @@ const OnlineElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number }> = ({
 };
 
 
-const OnlineElementSimple: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number }> = ({
+const OnlineElementSimple: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number, onClick: () => void }> = ({
   roomInfo,
   offsetN,
+  onClick,
 }) => {
+
   return (
     <div
       className="antiRotate homepageLabel smallElementOnEllipse padded:s-2 border whiteFill"
@@ -109,15 +117,17 @@ const OnlineElementSimple: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number }>
           backgroundColor: roomInfo.roomColor,
         } as React.CSSProperties
       }
+      onClick={onClick}
     >
       {roomInfo.roomName} is online
     </div>
   );
 };
 
-const OfflineElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number }> = ({
+const OfflineElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number, onClick: () => void }> = ({
   roomInfo,
-  offsetN,
+  offsetN, 
+  onClick,
 }) => {
   return (
     <div
@@ -126,9 +136,10 @@ const OfflineElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number }> = ({
         {
           "--animStart": offsetN + "%",
           "--animEnd": 100 + offsetN + "%",
-          backgroundColor: "white",
+          backgroundColor: "var(--gray)",
         } as React.CSSProperties
       }
+      onClick={onClick}
     >
       {roomInfo.roomName} is offline
     </div>

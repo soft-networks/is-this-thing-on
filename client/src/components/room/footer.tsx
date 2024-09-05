@@ -15,17 +15,16 @@ const Footer: React.FC = () => {
   const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));
   const isMobile = useMediaQuery({ maxWidth: 768 });
   return (
-    <footer className="align-end:fixed fullWidth uiLayer">
+    <footer className={classNames("fullWidth uiLayer horizontal-stack", {"align-end:fixed": !isMobile, "relative": isMobile})}>
       {ring && roomID && ring[roomID] && (
-        <div className={classNames("uiLayer padded:s-1 align-end:absolute overflowVisible", {
-          "centerh:absolute": isMobile
+        <div className={classNames("uiLayer padded:s-1 overflowVisible", {
+          "centerh:absolute": !isMobile
         })}>
           <Ring collapsed />
         </div>
       )}
       <div
-        className="uiLayer horizontal-stack:s-2 padded:s-1 "
-        style={{ position: "absolute", bottom: 0, right: 0 }}
+        className="uiLayer horizontal-stack:s-2 padded:s-1 align-end"
       >
         {roomID ? <NumOnlineRoom /> : <NumOnlineTotal />}
         <HomeButton />

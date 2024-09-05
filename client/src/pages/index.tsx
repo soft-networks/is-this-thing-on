@@ -63,14 +63,16 @@ const IndexDesktop = () => {
 
 const IndexMobile = () => {
   return (
-    <div className="fullBleed stack lightFill noOverflow" style={{width: "100vw", height: "calc(100vh - 42px)" }}>
-      <div style={{height: "60%", width: "100%", position: "relative"}}>
+    <div className="fullBleed stack noOverflow">
+      <div style={{height: "50%", width: "100%", position: "relative"}}>
         <DomRing />
         <div className="center:absolute highestLayer center-text">
           is this thing on?
         </div>
       </div>
+      <div className="flex-1 relative">
       <Chat key={`index-chat`} />
+      </div>
     </div>
   );
 };
