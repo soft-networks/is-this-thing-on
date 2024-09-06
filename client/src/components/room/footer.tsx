@@ -5,29 +5,25 @@ import { useCallback, useEffect, useState } from "react";
 import useRingStore from "../../stores/ringStore";
 import { useRoomStore } from "../../stores/roomStore";
 import AccountButton from "../account/accountButton";
-import Ring from "../rings/smallRing";
+import Ring, { HomeRing } from "../rings/smallRing";
 import { syncTotalOnline } from "../../lib/firestore";
 import classNames from "classnames";
 import { useMediaQuery } from "react-responsive";
 
 const Footer: React.FC = () => {
-  const ring = useRingStore(useCallback((s) => s.links, []));
-  const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));
+  const { pathname } = useRouter();
   const isMobile = useMediaQuery({ maxWidth: 768 });
   return (
     <footer className={classNames("fullWidth uiLayer horizontal-stack", {"align-end:fixed": !isMobile, "relative": isMobile})}>
-      {ring && roomID && ring[roomID] && (
         <div className={classNames("uiLayer padded:s-1 overflowVisible", {
           "centerh:absolute": !isMobile
         })}>
-          <Ring collapsed />
+          {pathname == "/" ?  <HomeRing  /> : <Ring collapsed />}
         </div>
-      )}
       <div
         className="uiLayer horizontal-stack:s-2 padded:s-1 align-end"
       >
-        {roomID ? <NumOnlineRoom /> : <NumOnlineTotal />}
-        <HomeButton />
+        {pathname == "/" ?  <NumOnlineTotal />: <NumOnlineTotal/> }
         <AccountButton />
       </div>
     </footer>
@@ -39,13 +35,13 @@ const HomeButton: React.FC = () => {
   return pathname == "/" ? (
     <Link href={"/about"} passHref>
       <div className="padded:s-3 border clickable whiteFill contrastFill:hover">
-        about
+        ?
       </div>
     </Link>
   ) : (
     <Link href={"/"} passHref>
       <div className="padded:s-3 border clickable whiteFill contrastFill:hover">
-        home
+      *
       </div>
     </Link>
   );
@@ -53,7 +49,7 @@ const HomeButton: React.FC = () => {
 
 const NumOnlineRoom: React.FC = () => {
   const numOnline = useRoomStore(useCallback((state) => state.roomInfo?.numOnline, []));
-  return <div className="padded:s-3 border whiteFill">{numOnline} in room</div>;
+  return <div className="padded:s-3 border whiteFill">{numOnline}</div>;
 };
 
 const NumOnlineTotal: React.FC = () => {
@@ -70,7 +66,7 @@ const NumOnlineTotal: React.FC = () => {
       }
     };
   }, []);
-  return <div className="padded:s-3 border whiteFill">{numOnline} on thing</div>;
+  return <div className="padded:s-3 border whiteFill">{numOnline}</div>;
 };
 
 export default Footer;

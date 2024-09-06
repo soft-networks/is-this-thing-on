@@ -101,7 +101,7 @@ export const Chat: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
   }, [filterRoom]);
   return (
     <div
-      className={(className || "") + " chat uiLayer"}
+      className={(className || "") + " chat highestLayer"}
       style={
         filterRoom
           ? { ...DEFAULT_STYLE(roomColor || "gray", filterRoom), ...style }
@@ -278,7 +278,7 @@ const ChatInput: React.FC<{
       <input
         value={currentMessage}
         placeholder={`chat as ${displayName}`}
-        className="padded:s-1 flex-1 whiteFill border "
+        className="padded:s-2 flex-1 whiteFill border "
         onChange={(e) => {
           setCurrentMessage(e.target.value);
         }}
@@ -290,7 +290,7 @@ const ChatInput: React.FC<{
       />
       <div
         onClick={submitMessage}
-        className="clickable padded:s-1 backgroundFill border contrastFill"
+        className="clickable padded:s-2 backgroundFill border contrastFill"
         style={{ borderLeft: "none" }}
       >
         send

@@ -22,6 +22,19 @@ const Layout: React.FunctionComponent<{
   const ringUnsubs = useRef<Unsubscribe[]>();
   const isMobile = useMediaQuery({ maxWidth: 768 });
 
+
+  useEffect(() => {
+    const setViewportHeight = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+
+    setViewportHeight();
+    window.addEventListener('resize', setViewportHeight);
+
+    return () => window.removeEventListener('resize', setViewportHeight);
+  }, []);
+
   useEffect(() => {
     async function setupSync() {
       logCallbackSetup("RingSyncs");
@@ -36,7 +49,7 @@ const Layout: React.FunctionComponent<{
   }, []);
   return (
     <div
-      className={classnames("fullBleed lightFill relative", {"stack:noGap": isMobile})}
+      className={classnames("fullScreen lightFill relative noOverflow", {"stack:noGap": isMobile})}
       key="layout"
       style={
         roomColor ? ({ "--roomColor": roomColor } as React.CSSProperties) : {}

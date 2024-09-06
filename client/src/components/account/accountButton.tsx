@@ -24,6 +24,7 @@ const AccountButton: React.FunctionComponent = () => {
         {currentUser
           ? currentUser.displayName || currentUser.email
           : `${displayName}`}
+          
       </div>
     </Link>
   ) : (
