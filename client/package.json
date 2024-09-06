@@ -26,7 +26,6 @@
     "react-dom": "^18.3.1",
     "react-draggable": "^4.4.4",
     "react-player": "^2.9.0",
-    "react-responsive": "^10.0.0",
     "react-use-measure": "^2.1.1",
     "slugify": "^1.6.5",
     "zustand": "^4.0.0-rc.1"

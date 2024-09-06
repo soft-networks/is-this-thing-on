@@ -10,12 +10,12 @@ import Layout from "../components/room/layout";
 import { useRoomStore } from "../stores/roomStore";
 import { useUserStore } from "../stores/userStore";
 import { activePresenceHeartbeat, setUserPresenceHeartbeat } from "../lib/firestore";
-import { useMediaQuery } from "react-responsive";
+import useMediaQuery from "../stores/useMediaQuery";
 
 const Index: NextPage = () => {
   const changeRoom = useRoomStore((s) => s.changeRoom);
   const displayName = useUserStore(useCallback((s) => s.displayName, []))
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isMobile = useMediaQuery();
 
   useEffect(() => {
     changeRoom(null);

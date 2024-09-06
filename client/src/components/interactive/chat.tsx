@@ -21,7 +21,7 @@ import {
 import useRingStore from "../../stores/ringStore";
 import { useRoomStore } from "../../stores/roomStore";
 import { useUserStore } from "../../stores/userStore";
-import { useMediaQuery } from "react-responsive";
+import useMediaQuery from "../../stores/useMediaQuery";
 
 const DEFAULT_STYLE = (roomColor: string, globalStyle: boolean) =>
   ({
@@ -64,7 +64,6 @@ export const Chat: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
   let [lastRecalculationUpdate, setLastRecalculationUpdate] = useState<number>(
     Date.now(),
   );
-  let isMobile = useMediaQuery({ maxWidth: 768 });
 
   useEffect(() => {
     setLastRecalculationUpdate(Date.now());
@@ -201,7 +200,7 @@ const RenderChat: React.FC<{
   const [myBlurPercentage, setMyBlurPercentage] = useState<number>(0);
   //Create a ref to reference the dom
   const myRef = useRef<HTMLDivElement>(null);
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isMobile = useMediaQuery();
 
   useEffect(() => {
     if (myRef.current) {

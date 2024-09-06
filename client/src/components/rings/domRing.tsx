@@ -4,11 +4,11 @@ import { useCallback, useMemo, useState } from "react";
 import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
 import { roomIsActive } from "../../stores/roomStore";
 import VideoPreview from "../videoPreview";
-import { useMediaQuery } from "react-responsive";
+import useMediaQuery from "../../stores/useMediaQuery";
 
 const DomRing = () => {
   const ring = useRingStore(useCallback((s) => s.links, []));
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isMobile = useMediaQuery();
   const domElements = useMemo(() => {
     const numKeys = Object.keys(ring).length;
     const spacePerElement = 100 / numKeys;

@@ -8,11 +8,11 @@ import AccountButton from "../account/accountButton";
 import Ring, { HomeRing } from "../rings/smallRing";
 import { syncTotalOnline } from "../../lib/firestore";
 import classNames from "classnames";
-import { useMediaQuery } from "react-responsive";
+import useMediaQuery from "../../stores/useMediaQuery";
 
 const Footer: React.FC = () => {
   const { pathname } = useRouter();
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isMobile = useMediaQuery();
   return (
     <footer className={classNames("fullWidth uiLayer horizontal-stack", {"align-end:fixed": !isMobile, "relative": isMobile})}>
         <div className={classNames("uiLayer padded:s-1 overflowVisible", {
