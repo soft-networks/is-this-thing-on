@@ -73,7 +73,7 @@ const OnlineElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number, onClick
       onMouseOut={() => setIsHovering(false)}
       onClick={onClick}
     >
-      <div className="homepageVideo noOverflow border">
+      <div className="homepageVideo noOverflow border hideOnMobile">
         {roomInfo.previewOverlay && (
           <div className="absoluteOrigin fullBleed highestLayer">
             <img

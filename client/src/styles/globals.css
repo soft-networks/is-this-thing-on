@@ -996,6 +996,9 @@ input:focus {
   .quarterWidth {
     max-inline-size: 100%;
   }
+  .hideOnMobile, video {
+    display: none;
+  }
 }
 @media screen and (min-width: 801px) {
  
