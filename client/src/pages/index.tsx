@@ -44,7 +44,11 @@ const Index: NextPage = () => {
         <div className="fullBleed noOverflow">
           <DomRing />
           <div className="center:absolute highestLayer center-text">
-            is this thing on?
+          <a href="/about">thing.tube</a>
+          <br/>
+            next stream: 10/12/24
+            <br/>
+            @MoMI
           </div>
         </div>
         <Chat key="index-chat" />
