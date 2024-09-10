@@ -10,6 +10,7 @@
     "format-check": "prettier --check '**/*.{js,json,md,mdx,ts,tsx,scss,yaml,yml}'"
   },
   "dependencies": {
+    "14": "^3.1.6",
     "@honeycombio/opentelemetry-web": "^0.5.0",
     "@mux/mux-player-react": "^1.11.2",
     "@mux/mux-video-react": "^0.7.0",
