@@ -3,14 +3,13 @@ import { NextPage } from "next";
 
 import Head from "next/head";
 import React, { useCallback, useEffect } from "react";
-
 import { Chat } from "../components/interactive/chat";
-import DomRing from "../components/rings/domRing";
 import Layout from "../components/room/layout";
 import { useRoomStore } from "../stores/roomStore";
 import { useUserStore } from "../stores/userStore";
 import { activePresenceHeartbeat, setUserPresenceHeartbeat } from "../lib/firestore";
 import useMediaQuery from "../stores/useMediaQuery";
+import DomRing from "../components/rings/domRing";
 
 const Index: NextPage = () => {
   const changeRoom = useRoomStore((s) => s.changeRoom);

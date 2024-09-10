@@ -23,7 +23,7 @@ const DomRing = () => {
       );
     });
     return elements;
-  }, [ring]);
+  }, [ring, isMobile]);
 
   return (
     <div id="rotatingEllipseContainer" className="stickerLayer">
