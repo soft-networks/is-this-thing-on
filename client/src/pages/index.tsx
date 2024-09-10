@@ -63,7 +63,7 @@ const IndexDesktop = () => {
 const IndexMobile = () => {
   return (
     <div className="fullBleed stack noOverflow">
-      <div style={{height: "50%", width: "100%", position: "relative"}}>
+      <div style={{height: "40%", width: "100%", position: "relative"}}>
         <DomRing />
         <div className="center:absolute highestLayer center-text">
           is this thing on?

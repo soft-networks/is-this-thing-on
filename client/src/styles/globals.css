@@ -784,6 +784,20 @@ a:hover,
   left: 0;
   padding: var(--s-1);
 }
+.chatScrollContainer { 
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+.chatScrollContainer::-webkit-scrollbar { /* WebKit */
+  width: 0;
+  height: 0;
+}
+
+
 .chat .contrastColor\:hover:hover {
   color: var(--chatAuthorColor);
 }
@@ -860,6 +874,7 @@ input,
 input::placeholder {
   font-family: "Manifont Grotesk", monospace;
   font: var(--s0);
+  border-radius: 0; /* Add this line */
 }
 
 input:focus {
@@ -999,7 +1014,25 @@ input:focus {
   .hideOnMobile, video {
     display: none;
   }
-}
+
+  .homepageLabel {
+   width: 80px;
+   height: 48px;
+  }
+
+  .chat::before {
+    content: '';
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background: linear-gradient(0deg, rgba(236, 236, 236, 0.0) 0%, rgba(236, 236, 236, 0.0) 70%, rgba(236, 236, 236, 1) 100%);
+  }
+  }
 @media screen and (min-width: 801px) {
  
 }

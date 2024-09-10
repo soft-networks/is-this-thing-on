@@ -113,7 +113,7 @@ export const Chat: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
       id="chat"
     >
       <div
-        className="stack:s-2 scrollOnHover"
+        className="stack:s-2 chatScrollContainer"
         style={
           {
             "--spacing": "var(--s-2)",
