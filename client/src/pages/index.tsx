@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import { NextPage } from "next";
-
 import Head from "next/head";
 import React, { useCallback, useEffect } from "react";
 import { Chat } from "../components/interactive/chat";
@@ -16,22 +15,24 @@ const Index: NextPage = () => {
   const displayName = useUserStore(useCallback((s) => s.displayName, []))
   const isMobile = useMediaQuery();
 
-  useEffect(() => {
-    changeRoom(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+ useEffect(() => {
+   changeRoom(null);
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+ }, []);
 
-  useEffect(() => {
-    if (displayName) {
-      setUserPresenceHeartbeat(displayName, "home");
-    }
-    return () => {
-      // Clear the active timeout when unmounting or changing rooms
-      if (activePresenceHeartbeat) {
-        clearTimeout(activePresenceHeartbeat);
-      }
-    };
-  }, [displayName]);
+
+ useEffect(() => {
+   if (displayName) {
+     setUserPresenceHeartbeat(displayName, "home");
+   }
+   return () => {
+     // Clear the active timeout when unmounting or changing rooms
+     if (activePresenceHeartbeat) {
+       clearTimeout(activePresenceHeartbeat);
+     }
+   };
+ }, [displayName]);
+
 
   return (
     <Layout>
@@ -75,5 +76,6 @@ const IndexMobile = () => {
     </div>
   );
 };
+
 
 export default Index;

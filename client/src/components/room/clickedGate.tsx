@@ -22,7 +22,7 @@ const ClickGate: React.FunctionComponent = ({ children }) => {
         id="desktopMessage"
         className="h1 center:absolute uiLayer center-text"
       >
-        WELCOME TO THING.
+        WELCOME TO THING.TUBE
         <br />
         CLICK 2 ENTER
       </div>
