@@ -560,6 +560,9 @@ pre {
   text-decoration: underline;
 }
 
+.underline {
+  text-decoration: underline;
+}
 .noUnderline * {
   text-decoration: none;
 }
