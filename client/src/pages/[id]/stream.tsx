@@ -208,11 +208,7 @@ const LivestreamView = ({
   const { useCameraState, useMicrophoneState, useIsCallLive, useParticipants } =
     useCallStateHooks();
 
-  const {
-    camera: cam,
-    selectedDevice: cameraId,
-    isEnabled: isCamEnabled,
-  } = useCameraState();
+  const { camera: cam, isEnabled: isCamEnabled } = useCameraState();
   const { microphone: mic, isEnabled: isMicEnabled } = useMicrophoneState();
   const [camDevices, setCamDevices] = useState<MediaDeviceInfo[]>([]);
   const [micDevices, setMicDevices] = useState<MediaDeviceInfo[]>([]);
