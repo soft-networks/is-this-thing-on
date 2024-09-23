@@ -1,6 +1,5 @@
 import {
   Call,
-  LivestreamLayout,
   ParticipantView,
   StreamCall,
   StreamVideo,
@@ -209,8 +208,14 @@ const LivestreamView = ({
   const { useCameraState, useMicrophoneState, useIsCallLive, useParticipants } =
     useCallStateHooks();
 
-  const { camera: cam, isEnabled: isCamEnabled } = useCameraState();
+  const {
+    camera: cam,
+    selectedDevice: cameraId,
+    isEnabled: isCamEnabled,
+  } = useCameraState();
   const { microphone: mic, isEnabled: isMicEnabled } = useMicrophoneState();
+  const [camDevices, setCamDevices] = useState<MediaDeviceInfo[]>([]);
+  const [micDevices, setMicDevices] = useState<MediaDeviceInfo[]>([]);
 
   const isLive = useIsCallLive();
   const [isInCall, setIsInCall] = useState<boolean>(false);
@@ -241,12 +246,33 @@ const LivestreamView = ({
     return leaveCall();
   }, []);
 
+  useEffect(() => {
+    call.camera
+      .listDevices()
+      .subscribe({ next: setCamDevices, error: console.error });
+  }, [isCamEnabled]);
+
+  useEffect(() => {
+    call.microphone
+      .listDevices()
+      .subscribe({ next: setMicDevices, error: console.error });
+  }, [isMicEnabled]);
+
   const VIDEO = 2;
   const liveParticipants = participants.filter((p) =>
     p.publishedTracks.includes(VIDEO),
   );
 
-  console.log({ isLive, participants, liveParticipants });
+  console.log({
+    camDevices,
+    micDevices,
+    isLive,
+    participants,
+    liveParticipants,
+  });
+
+  const labeledCamDevices = camDevices.filter((device) => device.label);
+  const labeledMicDevices = micDevices.filter((device) => device.label);
 
   let panelRef = createRef<HTMLDivElement>();
 
@@ -316,6 +342,21 @@ const LivestreamView = ({
                 >
                   {isCamEnabled ? "Disable camera" : "Enable camera"}
                 </button>
+                {labeledCamDevices.length > 0 && (
+                  <select
+                    value={call.camera.state.selectedDevice}
+                    onChange={(event) => call.camera.select(event.target.value)}
+                    className="padded:s-2"
+                  >
+                    {labeledCamDevices.map((device) => {
+                      return (
+                        <option key={device.deviceId} value={device.deviceId}>
+                          {device.label}
+                        </option>
+                      );
+                    })}
+                  </select>
+                )}
                 <button
                   className={classNames(
                     "padded:s-2 clickable",
@@ -325,6 +366,23 @@ const LivestreamView = ({
                 >
                   {isMicEnabled ? "Mute Mic" : "Unmute Mic"}
                 </button>
+                {labeledMicDevices.length > 0 && (
+                  <select
+                    value={call.microphone.state.selectedDevice}
+                    onChange={(event) =>
+                      call.microphone.select(event.target.value)
+                    }
+                    className="padded:s-2"
+                  >
+                    {labeledMicDevices.map((device) => {
+                      return (
+                        <option key={device.deviceId} value={device.deviceId}>
+                          {device.label}
+                        </option>
+                      );
+                    })}
+                  </select>
+                )}
                 <br />
                 <hr />
                 <br />
