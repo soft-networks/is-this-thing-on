@@ -93,7 +93,7 @@ const LivestreamView = ({ muted }: { muted: boolean }) => {
     />
   ) : (
     <div className="center:absolute whiteFill border padded:s1 highestLayer">
-      offline... for now
+      no video yet
     </div>
   );
 };

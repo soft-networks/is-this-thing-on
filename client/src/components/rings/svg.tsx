@@ -149,7 +149,7 @@ export const NodeLink: React.FC<NodeLinkProps> = ({
 }) => {
   const text = useMemo(
     () =>
-      `${link.roomName} is ${link.streamStatus.includes("active") ? "online" : "offline"}`,
+      `${link.roomName} is ${link.streamStatus.includes("active") ? "on" : "off"}`,
     [link.roomName, link.streamStatus],
   );
   return (
@@ -158,7 +158,7 @@ export const NodeLink: React.FC<NodeLinkProps> = ({
       style={{
         backgroundColor: link.streamStatus.includes("active")
           ? "var(--roomColor)"
-          : "var(--white)",
+          : "var(--gray)",
       }}
     >
       {!noNav && link.streamStatus == "active" ? (

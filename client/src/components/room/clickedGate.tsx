@@ -26,12 +26,6 @@ const ClickGate: React.FunctionComponent = ({ children }) => {
         <br />
         CLICK 2 ENTER
       </div>
-      <div
-        id="mobileMessage"
-        className="h1 center:absolute uiLayer center-text"
-      >
-        PLEASE VISIT THING.TUBE <br /> ON A COMPUTER
-      </div>
     </div>
   );
 };

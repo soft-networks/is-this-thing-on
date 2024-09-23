@@ -15,8 +15,47 @@ const SmallRing: React.FC<RingProps> = ({ collapsed, noNav }) => {
   return ring && roomID ? (
     <FooterLogo ring={ring} roomID={roomID} />
   ) : (
-    <div> no links </div>
+    <></>
   );
+};
+
+export const HomeRing: React.FC<{ }> = ({}) => {
+  const ring = useRingStore(useCallback((s) => s.links, []));
+  const { push } = useRouter();
+
+  return <div className="centerh relative">
+  <div className="horizontal-stack:s-2">
+    <div
+      className="whiteFill clickable clickable:link border padded:s-3 contrastFill:hover"
+      onClick={() => {
+        const keys = Object.keys(ring);
+        if (keys.length > 0) {
+          const firstRoomID = keys[keys.length-1];
+          push(roomIDToHREF(firstRoomID));
+        }
+      }}
+    >
+      ←
+    </div>
+    <div
+      className={`border padded:s-3 center-text`}
+      style={{backgroundColor:  "var(--contrast)"}}
+    >
+      <span>home</span>
+    </div>    <div
+      className="whiteFill clickable clickable:link border padded:s-3 contrastFill:hover"
+      onClick={() => {
+        const keys = Object.keys(ring);
+        if (keys.length > 0) {
+          const firstRoomID = keys[0];
+          push(roomIDToHREF(firstRoomID));
+        }
+      }}
+    >
+      →
+    </div>
+  </div>
+</div>
 };
 
 const FooterLogo: React.FC<{ ring: WebRing; roomID: string }> = ({
@@ -32,15 +71,15 @@ const FooterLogo: React.FC<{ ring: WebRing; roomID: string }> = ({
   const navStream = useCallback(
     (n: number) => {
       let keys = Object.keys(ring);
-      n = n < 0 ? keys.length - 1 : n;
-      let nextKey = keys[n % keys.length];
-      push(roomIDToHREF(nextKey));
+      if (n == keys.length || n == -1) {
+        push("/");
+      } else {
+        n = n < 0 ? keys.length - 1 : n;
+        let nextKey = keys[n % keys.length];
+        push(roomIDToHREF(nextKey));
+      }
     },
     [push, ring],
-  );
-  const ringParts = useMemo(
-    () => SVGRingSeparate({ ring, currentlySelected: indexSelected }),
-    [indexSelected, ring],
   );
   return (
     <div className="centerh relative">
@@ -51,7 +90,7 @@ const FooterLogo: React.FC<{ ring: WebRing; roomID: string }> = ({
             indexSelected !== undefined && navStream(indexSelected - 1)
           }
         >
-          prev
+          ←
         </div>
         <NodeLink link={ring[roomID]} id={roomID} noNav />
         <div
@@ -60,7 +99,7 @@ const FooterLogo: React.FC<{ ring: WebRing; roomID: string }> = ({
             indexSelected !== undefined && navStream(indexSelected + 1)
           }
         >
-          next
+          →
         </div>
       </div>
     </div>

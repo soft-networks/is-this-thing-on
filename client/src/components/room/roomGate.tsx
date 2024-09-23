@@ -42,7 +42,7 @@ export const RoomStatusGate: React.FunctionComponent = ({ children }) => {
         </ConsentGate>
       )}
       {roomInfo && !roomIsActive(roomInfo) && (
-        <div className="center:absolute"> offline... for now</div>
+        <div className="fullBleed"><div className="center:absolute highestLayer"> offline... for now (archive here)</div></div>
       )}
     </>
   );
