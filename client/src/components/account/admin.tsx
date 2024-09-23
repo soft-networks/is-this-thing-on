@@ -1,8 +1,11 @@
+import { getStreamKey, resetRoom } from "../../lib/server-api";
 import { useEffect, useState } from "react";
 
+import { app } from "../../lib/firestore/init";
+import { getAuth } from "firebase/auth";
 import { getRoomsWhereUserISAdmin } from "../../lib/firestore";
-import { getStreamKey, resetRoom } from "../../lib/server-api";
 
+const auth = getAuth(app);
 /**
  * AdminView renders RoomAdminUI for each room that a user id admin for
  */
@@ -10,16 +13,23 @@ interface AdminViewProps {
   uid: string;
 }
 const Admin: React.FC<AdminViewProps> = ({ uid }) => {
-  const [rooms, setRooms] = useState<undefined | RoomInfo[]>(undefined);
+  const [state, setState] = useState<{
+    rooms?: RoomInfo[];
+    userToken?: string;
+  }>({});
+
   useEffect(() => {
     async function getRooms() {
-      let rooms = await getRoomsWhereUserISAdmin(uid);
-      setRooms(rooms);
+      let [rooms, userToken] = await Promise.all([
+        getRoomsWhereUserISAdmin(uid),
+        auth.currentUser?.getIdToken(),
+      ]);
+      setState({ rooms, userToken });
     }
     getRooms();
-  }, [uid]);
+  }, [auth.currentUser, uid]);
 
-  return rooms ? (
+  return state.rooms && state.userToken ? (
     <div className="stack padded border-thin lightFill">
       <em>Rooms you manage</em>
       <p>
@@ -28,12 +38,12 @@ const Admin: React.FC<AdminViewProps> = ({ uid }) => {
           rtmps://global-live.mux.com:443/app
         </span>
       </p>
-      {rooms.map((r) => (
+      {state.rooms.map((r) => (
         <RoomAdminUI
           roomID={r.roomID}
           playbackID={r.streamPlaybackID}
           key={r.roomName + "-adminView"}
-          uid={uid}
+          userToken={state.userToken || ""}
         />
       ))}
     </div>
@@ -45,8 +55,8 @@ const Admin: React.FC<AdminViewProps> = ({ uid }) => {
 const RoomAdminUI: React.FC<{
   roomID: string;
   playbackID?: string;
-  uid: string;
-}> = ({ roomID, playbackID, uid }) => {
+  userToken: string;
+}> = ({ roomID, playbackID, userToken }) => {
   return (
     <div className="stack padded border-thin">
       <div>
@@ -58,7 +68,7 @@ const RoomAdminUI: React.FC<{
       </div>
       <div
         onClick={() => {
-          resetRoom(roomID);
+          resetRoom(userToken, roomID);
         }}
         className="button"
       >

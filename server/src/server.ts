@@ -1,7 +1,8 @@
 import { createAndReturnStreamKey, muxAuthHelper } from "./muxAPI.js";
-import { createStreamAdminToken, getOrCreateStreamCall, streamUpdateWasReceived } from "./streamAPI.js";
+import { createStreamAdminToken, streamUpdateWasReceived } from "./streamAPI.js";
 import express, { Application } from "express";
 import { presenceProcessor, resetMuxFirestoreRelationship } from "./firestore-api.js";
+import { verifyStreamIdentity, verifyThingAdmin } from "./middleware.js";
 
 import bodyParser from "body-parser"
 import { createServer } from "http";
@@ -16,19 +17,18 @@ const httpServer = createServer(app);
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
 });
 app.get("/", (req, res) => {
   res.send("Server?");
 });
-app.get("/stream-key/:id", createAndReturnStreamKey);
+app.get("/stream-key/:id", verifyThingAdmin, createAndReturnStreamKey);
 app.post("/mux-hook", muxAuthHelper, muxUpdateWasReceived);
 
-app.post("/stream-hook", streamUpdateWasReceived);
-app.get("/stream/:id/token", createStreamAdminToken)
-app.get("stream/:id/call", getOrCreateStreamCall);
-app.get("/reset-room/:id", async (req,res) => {
+app.post("/stream-hook", verifyStreamIdentity, streamUpdateWasReceived);
+app.get("/stream/:id/token", verifyThingAdmin, createStreamAdminToken)
+app.get("/reset-room/:id", verifyThingAdmin, async (req,res) => {
   logUpdate(`Resetting room ${req.params.id}`);
   try {
     const roomID = req.params.id;
@@ -40,7 +40,6 @@ app.get("/reset-room/:id", async (req,res) => {
     res.status(500).send("Error resetting room")
   } 
 })
-
 
 httpServer.listen(port, () => {
   logUpdate(`Server is LIVE on port ${port}`);

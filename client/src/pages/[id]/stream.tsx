@@ -9,7 +9,9 @@ import {
 import { createRef, useCallback, useEffect, useMemo, useState } from "react";
 
 import Draggable from "react-draggable";
+import { app } from "../../lib/firestore/init";
 import classNames from "classnames";
+import { getAuth } from "firebase/auth";
 import { getRoomsWhereUserISAdmin } from "../../lib/firestore";
 import { getStreamAdminCredentials } from "../../lib/server-api";
 import { logError } from "../../lib/logger";
@@ -20,6 +22,7 @@ interface StreamConfig {
   apiKey: string;
   userId: string;
 }
+const auth = getAuth(app);
 
 /**
  * This page allows room administrators to create (or rejoin) a livestream and stream their audio/video directly from the browser using WebRTC.
@@ -121,35 +124,36 @@ const AdminStreamPanel: React.FC<{
       userId: process.env.NEXT_PUBLIC_STREAM_ADMIN_USER_ID!,
     };
 
-    getStreamAdminCredentials(roomID)
-      .then((creds) => {
-        const myClient = new StreamVideoClient({
-          user: { id: creds.userId, name: "Admin" },
-          apiKey: config.apiKey,
-          token: creds.token,
-        });
+    const setCall = async () => {
+      if (!auth.currentUser) {
+        throw Error("Current user is unexpectedly null");
+      }
 
-        const myCall = myClient.call("livestream", creds.call.id);
-        console.log("CALL ID: " + creds.call.id);
-        myCall
-          .get()
-          .then(() => {
-            setState({
-              client: myClient,
-              call: myCall,
-              rtmpAddress: creds.call.rtmpAddress,
-              rtmpStreamKey: creds.call.rtmpStreamKey,
-            });
-          })
-          .catch((e) => {
-            logError("Failed to retrieve call details", e);
-            setError(e);
-          });
-      })
-      .catch((err: Error) => {
-        logError(err);
-        setError(err);
+      const adminToken = await auth.currentUser.getIdToken();
+      const creds = await getStreamAdminCredentials(adminToken, roomID);
+
+      const myClient = new StreamVideoClient({
+        user: { id: creds.userId, name: "Admin" },
+        apiKey: config.apiKey,
+        token: creds.token,
       });
+
+      const myCall = myClient.call("livestream", creds.call.id);
+      console.log("CALL ID: " + creds.call.id);
+      await myCall.get();
+
+      setState({
+        client: myClient,
+        call: myCall,
+        rtmpAddress: creds.call.rtmpAddress,
+        rtmpStreamKey: creds.call.rtmpStreamKey,
+      });
+    };
+
+    setCall().catch((err: Error) => {
+      logError(err);
+      setError(err);
+    });
   }, [roomID]);
 
   if (error) {
