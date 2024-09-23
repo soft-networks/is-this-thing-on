@@ -36,7 +36,7 @@ const About: NextPage = () => {
      Currently, thing.tube allows performers to stream from customized rooms, connected by a webring and a universal chat.
      <br/>
      <br/>
-     First launched in 2022, the website has featured performances by <a href="https://chia.design/">Chia Amisola</a>, <a href="https://herdimasanggara.com/">Herdimas Anggara</a>, <a href="https://darlasmessfactory.com">Darla Devour</a>, <a href="https://mayaontheinter.net/">Maya Man</a>, 
+     First launched in 2022, the website has featured performances by <a href="https://chia.design/">Chia Amisola</a>, <a href="https://ritual.engineer/">Herdimas Anggara</a>, <a href="https://linktr.ee/darladevoursyou">Darla Devour</a>, <a href="https://mayaontheinter.net/">Maya Man</a>, 
      and the founding members.
      THING is made possible with support from the Gray Area C/Change grant, NEW INC Next Web grant, Onassis ONX, Museum of the Moving Image (MoMI),
      and developers <a href="https://www.markhramos.net">Mark Ramos</a>, and <a href="https://kyeh.me/">Kevin Yeh</a>.
