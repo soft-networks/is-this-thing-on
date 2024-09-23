@@ -271,9 +271,6 @@ const LivestreamView = ({
     liveParticipants,
   });
 
-  const labeledCamDevices = camDevices.filter((device) => device.label);
-  const labeledMicDevices = micDevices.filter((device) => device.label);
-
   let panelRef = createRef<HTMLDivElement>();
 
   return (
@@ -342,16 +339,16 @@ const LivestreamView = ({
                 >
                   {isCamEnabled ? "Disable camera" : "Enable camera"}
                 </button>
-                {labeledCamDevices.length > 0 && (
+                {isCamEnabled && camDevices.length > 0 && (
                   <select
                     value={call.camera.state.selectedDevice}
                     onChange={(event) => call.camera.select(event.target.value)}
                     className="padded:s-2"
                   >
-                    {labeledCamDevices.map((device) => {
+                    {camDevices.map((device, idx) => {
                       return (
                         <option key={device.deviceId} value={device.deviceId}>
-                          {device.label}
+                          {device.label || `Device ${idx}`}
                         </option>
                       );
                     })}
@@ -366,7 +363,7 @@ const LivestreamView = ({
                 >
                   {isMicEnabled ? "Mute Mic" : "Unmute Mic"}
                 </button>
-                {labeledMicDevices.length > 0 && (
+                {isMicEnabled && micDevices.length > 0 && (
                   <select
                     value={call.microphone.state.selectedDevice}
                     onChange={(event) =>
@@ -374,10 +371,10 @@ const LivestreamView = ({
                     }
                     className="padded:s-2"
                   >
-                    {labeledMicDevices.map((device) => {
+                    {micDevices.map((device, idx) => {
                       return (
                         <option key={device.deviceId} value={device.deviceId}>
-                          {device.label}
+                          {device.label || `Device ${idx}`}
                         </option>
                       );
                     })}
