@@ -84,7 +84,7 @@ const CenterText = () => (
       thing.tube
     </Link>
     <br />
-    next stream: 10/12/24
+    next stream: 11/09/24
     <br />
     @MoMI
   </>

@@ -46,7 +46,7 @@ const About: NextPage = () => {
      For the full history of our project, feel free to explore our public archive on <a href = "https://drive.google.com/embeddedfolderview?id=1kQnnvjLfiySUOoV8foHPa2sKUNVrGeZm#grid">google drive.</a>
          <br/>
          <br/>
-        next stream: 10/12/24 @ MoMI
+        next stream: 11/09/24 @ MoMI
          </div>
   
 
