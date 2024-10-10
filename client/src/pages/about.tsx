@@ -42,11 +42,19 @@ const About: NextPage = () => {
      and developers <a href="https://www.markhramos.net">Mark Ramos</a>, and <a href="https://kyeh.me/">Kevin Yeh</a>.
      <br/>
      <br/>
-     Our code is opensource and archived on our <a href = "https://github.com/soft-networks/is-this-thing-on">github</a>.
+     Our code is open source and archived on our <a href = "https://github.com/soft-networks/is-this-thing-on">github</a>.
      For the full history of our project, feel free to explore our public archive on <a href = "https://drive.google.com/embeddedfolderview?id=1kQnnvjLfiySUOoV8foHPa2sKUNVrGeZm#grid">google drive.</a>
          <br/>
          <br/>
+         <s>
         next stream: 11/09/24 @ MoMI
+        </s>
+        <br/>
+        Due to FORCE MAJEURE we have postponed the October 12 MoMI show! In the meantime, we will do NO-THING, a 24-hour stream on the theme of NOTHING, early December. 
+        <Link href="https://docs.google.com/forms/d/e/1FAIpQLSdfDAp4BTtW1RZKcfJX3xArCa3cVEJTpMQgd7fz0M5c5_yLlg/viewform?usp=sf_link" className="underline">
+        Let us know if you'd like to participate?
+    </Link>        We don't have all the details yet, but we'll get back to you sometime in November.
+        <br/>
          </div>
   
 
