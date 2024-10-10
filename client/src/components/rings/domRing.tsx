@@ -136,7 +136,7 @@ const OfflineElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number, onClic
         {
           "--animStart": offsetN + "%",
           "--animEnd": 100 + offsetN + "%",
-          backgroundColor: "var(--gray)",
+          backgroundColor: roomInfo.roomColor,
         } as React.CSSProperties
       }
       onClick={onClick}
