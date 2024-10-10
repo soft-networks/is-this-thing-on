@@ -50,10 +50,8 @@ const About: NextPage = () => {
         next stream: 11/09/24 @ MoMI
         </s>
         <br/>
-        Due to FORCE MAJEURE we have postponed the October 12 MoMI show! In the meantime, we will do NO-THING, a 24-hour stream on the theme of NOTHING, early December. 
-        <Link href="https://docs.google.com/forms/d/e/1FAIpQLSdfDAp4BTtW1RZKcfJX3xArCa3cVEJTpMQgd7fz0M5c5_yLlg/viewform?usp=sf_link" className="underline">
-        Let us know if you`&apos;`d like to participate?
-    </Link>        We don`&apos;`t have all the details yet, but we`&apos;`ll get back to you sometime in November.
+        Due to FORCE MAJEURE we have postponed the October 12 MoMI show! In the meantime, we will do NO-THING, a 24-hour stream on the theme of NOTHING, early December. <Link href="https://docs.google.com/forms/d/e/1FAIpQLSdfDAp4BTtW1RZKcfJX3xArCa3cVEJTpMQgd7fz0M5c5_yLlg/viewform?usp=sf_link" className="underline">Let us know if you&apos;d like to participate?
+    </Link>        We don&apos;t have all the details yet, but we&apos;ll get back to you sometime in November.
         <br/>
          </div>
   
