@@ -36,17 +36,23 @@ const About: NextPage = () => {
      Currently, thing.tube allows performers to stream from customized rooms, connected by a webring and a universal chat.
      <br/>
      <br/>
-     First launched in 2022, the website has featured performances by <a href="https://chia.design/">Chia Amisola</a>, <a href="https://herdimasanggara.com/">Herdimas Anggara</a>, <a href="https://darlasmessfactory.com">Darla Devour</a>, <a href="https://mayaontheinter.net/">Maya Man</a>, 
+     First launched in 2022, the website has featured performances by <a href="https://chia.design/">Chia Amisola</a>, <a href="https://ritual.engineer/">Herdimas Anggara</a>, <a href="https://linktr.ee/darladevoursyou">Darla Devour</a>, <a href="https://mayaontheinter.net/">Maya Man</a>, 
      and the founding members.
      THING is made possible with support from the Gray Area C/Change grant, NEW INC Next Web grant, Onassis ONX, Museum of the Moving Image (MoMI),
      and developers <a href="https://www.markhramos.net">Mark Ramos</a>, and <a href="https://kyeh.me/">Kevin Yeh</a>.
      <br/>
      <br/>
-     Our code is opensource and archived on our <a href = "https://github.com/soft-networks/is-this-thing-on">github</a>.
+     Our code is open source and archived on our <a href = "https://github.com/soft-networks/is-this-thing-on">github</a>.
      For the full history of our project, feel free to explore our public archive on <a href = "https://drive.google.com/embeddedfolderview?id=1kQnnvjLfiySUOoV8foHPa2sKUNVrGeZm#grid">google drive.</a>
          <br/>
          <br/>
-        next stream: 10/12/24 @ MoMI
+         <s>
+        next stream: 11/09/24 @ MoMI
+        </s>
+        <br/>
+        Due to FORCE MAJEURE we have postponed the October 12 MoMI show! In the meantime, we will do NO-THING, a 24-hour stream on the theme of NOTHING, early December. <Link href="https://docs.google.com/forms/d/e/1FAIpQLSdfDAp4BTtW1RZKcfJX3xArCa3cVEJTpMQgd7fz0M5c5_yLlg/viewform?usp=sf_link" className="underline">Let us know if you&apos;d like to participate?
+    </Link>        We don&apos;t have all the details yet, but we&apos;ll get back to you sometime in November.
+        <br/>
          </div>
   
 

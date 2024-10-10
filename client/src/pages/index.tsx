@@ -83,10 +83,10 @@ const CenterText = () => (
     <Link href="/about" className="underline">
       thing.tube
     </Link>
-    <br />
-    next stream: 10/12/24
-    <br />
-    @MoMI
+    <Link href="https://docs.google.com/forms/d/e/1FAIpQLSdfDAp4BTtW1RZKcfJX3xArCa3cVEJTpMQgd7fz0M5c5_yLlg/viewform?usp=sf_link" className="underline">
+    <br/>
+      stream with us?
+    </Link>
   </>
 )
 
