@@ -653,6 +653,10 @@ a:hover,
 .whiteFill {
   background: var(--white);
 }
+
+.yellowFill {
+  background: yellow;
+}
 .faintWhiteFill {
   background: var(--faintWhite);
 }
