@@ -23,6 +23,12 @@ const Footer: React.FC = () => {
       <div
         className="uiLayer horizontal-stack:s-2 padded:s-1 align-end"
       >
+          <Link href={"/about"} passHref>
+      <div className="yellowFill padded:s-3 border clickable contrastFill:hover ">
+      about
+      </div>
+    </Link>
+
         {pathname == "/" ?  <NumOnlineTotal />: <NumOnlineTotal/> }
         <AccountButton />
       </div>
