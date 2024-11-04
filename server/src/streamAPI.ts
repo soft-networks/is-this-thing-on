@@ -95,8 +95,9 @@ export const createStreamAdminToken: RequestHandler = async (req, res) => {
     }
     console.log("> Creating stream admin token for room " + roomId);
     try {
-        // exp is optional (by default the token is valid for an hour)
-        const exp = Math.round(new Date().getTime() / 1000) + 60 * 60;
+        // exp is optional (by default the token is valid for an hour).
+        // set exp to be 6 hours.
+        const exp = Math.round(new Date().getTime() / 1000) + 60 * 60 * 6;
         const token = client.createToken(adminUserId, exp);
 
         const streamCall = await getOrCreateCall(roomId);

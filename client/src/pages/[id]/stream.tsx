@@ -192,19 +192,67 @@ const handleStopLive = async (call: Call) => {
 const handleGoLive = async (call: Call) => {
   return call.goLive({ start_hls: false, start_recording: true }).then(() => {
     // Force call state refresh to ensure the UI is updated.
-    call.get();
+    call.get().catch((err) => console.log("ERROR" + err));
   });
 };
 
-const LivestreamView = ({
-  call,
+const SelectStreamType = ({ setStreamType }: { setStreamType: any }) => {
+  return (
+    <>
+      <span>Start streaming with:</span>
+      <br />
+      <button
+        className="padded:s-2 clickable whiteFill greenFill:hover"
+        onClick={() => setStreamType("RTMPS")}
+      >
+        RTMPS
+      </button>
+      <button
+        className="padded:s-2 clickable whiteFill greenFill:hover"
+        onClick={() => setStreamType("Browser")}
+      >
+        Browser
+      </button>
+    </>
+  );
+};
+
+const RtmpsStreamDetails = ({
   rtmpAddress,
   rtmpStreamKey,
 }: {
-  call: Call;
   rtmpAddress: string;
   rtmpStreamKey: string;
 }) => {
+  return (
+    <>
+      <span>1a. Set up RTMPS streaming:</span>
+      <br />
+      <span
+        style={{
+          maxWidth: "500px",
+          textOverflow: "ellipsis",
+          wordBreak: "break-all",
+        }}
+      >
+        RTMPS Address: {rtmpAddress}
+      </span>
+      <span
+        style={{
+          maxWidth: "500px",
+          textOverflow: "ellipsis",
+          wordBreak: "break-all",
+        }}
+      >
+        RTMPS Stream Key: {rtmpStreamKey}
+      </span>
+    </>
+  );
+};
+
+const BrowserStreamDetails = ({ call }) => {
+  const [error, setError] = useState<Error>();
+
   const { useCameraState, useMicrophoneState, useIsCallLive, useParticipants } =
     useCallStateHooks();
 
@@ -213,33 +261,30 @@ const LivestreamView = ({
   const [camDevices, setCamDevices] = useState<MediaDeviceInfo[]>([]);
   const [micDevices, setMicDevices] = useState<MediaDeviceInfo[]>([]);
 
-  const isLive = useIsCallLive();
-  const [isInCall, setIsInCall] = useState<boolean>(false);
-  const [error, setError] = useState<Error>();
-
-  const participants = useParticipants();
   const joinCall = useCallback(() => {
-    call
-      .join()
-      .then(() => setIsInCall(true))
-      .catch((e: Error) => {
-        logError(`Failed to join call: ${e}`);
-        setError(e);
-      });
+    return call.join().catch((e: Error) => {
+      logError(`Failed to join call: ${e}`);
+      setError(e);
+    });
   }, [call]);
 
   const leaveCall = useCallback(() => {
-    call
-      .leave()
-      .then(() => setIsInCall(false))
-      .catch((e: Error) => {
-        logError(`Failed to leave call: ${e}`);
-        setError(e);
-      });
+    call.leave().catch((e: Error) => {
+      logError(`Failed to leave call: ${e}`);
+      setError(e);
+    });
   }, [call]);
 
   useEffect(() => {
-    return leaveCall();
+    // Promise.all([joinCall(), cam.enable(), mic.enable()]).catch(console.error);
+    console.log("JOINING CALL");
+    joinCall().then(() => {
+      console.log("ENABLING CAM");
+      Promise.all([cam.enable(), mic.enable()]).then(() => {
+        call.get();
+      });
+    });
+    return leaveCall;
   }, []);
 
   useEffect(() => {
@@ -254,20 +299,94 @@ const LivestreamView = ({
       .subscribe({ next: setMicDevices, error: console.error });
   }, [isMicEnabled]);
 
+  return (
+    <>
+      {camDevices.length > 0 && (
+        <select
+          value={call.camera.state.selectedDevice}
+          onChange={(event) => call.camera.select(event.target.value)}
+          className="padded:s-2"
+        >
+          {camDevices.map((device, idx) => {
+            return (
+              <option key={device.deviceId} value={device.deviceId}>
+                {device.label || `Device ${idx}`}
+              </option>
+            );
+          })}
+        </select>
+      )}
+      {micDevices.length > 0 && (
+        <select
+          value={call.microphone.state.selectedDevice}
+          onChange={(event) => call.microphone.select(event.target.value)}
+          className="padded:s-2"
+        >
+          {micDevices.map((device, idx) => {
+            return (
+              <option key={device.deviceId} value={device.deviceId}>
+                {device.label || `Device ${idx}`}
+              </option>
+            );
+          })}
+        </select>
+      )}
+    </>
+  );
+};
+
+const LivestreamView = ({
+  call,
+  rtmpAddress,
+  rtmpStreamKey,
+}: {
+  call: Call;
+  rtmpAddress: string;
+  rtmpStreamKey: string;
+}) => {
+  const { useIsCallLive, useParticipants } = useCallStateHooks();
+
+  const isLive = useIsCallLive();
+
+  const [streamType, setStreamType] = useState<"RTMPS" | "Browser" | null>(
+    null,
+  );
+
+  const participants = useParticipants();
+
   const VIDEO = 2;
   const liveParticipants = participants.filter((p) =>
     p.publishedTracks.includes(VIDEO),
   );
 
   console.log({
-    camDevices,
-    micDevices,
     isLive,
     participants,
     liveParticipants,
   });
 
+  useEffect(() => {
+    return () => {
+      handleStopLive(call);
+    };
+  }, []);
+
   let panelRef = createRef<HTMLDivElement>();
+
+  let streamInfo;
+
+  if (streamType == null) {
+    streamInfo = <SelectStreamType setStreamType={setStreamType} />;
+  } else if (streamType === "RTMPS") {
+    streamInfo = (
+      <RtmpsStreamDetails
+        rtmpAddress={rtmpAddress}
+        rtmpStreamKey={rtmpStreamKey}
+      />
+    );
+  } else {
+    streamInfo = <BrowserStreamDetails call={call} />;
+  }
 
   return (
     <>
@@ -292,106 +411,40 @@ const LivestreamView = ({
           <div className="padded:s-2 stack:s-0 monospace">
             <div className="fullBleed">
               <div className="stack:s-2">
-                <span>1a. Set up RTMPS streaming:</span>
-                <br />
-                <span
-                  style={{
-                    maxWidth: "500px",
-                    textOverflow: "ellipsis",
-                    wordBreak: "break-all",
-                  }}
-                >
-                  RTMPS Address: {rtmpAddress}
-                </span>
-                <span
-                  style={{
-                    maxWidth: "500px",
-                    textOverflow: "ellipsis",
-                    wordBreak: "break-all",
-                  }}
-                >
-                  RTMPS Stream Key: {rtmpStreamKey}
-                </span>
-                <br />
-                <hr />
-                <br />
-                <span>1b. Set up browser streaming:</span>
-                <br />
-                <button
-                  className={classNames(
-                    "padded:s-2 clickable",
-                    isInCall ? "greenFill" : "whiteFill greenFill:hover",
-                  )}
-                  onClick={() => (isInCall ? leaveCall() : joinCall())}
-                >
-                  {isInCall ? "Leave Call" : "Join Call"}
-                </button>
-                <button
-                  className={classNames(
-                    "padded:s-2 clickable",
-                    isCamEnabled ? "greenFill" : "whiteFill greenFill:hover",
-                  )}
-                  onClick={() => cam.toggle()}
-                >
-                  {isCamEnabled ? "Disable camera" : "Enable camera"}
-                </button>
-                {isCamEnabled && camDevices.length > 0 && (
-                  <select
-                    value={call.camera.state.selectedDevice}
-                    onChange={(event) => call.camera.select(event.target.value)}
-                    className="padded:s-2"
-                  >
-                    {camDevices.map((device, idx) => {
-                      return (
-                        <option key={device.deviceId} value={device.deviceId}>
-                          {device.label || `Device ${idx}`}
-                        </option>
-                      );
-                    })}
-                  </select>
+                {streamType != null && (
+                  <>
+                    <button
+                      className="padded:s-2 clickable whiteFill greenFill:hover"
+                      onClick={() => setStreamType(null)}
+                    >
+                      Back
+                    </button>
+                    <br />
+                    <hr />
+                    <br />
+                  </>
                 )}
-                <button
-                  className={classNames(
-                    "padded:s-2 clickable",
-                    isMicEnabled ? "greenFill" : "whiteFill greenFill:hover",
-                  )}
-                  onClick={() => mic.toggle()}
-                >
-                  {isMicEnabled ? "Mute Mic" : "Unmute Mic"}
-                </button>
-                {isMicEnabled && micDevices.length > 0 && (
-                  <select
-                    value={call.microphone.state.selectedDevice}
-                    onChange={(event) =>
-                      call.microphone.select(event.target.value)
-                    }
-                    className="padded:s-2"
-                  >
-                    {micDevices.map((device, idx) => {
-                      return (
-                        <option key={device.deviceId} value={device.deviceId}>
-                          {device.label || `Device ${idx}`}
-                        </option>
-                      );
-                    })}
-                  </select>
+                {streamInfo}
+                {streamType != null && (
+                  <>
+                    <br />
+                    <hr />
+                    <br />
+                    <span>2. Begin streaming to the public:</span>
+                    <br />
+                    <button
+                      className={classNames(
+                        "padded:s-2 clickable",
+                        isLive ? "greenFill" : "whiteFill greenFill:hover",
+                      )}
+                      onClick={() =>
+                        isLive ? handleStopLive(call) : handleGoLive(call)
+                      }
+                    >
+                      {isLive ? "Stop Livestream" : "Start livestream"}
+                    </button>
+                  </>
                 )}
-                <br />
-                <hr />
-                <br />
-                <span>2. Begin streaming to the public:</span>
-                <br />
-                <button
-                  className={classNames(
-                    "padded:s-2 clickable",
-                    isLive ? "greenFill" : "whiteFill greenFill:hover",
-                  )}
-                  onClick={() =>
-                    isLive ? handleStopLive(call) : handleGoLive(call)
-                  }
-                >
-                  {isLive ? "Stop Livestream" : "Start livestream"}
-                </button>
               </div>
             </div>
           </div>
@@ -404,7 +457,7 @@ const LivestreamView = ({
             ParticipantViewUI={null}
           />
         ) : (
-          <div>Waiting for an admin to begin streaming with video.</div>
+          <div>Waiting for video...</div>
         )}
       </div>
     </>
