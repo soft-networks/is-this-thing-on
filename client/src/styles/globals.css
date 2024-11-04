@@ -738,6 +738,19 @@ a:hover,
   width: 100%;
   height: 100%;
 }
+
+.streamPreviewAspectElement,
+.streamPreviewAspectElement > .testPlayer {
+  height: 100%;
+  width: 100%;
+
+  /* Always center the video so the sides are cut off evenly */
+  position: absolute;
+  left: 50%; /* % of surrounding element */
+  top: 50%;
+  transform: translate(-50%, -50%); /* % of current element */
+}
+
 .videoAspectElement,
 .videoAspectElement > .testPlayer {
   height: 100%;
@@ -756,6 +769,13 @@ a:hover,
   height: 100%;
 }
 
+/* Hide default Stream participant details */
+.str-video__video-placeholder,
+.str-video__participant-details,
+.str-video__call-controls__button {
+  display: none;
+}
+
 /* .muxPlayer {
   --controls: none;
   background: none;
@@ -770,7 +790,7 @@ a:hover,
 .videoMob {
   position: absolute;
   inset: 0;
-  min-width: 100vw; 
+  min-width: 100vw;
   min-height: 100vh;
   overflow: hidden;
   object-fit: cover;
@@ -791,19 +811,19 @@ a:hover,
   left: 0;
   padding: var(--s-1);
 }
-.chatScrollContainer { 
+.chatScrollContainer {
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
   overflow-y: auto;
   scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
 
-.chatScrollContainer::-webkit-scrollbar { /* WebKit */
+.chatScrollContainer::-webkit-scrollbar {
+  /* WebKit */
   width: 0;
   height: 0;
 }
-
 
 .chat .contrastColor\:hover:hover {
   color: var(--chatAuthorColor);
@@ -1018,17 +1038,18 @@ input:focus {
   .quarterWidth {
     max-inline-size: 100%;
   }
-  .hideOnMobile, video {
+  .hideOnMobile,
+  video {
     display: none;
   }
 
   .homepageLabel {
-   width: 80px;
-   height: 48px;
+    width: 80px;
+    height: 48px;
   }
 
   .chat::before {
-    content: '';
+    content: "";
     z-index: 10;
     width: 100%;
     height: 100%;
@@ -1037,9 +1058,13 @@ input:focus {
     top: 0;
     left: 0;
     pointer-events: none;
-    background: linear-gradient(0deg, rgba(236, 236, 236, 0.0) 0%, rgba(236, 236, 236, 0.0) 70%, rgba(236, 236, 236, 1) 100%);
+    background: linear-gradient(
+      0deg,
+      rgba(236, 236, 236, 0) 0%,
+      rgba(236, 236, 236, 0) 70%,
+      rgba(236, 236, 236, 1) 100%
+    );
   }
-  }
+}
 @media screen and (min-width: 801px) {
- 
 }

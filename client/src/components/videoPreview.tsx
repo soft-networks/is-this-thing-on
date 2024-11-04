@@ -4,6 +4,7 @@ import { useEffect, useMemo } from "react";
 
 import { logVideo } from "../lib/logger";
 import { generateStreamLink } from "../lib/server-api";
+import StreamPlayer from "./streamPlayer";
 
 const VideoPreview: React.FC<{
   iLink: RoomLinkInfo;
@@ -22,19 +23,34 @@ const VideoPreview: React.FC<{
     if (streamLink) logVideo(iLink.roomName, streamLink);
   }, [iLink.roomName, streamLink]);
 
-  return streamLink ? (
-    <ReactPlayer
-      url={streamLink}
-      playing={true}
-      muted={localMuted}
-      className="noEvents "
-      width={"302px"}
-      height={"169px"}
-      style={{ margin: "-1px" }}
-    />
-  ) : (
-    <div></div>
-  );
+  if (!isTest && iLink.streamPlaybackID) {
+    return (
+      <div
+        className="videoAspectContainer"
+        style={{ width: "302px", height: "169px" }}
+      >
+        <StreamPlayer
+          muted={true}
+          streamCallId={iLink.streamPlaybackID}
+          fullscreen={false}
+        />
+      </div>
+    );
+  } else if (isTest) {
+    return (
+      <ReactPlayer
+        url={streamLink}
+        playing={true}
+        muted={localMuted}
+        className="noEvents "
+        width={"302px"}
+        height={"169px"}
+        style={{ margin: "-1px" }}
+      />
+    );
+  } else {
+    return <div></div>;
+  }
 };
 
 export default VideoPreview;

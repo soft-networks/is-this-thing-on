@@ -65,6 +65,7 @@ const VideoPlayerInternal: React.FunctionComponent<{
           <StreamPlayer
             muted={mute || muteOverride || false}
             streamCallId={streamPlaybackID}
+            fullscreen={true}
           />
         )}
         {!isTest && !streamPlaybackID && (
