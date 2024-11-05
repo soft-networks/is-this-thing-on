@@ -5,9 +5,10 @@ import {
   StreamVideoClient,
   User,
 } from "@stream-io/video-react-sdk";
-import { logError, logInfo } from "../../lib/logger";
+
 import { useCallback, useEffect, useState } from "react";
 
+import { logError, logInfo } from "../../lib/logger";
 import { getStreamAdminCredentials } from "../../lib/server-api";
 import { useAdminStore } from "../../stores/adminStore";
 import { useRoomStore } from "../../stores/roomStore";
@@ -22,9 +23,12 @@ const publicUser: User = { type: "anonymous" };
  *
  * Upon leaving the page, the user will automatically leave the call.
  *  */
-const StreamGate: React.FunctionComponent<{ children: any }> = ({
-  children,
-}) => {
+const StreamGate: React.FunctionComponent<{
+  children: any;
+  roomID: string;
+  streamPlaybackID?: string;
+  anonymousOnly: boolean;
+}> = ({ children, roomID, streamPlaybackID, anonymousOnly }) => {
   const isAdmin = useAdminStore(useCallback((s) => s.isAdmin, []));
 
   const [state, setState] = useState<{
@@ -33,12 +37,10 @@ const StreamGate: React.FunctionComponent<{ children: any }> = ({
     rtmpsDetails: RtmpsDetails | null;
   }>();
 
-  const streamPlaybackID = useRoomStore(
-    useCallback((s) => s.roomInfo?.streamPlaybackID, []),
-  );
+  const useAdmin = !anonymousOnly && isAdmin;
 
   useEffect(() => {
-    getClient(isAdmin).then(([myClient, rtmpsDetails]) => {
+    getClient(roomID, useAdmin).then(([myClient, rtmpsDetails]) => {
       if (!streamPlaybackID) {
         // Technically, streamPlaybackID may be indirectly set in the middle of getClient()
         // so there is a race condition here. If this happens, we will call getClient twice,
@@ -56,7 +58,7 @@ const StreamGate: React.FunctionComponent<{ children: any }> = ({
         })
         .catch((e) => logError("Failed to retrieve call details", e));
     });
-  }, [streamPlaybackID, isAdmin]);
+  }, [roomID, streamPlaybackID, useAdmin]);
 
   useEffect(() => {
     if (!state) {
@@ -95,15 +97,16 @@ const StreamGate: React.FunctionComponent<{ children: any }> = ({
 
 /** Retrieves the Stream video client as an admin or anonymous viewer. */
 const getClient = async (
-  isAdmin: boolean,
+  roomId: string,
+  useAdmin: boolean,
 ): Promise<[StreamVideoClient, null | RtmpsDetails]> => {
-  if (isAdmin) {
+  if (useAdmin) {
     /**
      * After we have verified the user as a room admin, we can make calls using secrets retrieved from the server and
      * not worry too much about those credentials being viewable in the console.
      */
     console.log("using admin credentials for stream player");
-    const creds = await getStreamAdminCredentials("soft");
+    const creds = await getStreamAdminCredentials(roomId);
     const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY!;
 
     return [

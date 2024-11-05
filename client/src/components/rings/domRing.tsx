@@ -3,8 +3,9 @@ import { useCallback, useMemo, useState } from "react";
 
 import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
 import { roomIsActive } from "../../stores/roomStore";
-import VideoPreview from "../videoPreview";
 import useMediaQuery from "../../stores/useMediaQuery";
+import StreamGate from "../room/streamGate";
+import VideoPreview from "../videoPreview";
 
 const DomRing = () => {
   const ring = useRingStore(useCallback((s) => s.links, []));
@@ -32,11 +33,11 @@ const DomRing = () => {
   );
 };
 
-const NodeElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number; isMobile: boolean }> = ({
-  roomInfo,
-  offsetN,
-  isMobile,
-}) => {
+const NodeElement: React.FC<{
+  roomInfo: RoomLinkInfo;
+  offsetN: number;
+  isMobile: boolean;
+}> = ({ roomInfo, offsetN, isMobile }) => {
   const router = useRouter();
   const onClick = useCallback(() => {
     console.log("navigating to room", roomInfo.roomID);
@@ -44,20 +45,45 @@ const NodeElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number; isMobile:
   }, [roomInfo.roomID, router]);
 
   if (roomIsActive(roomInfo)) {
+    let element;
     if (isMobile) {
-      return <OnlineElementSimple roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />;
+      element = (
+        <OnlineElementSimple
+          roomInfo={roomInfo}
+          offsetN={offsetN}
+          onClick={onClick}
+        />
+      );
     } else {
-      return <OnlineElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />;
+      element = (
+        <OnlineElement
+          roomInfo={roomInfo}
+          offsetN={offsetN}
+          onClick={onClick}
+        />
+      );
     }
+
+    return (
+      <StreamGate
+        roomID={roomInfo.roomID}
+        streamPlaybackID={roomInfo.streamPlaybackID}
+        anonymousOnly={false}
+      >
+        {() => element}
+      </StreamGate>
+    );
   } else {
-    return <OfflineElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick}/>;
+    return (
+      <OfflineElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />
+    );
   }
 };
-const OnlineElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number, onClick: () => void }> = ({
-  roomInfo,
-  offsetN,
-  onClick,
-}) => {
+const OnlineElement: React.FC<{
+  roomInfo: RoomLinkInfo;
+  offsetN: number;
+  onClick: () => void;
+}> = ({ roomInfo, offsetN, onClick }) => {
   const [isHovering, setIsHovering] = useState<boolean>(false);
 
   return (
@@ -100,13 +126,11 @@ const OnlineElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number, onClick
   );
 };
 
-
-const OnlineElementSimple: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number, onClick: () => void }> = ({
-  roomInfo,
-  offsetN,
-  onClick,
-}) => {
-
+const OnlineElementSimple: React.FC<{
+  roomInfo: RoomLinkInfo;
+  offsetN: number;
+  onClick: () => void;
+}> = ({ roomInfo, offsetN, onClick }) => {
   return (
     <div
       className="antiRotate homepageLabel smallElementOnEllipse padded:s-2 border whiteFill"
@@ -124,11 +148,11 @@ const OnlineElementSimple: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number, o
   );
 };
 
-const OfflineElement: React.FC<{ roomInfo: RoomLinkInfo; offsetN: number, onClick: () => void }> = ({
-  roomInfo,
-  offsetN, 
-  onClick,
-}) => {
+const OfflineElement: React.FC<{
+  roomInfo: RoomLinkInfo;
+  offsetN: number;
+  onClick: () => void;
+}> = ({ roomInfo, offsetN, onClick }) => {
   return (
     <div
       className="antiRotate homepageLabel smallElementOnEllipse padded:s-2 border whiteFill"

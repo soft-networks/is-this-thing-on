@@ -1,4 +1,7 @@
-import RoomNameGate, { RoomStatusGate } from "./roomGate";
+import { Unsubscribe } from "firebase/auth";
+
+import { useCallback, useEffect, useMemo, useRef } from "react";
+
 import {
   activePresenceHeartbeat,
   setUserPresenceHeartbeat,
@@ -10,17 +13,15 @@ import {
   logError,
   logInfo,
 } from "../../lib/logger";
-import { useCallback, useEffect, useMemo, useRef } from "react";
-
-import AdminPanel from "../account/adminPanel";
-import ArtistRoom from "../artistRooms/artistRoom";
-import Layout from "./layout";
-import StreamGate from "./streamGate";
-import { Unsubscribe } from "firebase/auth";
 import { useAdminStore } from "../../stores/adminStore";
 import { useRoomStore } from "../../stores/roomStore";
 import useStickerCDNStore from "../../stores/stickerStore";
 import { useUserStore } from "../../stores/userStore";
+import AdminPanel from "../account/adminPanel";
+import ArtistRoom from "../artistRooms/artistRoom";
+import Layout from "./layout";
+import RoomNameGate, { RoomStatusGate } from "./roomGate";
+import StreamGate from "./streamGate";
 
 const Room: React.FC<{ roomID: string; season?: number }> = ({
   roomID,
@@ -36,6 +37,10 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({
   const unsubscribeFromRoomInfo = useRef<Unsubscribe>();
   const adminForIDs = useUserStore(useCallback((s) => s.adminFor, []));
   const setIsAdmin = useAdminStore(useCallback((s) => s.setIsAdmin, []));
+
+  const roomPlaybackId = useRoomStore(
+    useCallback((s) => s.roomInfo?.streamPlaybackID, []),
+  );
   const roomColor = useRoomStore(useCallback((s) => s.roomInfo?.roomColor, []));
   const displayName = useUserStore(useCallback((s) => s.displayName, []));
 
@@ -88,7 +93,11 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({
   return (
     <Layout roomColor={roomColor}>
       <RoomNameGate id={roomID as string}>
-        <StreamGate>
+        <StreamGate
+          roomID={roomID}
+          streamPlaybackID={roomPlaybackId}
+          anonymousOnly={false}
+        >
           {(rtmpsDetails: RtmpsDetails | null) => (
             <>
               <AdminPanel rtmpsDetails={rtmpsDetails} />

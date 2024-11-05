@@ -49,7 +49,7 @@ const StreamPlayer: React.FunctionComponent<VideoPlayerProps> = ({
     return (
       <>
         <ParticipantView
-          participant={liveParticipants[0]}
+          participant={liveParticipants[liveParticipants.length - 1]}
           muteAudio={muted}
           className={`noEvents stream-player ${fullscreen ? "videoAspectElement" : "streamPreviewAspectElement"}`}
         />

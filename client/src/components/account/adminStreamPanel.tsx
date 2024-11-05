@@ -4,9 +4,9 @@ import {
   useCall,
   useCallStateHooks,
 } from "@stream-io/video-react-sdk";
-import { useEffect, useState } from "react";
-
 import classNames from "classnames";
+
+import { useEffect, useState } from "react";
 
 /**
  * This panel fits into the overall AdminPanel and manages the Stream video and audio.
@@ -94,7 +94,7 @@ const AdminStreamPanel: React.FC<{
                 style={{ width: "302px", height: "169px" }}
               >
                 <ParticipantView
-                  participant={liveParticipants[0]}
+                  participant={liveParticipants[liveParticipants.length - 1]}
                   muteAudio={true}
                   className="noEvents stream-player videoAspect"
                 />

@@ -29,11 +29,7 @@ const VideoPreview: React.FC<{
         className="videoAspectContainer"
         style={{ width: "302px", height: "169px" }}
       >
-        <StreamPlayer
-          muted={true}
-          streamCallId={iLink.streamPlaybackID}
-          fullscreen={false}
-        />
+        <StreamPlayer muted={true} fullscreen={false} />
       </div>
     );
   } else if (isTest) {
