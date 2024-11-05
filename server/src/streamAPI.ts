@@ -65,10 +65,17 @@ export const streamUpdateWasReceived: RequestHandler = async (req, res) => {
             const id = hook.call_cid;
             const callID = id.split(':')[1];
             logInfo(`Received ${eventType} for call ${callID}`);
-            logUpdate("> Stream went idle");
-            let roomID = await getRoomIDFromStreamCallID(callID);
-            await writeStreamStateToDB(roomID, "idle");
-            return res.status(200).send("Thanks for the update :) ");
+            const call = await client.video.call('livestream', callID).get();
+            
+            if (call.members.length <= 0) {
+                logUpdate("> Stream went idle");
+                let roomID = await getRoomIDFromStreamCallID(callID);
+                await writeStreamStateToDB(roomID, "idle");
+            } else {
+                logInfo("Call still has members online.")
+            }
+            
+            return res.status(200).send("Thanks for the update :) ");    
         }
         if (eventType == "custom" && hook.custom.type == "STOP_LIVE") {
             const callID = hook.custom.callId;
@@ -154,7 +161,17 @@ const generateNewStreamCall = async (roomId: string): Promise<[string, VideoGetO
     const call = client.video.call('livestream', callId);
 
     // TODO: Determine best settings to maximize latency and quality?
-    const resp = await call.create({ data: { created_by_id: adminUserId } });
+    const resp = await call.create({ 
+        data: { 
+            created_by_id: adminUserId, 
+            settings_override: {
+                backstage: {
+                    enabled: true,
+                    join_ahead_time_seconds: 300,
+                },
+            }, 
+        } 
+    });
 
     if (!resp.created) {
         throw Error(`Stream with random ID ${callId} was not created for ${roomId}`);

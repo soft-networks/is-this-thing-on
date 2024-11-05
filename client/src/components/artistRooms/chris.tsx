@@ -1,8 +1,6 @@
-import React from "react";
-
-import AdminPanel from "../account/adminPanel";
 import { Chat } from "../interactive/chat";
 import ChrisyStickers from "../interactive/custom/chrisyStickers";
+import React from "react";
 import VideoPlayer from "../videoPlayer";
 
 const Chris: React.FC = () => {
@@ -23,7 +21,6 @@ const Chris: React.FC = () => {
       />
       <VideoPlayer />
       <ChrisyStickers />
-      <AdminPanel />
     </main>
   );
 };

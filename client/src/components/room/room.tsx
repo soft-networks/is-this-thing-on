@@ -12,8 +12,10 @@ import {
 } from "../../lib/logger";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 
+import AdminPanel from "../account/adminPanel";
 import ArtistRoom from "../artistRooms/artistRoom";
 import Layout from "./layout";
+import StreamGate from "./streamGate";
 import { Unsubscribe } from "firebase/auth";
 import { useAdminStore } from "../../stores/adminStore";
 import { useRoomStore } from "../../stores/roomStore";
@@ -86,9 +88,16 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({
   return (
     <Layout roomColor={roomColor}>
       <RoomNameGate id={roomID as string}>
-        <RoomStatusGate>
-          <ArtistRoom roomID={roomID} />
-        </RoomStatusGate>
+        <StreamGate>
+          {(rtmpsDetails: RtmpsDetails | null) => (
+            <>
+              <AdminPanel rtmpsDetails={rtmpsDetails} />
+              <RoomStatusGate>
+                <ArtistRoom roomID={roomID} />
+              </RoomStatusGate>
+            </>
+          )}
+        </StreamGate>
       </RoomNameGate>
     </Layout>
   );

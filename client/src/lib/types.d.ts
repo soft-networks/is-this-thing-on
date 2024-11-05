@@ -67,3 +67,5 @@ interface RoomUIProps {
   className?: string;
   style?: React.CSSProperties;
 }
+
+type RtmpsDetails = { rtmpAddress: string; rtmpStreamKey: string };

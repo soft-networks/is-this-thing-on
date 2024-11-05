@@ -1,11 +1,10 @@
-import React from "react";
-
-import AdminPanel from "../account/adminPanel";
-import { Chat } from "../interactive/chat";
 import {
   DefaultStickerAdder,
   EmptyChooser,
 } from "../interactive/stickerAdders";
+
+import { Chat } from "../interactive/chat";
+import React from "react";
 import Stickers from "../interactive/stickers";
 import VideoPlayer from "../videoPlayer";
 
@@ -20,7 +19,6 @@ const Maya: React.FC = () => {
       <Chat key="chat" />
       <VideoPlayer />
       <Stickers StickerChooser={DefaultStickerAdder} />
-      <AdminPanel />
     </main>
   );
 };

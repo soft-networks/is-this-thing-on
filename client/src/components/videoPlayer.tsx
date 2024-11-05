@@ -1,11 +1,10 @@
-import ReactPlayer from "react-player";
-
-import { useCallback } from "react";
-
-import { useAdminStore } from "../stores/adminStore";
-import useLocalMutedStore from "../stores/localMuteStore";
 import { roomIsActive, roomIsTest, useRoomStore } from "../stores/roomStore";
+
+import ReactPlayer from "react-player";
 import StreamPlayer from "./streamPlayer";
+import { useAdminStore } from "../stores/adminStore";
+import { useCallback } from "react";
+import useLocalMutedStore from "../stores/localMuteStore";
 
 interface VideoPlayerProps {
   muteOverride?: boolean;
@@ -22,6 +21,8 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
     useCallback((s) => s.roomInfo?.streamStatus, []),
   );
   const hideVideo = useAdminStore(useCallback((s) => s.hideVideo, []));
+
+  console.log({ streamPlaybackID });
   return (
     <>
       {!hideVideo && roomIsActive(streamStatus) && (
@@ -64,7 +65,6 @@ const VideoPlayerInternal: React.FunctionComponent<{
         {!isTest && streamPlaybackID && (
           <StreamPlayer
             muted={mute || muteOverride || false}
-            streamCallId={streamPlaybackID}
             fullscreen={true}
           />
         )}
