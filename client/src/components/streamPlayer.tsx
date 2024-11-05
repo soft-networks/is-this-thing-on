@@ -1,18 +1,8 @@
 import {
-  Call,
   ParticipantView,
-  StatCardExplanation,
-  StreamCall,
-  StreamVideo,
-  StreamVideoClient,
   User,
   useCallStateHooks,
 } from "@stream-io/video-react-sdk";
-import { logError, logInfo } from "../lib/logger";
-import { useCallback, useEffect, useState } from "react";
-
-import { getStreamAdminCredentials } from "../lib/server-api";
-import { useAdminStore } from "../stores/adminStore";
 
 const user: User = { type: "anonymous" };
 
