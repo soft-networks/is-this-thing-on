@@ -22,7 +22,6 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
   );
   const hideVideo = useAdminStore(useCallback((s) => s.hideVideo, []));
 
-  console.log({ streamPlaybackID });
   return (
     <>
       {!hideVideo && roomIsActive(streamStatus) && (

@@ -14,6 +14,14 @@ import { useRoomStore } from "../../stores/roomStore";
 
 const publicUser: User = { type: "anonymous" };
 
+/**
+ * StreamGate provides context for being in a Stream call as an admin or viewer. Upon initializing, it will:
+ *
+ * - (As an admin) Get or create a stream call and admin RTMPS credentials
+ * - (All roles) Join the call as an admin or anonymous viewer
+ *
+ * Upon leaving the page, the user will automatically leave the call.
+ *  */
 const StreamGate: React.FunctionComponent<{ children: any }> = ({
   children,
 }) => {
@@ -30,41 +38,11 @@ const StreamGate: React.FunctionComponent<{ children: any }> = ({
   );
 
   useEffect(() => {
-    const getClient = async (): Promise<
-      [StreamVideoClient, null | RtmpsDetails]
-    > => {
-      if (isAdmin) {
-        console.log("using admin credentials for stream player");
-        const creds = await getStreamAdminCredentials("soft");
-        const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY!;
-
-        return [
-          new StreamVideoClient({
-            user: { id: creds.userId, name: "Admin" },
-            apiKey: apiKey,
-            token: creds.token,
-          }),
-          {
-            rtmpAddress: creds.call.rtmpAddress,
-            rtmpStreamKey: creds.call.rtmpStreamKey,
-          },
-        ];
-      } else {
-        console.log("using public credentials for stream player");
-
-        return [
-          new StreamVideoClient({
-            apiKey: process.env.NEXT_PUBLIC_STREAM_API_KEY!,
-            user: publicUser,
-          }),
-          null,
-        ];
-      }
-    };
-
-    getClient().then(([myClient, rtmpsDetails]) => {
-      // TODO
+    getClient(isAdmin).then(([myClient, rtmpsDetails]) => {
       if (!streamPlaybackID) {
+        // Technically, streamPlaybackID may be indirectly set in the middle of getClient()
+        // so there is a race condition here. If this happens, we will call getClient twice,
+        // and that's okay.
         return;
       }
 
@@ -85,15 +63,15 @@ const StreamGate: React.FunctionComponent<{ children: any }> = ({
       return;
     }
 
-    console.log({ state, message: "....JOINING CALL...." });
+    logInfo("....JOINING CALL....");
 
-    // Ensure camera is disabled on initial load.
+    // Ensure camera is disabled by default on page load.
     state.call.camera.disable();
 
     state.call
       .join()
       .then(() => {
-        console.log({ state, msg: "JOINED CALL FROM STREAM GATE" });
+        logInfo("Joined call from StreamGate");
       })
       .catch((e) => {
         logError("Failed to join call", e);
@@ -103,8 +81,6 @@ const StreamGate: React.FunctionComponent<{ children: any }> = ({
       state.call.leave().catch((e) => {
         logError("Failed to leave call", e);
       });
-      // setState(undefined);
-      // setJoined(false);
     };
   }, [state]);
 
@@ -115,6 +91,43 @@ const StreamGate: React.FunctionComponent<{ children: any }> = ({
       <StreamCall call={state.call}>{children(state.rtmpsDetails)}</StreamCall>
     </StreamVideo>
   );
+};
+
+/** Retrieves the Stream video client as an admin or anonymous viewer. */
+const getClient = async (
+  isAdmin: boolean,
+): Promise<[StreamVideoClient, null | RtmpsDetails]> => {
+  if (isAdmin) {
+    /**
+     * After we have verified the user as a room admin, we can make calls using secrets retrieved from the server and
+     * not worry too much about those credentials being viewable in the console.
+     */
+    console.log("using admin credentials for stream player");
+    const creds = await getStreamAdminCredentials("soft");
+    const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY!;
+
+    return [
+      new StreamVideoClient({
+        user: { id: creds.userId, name: "Admin" },
+        apiKey: apiKey,
+        token: creds.token,
+      }),
+      {
+        rtmpAddress: creds.call.rtmpAddress,
+        rtmpStreamKey: creds.call.rtmpStreamKey,
+      },
+    ];
+  } else {
+    console.log("using public credentials for stream player");
+
+    return [
+      new StreamVideoClient({
+        apiKey: process.env.NEXT_PUBLIC_STREAM_API_KEY!,
+        user: publicUser,
+      }),
+      null,
+    ];
+  }
 };
 
 export default StreamGate;

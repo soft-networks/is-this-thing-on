@@ -1,40 +1,127 @@
 import {
   Call,
   ParticipantView,
-  StreamCall,
-  StreamVideo,
-  StreamVideoClient,
   useCall,
   useCallStateHooks,
 } from "@stream-io/video-react-sdk";
-import { createRef, useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
-import StreamPlayer from "../streamPlayer";
 import classNames from "classnames";
-import { getStreamAdminCredentials } from "../../lib/server-api";
-import { logError } from "../../lib/logger";
-
-interface StreamConfig {
-  apiKey: string;
-  userId: string;
-}
 
 /**
- * This component is only shown after we have already verified the user as a room admin, so we can make calls using secrets
- * retrieved from the server and not worry too much about those credentials being viewable in the console.
+ * This panel fits into the overall AdminPanel and manages the Stream video and audio.
  */
 const AdminStreamPanel: React.FC<{
   rtmpsDetails: RtmpsDetails | null;
 }> = ({ rtmpsDetails }) => {
-  const [error, setError] = useState<Error>();
+  const call = useCall();
+  const { useIsCallLive, useParticipants } = useCallStateHooks();
+  const isLive = useIsCallLive();
+  const participants = useParticipants();
 
-  if (error) {
-    return <div className="fullBleed center:children">{error.message}</div>;
+  const [streamType, setStreamType] = useState<"RTMPS" | "Browser" | null>(
+    null,
+  );
+
+  const VIDEO = 2;
+  const liveParticipants = participants.filter((p) =>
+    p.publishedTracks.includes(VIDEO),
+  );
+
+  const liveReady = liveParticipants.length > 0;
+
+  console.log({
+    streamType,
+    isLive,
+    participants,
+    liveParticipants,
+    adminPanel: true,
+    call,
+  });
+
+  if (!call) {
+    return <div>Missing call data. Loading...</div>;
   }
 
-  return <LivestreamView rtmpsDetails={rtmpsDetails} />;
+  let streamInfo;
+
+  if (streamType == null) {
+    streamInfo = <SelectStreamType setStreamType={setStreamType} />;
+  } else if (streamType === "RTMPS") {
+    if (rtmpsDetails) {
+      streamInfo = (
+        <RtmpsStreamDetails
+          rtmpAddress={rtmpsDetails.rtmpAddress}
+          rtmpStreamKey={rtmpsDetails.rtmpStreamKey}
+        />
+      );
+    } else {
+      streamInfo = <div>Missing rtmpsDetails</div>;
+    }
+  } else if (streamType === "Browser") {
+    streamInfo = <BrowserStreamDetails call={call} />;
+  }
+
+  return (
+    <>
+      {streamType != null && (
+        <>
+          {/* Show back button if RTMPS or Browser was selected. */}
+          <button
+            className="padded:s-2 clickable whiteFill greenFill:hover"
+            onClick={() => setStreamType(null)}
+          >
+            Back
+          </button>
+        </>
+      )}
+      {streamInfo}
+      {isLive || liveReady ? (
+        <>
+          <br />
+          <hr />
+          <br />
+          {!isLive && (
+            <>
+              {/* Show number of available inputs and preview of selected input */}
+              <span>
+                {liveParticipants.length} video input
+                {liveParticipants.length > 1 ? "s" : ""} ready.
+              </span>
+              <br />
+              <div
+                className="videoAspectContainer"
+                style={{ width: "302px", height: "169px" }}
+              >
+                <ParticipantView
+                  participant={liveParticipants[0]}
+                  muteAudio={true}
+                  className="noEvents stream-player videoAspect"
+                />
+              </div>
+              <br />
+            </>
+          )}
+          {/* Show button to start or stop livestream */}
+          <button
+            className={classNames(
+              "padded:s-2 clickable",
+              isLive ? "greenFill" : "whiteFill greenFill:hover",
+            )}
+            onClick={() => (isLive ? handleStopLive(call) : handleGoLive(call))}
+          >
+            {isLive ? "Stop Livestream" : "Start livestream"}
+          </button>
+        </>
+      ) : (
+        <br />
+      )}
+    </>
+  );
 };
 
+// To stop livestream, tell Stream to stop the call and then send a custom event. The event will
+// send a webhook to our API and update Firestore to set the room state to inactive.
 const handleStopLive = async (call: Call) => {
   return Promise.all([
     call.stopLive(),
@@ -48,13 +135,16 @@ const handleStopLive = async (call: Call) => {
   });
 };
 
+// Start livestreams with HLS disabled and recording enabled.
 const handleGoLive = async (call: Call) => {
   return call.goLive({ start_hls: false, start_recording: true }).then(() => {
     // Force call state refresh to ensure the UI is updated.
-    call.get().catch((err) => console.log("ERROR" + err));
+    call.get().catch((err) => console.log("ERROR " + err));
   });
 };
 
+// On initial page load, show these options to either provide RTMPS info
+// or to enable the camera and mic for browser-based streaming.
 const SelectStreamType = ({ setStreamType }: { setStreamType: any }) => {
   return (
     <>
@@ -75,20 +165,12 @@ const SelectStreamType = ({ setStreamType }: { setStreamType: any }) => {
 };
 
 const RtmpsStreamDetails = ({
-  call,
   rtmpAddress,
   rtmpStreamKey,
 }: {
-  call: Call;
   rtmpAddress: string;
   rtmpStreamKey: string;
 }) => {
-  useEffect(() => {
-    return () => {
-      handleStopLive(call);
-    };
-  }, []);
-
   return (
     <>
       <span
@@ -113,6 +195,8 @@ const RtmpsStreamDetails = ({
   );
 };
 
+// When selecting "Enable browser video", enable the camera/microphone and
+// allow the admin to select different inputs.
 const BrowserStreamDetails = ({ call }: { call: Call }) => {
   const { useCameraState, useMicrophoneState } = useCallStateHooks();
 
@@ -180,116 +264,6 @@ const BrowserStreamDetails = ({ call }: { call: Call }) => {
             );
           })}
         </select>
-      )}
-    </>
-  );
-};
-
-const LivestreamView = ({
-  rtmpsDetails,
-}: {
-  rtmpsDetails: RtmpsDetails | null;
-}) => {
-  const call = useCall();
-  const { useIsCallLive, useParticipants } = useCallStateHooks();
-
-  const isLive = useIsCallLive();
-
-  const [streamType, setStreamType] = useState<"RTMPS" | "Browser" | null>(
-    null,
-  );
-
-  const participants = useParticipants();
-
-  const VIDEO = 2;
-  const liveParticipants = participants.filter((p) =>
-    p.publishedTracks.includes(VIDEO),
-  );
-
-  const liveReady = liveParticipants.length > 0;
-
-  console.log({
-    streamType,
-    isLive,
-    participants,
-    liveParticipants,
-    adminPanel: true,
-    call,
-  });
-
-  if (!call) {
-    return <div>Missing call data. Loading...</div>;
-  }
-
-  let streamInfo;
-
-  if (streamType == null) {
-    streamInfo = <SelectStreamType setStreamType={setStreamType} />;
-  } else if (streamType === "RTMPS" && rtmpsDetails) {
-    streamInfo = (
-      <RtmpsStreamDetails
-        call={call}
-        rtmpAddress={rtmpsDetails.rtmpAddress}
-        rtmpStreamKey={rtmpsDetails.rtmpStreamKey}
-      />
-    );
-  } else if (streamType === "Browser") {
-    streamInfo = <BrowserStreamDetails call={call} />;
-  } else {
-    console.log({ rtmpsDetails });
-    streamInfo = <div>Ooopsssopsospsopsopospo</div>;
-  }
-
-  return (
-    <>
-      {streamType != null && (
-        <>
-          <button
-            className="padded:s-2 clickable whiteFill greenFill:hover"
-            onClick={() => setStreamType(null)}
-          >
-            Back
-          </button>
-        </>
-      )}
-      {streamInfo}
-      {isLive || liveReady ? (
-        <>
-          <br />
-          <hr />
-          <br />
-          {!isLive && (
-            <>
-              <span>
-                {liveParticipants.length} video input
-                {liveParticipants.length > 1 ? "s" : ""} ready.
-              </span>
-              <br />
-              <div
-                className="videoAspectContainer"
-                style={{ width: "302px", height: "169px" }}
-              >
-                <ParticipantView
-                  participant={liveParticipants[0]}
-                  muteAudio={true}
-                  className="noEvents stream-player videoAspect"
-                />
-              </div>
-              <br />
-            </>
-          )}
-          <button
-            className={classNames(
-              "padded:s-2 clickable",
-              isLive ? "greenFill" : "whiteFill greenFill:hover",
-            )}
-            onClick={() => (isLive ? handleStopLive(call) : handleGoLive(call))}
-          >
-            {isLive ? "Stop Livestream" : "Start livestream"}
-          </button>
-        </>
-      ) : (
-        <br />
       )}
     </>
   );

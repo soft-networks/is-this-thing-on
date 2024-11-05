@@ -167,7 +167,7 @@ const generateNewStreamCall = async (roomId: string): Promise<[string, VideoGetO
             settings_override: {
                 backstage: {
                     enabled: true,
-                    join_ahead_time_seconds: 300,
+                    join_ahead_time_seconds: 60 * 60,  // Allow people to join the call up to an hour beforehand
                 },
             }, 
         } 
