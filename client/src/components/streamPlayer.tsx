@@ -1,8 +1,11 @@
 import {
   ParticipantView,
-  User,
+  useCall,
   useCallStateHooks,
+  User,
 } from "@stream-io/video-react-sdk";
+
+import { useEffect } from "react";
 
 const user: User = { type: "anonymous" };
 
@@ -14,21 +17,20 @@ interface VideoPlayerProps {
 const StreamPlayer: React.FunctionComponent<VideoPlayerProps> = ({
   muted,
   fullscreen,
-}) => {
-  return <LivestreamView muted={muted} fullscreen={fullscreen} />;
-};
-
-const LivestreamView = ({
-  muted,
-  fullscreen,
 }: {
   muted: boolean;
   fullscreen: boolean;
 }) => {
+  const call = useCall();
   const { useIsCallLive, useParticipants } = useCallStateHooks();
   const isLive = useIsCallLive();
 
   const participants = useParticipants();
+
+  useEffect(() => {
+    call?.get();
+  }, [call]);
+
   const VIDEO = 2;
   const liveParticipants = participants.filter((p) =>
     p.publishedTracks.includes(VIDEO),
