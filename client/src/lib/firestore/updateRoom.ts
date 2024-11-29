@@ -30,10 +30,8 @@ async function updateRoom(room: UpdateRoomProps) {
   try {
     const { roomName, roomId, roomColor } = room;
     const roomData = {
-      name: roomName,
-      id: roomId,
-      color: roomColor,
-      createdAt: new Date()
+      room_name: roomName,
+      room_color: roomColor
     };
     const roomRef = doc(db, 'rooms', roomId);
     await setDoc(roomRef, roomData, { merge: true });

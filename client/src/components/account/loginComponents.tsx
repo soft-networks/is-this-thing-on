@@ -2,7 +2,37 @@ import { useCallback, useState } from "react";
 
 import { useUserStore } from "../../stores/userStore";
 
-export const SignUp: React.FC = () => {
+
+const LoginScreen: React.FC = () => {
+  return (
+    <div className="stack:s2 padded quarterWidth centerh">
+      <div className="stack ">
+        <p>
+          <em> welcome to is this THING on? </em>
+        </p>
+        <p>
+          you can view streams, chat and leave reactions without an account. if
+          you want a username or for your data to be tied to an identity, you
+          can login below.
+        </p>
+        <p>
+          please note that we are currently in Season 1 - in which all data is
+          being stored in central servers run by Google, Amazon et all. there is
+          also a central administrator (Bhavik!) who can view all your data,
+          edit it, remove any chats, and so on. if you have any questions please{" "}
+          <a href="mailto:hello@softnet.works" target="_blank" rel="noreferrer">
+            reach out to him directly
+          </a>
+        </p>
+      </div>
+      <SignUp />
+      <SignIn />
+    </div>
+  );
+};
+
+
+const SignUp: React.FC = () => {
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [usernameValue, setUsernameValue] = useState("");
@@ -84,7 +114,7 @@ export const SignUp: React.FC = () => {
   );
 };
 
-export const SignIn: React.FC = () => {
+const SignIn: React.FC = () => {
   const [usernameValue, setUsernameValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [error, setError] = useState("");
@@ -134,3 +164,5 @@ export const SignIn: React.FC = () => {
     </div>
   );
 };
+
+export default LoginScreen;;
