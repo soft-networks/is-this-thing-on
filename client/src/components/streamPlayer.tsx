@@ -4,22 +4,26 @@ import {
   StreamCall,
   StreamVideo,
   StreamVideoClient,
-  User,
   useCallStateHooks,
+  User,
 } from "@stream-io/video-react-sdk";
-import { logError, logInfo } from "../lib/logger";
+
 import { useEffect, useState } from "react";
+
+import { logError, logInfo } from "../lib/logger";
 
 const user: User = { type: "anonymous" };
 
 interface VideoPlayerProps {
   muted: boolean;
   streamCallId: string;
+  fullscreen: boolean;
 }
 
 const StreamPlayer: React.FunctionComponent<VideoPlayerProps> = ({
   muted,
   streamCallId,
+  fullscreen,
 }) => {
   const [state, setState] = useState<{
     client: StreamVideoClient;
@@ -67,13 +71,19 @@ const StreamPlayer: React.FunctionComponent<VideoPlayerProps> = ({
   return (
     <StreamVideo client={state.client}>
       <StreamCall call={state.call}>
-        <LivestreamView muted={muted} />
+        <LivestreamView muted={muted} fullscreen={fullscreen} />
       </StreamCall>
     </StreamVideo>
   );
 };
 
-const LivestreamView = ({ muted }: { muted: boolean }) => {
+const LivestreamView = ({
+  muted,
+  fullscreen,
+}: {
+  muted: boolean;
+  fullscreen: boolean;
+}) => {
   const { useIsCallLive, useParticipants } = useCallStateHooks();
   const isLive = useIsCallLive();
 
@@ -89,7 +99,7 @@ const LivestreamView = ({ muted }: { muted: boolean }) => {
     <ParticipantView
       participant={liveParticipants[0]}
       muteAudio={muted}
-      className="noEvents videoAspectElement stream-player"
+      className={`noEvents stream-player ${fullscreen ? "videoAspectElement" : "streamPreviewAspectElement"}`}
     />
   ) : (
     <div className="center:absolute whiteFill border padded:s1 highestLayer">
