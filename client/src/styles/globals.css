@@ -897,11 +897,24 @@ footer .clickable:hover{
   background: var(--contrast);
 } */
 
+
+input[type="text"] {
+  background: none;
+  border: none;
+  outline: none;
+  padding: var(--s-1);
+  background: var(--white);
+  border: 1px solid var(--gray);
+}
+input[type="color"] {
+  border: 0;
+}
 input,
 input::placeholder {
   font-family: "Manifont Grotesk", monospace;
   font: var(--s0);
   border-radius: 0; /* Add this line */
+  
 }
 
 input:focus {

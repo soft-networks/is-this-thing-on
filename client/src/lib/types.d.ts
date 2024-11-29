@@ -1,10 +1,3 @@
-interface MagicPiece {
-  id: string;
-  triggerType?: any;
-  pos: { x: number; y: number };
-  asset?: string;
-  reward?: number;
-}
 
 interface SarahQuestion {
   question: string;
@@ -66,4 +59,11 @@ interface StickerInstance {
 interface RoomUIProps {
   className?: string;
   style?: React.CSSProperties;
+}
+
+interface UpdateRoomProps {
+  roomName: string;
+  roomId: string;
+  roomColor: string;
+  adminUserId: string;
 }
