@@ -10,8 +10,12 @@ export const generateStreamLink = (playbackID: string) => {
   return `https://stream.mux.com/${playbackID}.m3u8`;
 };
 
-const fetchResponse = async (endpoint: string) => {
-  const response = await fetch(endpoint);
+const fetchResponse = async (adminToken: string, endpoint: string) => {
+  const response = await fetch(endpoint, {
+    headers: {
+      Authorization: `Bearer ${adminToken}`,
+    },
+  });
   if (!response.ok) {
     throw new Error(
       `Request to ${endpoint} failed with status code ${response.status}`,
@@ -20,12 +24,10 @@ const fetchResponse = async (endpoint: string) => {
   return response;
 };
 
-export const getStreamKey = async (streamName: string) => {
+export const getStreamKey = async (adminToken: string, streamName: string) => {
   try {
-    // Imagine that this getStreamKey has a secret key like
-    // let secretKey = hash(process.env.secretKey)
-    //Then fetchResponse(/streamName, )
     const streamKeyResponse = await fetchResponse(
+      adminToken,
       `${STREAMS_KEY_ENDPOINT}/${streamName}`,
     );
     const streamKeys = await streamKeyResponse.json();
@@ -42,26 +44,8 @@ interface ServerCallResponse {
   rtmpStreamKey: string;
 }
 
-export const getStreamCall = async (
-  streamName: string,
-): Promise<ServerCallResponse | undefined> => {
-  try {
-    const resp = await fetchResponse(`${STREAM_ENDPOINT}/${streamName}/call`);
-    const json = await resp.json();
-
-    return {
-      id: json["callId"],
-      rtmpAddress: json["rtmpAddress"],
-      rtmpStreamKey: json["rtmpStreamKey"],
-    };
-  } catch (e) {
-    console.log("Error getting stream call", (e as Error).message);
-    return undefined;
-  }
-};
-
-export const resetRoom = async (roomID: string) => {
-  await fetch(SERVER_URL + "/reset-room/" + roomID);
+export const resetRoom = async (adminToken: string, roomID: string) => {
+  return fetchResponse(adminToken, SERVER_URL + "/reset-room/" + roomID);
 };
 
 interface StreamAdminCredentials {
@@ -71,9 +55,11 @@ interface StreamAdminCredentials {
 }
 
 export const getStreamAdminCredentials: (
+  adminToken: string,
   roomID: string,
-) => Promise<StreamAdminCredentials> = async (roomID) => {
+) => Promise<StreamAdminCredentials> = async (adminToken, roomID) => {
   const streamTokenResponse = await fetchResponse(
+    adminToken,
     `${STREAM_ENDPOINT}/${roomID}/token`,
   );
   const resp = await streamTokenResponse.json();
