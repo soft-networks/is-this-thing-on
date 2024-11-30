@@ -1,9 +1,9 @@
-import Head from "next/head";
+import { roomIsActive, useRoomStore } from "../../stores/roomStore";
 import { useCallback, useMemo } from "react";
 
-import useRingStore from "../../stores/ringStore";
-import { roomIsActive, useRoomStore } from "../../stores/roomStore";
 import ConsentGate from "./consentGate";
+import Head from "next/head";
+import useRingStore from "../../stores/ringStore";
 
 const loadingDiv = <div className="center:absolute"> loading...</div>;
 const RoomNameGate: React.FunctionComponent<{ id: string }> = ({
@@ -42,7 +42,12 @@ export const RoomStatusGate: React.FunctionComponent = ({ children }) => {
         </ConsentGate>
       )}
       {roomInfo && !roomIsActive(roomInfo) && (
-        <div className="fullBleed"><div className="center:absolute highestLayer"> offline... for now (archive here)</div></div>
+        <div className="fullBleed">
+          <div className="center:absolute highestLayer">
+            {" "}
+            offline... for now (archive here)
+          </div>
+        </div>
       )}
     </>
   );

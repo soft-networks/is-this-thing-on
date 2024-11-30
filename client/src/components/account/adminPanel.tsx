@@ -1,18 +1,24 @@
-import classnames from "classnames";
-import Draggable from "react-draggable";
-
 import { createRef, useCallback } from "react";
 
+import AdminStreamPanel from "./adminStreamPanel";
+import Draggable from "react-draggable";
+import classnames from "classnames";
 import { resetStickers } from "../../lib/firestore";
 import { useAdminStore } from "../../stores/adminStore";
 import { useRoomStore } from "../../stores/roomStore";
 
-const AdminPanel = () => {
+const AdminPanel = ({
+  rtmpsDetails,
+}: {
+  rtmpsDetails: RtmpsDetails | null;
+}) => {
   const isAdmin = useAdminStore(useCallback((s) => s.isAdmin, []));
-  return isAdmin ? <AdminPanelInternal /> : null;
+  return isAdmin ? <AdminPanelInternal rtmpsDetails={rtmpsDetails} /> : null;
 };
 
-const AdminPanelInternal: React.FC<{}> = () => {
+const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
+  rtmpsDetails,
+}) => {
   const roomName = useRoomStore(useCallback((s) => s.roomInfo?.roomID, []));
   let panelRef = createRef<HTMLDivElement>();
 
@@ -48,6 +54,10 @@ const AdminPanelInternal: React.FC<{}> = () => {
               ⚠️ Reset Stickers
             </div>
           )}
+          <br />
+          <hr />
+          <br />
+          {roomName && <AdminStreamPanel rtmpsDetails={rtmpsDetails} />}
         </div>
       </div>
     </Draggable>

@@ -1,7 +1,5 @@
-import React from "react";
-
-import AdminPanel from "../account/adminPanel";
 import { Chat } from "../interactive/chat";
+import React from "react";
 import VideoPlayer from "../videoPlayer";
 
 const Ambient: React.FC = () => {
@@ -25,7 +23,6 @@ const Ambient: React.FC = () => {
         }
       />
       <VideoPlayer />
-      <AdminPanel />
     </main>
   );
 };

@@ -19,6 +19,7 @@ const VideoPreview: React.FC<{
       ? generateStreamLink(iLink.streamPlaybackID)
       : undefined;
   }, [iLink.streamPlaybackID, isTest]);
+
   useEffect(() => {
     if (streamLink) logVideo(iLink.roomName, streamLink);
   }, [iLink.roomName, streamLink]);
@@ -29,11 +30,7 @@ const VideoPreview: React.FC<{
         className="videoAspectContainer"
         style={{ width: "302px", height: "169px" }}
       >
-        <StreamPlayer
-          muted={true}
-          streamCallId={iLink.streamPlaybackID}
-          fullscreen={false}
-        />
+        <StreamPlayer muted={true} fullscreen={false} />
       </div>
     );
   } else if (isTest) {
