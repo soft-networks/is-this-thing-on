@@ -5,14 +5,17 @@ import {
   StreamVideoClient,
   User,
 } from "@stream-io/video-react-sdk";
+import { getAuth } from "firebase/auth";
 
 import { useCallback, useEffect, useState } from "react";
 
+import { app } from "../../lib/firestore/init";
 import { logError, logInfo } from "../../lib/logger";
 import { getStreamAdminCredentials } from "../../lib/server-api";
 import { useAdminStore } from "../../stores/adminStore";
 import { useRoomStore } from "../../stores/roomStore";
 
+const auth = getAuth(app);
 const publicUser: User = { type: "anonymous" };
 
 /**
@@ -106,7 +109,12 @@ const getClient = async (
      * not worry too much about those credentials being viewable in the console.
      */
     console.log("using admin credentials for stream player");
-    const creds = await getStreamAdminCredentials(roomId);
+    if (!auth.currentUser) {
+      throw Error("Current user is unexpectedly null");
+    }
+
+    const adminToken = await auth.currentUser.getIdToken();
+    const creds = await getStreamAdminCredentials(adminToken, roomId);
     const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY!;
 
     return [
