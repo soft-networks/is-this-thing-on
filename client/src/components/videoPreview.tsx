@@ -19,6 +19,7 @@ const VideoPreview: React.FC<{
       ? generateStreamLink(iLink.streamPlaybackID)
       : undefined;
   }, [iLink.streamPlaybackID, isTest]);
+
   useEffect(() => {
     if (streamLink) logVideo(iLink.roomName, streamLink);
   }, [iLink.roomName, streamLink]);
