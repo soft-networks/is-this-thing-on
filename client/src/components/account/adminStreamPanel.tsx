@@ -30,15 +30,6 @@ const AdminStreamPanel: React.FC<{
 
   const liveReady = liveParticipants.length > 0;
 
-  console.log({
-    streamType,
-    isLive,
-    participants,
-    liveParticipants,
-    adminPanel: true,
-    call,
-  });
-
   if (!call) {
     return <div>Missing call data. Loading...</div>;
   }
