@@ -1,11 +1,10 @@
-import { useCallback } from "react";
-import { useRoomStore } from "../../stores/roomStore";
-import AdminPanel from "../account/adminPanel";
 import { Chat } from "../interactive/chat";
 import { StickerAdderProps } from "../interactive/stickerAdders";
 import Stickers from "../interactive/stickers";
 import VideoPlayer from "../videoPlayer";
-import useMediaQuery  from '../../stores/useMediaQuery';
+import { useCallback } from "react";
+import useMediaQuery from "../../stores/useMediaQuery";
+import { useRoomStore } from "../../stores/roomStore";
 
 interface RoomViewProps {
   stickerStyle?: React.CSSProperties;
@@ -13,8 +12,10 @@ interface RoomViewProps {
   chatStyle?: React.CSSProperties;
 }
 
-
-const DefaultRoomMobileContent = ({ chatStyle, roomInfo }: RoomViewProps & { roomInfo: any }) => (
+const DefaultRoomMobileContent = ({
+  chatStyle,
+  roomInfo,
+}: RoomViewProps & { roomInfo: any }) => (
   <div className="fullBleed stack">
     <Chat key={`${roomInfo.roomID}-chat`} style={chatStyle} />
   </div>
@@ -30,7 +31,6 @@ const DefaultRoomDesktopContent = ({
     <Chat key={`${roomInfo.roomID}-chat`} style={chatStyle} />
     <VideoPlayer />
     <Stickers style={stickerStyle} StickerChooser={stickerChooser} />
-    <AdminPanel />
   </>
 );
 
@@ -52,6 +52,5 @@ const DefaultRoom = (props: RoomViewProps) => {
     </main>
   );
 };
-
 
 export default DefaultRoom;
