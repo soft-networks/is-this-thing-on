@@ -105,6 +105,7 @@ a,
 a:visited,
 .clickable\:link {
   color: var(--black);
+  text-decoration: none;
 }
 
 .chrisyRoom .addCursor {
@@ -193,6 +194,12 @@ iframe body {
   width: 100%;
   height: 100%;
   position: relative;
+}
+
+.fullScreen {
+  width: 100vw;
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
 }
 
 .fullHeight {
@@ -553,6 +560,9 @@ pre {
   text-decoration: underline;
 }
 
+.underline {
+  text-decoration: underline;
+}
 .noUnderline * {
   text-decoration: none;
 }
@@ -643,6 +653,10 @@ a:hover,
 .whiteFill {
   background: var(--white);
 }
+
+.yellowFill {
+  background: yellow;
+}
 .faintWhiteFill {
   background: var(--faintWhite);
 }
@@ -724,6 +738,19 @@ a:hover,
   width: 100%;
   height: 100%;
 }
+
+.streamPreviewAspectElement,
+.streamPreviewAspectElement > .testPlayer {
+  height: 100%;
+  width: 100%;
+
+  /* Always center the video so the sides are cut off evenly */
+  position: absolute;
+  left: 50%; /* % of surrounding element */
+  top: 50%;
+  transform: translate(-50%, -50%); /* % of current element */
+}
+
 .videoAspectElement,
 .videoAspectElement > .testPlayer {
   height: 100%;
@@ -740,6 +767,13 @@ a:hover,
 .stream-player > video {
   width: 100%;
   height: 100%;
+}
+
+/* Hide default Stream participant details */
+.str-video__video-placeholder,
+.str-video__participant-details,
+.str-video__call-controls__button {
+  display: none;
 }
 
 /* .muxPlayer {
@@ -773,9 +807,24 @@ a:hover,
   border-color: var(--chatBorderColor);
   transition: all 100ms;
   position: absolute;
-  bottom: var(--s0);
-  left: var(--s0);
+  bottom: 0;
+  left: 0;
+  padding: var(--s-1);
 }
+.chatScrollContainer {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.chatScrollContainer::-webkit-scrollbar {
+  /* WebKit */
+  width: 0;
+  height: 0;
+}
+
 .chat .contrastColor\:hover:hover {
   color: var(--chatAuthorColor);
 }
@@ -852,6 +901,7 @@ input,
 input::placeholder {
   font-family: "Manifont Grotesk", monospace;
   font: var(--s0);
+  border-radius: 0; /* Add this line */
 }
 
 input:focus {
@@ -951,23 +1001,70 @@ input:focus {
   }
 }
 
-@media screen and (max-width: 800px) {
-  #mobileMessage {
-    visibility: visible;
-    opacity: 1;
+@media screen and (max-width: 768px) {
+  #rotatingEllipseContainer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: rotate(0deg);
   }
-  #desktopMessage {
-    visibility: hidden;
-    opacity: 0;
+  .smallElementOnEllipse {
+    offset-path: ellipse(35% 35% at center);
+    offset-rotate: 0deg;
+    vertical-align: middle;
+    animation: move 120s infinite linear;
+  }
+  .antiRotate {
+    transform: rotate(0deg);
+  }
+  .chat {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    padding: var(--s-2);
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .chat > div:first-child {
+    max-height: 100% !important;
+    flex-grow: 1;
+  }
+  .quarterWidth {
+    max-inline-size: 100%;
+  }
+  .hideOnMobile,
+  video {
+    display: none;
+  }
+
+  .homepageLabel {
+    width: 80px;
+    height: 48px;
+  }
+
+  .chat::before {
+    content: "";
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      0deg,
+      rgba(236, 236, 236, 0) 0%,
+      rgba(236, 236, 236, 0) 70%,
+      rgba(236, 236, 236, 1) 100%
+    );
   }
 }
 @media screen and (min-width: 801px) {
-  #desktopMessage {
-    visibility: visible;
-    opacity: 1;
-  }
-  #mobileMessage {
-    visibility: hidden;
-    opacity: 0;
-  }
 }

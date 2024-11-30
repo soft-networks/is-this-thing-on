@@ -6,15 +6,26 @@ import { useUserStore } from "../../stores/userStore";
 import Admin from "./admin";
 import { SignIn, SignUp } from "./loginComponents";
 
+import { useRouter } from 'next/router';
+
 const Auth: React.FC = () => {
   const currentUser = useUserStore(
     useCallback((state) => state.currentUser, []),
   );
-  return currentUser ? (
-    <AccountManager currentUser={currentUser} key="accountManager" />
-  ) : (
+  const router = useRouter();
+
+  return (<div className="fullBleed lightFill">
+    {currentUser ? (
+      <AccountManager currentUser={currentUser} key="accountManager" />
+    ) : (
     <LoginScreen key="login" />
-  );
+  )}
+    <div className="padded:s-1 align-end:fixed horizontal-stack fullWidth">
+      <div className="padded:s-2 border align-end whiteFill clickable" onClick={() => router.back()}>
+        close
+       </div>
+    </div>
+  </div>)
 };
 
 const LoginScreen: React.FC = () => {

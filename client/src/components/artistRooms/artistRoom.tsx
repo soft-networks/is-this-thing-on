@@ -7,8 +7,16 @@ import Maya from "./maya";
 import Molly from "./molly";
 import Sarah from "./sarah";
 import Soft from "./soft";
+import useMediaQuery  from '../../stores/useMediaQuery';
 
 const ArtistRoom = ({ roomID }: { roomID: string }) => {
+  const isMobile = useMediaQuery();
+
+  if (isMobile) {
+    return <DefaultRoom />;
+  }
+
+  // Existing desktop version
   if (roomID == "compromised") {
     return <Compromised />;
   }
