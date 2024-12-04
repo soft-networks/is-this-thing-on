@@ -58,10 +58,10 @@ export const HomeRing: React.FC<{ }> = ({}) => {
 </div>
 };
 
-const FooterLogo: React.FC<{ ring: WebRing; roomID: string }> = ({
-  ring,
+const FooterLogo: React.FC<{ roomID: string }> = ({
   roomID,
 }) => {
+  const ring = useRingStore(useCallback((s) => s.links, []));
   const { push } = useRouter();
   const indexSelected = useMemo(() => {
     if (!roomID) return;
