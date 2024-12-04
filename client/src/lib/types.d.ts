@@ -67,3 +67,6 @@ interface UpdateRoomProps {
   roomColor: string;
   adminUserId: string;
 }
+
+type RtmpsDetails = { rtmpAddress: string; rtmpStreamKey: string };
+

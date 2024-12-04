@@ -16,7 +16,7 @@
     "@mux/mux-video-react": "^0.7.0",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/auto-instrumentations-web": "^0.40.0",
-    "@stream-io/video-react-sdk": "^1.2.20",
+    "@stream-io/video-react-sdk": "^1.7.27",
     "classnames": "^2.3.1",
     "emotion": "^11.0.0",
     "firebase": "^9.6.4",

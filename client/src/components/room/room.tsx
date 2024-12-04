@@ -2,7 +2,11 @@ import { Unsubscribe } from "firebase/auth";
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
 
-import { activePresenceHeartbeat, setUserPresenceHeartbeat, syncRoomInfoDB } from "../../lib/firestore";
+import {
+  activePresenceHeartbeat,
+  setUserPresenceHeartbeat,
+  syncRoomInfoDB,
+} from "../../lib/firestore";
 import {
   logCallbackDestroyed,
   logCallbackSetup,
@@ -13,9 +17,11 @@ import { useAdminStore } from "../../stores/adminStore";
 import { useRoomStore } from "../../stores/roomStore";
 import useStickerCDNStore from "../../stores/stickerStore";
 import { useUserStore } from "../../stores/userStore";
+import AdminPanel from "../account/adminPanel";
 import ArtistRoom from "../artistRooms/artistRoom";
 import Layout from "./layout";
 import RoomNameGate, { RoomStatusGate } from "./roomGate";
+import StreamGate from "./streamGate";
 
 const Room: React.FC<{ roomID: string; season?: number }> = ({
   roomID,
@@ -31,8 +37,12 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({
   const unsubscribeFromRoomInfo = useRef<Unsubscribe>();
   const adminForIDs = useUserStore(useCallback((s) => s.adminFor, []));
   const setIsAdmin = useAdminStore(useCallback((s) => s.setIsAdmin, []));
+
+  const roomPlaybackId = useRoomStore(
+    useCallback((s) => s.roomInfo?.streamPlaybackID, []),
+  );
   const roomColor = useRoomStore(useCallback((s) => s.roomInfo?.roomColor, []));
-  const displayName = useUserStore(useCallback((s) => s.displayName, []))
+  const displayName = useUserStore(useCallback((s) => s.displayName, []));
 
   useEffect(() => {
     async function subscribeToRoomInfo() {
@@ -49,6 +59,7 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({
         );
         //TODO: This is a weird place to do this, it should be after the gate.. but its okay for now.
         initializeRoomStickerCDN(roomID);
+        console.log({ adminForIDs, roomID });
         if (adminForIDs && roomID && adminForIDs.includes(roomID)) {
           logInfo("You are admin for this room");
           setIsAdmin(true);
@@ -67,7 +78,6 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomID]);
 
-
   useEffect(() => {
     if (displayName && roomID) {
       setUserPresenceHeartbeat(displayName, roomID);
@@ -80,17 +90,26 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({
     };
   }, [displayName, roomID]);
 
-
   return (
     <Layout roomColor={roomColor}>
       <RoomNameGate id={roomID as string}>
-        <RoomStatusGate>
-          <ArtistRoom roomID={roomID} />
-        </RoomStatusGate>
+        <StreamGate
+          roomID={roomID}
+          streamPlaybackID={roomPlaybackId}
+          anonymousOnly={false}
+        >
+          {(rtmpsDetails: RtmpsDetails | null) => (
+            <>
+              <AdminPanel rtmpsDetails={rtmpsDetails} />
+              <RoomStatusGate>
+                <ArtistRoom roomID={roomID} />
+              </RoomStatusGate>
+            </>
+          )}
+        </StreamGate>
       </RoomNameGate>
     </Layout>
   );
 };
-
 
 export default Room;
