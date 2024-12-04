@@ -16,7 +16,7 @@ interface ChatMessage {
 
 interface StreamNames {
   names?: string[];
-}
+} 
 
 type STREAM_STATUS_TYPE = "active" | "disconnected" | "active-test";
 
@@ -35,6 +35,7 @@ type RoomInfo = RoomLinkInfo & {
   streamOwner: string;
   numOnline: number;
 };
+
 
 type Pos = [number, number];
 

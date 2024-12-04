@@ -9,7 +9,7 @@ interface AdminStore {
   setStickerBehaviorOverride: (behavior: BEHAVIOR_TYPES | undefined) => void;
 }
 
-export const useAdminStore = create<AdminStore>((set) => ({
+export const useGlobalAdminStore = create<AdminStore>((set) => ({
   isAdmin: false,
   setIsAdmin: (isAdmin: boolean) => {
     if (!isAdmin) {

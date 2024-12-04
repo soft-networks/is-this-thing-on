@@ -1,11 +1,11 @@
 import { useCallback } from "react";
-import { useUserStore } from "../../stores/userStore";
+import { useGlobalUserStore } from "../../stores/globalUserStore";
 import { useRouter } from 'next/router';
 import LoginScreen from "./loginComponents";
 import LoggedInSettings from "./loggedInSettings";
 
 const Auth: React.FC = () => {
-  const currentUser = useUserStore(
+  const currentUser = useGlobalUserStore(
     useCallback((state) => state.currentUser, []),
   );
   const router = useRouter();

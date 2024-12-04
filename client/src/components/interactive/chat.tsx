@@ -20,7 +20,7 @@ import {
 } from "../../lib/logger";
 import useGlobalRoomsInfoStore from "../../stores/globalRoomsInfoStore";
 import { useRoomStore } from "../../stores/roomStore";
-import { useUserStore } from "../../stores/userStore";
+import { useGlobalUserStore } from "../../stores/globalUserStore";
 import useMediaQuery from "../../stores/useMediaQuery";
 
 const DEFAULT_STYLE = (roomColor: string, globalStyle: boolean) =>
@@ -258,7 +258,7 @@ const ChatInput: React.FC<{
     username: string;
   }) => void;
 }> = ({ onSubmit }) => {
-  const displayName = useUserStore((state) => state.displayName);
+  const displayName = useGlobalUserStore((state) => state.displayName);
   //const numOnline = useRoomStore((state) => state.roomInfo?.numOnline);
 
   const [currentMessage, setCurrentMessage] = useState<string>("");

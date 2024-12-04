@@ -5,7 +5,7 @@ import React, { useCallback, useEffect } from "react";
 import { Chat } from "../components/interactive/chat";
 import Layout from "../components/room/layout";
 import { useRoomStore } from "../stores/roomStore";
-import { useUserStore } from "../stores/userStore";
+import { useGlobalUserStore } from "../stores/globalUserStore";
 import { activePresenceHeartbeat, setUserPresenceHeartbeat } from "../lib/firestore";
 import useMediaQuery from "../stores/useMediaQuery";
 import DomRing from "../components/rings/domRing";
@@ -13,7 +13,7 @@ import Link from "next/link";
 
 const Index: NextPage = () => {
   const changeRoom = useRoomStore((s) => s.changeRoom);
-  const displayName = useUserStore(useCallback((s) => s.displayName, []))
+  const displayName = useGlobalUserStore(useCallback((s) => s.displayName, []))
   const isMobile = useMediaQuery();
 
   useEffect(() => {

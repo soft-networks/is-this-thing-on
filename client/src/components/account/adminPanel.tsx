@@ -4,7 +4,7 @@ import AdminStreamPanel from "./adminStreamPanel";
 import Draggable from "react-draggable";
 import classnames from "classnames";
 import { resetStickers } from "../../lib/firestore";
-import { useAdminStore } from "../../stores/adminStore";
+import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
 import { useRoomStore } from "../../stores/roomStore";
 
 const AdminPanel = ({
@@ -12,7 +12,7 @@ const AdminPanel = ({
 }: {
   rtmpsDetails: RtmpsDetails | null;
 }) => {
-  const isAdmin = useAdminStore(useCallback((s) => s.isAdmin, []));
+  const isAdmin = useGlobalAdminStore(useCallback((s) => s.isAdmin, []));
   return isAdmin ? <AdminPanelInternal rtmpsDetails={rtmpsDetails} /> : null;
 };
 
@@ -65,10 +65,10 @@ const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
 };
 
 const StickerOverride: React.FC = () => {
-  const stickerBehaviorOverride = useAdminStore(
+  const stickerBehaviorOverride = useGlobalAdminStore(
     useCallback((s) => s.stickerBehaviorOverride, []),
   );
-  const setStickerBehaviorOverride = useAdminStore(
+  const setStickerBehaviorOverride = useGlobalAdminStore(
     useCallback((s) => s.setStickerBehaviorOverride, []),
   );
 
@@ -106,8 +106,8 @@ const StickerOverride: React.FC = () => {
 };
 
 const VideoOverride: React.FC = () => {
-  const hideVideo = useAdminStore(useCallback((s) => s.hideVideo, []));
-  const setVideoOverride = useAdminStore(
+  const hideVideo = useGlobalAdminStore(useCallback((s) => s.hideVideo, []));
+  const setVideoOverride = useGlobalAdminStore(
     useCallback((s) => s.setHideVideo, []),
   );
   return (

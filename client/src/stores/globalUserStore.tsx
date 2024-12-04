@@ -36,7 +36,7 @@ interface UserState {
   ) => void;
 }
 
-export const useUserStore = create<UserState>()(
+export const useGlobalUserStore = create<UserState>()(
   persist(
     (set) => ({
       currentUser: undefined,

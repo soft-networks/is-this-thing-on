@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { useUserStore } from "../../stores/userStore";
+import { useGlobalUserStore } from "../../stores/globalUserStore";
 
 const ChangeUsername: React.FC = () => {
-    const updateDisplayname = useUserStore(
+    const updateDisplayname = useGlobalUserStore(
       useCallback((state) => state.updateDisplayname, []),
     );
     const [localDisplayname, setLocalDisplayname] = useState<string>("");
@@ -45,7 +45,7 @@ const ChangeUsername: React.FC = () => {
   };
   
   const SignOut = () => {
-    const signOut = useUserStore(useCallback((state) => state.signOut, []));
+    const signOut = useGlobalUserStore(useCallback((state) => state.signOut, []));
   
     return (
       <div

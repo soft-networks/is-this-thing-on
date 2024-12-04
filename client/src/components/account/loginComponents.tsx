@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import { useUserStore } from "../../stores/userStore";
+import { useGlobalUserStore } from "../../stores/globalUserStore";
 
 
 const LoginScreen: React.FC = () => {
@@ -38,8 +38,8 @@ const SignUp: React.FC = () => {
   const [usernameValue, setUsernameValue] = useState("");
 
   const [error, setError] = useState("");
-  const signUp = useUserStore(useCallback((state) => state.signUp, []));
-  const updateDisplayname = useUserStore(
+  const signUp = useGlobalUserStore(useCallback((state) => state.signUp, []));
+  const updateDisplayname = useGlobalUserStore(
     useCallback((state) => state.updateDisplayname, []),
   );
 
@@ -118,7 +118,7 @@ const SignIn: React.FC = () => {
   const [usernameValue, setUsernameValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [error, setError] = useState("");
-  const signIn = useUserStore(useCallback((state) => state.signIn, []));
+  const signIn = useGlobalUserStore(useCallback((state) => state.signIn, []));
   const signInComplete = useCallback(
     (success: boolean, error?: string) => {
       if (success) {

@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useCallback, useState } from "react";
-import { useUserStore } from "../../stores/userStore";
+import { useGlobalUserStore } from "../../stores/globalUserStore";
 import { ChangeUsername, SignOut } from "./userManagement";
 import { User } from "firebase/auth";
 import { getRoomsWhereUserISAdmin } from "../../lib/firestore";
 import { CreateRoom, UpdateRoom } from "./roomManagement";
 
 const LoggedInSettings: React.FC<{ currentUser: User }> = ({ currentUser }) => {
-    const displayName = useUserStore(
+    const displayName = useGlobalUserStore(
       useCallback((state) => state.displayName, []),
     );
     return (

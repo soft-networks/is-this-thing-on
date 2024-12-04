@@ -16,10 +16,10 @@ import {
   addStickerInstance,
   syncStickerInstances,
 } from "../../../lib/firestore";
-import { useAdminStore } from "../../../stores/adminStore";
+import { useGlobalAdminStore } from "../../../stores/globalUserAdminStore";
 import { useRoomStore } from "../../../stores/roomStore";
 import useStickerCDNStore from "../../../stores/stickerStore";
-import { useUserStore } from "../../../stores/userStore";
+import { useGlobalUserStore } from "../../../stores/globalUserStore";
 import { DefaultStickerAdder, RandomStickerAdder } from "../stickerAdders";
 import { StickerRenderer } from "../stickerRenderHelpers";
 
@@ -115,10 +115,10 @@ const ChrisyStickerAdder: React.FC<{
   cdn: StickerCDN;
   containerBounds: RectReadOnly;
 }> = ({ roomID, cdn, containerBounds }) => {
-  const behaviorOverride = useAdminStore(
+  const behaviorOverride = useGlobalAdminStore(
     useCallback((s) => s.stickerBehaviorOverride, []),
   );
-  const displayName = useUserStore(
+  const displayName = useGlobalUserStore(
     useCallback((state) => state.displayName, []),
   );
   const addSticker = (pos: Pos, cdnID: string, scale?: number) => {
@@ -142,10 +142,10 @@ const ChrisyStickerAdder: React.FC<{
 };
 
 const ChrisyStickerAdminController: React.FC = () => {
-  const behaviorOverride = useAdminStore(
+  const behaviorOverride = useGlobalAdminStore(
     useCallback((s) => s.stickerBehaviorOverride, []),
   );
-  const setBehaviorOverride = useAdminStore(
+  const setBehaviorOverride = useGlobalAdminStore(
     useCallback((s) => s.setStickerBehaviorOverride, []),
   );
 
