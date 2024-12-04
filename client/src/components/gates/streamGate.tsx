@@ -39,14 +39,12 @@ const StreamGate: React.FunctionComponent<{
 
   const useAdmin = !anonymousOnly && isAdmin;
 
+  //On page load, create a client which should set a streamPlaybackID in the server. If not, we will end up re-calling getClient() once it loads.
   useEffect(() => {
     console.log("GETTING CLIENT IN STREAMGATE");
     getClient(roomID, useAdmin).then(([myClient, rtmpsDetails]) => {
       if (!streamPlaybackID) {
         console.log("NO STREAM PLAYBACK ID IN STREAMGATE");
-        // Technically, streamPlaybackID may be indirectly set in the middle of getClient()
-        // so there is a race condition here. If this happens, we will call getClient twice,
-        // and that's okay.
         return;
       }
 
