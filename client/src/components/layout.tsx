@@ -2,14 +2,17 @@ import { Unsubscribe } from "firebase/firestore";
 
 import { useCallback, useEffect, useRef } from "react";
 
-import { syncWebRing } from "../../lib/firestore";
-import { logCallbackDestroyed, logCallbackSetup } from "../../lib/logger";
-import useGlobalRoomsInfoStore from "../../stores/globalRoomsInfoStore";
-import ClickGate from "../gates/globalClickedGate";
-import Footer from "./footer";
-import useMediaQuery from "../../stores/useMediaQuery";
+import { syncWebRing } from "../lib/firestore";
+import { logCallbackDestroyed, logCallbackSetup } from "../lib/logger";
+import useGlobalRoomsInfoStore from "../stores/globalRoomsInfoStore";
+import ClickGate from "./gates/globalClickedGate";
+import Footer from "./room/footer";
+import useMediaQuery from "../stores/useMediaQuery";
 import classnames from "classnames";
 import Head from "next/head";
+import Instrumentation from "./Instrumentation";
+
+
 //TODO: Currently we have a listener for each ringNode. Can simplify, requires DB refactor.
 
 const Layout: React.FunctionComponent<{
@@ -62,6 +65,7 @@ const Layout: React.FunctionComponent<{
         {children}
         {!hideFooter && <Footer />}
       </ClickGate>
+      <Instrumentation />
     </div>
   );
 };

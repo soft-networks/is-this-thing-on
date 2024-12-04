@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import React, { useCallback, useEffect } from "react";
 import { Chat } from "../components/interactive/chat";
-import Layout from "../components/room/layout";
+import Layout from "../components/layout";
 import { useRoomStore } from "../stores/roomStore";
 import { useGlobalUserStore } from "../stores/globalUserStore";
 import { activePresenceHeartbeat, setUserPresenceHeartbeat } from "../lib/firestore";
@@ -36,12 +36,12 @@ const Index: NextPage = () => {
 
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>THING</title>
       </Head>
       {isMobile ? <IndexMobile /> : <IndexDesktop />}
-    </Layout>
+    </>
   );
 };
 

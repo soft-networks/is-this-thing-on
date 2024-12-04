@@ -40,8 +40,10 @@ const StreamGate: React.FunctionComponent<{
   const useAdmin = !anonymousOnly && isAdmin;
 
   useEffect(() => {
+    console.log("GETTING CLIENT IN STREAMGATE");
     getClient(roomID, useAdmin).then(([myClient, rtmpsDetails]) => {
       if (!streamPlaybackID) {
+        console.log("NO STREAM PLAYBACK ID IN STREAMGATE");
         // Technically, streamPlaybackID may be indirectly set in the middle of getClient()
         // so there is a race condition here. If this happens, we will call getClient twice,
         // and that's okay.
@@ -62,6 +64,7 @@ const StreamGate: React.FunctionComponent<{
 
   useEffect(() => {
     if (!state) {
+      console.log("NO STATE IN STREAMGATE");
       return;
     }
 
@@ -86,7 +89,10 @@ const StreamGate: React.FunctionComponent<{
     };
   }, [state]);
 
-  if (!state || !state.client || !state.call) return null;
+  if (!state || !state.client || !state.call) {
+    console.log("StreamGate is failing, returning out: ", state);
+    return null;
+  }
 
   return (
     <StreamVideo client={state.client}>

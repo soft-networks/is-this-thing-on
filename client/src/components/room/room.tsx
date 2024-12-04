@@ -19,7 +19,6 @@ import useStickerCDNStore from "../../stores/stickerStore";
 import { useGlobalUserStore } from "../../stores/globalUserStore";
 import AdminPanel from "../account/adminPanel";
 import ArtistRoom from "../artistRooms/artistRoom";
-import Layout from "./layout";
 import RoomStatusGate  from "../gates/roomStatusGate";
 import RoomExistsGate  from "../gates/roomExistsGate";
 import StreamGate from "../gates/streamGate";
@@ -92,7 +91,6 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({
   }, [displayName, roomID]);
 
   return (
-    <Layout roomColor={roomColor}>
       <RoomExistsGate id={roomID as string}>
         <StreamGate
           roomID={roomID}
@@ -109,7 +107,6 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({
           )}
         </StreamGate>
       </RoomExistsGate>
-    </Layout>
   );
 };
 

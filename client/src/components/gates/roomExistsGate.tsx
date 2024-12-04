@@ -14,6 +14,7 @@ const RoomExistsGate: React.FunctionComponent<{ id: string }> = ({
         const streamNames = Object.keys(ring);
         return streamNames.includes(id);
     }, [ring, id]);
+    console.log("isValidName", isValidName);
     return isValidName ? (
         <> {children} </>
     ) : (
