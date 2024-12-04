@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
-import useRingStore from "../../stores/ringStore";
+import useGlobalRoomsInfoStore from "../../stores/globalRoomsInfoStore";
 import { useRoomStore } from "../../stores/roomStore";
 import AccountButton from "../account/accountButton";
 import Ring, { HomeRing } from "../rings/smallRing";

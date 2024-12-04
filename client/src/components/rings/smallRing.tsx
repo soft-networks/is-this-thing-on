@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useCallback, useMemo, } from "react";
-import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
+import useGlobalRoomsInfoStore, { roomIDToHREF } from "../../stores/globalRoomsInfoStore";
 import { useRoomStore } from "../../stores/roomStore";
 import { NodeLink, SVGRingSeparate } from "./svg";
 
@@ -9,7 +9,7 @@ interface RingProps {
   noNav?: boolean;
 }
 const SmallRing: React.FC<RingProps> = ({ collapsed, noNav }) => {
-  const ring = useRingStore(useCallback((s) => s.links, []));
+  const ring = useGlobalRoomsInfoStore(useCallback((s) => s.rooms, []));
   const roomID = useRoomStore(useCallback((s) => s.currentRoomID, []));
 
   return ring && roomID ? (
@@ -20,7 +20,7 @@ const SmallRing: React.FC<RingProps> = ({ collapsed, noNav }) => {
 };
 
 export const HomeRing: React.FC<{ }> = ({}) => {
-  const ring = useRingStore(useCallback((s) => s.links, []));
+  const ring = useGlobalRoomsInfoStore(useCallback((s) => s.rooms, []));
   const { push } = useRouter();
 
   return <div className="centerh relative">
@@ -61,7 +61,7 @@ export const HomeRing: React.FC<{ }> = ({}) => {
 const FooterLogo: React.FC<{ roomID: string }> = ({
   roomID,
 }) => {
-  const ring = useRingStore(useCallback((s) => s.links, []));
+  const ring = useGlobalRoomsInfoStore(useCallback((s) => s.rooms, []));
   const { push } = useRouter();
   const indexSelected = useMemo(() => {
     if (!roomID) return;

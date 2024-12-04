@@ -4,8 +4,8 @@ import { useCallback, useEffect, useRef } from "react";
 
 import { syncWebRing } from "../../lib/firestore";
 import { logCallbackDestroyed, logCallbackSetup } from "../../lib/logger";
-import useRingStore from "../../stores/ringStore";
-import ClickGate from "./clickedGate";
+import useGlobalRoomsInfoStore from "../../stores/globalRoomsInfoStore";
+import ClickGate from "../gates/globalClickedGate";
 import Footer from "./footer";
 import useMediaQuery from "../../stores/useMediaQuery";
 import classnames from "classnames";
@@ -17,8 +17,8 @@ const Layout: React.FunctionComponent<{
   hideFooter?: boolean;
   roomColor?: string;
 }> = ({ children, hideFooter, roomColor }) => {
-  const initializeRing = useRingStore(useCallback((s) => s.initializeRing, []));
-  const updateRingStatus = useRingStore(useCallback((s) => s.updateStatus, []));
+  const initializeRing = useGlobalRoomsInfoStore(useCallback((s) => s.initializeRing, []));
+  const updateRingStatus = useGlobalRoomsInfoStore(useCallback((s) => s.updateRoomInfo, []));
   const ringUnsubs = useRef<Unsubscribe[]>();
   const isMobile = useMediaQuery();
 

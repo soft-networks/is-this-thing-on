@@ -1,14 +1,14 @@
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
 
-import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
+import useGlobalRoomsInfoStore, { roomIDToHREF } from "../../stores/globalRoomsInfoStore";
 import { roomIsActive } from "../../stores/roomStore";
 import useMediaQuery from "../../stores/useMediaQuery";
-import StreamGate from "../room/streamGate";
+import StreamGate from "../gates/streamGate";
 import VideoPreview from "../videoPreview";
 
 const DomRing = () => {
-  const ring = useRingStore(useCallback((s) => s.links, []));
+  const ring = useGlobalRoomsInfoStore(useCallback((s) => s.rooms, []));
   const isMobile = useMediaQuery();
   const domElements = useMemo(() => {
     const numKeys = Object.keys(ring).length;

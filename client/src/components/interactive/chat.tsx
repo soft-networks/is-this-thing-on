@@ -18,7 +18,7 @@ import {
   logError,
   logInfo,
 } from "../../lib/logger";
-import useRingStore from "../../stores/ringStore";
+import useGlobalRoomsInfoStore from "../../stores/globalRoomsInfoStore";
 import { useRoomStore } from "../../stores/roomStore";
 import { useUserStore } from "../../stores/userStore";
 import useMediaQuery from "../../stores/useMediaQuery";
@@ -195,7 +195,7 @@ const RenderChat: React.FC<{
   lastRecalculationUpdate: number;
   alwaysShow?: boolean;
 }> = ({ chat, id, lastRecalculationUpdate, alwaysShow }) => {
-  const links = useRingStore((s) => s.links);
+  const links = useGlobalRoomsInfoStore((s) => s.rooms);
   const myRoom = useMemo(() => links[chat.roomID], [links, chat]);
   const [myBlurPercentage, setMyBlurPercentage] = useState<number>(0);
   //Create a ref to reference the dom
