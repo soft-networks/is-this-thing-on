@@ -10,7 +10,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { logError, logInfo } from "../../lib/logger";
 import { getStreamAdminCredentials } from "../../lib/server-api";
-import { useAdminStore } from "../../stores/adminStore";
+import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
 import { useRoomStore } from "../../stores/roomStore";
 
 const publicUser: User = { type: "anonymous" };
@@ -29,7 +29,7 @@ const StreamGate: React.FunctionComponent<{
   streamPlaybackID?: string;
   anonymousOnly: boolean;
 }> = ({ children, roomID, streamPlaybackID, anonymousOnly }) => {
-  const isAdmin = useAdminStore(useCallback((s) => s.isAdmin, []));
+  const isAdmin = useGlobalAdminStore(useCallback((s) => s.isAdmin, []));
 
   const [state, setState] = useState<{
     client: StreamVideoClient;
@@ -39,12 +39,12 @@ const StreamGate: React.FunctionComponent<{
 
   const useAdmin = !anonymousOnly && isAdmin;
 
+  //On page load, create a client which should set a streamPlaybackID in the server. If not, we will end up re-calling getClient() once it loads.
   useEffect(() => {
+    console.log("GETTING CLIENT IN STREAMGATE");
     getClient(roomID, useAdmin).then(([myClient, rtmpsDetails]) => {
       if (!streamPlaybackID) {
-        // Technically, streamPlaybackID may be indirectly set in the middle of getClient()
-        // so there is a race condition here. If this happens, we will call getClient twice,
-        // and that's okay.
+        console.log("NO STREAM PLAYBACK ID IN STREAMGATE");
         return;
       }
 
@@ -62,6 +62,7 @@ const StreamGate: React.FunctionComponent<{
 
   useEffect(() => {
     if (!state) {
+      console.log("NO STATE IN STREAMGATE");
       return;
     }
 
@@ -86,7 +87,10 @@ const StreamGate: React.FunctionComponent<{
     };
   }, [state]);
 
-  if (!state || !state.client || !state.call) return null;
+  if (!state || !state.client || !state.call) {
+    console.log("StreamGate is failing, returning out: ", state);
+    return null;
+  }
 
   return (
     <StreamVideo client={state.client}>

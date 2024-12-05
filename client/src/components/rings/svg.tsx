@@ -9,7 +9,7 @@ import React, {
   useState,
 } from "react";
 
-import { roomIDToHREF } from "../../stores/ringStore";
+import { roomIDToHREF } from "../../stores/globalRoomsInfoStore";
 import { roomIsActive, useRoomStore } from "../../stores/roomStore";
 
 const ELLIPSE_PATH =

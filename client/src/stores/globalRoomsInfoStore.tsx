@@ -3,23 +3,23 @@ import create from "zustand";
 
 import { logFirebaseUpdate } from "../lib/logger";
 
-interface RingState {
-  links: WebRing;
-  updateStatus: (roomName: string, update: RoomLinkInfo) => void;
+interface GlobalRoomsInfo {
+  rooms: WebRing;
+  updateRoomInfo: (roomName: string, update: RoomLinkInfo) => void;
   initializeRing: (ring: WebRing) => void;
 }
-const useRingStore = create<RingState>((set) => ({
-  links: {},
+const useGlobalRoomsInfoStore = create<GlobalRoomsInfo>((set) => ({
+  rooms: {},
   initializeRing: (ring) => {
     logFirebaseUpdate("RingSync initialized");
-    set({ links: ring });
+    set({ rooms: ring });
   },
-  updateStatus: (roomName, updatedLink) => {
+  updateRoomInfo: (roomName, updatedRoomInfo) => {
     logFirebaseUpdate(`RingSync Updated for ${roomName}`);
     set((s) => {
-      let ns = { ...s.links };
-      ns[roomName] = updatedLink;
-      return { links: ns };
+      let ns = { ...s.rooms };
+      ns[roomName] = updatedRoomInfo;
+      return { rooms: ns };
     });
   },
 }));
@@ -28,4 +28,4 @@ export const roomIDToHREF = (id: string) => {
   return `/${slugify(id)}`;
 };
 
-export default useRingStore;
+export default useGlobalRoomsInfoStore;

@@ -14,7 +14,7 @@ Then, you can run the server with `npm run dev`.
 
 ## How to tunnel webhooks
 
-Optionally, you can also have your local server receive webhooks from mux. For this, we recommend a tunneling service with stable domains like [localhost.run](https://localhost.run). Then, within the mux dashboard, set up a webook that points to `https://MUX_USERNAME:MUX_PASSWORD@TUNNEL_URL/mux-hook`. You can learn more [here](https://docs.mux.com/core/listen-for-webhooks).
+Optionally, you can also have your local server receive webhooks from mux. For this, we recommend a tunneling service with stable domains like [localhost.run](https://localhost.run). Then, within the mux dashboard, set up a webook that points to `https://MUX_USERNAME:MUX_PASSWORD@TUNNEL_URL/mux-hook`. You can learn more [here](https://docs.mux.com/core/listen-for-webhooks). Please note, that if you are setting up the tunnel, and override it in the STREAM dashboard, remember to reset STREAM to point to `https://isto-server.fly.dev/stream-hook` when you're done with local development.
 
 ## How to deploy
 

@@ -13,15 +13,15 @@ import {
   logError,
   logInfo,
 } from "../../lib/logger";
-import { useAdminStore } from "../../stores/adminStore";
+import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
 import { useRoomStore } from "../../stores/roomStore";
 import useStickerCDNStore from "../../stores/stickerStore";
-import { useUserStore } from "../../stores/userStore";
+import { useGlobalUserStore } from "../../stores/globalUserStore";
 import AdminPanel from "../account/adminPanel";
 import ArtistRoom from "../artistRooms/artistRoom";
-import Layout from "./layout";
-import RoomNameGate, { RoomStatusGate } from "./roomGate";
-import StreamGate from "./streamGate";
+import RoomStatusGate  from "../gates/roomStatusGate";
+import RoomExistsGate  from "../gates/roomExistsGate";
+import StreamGate from "../gates/streamGate";
 
 const Room: React.FC<{ roomID: string; season?: number }> = ({
   roomID,
@@ -35,14 +35,14 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({
     useCallback((s) => s.unmountRoomStickers, []),
   );
   const unsubscribeFromRoomInfo = useRef<Unsubscribe>();
-  const adminForIDs = useUserStore(useCallback((s) => s.adminFor, []));
-  const setIsAdmin = useAdminStore(useCallback((s) => s.setIsAdmin, []));
+  const adminForIDs = useGlobalUserStore(useCallback((s) => s.adminFor, []));
+  const setIsAdmin = useGlobalAdminStore(useCallback((s) => s.setIsAdmin, []));
 
   const roomPlaybackId = useRoomStore(
     useCallback((s) => s.roomInfo?.streamPlaybackID, []),
   );
   const roomColor = useRoomStore(useCallback((s) => s.roomInfo?.roomColor, []));
-  const displayName = useUserStore(useCallback((s) => s.displayName, []));
+  const displayName = useGlobalUserStore(useCallback((s) => s.displayName, []));
 
   useEffect(() => {
     async function subscribeToRoomInfo() {
@@ -91,8 +91,7 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({
   }, [displayName, roomID]);
 
   return (
-    <Layout roomColor={roomColor}>
-      <RoomNameGate id={roomID as string}>
+      <RoomExistsGate id={roomID as string}>
         <StreamGate
           roomID={roomID}
           streamPlaybackID={roomPlaybackId}
@@ -107,8 +106,7 @@ const Room: React.FC<{ roomID: string; season?: number }> = ({
             </>
           )}
         </StreamGate>
-      </RoomNameGate>
-    </Layout>
+      </RoomExistsGate>
   );
 };
 

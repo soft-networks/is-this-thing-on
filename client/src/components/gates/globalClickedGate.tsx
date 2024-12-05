@@ -1,10 +1,7 @@
-import { useCallback, useEffect } from "react";
-
-import useDidClick from "../../stores/clickedStore";
+import { useCallback, useEffect, useState } from "react";
 
 const ClickGate: React.FunctionComponent = ({ children }) => {
-  const didClick = useDidClick(useCallback((s) => s.didClick, []));
-  const setDidClick = useDidClick(useCallback((s) => s.setDidClick, []));
+  const [didClick, setDidClick] = useState(false);
 
   const clickHappened = useCallback(() => {
     setDidClick(true);

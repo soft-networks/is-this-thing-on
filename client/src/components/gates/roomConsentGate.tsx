@@ -1,15 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { logInfo } from "../../lib/logger";
-import useConsentStore from "../../stores/consentStore";
 import { useRoomStore } from "../../stores/roomStore";
 
-const ConsentGate: React.FC<{ roomID: string; consentURL?: string }> = ({
-  roomID,
+const ConsentGate: React.FC = ({
   children,
-  consentURL,
 }) => {
-  return consentURL ? (
+  const roomID = useRoomStore(useCallback((s) => s.roomInfo?.roomID, []));
+  const consentURL = useRoomStore(useCallback((s) => s.roomInfo?.consentURL, []));
+  return consentURL && roomID ? (
     <ConsentGateInternal roomID={roomID} consentURL={consentURL}>
       {children}
     </ConsentGateInternal>
@@ -23,15 +22,8 @@ const ConsentGateInternal: React.FC<{ roomID: string; consentURL: string }> = ({
   children,
   consentURL,
 }) => {
-  const consent = useConsentStore(useCallback((s) => s.consent, []));
-  const setConsent = useConsentStore(useCallback((s) => s.setConsent, []));
   const [consentPassed, setConsentPassed] = useState<boolean>(false);
-  useEffect(() => {
-    if (consent.includes(roomID)) {
-      logInfo("Consent Accepted for" + roomID);
-      setConsentPassed(true);
-    }
-  }, [consent, roomID]);
+
   return consentPassed ? (
     <>{children}</>
   ) : (
@@ -49,8 +41,7 @@ const ConsentGateInternal: React.FC<{ roomID: string; consentURL: string }> = ({
           <div
             className="clickable padded lightFill border contrastFill contrastFill:hover"
             onClick={() => {
-              console.log("SETTING", roomID);
-              setConsent(roomID);
+              logInfo("Consent Accepted for" + roomID);
               setConsentPassed(true);
             }}
           >

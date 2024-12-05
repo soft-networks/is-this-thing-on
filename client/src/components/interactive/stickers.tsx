@@ -23,7 +23,7 @@ import {
 } from "../../lib/logger";
 import { useRoomStore } from "../../stores/roomStore";
 import useStickerCDNStore from "../../stores/stickerStore";
-import { useUserStore } from "../../stores/userStore";
+import { useGlobalUserStore } from "../../stores/globalUserStore";
 import { DefaultStickerAdder, StickerAdderProps } from "./stickerAdders";
 import { StickerRenderer } from "./stickerRenderHelpers";
 
@@ -39,8 +39,8 @@ const Stickers: React.FC<StickersProps> = ({
   const stickerCDN = useStickerCDNStore(
     useCallback((state) => state.stickerCDN, []),
   );
-  const adminForIDs = useUserStore(useCallback((s) => s.adminFor, []));
-  const displayName = useUserStore(
+  const adminForIDs = useGlobalUserStore(useCallback((s) => s.adminFor, []));
+  const displayName = useGlobalUserStore(
     useCallback((state) => state.displayName, []),
   );
 

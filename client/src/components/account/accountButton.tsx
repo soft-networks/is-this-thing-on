@@ -4,13 +4,13 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 
-import { useUserStore } from "../../stores/userStore";
+import { useGlobalUserStore } from "../../stores/globalUserStore";
 
 const AccountButton: React.FunctionComponent = () => {
-  const displayName = useUserStore(
+  const displayName = useGlobalUserStore(
     useCallback((state) => state.displayName, []),
   );
-  const currentUser = useUserStore(
+  const currentUser = useGlobalUserStore(
     useCallback((state) => state.currentUser, []),
   );
   const { pathname, back } = useRouter();

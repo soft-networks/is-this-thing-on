@@ -1,10 +1,3 @@
-interface MagicPiece {
-  id: string;
-  triggerType?: any;
-  pos: { x: number; y: number };
-  asset?: string;
-  reward?: number;
-}
 
 interface SarahQuestion {
   question: string;
@@ -23,7 +16,7 @@ interface ChatMessage {
 
 interface StreamNames {
   names?: string[];
-}
+} 
 
 type STREAM_STATUS_TYPE = "active" | "disconnected" | "active-test";
 
@@ -42,6 +35,7 @@ type RoomInfo = RoomLinkInfo & {
   streamOwner: string;
   numOnline: number;
 };
+
 
 type Pos = [number, number];
 
@@ -68,4 +62,12 @@ interface RoomUIProps {
   style?: React.CSSProperties;
 }
 
+interface UpdateRoomProps {
+  roomName: string;
+  roomId: string;
+  roomColor: string;
+  adminUserId: string;
+}
+
 type RtmpsDetails = { rtmpAddress: string; rtmpStreamKey: string };
+
