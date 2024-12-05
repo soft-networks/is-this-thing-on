@@ -17,7 +17,7 @@ import {
   syncStickerInstances,
 } from "../../../lib/firestore";
 import { useGlobalAdminStore } from "../../../stores/globalUserAdminStore";
-import { useRoomStore } from "../../../stores/roomStore";
+import { useRoomStore } from "../../../stores/currentRoomStore";
 import useStickerCDNStore from "../../../stores/stickerStore";
 import { useGlobalUserStore } from "../../../stores/globalUserStore";
 import { DefaultStickerAdder, RandomStickerAdder } from "../stickerAdders";

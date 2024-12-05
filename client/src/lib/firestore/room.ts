@@ -9,10 +9,11 @@ import {
 
 import { sanitizeRoomInfo, validateRoomName } from "./converters";
 import { roomDoc, roomsCollection } from "./locations";
+import { logFirebaseUpdate } from "../logger";
 
 export async function syncRoomInfoDB(
   roomName: string,
-  callback: (roomInfo: RoomInfo) => void,
+  callback: (roomInfo: CurrentRoomInfo) => void,
 ) {
   if (!validateRoomName(roomName)) {
     return;
@@ -37,7 +38,7 @@ export async function getRoomsWhereUserISAdmin(userID: string) {
     return undefined;
   }
 
-  let roomInfo: RoomInfo[] = [];
+  let roomInfo: CurrentRoomInfo[] = [];
   querySnapshot.forEach((doc) =>
     roomInfo.push(sanitizeRoomInfo(doc.data(), doc.id)),
   );
@@ -50,35 +51,38 @@ export async function getRoomAdmins(roomID: string) {
   return data && data["admins"] ? data["admins"] : [];
 }
 
-export async function syncWebRing(
-  initRing: (ring: WebRing) => void,
-  linkUpdate: (roomName: string, update: RoomLinkInfo) => void,
+export async function syncAllRoomsSummary(
+  initRing: (ring: AllRoomsSummary) => void,
+  linkUpdate: (roomName: string, update: RoomSummary) => void,
+  onRoomCreatedOrDestroyed: (roomName: string, update: "created" | "destroyed", roomInfo: RoomSummary) => void,
 ) {
-  let collectionRef = roomsCollection();
-  let docs = await getDocs(query(collectionRef, where("hidden", "!=", true)));
-
   const unsubUpdates: Unsubscribe[] = [];
-  const ring: WebRing = {};
+  const ring: AllRoomsSummary = {};
+  let collectionRef = roomsCollection();
 
-  docs.forEach((doc) => {
-    let data = sanitizeRoomInfo(doc.data(), doc.id);
-
-    ring[doc.id] = {
-      roomID: data.roomID,
-      roomName: data.roomName,
-      roomColor: "white",
-      streamStatus: "disconnected",
-      consentURL: data.consentURL,
-    };
-    let unsub = onSnapshot(doc.ref, (doc) => {
-      let data = doc.data();
-      if (data && doc.id) {
-        let sanitized = sanitizeRoomInfo(data, doc.id);
-        linkUpdate(doc.id, sanitized);
-      }
-    });
-    unsubUpdates.push(unsub);
-  });
-  initRing(ring);
+  // Single listener for all document changes
+  const unsubRoomChanges = onSnapshot(
+    query(collectionRef, where("hidden", "!=", true)),
+    {includeMetadataChanges: true},
+    (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        const roomInfo = sanitizeRoomInfo(change.doc.data(), change.doc.id);
+        if (change.type === "added") {
+          logFirebaseUpdate(`Room ${change.doc.id} created`, [roomInfo]);
+          onRoomCreatedOrDestroyed(change.doc.id, "created", roomInfo);
+          ring[change.doc.id] = roomInfo;
+        }
+        else if (change.type === "removed") {
+          onRoomCreatedOrDestroyed(change.doc.id, "destroyed", roomInfo);
+          delete ring[change.doc.id];
+        }
+        else if (change.type === "modified") {
+            ring[change.doc.id] = roomInfo;
+            linkUpdate(change.doc.id, roomInfo);
+        }
+      });
+    }
+  );
+  unsubUpdates.push(unsubRoomChanges);
   return unsubUpdates;
 }

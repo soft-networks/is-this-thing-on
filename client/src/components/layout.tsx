@@ -1,16 +1,12 @@
-import { Unsubscribe } from "firebase/firestore";
-
-import { useCallback, useEffect, useRef } from "react";
-
-import { syncWebRing } from "../lib/firestore";
-import { logCallbackDestroyed, logCallbackSetup } from "../lib/logger";
-import useGlobalRoomsInfoStore from "../stores/globalRoomsInfoStore";
+import { useEffect } from "react";
 import ClickGate from "./gates/globalClickedGate";
-import Footer from "./room/footer";
+import Footer from "./footer";
 import useMediaQuery from "../stores/useMediaQuery";
 import classnames from "classnames";
 import Head from "next/head";
 import Instrumentation from "./Instrumentation";
+import  GlobalRoomsSummaryProvider  from "./gates/globalRoomsSummaryProvider";
+import GlobalPresenceGate from "./gates/globalPresenceGate";
 
 
 //TODO: Currently we have a listener for each ringNode. Can simplify, requires DB refactor.
@@ -20,12 +16,7 @@ const Layout: React.FunctionComponent<{
   hideFooter?: boolean;
   roomColor?: string;
 }> = ({ children, hideFooter, roomColor }) => {
-  const initializeRing = useGlobalRoomsInfoStore(useCallback((s) => s.initializeRing, []));
-  const updateRingStatus = useGlobalRoomsInfoStore(useCallback((s) => s.updateRoomInfo, []));
-  const ringUnsubs = useRef<Unsubscribe[]>();
   const isMobile = useMediaQuery();
-
-
   useEffect(() => {
     const setViewportHeight = () => {
       const vh = window.innerHeight * 0.01;
@@ -34,27 +25,15 @@ const Layout: React.FunctionComponent<{
 
     setViewportHeight();
     window.addEventListener('resize', setViewportHeight);
-
     return () => window.removeEventListener('resize', setViewportHeight);
   }, [isMobile]);
 
-  useEffect(() => {
-    async function setupSync() {
-      logCallbackSetup("RingSyncs");
-      ringUnsubs.current = await syncWebRing(initializeRing, updateRingStatus);
-    }
-    setupSync();
-    return () => {
-      logCallbackDestroyed("RingSyncs");
-      ringUnsubs.current && ringUnsubs.current.forEach((u) => u());
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
   return (
     <div
       className={classnames("fullScreen lightFill relative noOverflow", {"stack:noGap": isMobile})}
       key={`layout-${isMobile}`}
-      style={
+      style={ 
         roomColor ? ({ "--roomColor": roomColor } as React.CSSProperties) : {}
       }
     >
@@ -62,8 +41,12 @@ const Layout: React.FunctionComponent<{
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </Head>
       <ClickGate>
-        {children}
-        {!hideFooter && <Footer />}
+        <GlobalRoomsSummaryProvider>
+          <GlobalPresenceGate>
+            {children}
+            {!hideFooter && <Footer />}
+          </GlobalPresenceGate>
+        </GlobalRoomsSummaryProvider>
       </ClickGate>
       <Instrumentation />
     </div>

@@ -1,4 +1,4 @@
-import { roomIsActive, useRoomStore } from "../../stores/roomStore";
+import { roomIsActive, useRoomStore } from "../../stores/currentRoomStore";
 import { useCallback, useMemo } from "react";
 
 import ConsentGate from "./roomConsentGate";

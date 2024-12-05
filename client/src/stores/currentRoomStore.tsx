@@ -2,21 +2,21 @@ import create from "zustand";
 
 type RoomState = {
   currentRoomID: string | null;
-  changeRoom: (newRoom: string | null, roomInfo?: RoomInfo) => void;
-  roomInfo: RoomInfo | undefined;
+  changeRoom: (newRoom: string | null, roomInfo?: CurrentRoomInfo) => void;
+  roomInfo: CurrentRoomInfo | undefined;
 };
 
 export const useRoomStore = create<RoomState>((set) => ({
   currentRoomID: null,
   roomInfo: undefined,
-  changeRoom: (newRoom: string | null, roomInfo?: RoomInfo) => {
+  changeRoom: (newRoom: string | null, roomInfo?: CurrentRoomInfo) => {
     //console.log("Room store updated", newRoom, roomInfo);
     set((s) => ({ currentRoomID: newRoom, roomInfo: roomInfo }));
   },
 }));
 
 export const roomIsActive = (
-  roomInfo: RoomInfo | RoomLinkInfo | undefined | STREAM_STATUS_TYPE,
+  roomInfo: CurrentRoomInfo | RoomSummary | undefined | STREAM_STATUS_TYPE,
 ) => {
   if (roomIsTest(roomInfo)) {
     console.log("TEST ROOM");
@@ -42,7 +42,7 @@ export const roomIsActive = (
 };
 
 export const roomIsTest = (
-  roomInfo: RoomInfo | RoomLinkInfo | undefined | STREAM_STATUS_TYPE,
+  roomInfo: CurrentRoomInfo | RoomSummary | undefined | STREAM_STATUS_TYPE,
 ) => {
   if (typeof roomInfo == "string") {
     

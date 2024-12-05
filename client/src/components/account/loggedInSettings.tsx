@@ -39,7 +39,7 @@ interface AdminViewProps {
     uid: string;
   }
   const UserRoomManager: React.FC<AdminViewProps> = ({ uid }) => {
-    const [rooms, setRooms] = useState<undefined | RoomInfo[]>(undefined);
+    const [rooms, setRooms] = useState<undefined | CurrentRoomInfo[]>(undefined);
     useEffect(() => {
       async function getRooms() {
         let rooms = await getRoomsWhereUserISAdmin(uid);

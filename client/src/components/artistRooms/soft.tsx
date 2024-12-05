@@ -3,7 +3,7 @@ import React, { useMemo, useState } from "react";
 import { Chat } from "../interactive/chat";
 import DefaultRoomview from "./defaultRoom";
 import Draggable from "react-draggable";
-import VideoPlayer from "../videoPlayer";
+import VideoPlayer from "../video/videoPlayer";
 
 const Soft: React.FC = () => {
   return (

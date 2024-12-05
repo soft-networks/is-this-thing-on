@@ -19,7 +19,7 @@ import {
   logInfo,
 } from "../../lib/logger";
 import useGlobalRoomsInfoStore from "../../stores/globalRoomsInfoStore";
-import { useRoomStore } from "../../stores/roomStore";
+import { useRoomStore } from "../../stores/currentRoomStore";
 import { useGlobalUserStore } from "../../stores/globalUserStore";
 import useMediaQuery from "../../stores/useMediaQuery";
 

@@ -21,7 +21,7 @@ import {
   logFirebaseUpdate,
   logInfo,
 } from "../../lib/logger";
-import { useRoomStore } from "../../stores/roomStore";
+import { useRoomStore } from "../../stores/currentRoomStore";
 import useStickerCDNStore from "../../stores/stickerStore";
 import { useGlobalUserStore } from "../../stores/globalUserStore";
 import { DefaultStickerAdder, StickerAdderProps } from "./stickerAdders";

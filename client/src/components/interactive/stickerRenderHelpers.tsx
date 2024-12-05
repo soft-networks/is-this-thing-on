@@ -14,7 +14,7 @@ import {
   updateStickerInstancePos,
 } from "../../lib/firestore";
 import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
-import { useRoomStore } from "../../stores/roomStore";
+import { useRoomStore } from "../../stores/currentRoomStore";
 
 interface StickerRenderProps {
   sticker: Sticker;

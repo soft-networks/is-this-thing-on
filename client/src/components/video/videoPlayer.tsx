@@ -1,8 +1,8 @@
-import { roomIsActive, roomIsTest, useRoomStore } from "../stores/roomStore";
+import { roomIsActive, roomIsTest, useRoomStore } from "../../stores/currentRoomStore";
 
 import ReactPlayer from "react-player";
 import StreamPlayer from "./streamPlayer";
-import { useGlobalAdminStore } from "../stores/globalUserAdminStore";
+import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
 import { useCallback, useState } from "react";
 
 

@@ -1,7 +1,7 @@
 import { Chat } from "../interactive/chat";
 import ChrisyStickers from "../interactive/custom/chrisyStickers";
 import React from "react";
-import VideoPlayer from "../videoPlayer";
+import VideoPlayer from "../video/videoPlayer";
 
 const Chris: React.FC = () => {
   return (

@@ -11,7 +11,7 @@ import { useCallback, useEffect, useState } from "react";
 import { logError, logInfo } from "../../lib/logger";
 import { getStreamAdminCredentials } from "../../lib/server-api";
 import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
-import { useRoomStore } from "../../stores/roomStore";
+import { useRoomStore } from "../../stores/currentRoomStore";
 
 const publicUser: User = { type: "anonymous" };
 

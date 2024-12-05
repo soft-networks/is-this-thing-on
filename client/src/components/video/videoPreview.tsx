@@ -2,12 +2,12 @@ import ReactPlayer from "react-player";
 
 import { useEffect, useMemo } from "react";
 
-import { logVideo } from "../lib/logger";
-import { generateStreamLink } from "../lib/server-api";
+import { logVideo } from "../../lib/logger";
+import { generateStreamLink } from "../../lib/server-api";
 import StreamPlayer from "./streamPlayer";
 
 const VideoPreview: React.FC<{
-  iLink: RoomLinkInfo;
+  iLink: RoomSummary;
   localMuted: boolean;
   isTest: boolean;
 }> = ({ iLink, localMuted, isTest }) => {

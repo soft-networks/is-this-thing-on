@@ -4,7 +4,7 @@ import { useCallback, useEffect } from "react";
 
 import Auth from "../components/account/auth";
 import Layout from "../components/layout";
-import { useRoomStore } from "../stores/roomStore";
+import { useRoomStore } from "../stores/currentRoomStore";
 
 const Account: NextPage = () => {
   const changeRoom = useRoomStore(useCallback((state) => state.changeRoom, []));

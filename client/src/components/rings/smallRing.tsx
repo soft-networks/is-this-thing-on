@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useCallback, useMemo, } from "react";
 import useGlobalRoomsInfoStore, { roomIDToHREF } from "../../stores/globalRoomsInfoStore";
-import { useRoomStore } from "../../stores/roomStore";
+import { useRoomStore } from "../../stores/currentRoomStore";
 import { NodeLink, SVGRingSeparate } from "./svg";
 
 interface RingProps {

@@ -19,7 +19,7 @@ const CreateRoom: React.FC<{
     roomID: string;
     playbackID?: string;
     uid: string;
-    room?: RoomInfo;
+    room?: CurrentRoomInfo;
   }> = ({ uid, room }) => {
     return (
       <div className="stack padded border-thin">
@@ -31,7 +31,7 @@ const CreateRoom: React.FC<{
 
 const RoomForm: React.FC<{
     uid: string;
-    room?: RoomInfo;
+    room?: CurrentRoomInfo;
   }> = ({ uid, room }) => {
     const [roomName, setRoomName] = useState(room?.roomName || "");
     const [roomId, setRoomId] = useState(room?.roomID || "");

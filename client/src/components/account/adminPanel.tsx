@@ -5,7 +5,7 @@ import Draggable from "react-draggable";
 import classnames from "classnames";
 import { resetStickers } from "../../lib/firestore";
 import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
-import { useRoomStore } from "../../stores/roomStore";
+import { useRoomStore } from "../../stores/currentRoomStore";
 
 const AdminPanel = ({
   rtmpsDetails,

@@ -1,10 +1,10 @@
 import { Chat } from "../interactive/chat";
 import { StickerAdderProps } from "../interactive/stickerAdders";
 import Stickers from "../interactive/stickers";
-import VideoPlayer from "../videoPlayer";
+import VideoPlayer from "../video/videoPlayer";
 import { useCallback } from "react";
 import useMediaQuery from "../../stores/useMediaQuery";
-import { useRoomStore } from "../../stores/roomStore";
+import { useRoomStore } from "../../stores/currentRoomStore";
 
 interface RoomViewProps {
   stickerStyle?: React.CSSProperties;

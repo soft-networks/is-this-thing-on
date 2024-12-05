@@ -20,18 +20,18 @@ interface StreamNames {
 
 type STREAM_STATUS_TYPE = "active" | "disconnected" | "active-test";
 
-interface RoomLinkInfo {
+interface RoomSummary {
   roomID: string;
   roomName: string;
   roomColor: string;
   streamStatus: STREAM_STATUS_TYPE;
   streamPlaybackID?: string;
-  consentURL?: string;
   previewOverlay?: string;
 }
-type WebRing = { [key: string]: RoomLinkInfo };
+type AllRoomsSummary = { [key: string]: RoomSummary };
 
-type RoomInfo = RoomLinkInfo & {
+type CurrentRoomInfo = RoomSummary & {
+  consentURL?: string;
   streamOwner: string;
   numOnline: number;
 };

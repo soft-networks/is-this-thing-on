@@ -2,13 +2,13 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
-import useGlobalRoomsInfoStore from "../../stores/globalRoomsInfoStore";
-import { useRoomStore } from "../../stores/roomStore";
-import AccountButton from "../account/accountButton";
-import Ring, { HomeRing } from "../rings/smallRing";
-import { syncTotalOnline } from "../../lib/firestore";
+import useGlobalRoomsInfoStore from "../stores/globalRoomsInfoStore";
+import { useRoomStore } from "../stores/currentRoomStore";
+import AccountButton from "./account/accountButton";
+import Ring, { HomeRing } from "./rings/smallRing";
+import { syncTotalOnline } from "../lib/firestore";
 import classNames from "classnames";
-import useMediaQuery from "../../stores/useMediaQuery";
+import useMediaQuery from "../stores/useMediaQuery";
 
 const Footer: React.FC = () => {
   const { pathname } = useRouter();
