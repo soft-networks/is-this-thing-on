@@ -5,20 +5,15 @@ const RoomExistsGate: React.FunctionComponent<{ id: string }> = ({
     id,
     children,
 }) => {
-    const ring = useGlobalRoomsInfoStore(useCallback((room) => room.rooms, []));
-    const isValidName = useMemo(() => {
-        if (ring == undefined || Object.keys(ring).length == 0) {
-            return <div className="center:absolute">loading...</div>;
-            ;
-        }
-        const streamNames = Object.keys(ring);
-        return streamNames.includes(id);
-    }, [ring, id]);
-    console.log("isValidName", isValidName);
-    return isValidName ? (
-        <> {children} </>
+    // Only select the specific room's existence instead of the entire rooms object
+    const roomExists = useGlobalRoomsInfoStore(
+        useCallback((state) => Boolean(state.rooms?.[id]), [id])
+    );
+
+    return roomExists ? (
+        <>{children}</>
     ) : (
-        <div className="center:absolute"> whoops, ur lost. </div>
+        <div className="center:absolute">whoops, ur lost.</div>
     );
 };
 

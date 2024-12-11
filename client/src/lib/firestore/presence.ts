@@ -14,6 +14,7 @@ async function setPresenceDB(userID: string, roomName: string) {
   });
 }
 export async function setUserPresenceHeartbeat(userID: string, roomName: string) {
+  //return;
   if (activePresenceHeartbeat) {
     clearTimeout(activePresenceHeartbeat);
   }

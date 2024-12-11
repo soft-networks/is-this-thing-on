@@ -8,7 +8,7 @@ import {
 
 import { useCallback, useEffect, useState } from "react";
 
-import { logError, logInfo } from "../../lib/logger";
+import { logCallbackDestroyed, logCallbackSetup, logError, logInfo } from "../../lib/logger";
 import { getStreamAdminCredentials } from "../../lib/server-api";
 import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
 import { useRoomStore } from "../../stores/currentRoomStore";
@@ -41,10 +41,9 @@ const StreamGate: React.FunctionComponent<{
 
   //On page load, create a client which should set a streamPlaybackID in the server. If not, we will end up re-calling getClient() once it loads.
   useEffect(() => {
-    console.log("GETTING CLIENT IN STREAMGATE");
+    logCallbackSetup(`Creating stream call for ${roomID}`);
     getClient(roomID, useAdmin).then(([myClient, rtmpsDetails]) => {
       if (!streamPlaybackID) {
-        console.log("NO STREAM PLAYBACK ID IN STREAMGATE");
         return;
       }
 
@@ -62,25 +61,22 @@ const StreamGate: React.FunctionComponent<{
 
   useEffect(() => {
     if (!state) {
-      console.log("NO STATE IN STREAMGATE");
       return;
     }
-
-    logInfo("....JOINING CALL....");
-
     // Ensure camera is disabled by default on page load.
     state.call.camera.disable();
 
     state.call
       .join()
       .then(() => {
-        logInfo("Joined call from StreamGate");
+        logInfo(`Joined call from StreamGate ${state.call.cid}`);
       })
       .catch((e) => {
         logError("Failed to join call", e);
       });
 
     return () => {
+      logCallbackDestroyed(`Leaving stream call ${state.call.cid}`)
       state.call.leave().catch((e) => {
         logError("Failed to leave call", e);
       });
@@ -88,7 +84,7 @@ const StreamGate: React.FunctionComponent<{
   }, [state]);
 
   if (!state || !state.client || !state.call) {
-    console.log("StreamGate is failing, returning out: ", state);
+    logInfo("StreamGate is failing, returning out: ", [state]);
     return null;
   }
 
@@ -109,7 +105,7 @@ const getClient = async (
      * After we have verified the user as a room admin, we can make calls using secrets retrieved from the server and
      * not worry too much about those credentials being viewable in the console.
      */
-    console.log("using admin credentials for stream player");
+    logInfo("Using admin credentials for stream player");
     const creds = await getStreamAdminCredentials(roomId);
     const apiKey = process.env.NEXT_PUBLIC_STREAM_API_KEY!;
 
@@ -125,7 +121,7 @@ const getClient = async (
       },
     ];
   } else {
-    console.log("using public credentials for stream player");
+    logInfo("using public credentials for stream player");
 
     return [
       new StreamVideoClient({

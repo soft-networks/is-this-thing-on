@@ -43,8 +43,6 @@ const StreamPlayer: React.FunctionComponent<VideoPlayerProps> = ({
     p.publishedTracks.includes(VIDEO),
   );
 
-  console.log({ isLive, participants, liveParticipants });
-
   if (isLive && liveParticipants.length > 0) {
     return (
       <>

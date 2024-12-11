@@ -2,10 +2,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
-import useGlobalRoomsInfoStore from "../stores/globalRoomsInfoStore";
 import { useRoomStore } from "../stores/currentRoomStore";
 import AccountButton from "./account/accountButton";
-import Ring, { HomeRing } from "./rings/smallRing";
+import { FooterRing,HomeRing } from "./rings/smallRing";
 import { syncTotalOnline } from "../lib/firestore";
 import classNames from "classnames";
 import useMediaQuery from "../stores/useMediaQuery";
@@ -18,7 +17,7 @@ const Footer: React.FC = () => {
       <div className={classNames("uiLayer padded:s-1 overflowVisible", {
         "centerh:absolute": !isMobile
       })}>
-        {pathname == "/" ? <HomeRing /> : <Ring collapsed />}
+         <FooterRing isHome={pathname == "/"}/>
       </div>
       <div
         className="uiLayer horizontal-stack:s-2 padded:s-1 align-end"

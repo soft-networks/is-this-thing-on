@@ -18,7 +18,6 @@ import {
   logError,
   logInfo,
 } from "../../lib/logger";
-import useGlobalRoomsInfoStore from "../../stores/globalRoomsInfoStore";
 import { useRoomStore } from "../../stores/currentRoomStore";
 import { useGlobalUserStore } from "../../stores/globalUserStore";
 import useMediaQuery from "../../stores/useMediaQuery";
@@ -195,8 +194,7 @@ const RenderChat: React.FC<{
   lastRecalculationUpdate: number;
   alwaysShow?: boolean;
 }> = ({ chat, id, lastRecalculationUpdate, alwaysShow }) => {
-  const links = useGlobalRoomsInfoStore((s) => s.rooms);
-  const myRoom = useMemo(() => links[chat.roomID], [links, chat]);
+
   const [myBlurPercentage, setMyBlurPercentage] = useState<number>(0);
   //Create a ref to reference the dom
   const myRef = useRef<HTMLDivElement>(null);

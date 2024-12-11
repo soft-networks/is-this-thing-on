@@ -28,8 +28,8 @@ const useGlobalRoomsInfoStore = create<GlobalRoomsInfo>((set) => ({
         logFirebaseUpdate(`RingSync Updated for ${roomName}`);
         return { rooms: ns };
       } else {
-        logInfo(`Received unnecessary update for ${roomName}, not updating store`);
-        return s;
+        // logInfo(`Received unnecessary update for ${roomName}, not updating store`);
+        return {};
       }
     });
   },
