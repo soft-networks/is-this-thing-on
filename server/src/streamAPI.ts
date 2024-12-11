@@ -109,9 +109,11 @@ export const createStreamAdminToken: RequestHandler = async (req, res) => {
     // set exp to be 36 hours.
     const exp = Math.round(new Date().getTime() / 1000) + 60 * 60 * 36;
     const token = client.createToken(adminUserId, exp);
-
+    console.log("token: ", token);
     const streamCall = await getOrCreateCall(roomId);
+    console.log("streamCall: ", streamCall);
     await connectStreamRoomDB(roomId, streamCall.id);
+    console.log("returning token to client should be written to db")
     res.send({ userId: adminUserId, call: streamCall, token });
   } catch (e) {
     logError(getErrorMessage(e));
