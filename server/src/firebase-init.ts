@@ -1,7 +1,9 @@
-import { initializeApp, cert } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
+import { cert, initializeApp } from "firebase-admin/app";
+
 import dotenv from "dotenv";
 import { existsSync } from 'fs';
+import { getAuth } from "firebase-admin/auth";
+import { getFirestore } from "firebase-admin/firestore";
 import { resolve } from 'path';
 
 const envLocalPath = resolve(process.cwd(), '.env.local');
@@ -23,4 +25,6 @@ export const app = initializeApp({
   databaseURL: "https://is-this-thing-on-320a7-default-rtdb.firebaseio.com",
   storageBucket: "is-this-thing-on-320a7.appspot.com",
 });
+
 export const firestore = getFirestore(app);
+export const firebaseAuth = getAuth(app);

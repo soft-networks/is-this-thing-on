@@ -18,7 +18,7 @@ import { randomUUID } from "crypto";
 
 const apiKey = process.env.STREAM_API_KEY!;
 const apiSecret = process.env.STREAM_API_SECRET!;
-const client = new StreamClient(apiKey, apiSecret);
+export const client = new StreamClient(apiKey, apiSecret);
 
 const adminUserId = process.env.STREAM_ADMIN_USER_ID!;
 
@@ -65,7 +65,7 @@ export const streamUpdateWasReceived: RequestHandler = async (req, res) => {
         return res.status(200).send("Thanks for the update :) ");
       }
     }
-    if (eventType == "call_ended" || eventType == "call.session_ended") {
+    if (eventType == "call.ended" || eventType == "call.session_ended") {
       // NOTE: There is no live_ended status, so these events are the best proxies for when the streamer is offline.
       //
       // - call.session_ended: Occurs when participant leaves the call or closes their tab.
@@ -116,24 +116,6 @@ export const createStreamAdminToken: RequestHandler = async (req, res) => {
   } catch (e) {
     logError(getErrorMessage(e));
     res.status(500).send("Error creating stream admin token");
-  }
-};
-
-export const getOrCreateStreamCall: RequestHandler = async (req, res) => {
-  const roomId = req.params.id;
-
-  if (!roomId) {
-    res.status(400).send("No room ID provided");
-    return;
-  }
-
-  try {
-    const callId = getOrCreateCall(roomId);
-    res.send({ callId: callId });
-  } catch (e) {
-    logError(getErrorMessage(e));
-    res.status(500).send("Error creating Stream call");
-    return;
   }
 };
 
