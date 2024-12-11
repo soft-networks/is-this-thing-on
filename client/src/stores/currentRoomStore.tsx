@@ -3,6 +3,7 @@ import create from "zustand";
 type RoomState = {
   currentRoomID: string | null;
   changeRoom: (newRoom: string | null, roomInfo?: CurrentRoomInfo) => void;
+  updateCurrentRoomInfo: (roomInfo: CurrentRoomInfo) => void;
   roomInfo: CurrentRoomInfo | undefined;
 };
 
@@ -11,8 +12,11 @@ export const useRoomStore = create<RoomState>((set) => ({
   roomInfo: undefined,
   changeRoom: (newRoom: string | null, roomInfo?: CurrentRoomInfo) => {
     //console.log("Room store updated", newRoom, roomInfo);
-    set((s) => ({ currentRoomID: newRoom, roomInfo: roomInfo }));
+    set((s) => ({ currentRoomID: newRoom}));
   },
+  updateCurrentRoomInfo: (roomInfo: CurrentRoomInfo) => {
+    set((s) => ({ roomInfo: roomInfo }));
+  }
 }));
 
 export const roomIsActive = (

@@ -147,6 +147,9 @@ export const NodeLink: React.FC<NodeLinkProps> = ({
   noNav,
   id,
 }) => {
+  if (!link) {
+    return null;
+  }
   const text = useMemo(
     () =>
       `${link.roomName} is ${link.streamStatus.includes("active") ? "on" : "off"}`,

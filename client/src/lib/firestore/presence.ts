@@ -17,7 +17,7 @@ export async function setUserPresenceHeartbeat(userID: string, roomName: string)
   if (activePresenceHeartbeat) {
     clearTimeout(activePresenceHeartbeat);
   }
-  logInfo(`Setting user presence ${roomName}`)
+  // logInfo(`Setting user presence ${roomName}`)
   await setPresenceDB(userID, roomName);
   activePresenceHeartbeat = setTimeout(
     () => setUserPresenceHeartbeat(userID, roomName),

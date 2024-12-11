@@ -14,8 +14,7 @@ import GlobalPresenceGate from "./gates/globalPresenceGate";
 const Layout: React.FunctionComponent<{
   hideChat?: boolean;
   hideFooter?: boolean;
-  roomColor?: string;
-}> = ({ children, hideFooter, roomColor }) => {
+}> = ({ children, hideFooter }) => {
   const isMobile = useMediaQuery();
   useEffect(() => {
     const setViewportHeight = () => {
@@ -33,9 +32,6 @@ const Layout: React.FunctionComponent<{
     <div
       className={classnames("fullScreen lightFill relative noOverflow", {"stack:noGap": isMobile})}
       key={`layout-${isMobile}`}
-      style={ 
-        roomColor ? ({ "--roomColor": roomColor } as React.CSSProperties) : {}
-      }
     >
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />

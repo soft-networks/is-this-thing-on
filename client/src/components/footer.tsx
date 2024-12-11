@@ -14,22 +14,17 @@ const Footer: React.FC = () => {
   const { pathname } = useRouter();
   const isMobile = useMediaQuery();
   return (
-    <footer className={classNames("fullWidth uiLayer horizontal-stack", {"align-end:fixed": !isMobile, "relative": isMobile})}>
-        <div className={classNames("uiLayer padded:s-1 overflowVisible", {
-          "centerh:absolute": !isMobile
-        })}>
-          {pathname == "/" ?  <HomeRing  /> : <Ring collapsed />}
-        </div>
+    <footer className={classNames("fullWidth uiLayer horizontal-stack", { "align-end:fixed": !isMobile, "relative": isMobile })}>
+      <div className={classNames("uiLayer padded:s-1 overflowVisible", {
+        "centerh:absolute": !isMobile
+      })}>
+        {pathname == "/" ? <HomeRing /> : <Ring collapsed />}
+      </div>
       <div
         className="uiLayer horizontal-stack:s-2 padded:s-1 align-end"
       >
-          <Link href={"/about"} passHref>
-      <div className="yellowFill padded:s-3 border clickable contrastFill:hover ">
-      about
-      </div>
-    </Link>
-
-        {pathname == "/" ?  <NumOnlineTotal />: <NumOnlineTotal/> }
+        <HomeButton />
+        {pathname == "/" ? <NumOnlineTotal /> : <NumOnlineTotal />}
         <AccountButton />
       </div>
     </footer>
@@ -41,13 +36,13 @@ const HomeButton: React.FC = () => {
   return pathname == "/" ? (
     <Link href={"/about"} passHref>
       <div className="padded:s-3 border clickable whiteFill contrastFill:hover">
-        ?
+        about
       </div>
     </Link>
   ) : (
     <Link href={"/"} passHref>
-      <div className="padded:s-3 border clickable whiteFill contrastFill:hover">
-      *
+      <div className="padded:s-3 border clickable whiteFill contrastFill:hover" style={{ height: "28px", fontSize: "14px" }}>
+      home
       </div>
     </Link>
   );

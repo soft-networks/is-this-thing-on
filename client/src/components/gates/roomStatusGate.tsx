@@ -31,12 +31,16 @@ const RoomStatusGate: React.FunctionComponent = ({ children }) => {
         </Head>
       )}
       {roomInfo && roomIsActive(roomInfo) && (
-        <ConsentGate>
-          {children}
-        </ConsentGate>
+        <div className="fullBleed" style={
+          roomInfo.roomColor ? ({ "--roomColor": roomInfo.roomColor } as React.CSSProperties) : {}
+        }>
+          <ConsentGate>
+            {children}
+          </ConsentGate>
+        </div>
       )}
       {roomInfo && !roomIsActive(roomInfo) && (
-        <div className="fullBleed">
+        <div className="fullBleed" >
           <div className="center:absolute highestLayer">
             {" "}
             offline... for now (archive here)

@@ -26,9 +26,10 @@ const RoomProvider: React.FC<{roomID: string}> = ({ roomID, children }) => {
               unsubscribeFromRoomInfo.current();
             }
             logCallbackSetup(`RoomInfo ${roomID}`);
-            unsubscribeFromRoomInfo.current = await syncRoomInfoDB(roomID, (r) =>
-              roomStore.changeRoom(roomID as string, r),
-            );
+            roomStore.changeRoom(roomID as string)
+            unsubscribeFromRoomInfo.current = await syncRoomInfoDB(roomID, (r) => {
+              roomStore.updateCurrentRoomInfo(r)
+            });
             //TODO: This is a weird place to do this, it should be after the gate.. but its okay for now.
             stickerStore.changeRoomStickers(roomID);
             console.log({adminForIDs, roomID });

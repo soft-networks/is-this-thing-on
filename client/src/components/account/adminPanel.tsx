@@ -19,7 +19,7 @@ const AdminPanel = ({
 const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
   rtmpsDetails,
 }) => {
-  const roomName = useRoomStore(useCallback((s) => s.roomInfo?.roomID, []));
+  const roomName = useRoomStore(useCallback((s) => s.roomInfo?.roomName, []));
   let panelRef = createRef<HTMLDivElement>();
 
   return (
