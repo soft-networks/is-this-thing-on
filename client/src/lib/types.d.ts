@@ -33,7 +33,6 @@ type AllRoomsSummary = { [key: string]: RoomSummary };
 type CurrentRoomInfo = RoomSummary & {
   consentURL?: string;
   streamOwner: string;
-  numOnline: number;
 };
 
 
@@ -69,5 +68,8 @@ interface UpdateRoomProps {
   adminUserId: string;
 }
 
+interface PresenceStats {
+  [key: string]: number;
+}
 type RtmpsDetails = { rtmpAddress: string; rtmpStreamKey: string };
 

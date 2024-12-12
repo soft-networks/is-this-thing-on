@@ -22,7 +22,6 @@ export function sanitizeRoomInfo(data: DocumentData, id: string): CurrentRoomInf
     streamPlaybackID: data["stream_playback_id"] || undefined,
     streamOwner: "bhavik",
     streamStatus: sanitizeStreamStatus(data["stream_status"]),
-    numOnline: data["num_online"] || 0,
     roomName: data["room_name"] || id,
     roomColor: data["room_color"] || "#FCFF54",
     consentURL: data["consentURL"] || undefined,

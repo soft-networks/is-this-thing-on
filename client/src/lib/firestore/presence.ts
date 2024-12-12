@@ -1,6 +1,6 @@
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
 
-import { presenceCollection } from "./locations";
+import { presenceCollection, presenceStatsDoc } from "./locations";
 import { logInfo } from "../logger";
 
 const PRESENCE_LENGTH = 5 * 1000;
@@ -24,4 +24,12 @@ export async function setUserPresenceHeartbeat(userID: string, roomName: string)
     () => setUserPresenceHeartbeat(userID, roomName),
     PRESENCE_LENGTH,
   );
+}
+export async function syncPresence(onPresenceUpdate: (presenceStats: PresenceStats) => void){
+  return onSnapshot(presenceStatsDoc(), (snapshot) => {
+    const presenceStatsData = snapshot.data() as PresenceStats; 
+    if (presenceStatsData) {
+      onPresenceUpdate(presenceStatsData);
+    }
+  });
 }

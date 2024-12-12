@@ -8,6 +8,7 @@ import { FooterRing } from "./rings/smallRing";
 import { syncTotalOnline } from "../lib/firestore";
 import classNames from "classnames";
 import useMediaQuery from "../stores/useMediaQuery";
+import useGlobalPresenceStore from "../stores/globalPresenceStore";
 
 const Footer: React.FC = () => {
   const { pathname } = useRouter();
@@ -23,7 +24,7 @@ const Footer: React.FC = () => {
         className="uiLayer horizontal-stack:s-2 padded:s-1 align-end"
       >
         <HomeButton />
-        {pathname == "/" ? <NumOnlineTotal /> : <NumOnlineTotal />}
+        <NumOnline />
         <AccountButton />
       </div>
     </footer>
@@ -47,26 +48,11 @@ const HomeButton: React.FC = () => {
   );
 };
 
-const NumOnlineRoom: React.FC = () => {
-  const numOnline = useRoomStore(useCallback((state) => state.roomInfo?.numOnline, []));
-  return <div className="padded:s-3 border whiteFill">{numOnline}</div>;
+const NumOnline: React.FC = () => {
+  const presenceStats = useGlobalPresenceStore(useCallback((state) => state.presenceStats, []));
+  const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));
+
+
+  return <div className="padded:s-3 border whiteFill">{roomID ? (presenceStats[roomID] || 0) : (presenceStats["home"] || 0)}</div>;
 };
-
-const NumOnlineTotal: React.FC = () => {
-  const [numOnline, setNumOnline] = useState<number>(0);
-
-  useEffect(() => {
-    const unsubscribe = syncTotalOnline((stats: number) => {
-      setNumOnline(stats);
-    });
-
-    return () => {
-      if (unsubscribe) {
-        unsubscribe();
-      }
-    };
-  }, []);
-  return <div className="padded:s-3 border whiteFill">{numOnline} on</div>;
-};
-
 export default Footer;

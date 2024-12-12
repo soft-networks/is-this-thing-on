@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import updateOrCreateRoom from "../../lib/firestore/updateRoom";
 import useGlobalRoomsInfoStore from "../../stores/globalRoomsInfoStore";
 import { getRoomsWhereUserISAdmin } from "../../lib/firestore/room";
 import Link from "next/link";
+import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
 
 
 const RoomManagement: React.FC<{uid: string}> = ({ uid }) => {
@@ -29,25 +30,19 @@ const CreateRoom: React.FC<{
   
 
 const UserRoomManager: React.FC<{uid: string}> = ({ uid }) => {
-  const [rooms, setRooms] = useState<undefined | CurrentRoomInfo[]>(undefined);
-  const numRooms = useGlobalRoomsInfoStore(useCallback((state) => Object.keys(state.rooms).length, []));
 
-  const refreshRooms = useCallback(async () => {
-    let rooms = await getRoomsWhereUserISAdmin(uid);
-    setRooms(rooms);
-  }, [uid]);
+  const adminFor = useGlobalAdminStore(useCallback((s) => s.adminFor, []));
+  const rooms = useGlobalRoomsInfoStore(useCallback((s) => s.rooms, []));
 
+  const myRooms = useMemo(() => {
+    return adminFor.map((r) => rooms[r]);
+  }, [adminFor, rooms]);
 
-  useEffect(() => {
-    console.log("numRooms changed ", numRooms);
-    setTimeout(refreshRooms, 500);
-  }, [numRooms]);
-
-  return rooms ? (
+  return adminFor.length > 0 ? (
     <div className="stack padded border-thin lightFill">
       <div className="stack:s-1">
         <em>Rooms you manage</em>
-        {rooms.map((r) => (
+        {myRooms.map((r) => (
           <UpdateRoom
             roomID={r.roomID}
             key={r.roomName + "-adminView"}
@@ -66,7 +61,7 @@ const UserRoomManager: React.FC<{uid: string}> = ({ uid }) => {
     roomID: string;
     playbackID?: string;
     uid: string;
-    room?: CurrentRoomInfo;
+    room?: RoomSummary;
   }> = ({ uid, room }) => {
     return (
       <div className="stack padded border-thin">
@@ -78,7 +73,7 @@ const UserRoomManager: React.FC<{uid: string}> = ({ uid }) => {
 
 const RoomForm: React.FC<{
     uid: string;
-    room?: CurrentRoomInfo;
+    room?: RoomSummary;
   }> = ({ uid, room }) => {
     const [roomName, setRoomName] = useState(room?.roomName || "");
     const [roomId, setRoomId] = useState(room?.roomID || "");

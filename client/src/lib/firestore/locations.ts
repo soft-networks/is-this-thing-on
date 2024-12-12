@@ -60,3 +60,7 @@ export function presenceCollection() {
   // console.log("Presence reference");
   return collection(db, "presence");
 }
+
+export function presenceStatsDoc() {
+  return doc(db, "stats", "presence");
+}

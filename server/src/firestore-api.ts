@@ -143,12 +143,18 @@ export function setupPresenceListener(allRoomNames: string[]) {
     }));
     // Calculate the total number of people online across all rooms
     const totalOnline = currentlyOnline.reduce((sum, { numOnline }) => sum + numOnline, 0);
-    
+    currentlyOnline.push({roomID: "home", numOnline: totalOnline});
+
+    // Store the full presence data in a single document
+    await firestore.collection("stats").doc("presence").set({ 
+      ...Object.fromEntries(currentlyOnline.map(({roomID, numOnline}) => [roomID, numOnline]))
+    });
+
     // Update a separate document in Firestore with the total online count
-    await Promise.all(currentlyOnline.map(({roomID, numOnline}) => 
-      roomID !== "home" &&roomDoc(roomID).set({num_online: numOnline}, {merge: true})
-    ));
-    await firestore.collection("stats").doc("total_online").set({ total: totalOnline }, { merge: true });
+    // await Promise.all(currentlyOnline.map(({roomID, numOnline}) => 
+    //   roomID !== "home" &&roomDoc(roomID).set({num_online: numOnline}, {merge: true})
+    // ));
+    // await firestore.collection("stats").doc("total_online").set({ total: totalOnline }, { merge: true });
   });
 }
 
