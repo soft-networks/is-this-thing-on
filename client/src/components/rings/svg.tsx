@@ -147,14 +147,15 @@ export const NodeLink: React.FC<NodeLinkProps> = ({
   noNav,
   id,
 }) => {
-  if (!link) {
-    return null;
-  }
+
   const text = useMemo(
     () =>
       `${link.roomName} is ${link.streamStatus.includes("active") ? "on" : "off"}`,
     [link.roomName, link.streamStatus],
   );
+  if (!link) {
+    return null;
+  }
   return (
     <div
       className={`border padded:s-3 center-text ${className}`}

@@ -238,6 +238,9 @@ p {
   --textWidth: 72ch;
 }
 
+.minTextWidth {
+  min-width: 48px;
+}
 .padded {
   padding: var(--spacing);
 }
@@ -599,7 +602,6 @@ a:hover,
 }
 
 .button {
-  text-decoration: underline;
   cursor: pointer;
 }
 
@@ -669,7 +671,7 @@ a:hover,
 .yellowFill {
   background: yellow;
 }
-.fhiteFill {
+.faintWhiteFill {
   background: var(--faintWhite);
 }
 
@@ -737,7 +739,8 @@ a:hover,
 }
 
 .caption {
-  font-size: calc(0.8 * var(--s0));
+  font-size: calc(0.91 * var(--s0));
+  opacity: 0.8;
 }
 
 /* Specific */

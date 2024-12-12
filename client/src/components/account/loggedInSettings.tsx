@@ -9,21 +9,21 @@ const LoggedInSettings: React.FC<{ currentUser: User }> = ({ currentUser }) => {
       useCallback((state) => state.displayName, []),
     );
     return (
-      <div className="quarterWidth centerh stack:s2 padded fullHeight overflowScroll">
-        <div className="stack padded align-start border-thin" key="details">
-          <em> account details </em>
-          <div> email: {currentUser.email} </div>
-          <div> username: {displayName} </div>
-          <SignOut />
-        </div>
-        <div className="stack padded border-thin" key="username">
-          <em> change username </em>
-          <p>
-            you can change your user name - but this will only apply for future
-            chats.
-          </p>
-          <ChangeUsername />
-        </div>
+      <div className="fullHeight stack:s1 quarterWidth centerh  padded overflowScroll">
+          <div className="stack padded align-start border:gray" key="details">
+            <em> account details </em>
+            <div> email: {currentUser.email} </div>
+            <div> username: {displayName} </div>
+            <SignOut />
+          </div>
+          <div className="stack padded border:gray" key="username">
+            <em> change username </em>
+            <p>
+              you can change your user name - but this will only apply for future
+              chats.
+            </p>
+            <ChangeUsername />
+          </div>
         <RoomManagement uid={currentUser.uid} />
       </div>
     );

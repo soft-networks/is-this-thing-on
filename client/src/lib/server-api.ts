@@ -1,5 +1,3 @@
-import { logError } from "./logger";
-
 const USE_PROD_SERVER = process.env.NEXT_PUBLIC_USE_PROD_SERVER != "false";
 const SERVER_URL = USE_PROD_SERVER
   ? "https://isto-server.fly.dev"
@@ -13,18 +11,13 @@ export const generateStreamLink = (playbackID: string) => {
 };
 
 const fetchResponse = async (endpoint: string) => {
-  try {
   const response = await fetch(endpoint);
   if (!response.ok) {
     throw new Error(
       `Request to ${endpoint} failed with status code ${response.status}`,
     );
   }
-    return response;
-  } catch (e) {
-    logError("Error fetching response", [endpoint, (e as Error).message]);
-    return undefined;
-  }
+  return response;
 };
 
 export const getStreamKey = async (streamName: string) => {
