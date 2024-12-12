@@ -10,6 +10,8 @@ const GlobalRoomsSummaryProvider: React.FC = ({ children }) => {
     const updateRingStatus = useGlobalRoomsInfoStore(useCallback((s) => s.updateRoomInfo, []));
     const onRoomCreatedOrDestroyed = useGlobalRoomsInfoStore(useCallback((s) => s.onRoomCreatedOrDestroyed, []));
     const ringUnsubs = useRef<Unsubscribe[]>();
+    const numRooms = useGlobalRoomsInfoStore(useCallback((s) => Object.keys(s.rooms).length, []));
+
     useEffect(() => {
         async function setupSync() {
             logCallbackSetup("🌎 Mounting RingSyncs");

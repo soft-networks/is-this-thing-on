@@ -1,6 +1,18 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import updateOrCreateRoom from "../../lib/firestore/updateRoom";
+import useGlobalRoomsInfoStore from "../../stores/globalRoomsInfoStore";
+import { getRoomsWhereUserISAdmin } from "../../lib/firestore/room";
+import Link from "next/link";
 
+
+const RoomManagement: React.FC<{uid: string}> = ({ uid }) => {
+    return (
+        <div className="stack padded border-thin lightFill">
+            <CreateRoom uid={uid} />
+            <UserRoomManager uid={uid} />
+        </div>
+    );
+}
 
 const CreateRoom: React.FC<{
     uid: string;
@@ -15,6 +27,41 @@ const CreateRoom: React.FC<{
     );
   };
   
+
+const UserRoomManager: React.FC<{uid: string}> = ({ uid }) => {
+  const [rooms, setRooms] = useState<undefined | CurrentRoomInfo[]>(undefined);
+  const numRooms = useGlobalRoomsInfoStore(useCallback((state) => Object.keys(state.rooms).length, []));
+
+  const refreshRooms = useCallback(async () => {
+    let rooms = await getRoomsWhereUserISAdmin(uid);
+    setRooms(rooms);
+  }, [uid]);
+
+
+  useEffect(() => {
+    console.log("numRooms changed ", numRooms);
+    setTimeout(refreshRooms, 500);
+  }, [numRooms]);
+
+  return rooms ? (
+    <div className="stack padded border-thin lightFill">
+      <div className="stack:s-1">
+        <em>Rooms you manage</em>
+        {rooms.map((r) => (
+          <UpdateRoom
+            roomID={r.roomID}
+            key={r.roomName + "-adminView"}
+            uid={uid}
+            room={r}
+          />
+        ))}
+      </div>
+    </div>
+  ) : (
+    <div> you are not the admin for any rooms</div>
+  );
+};
+
   const UpdateRoom: React.FC<{
     roomID: string;
     playbackID?: string;
@@ -46,13 +93,16 @@ const RoomForm: React.FC<{
         adminUserId: uid
       };
       await updateOrCreateRoom(roomData);
+      setRoomName("");
+      setRoomId("");
+      setRoomColor("#000000");
     };
   
     return (
-      <form onSubmit={handleSubmit} className="stack:s-1">
+      <form onSubmit={handleSubmit} className="stack">
         <div>
           <div>
-            <label htmlFor="roomId">Room ID:</label>
+            <label htmlFor="roomId">Room ID: </label>
             {!room?.roomID ? <input
               type="text"
               id="roomId"
@@ -61,7 +111,7 @@ const RoomForm: React.FC<{
               placeholder="Room ID"
             /> : <span>{roomId}</span>}
           </div>
-          <label htmlFor="roomName">Room Name:</label>
+          <label htmlFor="roomName">Room Name: </label>
           <input
             type="text"
             id="roomName"
@@ -72,7 +122,7 @@ const RoomForm: React.FC<{
           />
         </div>
         <div>
-          <label htmlFor="roomColor">Room Color:</label>
+          <label htmlFor="roomColor">Room Color: </label>
           <input
             type="color"
             id="roomColor"
@@ -82,10 +132,14 @@ const RoomForm: React.FC<{
             placeholder="Room Color"
           />
         </div>
-        <button type="submit" className="button">{room ? "Update" : "Create"} Room</button>
+        <div className="horizontal-stack">
+          <div className="padded:s-1 whiteFill border greenFill:hover cursor:pointer" onClick={handleSubmit}>{room ? "Update" : "Create"} Room</div>
+          {room && <Link href={`/${room.roomID}`} className="whiteFill greenFill:hover border padded:s-1">View Room</Link>}
+        </div>
+        
       </form>
     );
   };
 
   
-  export {CreateRoom, UpdateRoom};
+  export default RoomManagement;

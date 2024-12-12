@@ -12,7 +12,7 @@ const RoomProvider: React.FC<{roomID: string}> = ({ roomID, children }) => {
 
     const roomStore = useRoomStore(useCallback((s) => s, []));
     const stickerStore = useStickerCDNStore(useCallback((s) => s, []));
-    const adminForIDs = useGlobalUserStore(useCallback((s) => s.adminFor, []));
+    const adminForIDs = useGlobalAdminStore(useCallback((s) => s.adminFor, []));
     const setIsAdmin = useGlobalAdminStore(useCallback((s) => s.setIsAdmin, []));
     const unsubscribeFromRoomInfo = useRef<Unsubscribe>();
 

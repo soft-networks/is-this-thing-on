@@ -59,7 +59,6 @@ async function newRoom(room: UpdateRoomProps) {
     };
     const roomRef = doc(db, 'rooms', roomId);
     await setDoc(roomRef, roomData);
-    console.log("New room created", newRoom);
   } catch (error: unknown) {
     logError("Failed to create room", [(error as Error).message]);
   }

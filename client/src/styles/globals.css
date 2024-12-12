@@ -581,6 +581,10 @@ a:hover,
   cursor: pointer;
 }
 
+.cursor\:pointer {
+  cursor: pointer;
+}
+
 .noSelect {
   -webkit-touch-callout: none;
   -webkit-user-select: none;

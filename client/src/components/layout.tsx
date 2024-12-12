@@ -5,8 +5,9 @@ import useMediaQuery from "../stores/useMediaQuery";
 import classnames from "classnames";
 import Head from "next/head";
 import Instrumentation from "./Instrumentation";
-import  GlobalRoomsSummaryProvider  from "./gates/globalRoomsSummaryProvider";
+import GlobalRoomsSummaryProvider from "./gates/globalRoomsSummaryProvider";
 import GlobalPresenceGate from "./gates/globalPresenceGate";
+import GlobalUserAdminProvider from "./gates/globalUserAdminStore";
 
 
 //TODO: Currently we have a listener for each ringNode. Can simplify, requires DB refactor.
@@ -30,7 +31,7 @@ const Layout: React.FunctionComponent<{
 
   return (
     <div
-      className={classnames("fullScreen lightFill relative noOverflow", {"stack:noGap": isMobile})}
+      className={classnames("fullScreen lightFill relative noOverflow", { "stack:noGap": isMobile })}
       key={`layout-${isMobile}`}
     >
       <Head>
@@ -38,10 +39,12 @@ const Layout: React.FunctionComponent<{
       </Head>
       <ClickGate>
         <GlobalRoomsSummaryProvider>
-          <GlobalPresenceGate>
-            {children}
-            {!hideFooter && <Footer />}
-          </GlobalPresenceGate>
+          <GlobalUserAdminProvider>
+            <GlobalPresenceGate>
+              {children}
+              {!hideFooter && <Footer />}
+            </GlobalPresenceGate>
+          </GlobalUserAdminProvider>
         </GlobalRoomsSummaryProvider>
       </ClickGate>
       <Instrumentation />

@@ -26,6 +26,7 @@ import useStickerCDNStore from "../../stores/stickerStore";
 import { useGlobalUserStore } from "../../stores/globalUserStore";
 import { DefaultStickerAdder, StickerAdderProps } from "./stickerAdders";
 import { StickerRenderer } from "./stickerRenderHelpers";
+import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
 
 interface StickersProps {
   StickerChooser?: React.FC<StickerAdderProps>;
@@ -39,7 +40,7 @@ const Stickers: React.FC<StickersProps> = ({
   const stickerCDN = useStickerCDNStore(
     useCallback((state) => state.stickerCDN, []),
   );
-  const adminForIDs = useGlobalUserStore(useCallback((s) => s.adminFor, []));
+  const adminForIDs = useGlobalAdminStore(useCallback((s) => s.adminFor, []));
   const displayName = useGlobalUserStore(
     useCallback((state) => state.displayName, []),
   );
