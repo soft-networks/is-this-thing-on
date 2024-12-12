@@ -4,28 +4,28 @@ import AdminStreamPanel from "./adminStreamPanel";
 import Draggable from "react-draggable";
 import classnames from "classnames";
 import { resetStickers } from "../../lib/firestore";
-import { useAdminStore } from "../../stores/adminStore";
-import { useRoomStore } from "../../stores/roomStore";
+import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
+import { useRoomStore } from "../../stores/currentRoomStore";
 
 const AdminPanel = ({
   rtmpsDetails,
 }: {
   rtmpsDetails: RtmpsDetails | null;
 }) => {
-  const isAdmin = useAdminStore(useCallback((s) => s.isAdmin, []));
+  const isAdmin = useGlobalAdminStore(useCallback((s) => s.isAdmin, []));
   return isAdmin ? <AdminPanelInternal rtmpsDetails={rtmpsDetails} /> : null;
 };
 
 const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
   rtmpsDetails,
 }) => {
-  const roomName = useRoomStore(useCallback((s) => s.roomInfo?.roomID, []));
+  const roomName = useRoomStore(useCallback((s) => s.roomInfo?.roomName, []));
   let panelRef = createRef<HTMLDivElement>();
 
   return (
     <Draggable handle=".handle" nodeRef={panelRef}>
       <div
-        className="stack:s-2 grayFill relative border uiLayer showOnHoverSelfTrigger "
+        className="stack:s-2 lightFill relative border uiLayer showOnHoverSelfTrigger "
         style={{ position: "fixed", top: "var(--s3)", right: "var(--s1)" }}
         ref={panelRef}
       >
@@ -41,22 +41,24 @@ const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
           <div>...</div>
           <div>Admin Panel</div>
         </div>
-        <div className="padded:s-2 stack:s-1 monospace">
-          <StickerOverride />
-          <VideoOverride />
-          {roomName && (
-            <div
-              className={classnames(
-                "padded:s-2 whiteFill clickable contrastFill:hover",
-              )}
-              onClick={() => resetStickers(roomName)}
-            >
-              ⚠️ Reset Stickers
-            </div>
-          )}
-          <br />
-          <hr />
-          <br />
+        
+        <div className="padded:s-1 stack:s1 monospace">
+          <div className="stack:s-1">
+            <div>Room controls</div>
+            <VideoOverride />
+            {roomName && (
+              <div
+                className={classnames(
+                  "padded:s-2 whiteFill clickable greenFill:hover border",
+                )}
+                onClick={() => resetStickers(roomName)}
+              >
+                ⚠️ Reset Stickers
+              </div>
+            )}
+            <StickerOverride />
+          </div>
+          <hr/>
           {roomName && <AdminStreamPanel rtmpsDetails={rtmpsDetails} />}
         </div>
       </div>
@@ -65,16 +67,16 @@ const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
 };
 
 const StickerOverride: React.FC = () => {
-  const stickerBehaviorOverride = useAdminStore(
+  const stickerBehaviorOverride = useGlobalAdminStore(
     useCallback((s) => s.stickerBehaviorOverride, []),
   );
-  const setStickerBehaviorOverride = useAdminStore(
+  const setStickerBehaviorOverride = useGlobalAdminStore(
     useCallback((s) => s.setStickerBehaviorOverride, []),
   );
 
   return (
-    <div className="highestLayer stack:s-2 whiteFill padded:s-2 ">
-      <div>Special Sticker Behavior</div>
+    <div className="highestLayer stack:s-2 lightFill border:gray padded:s-2 ">
+      <div>Override Sticker Behavior</div>
       <div className="horizontal-stack">
         <div className="horizontal-stack:s-2 everest">
           <label>Move</label>
@@ -106,18 +108,18 @@ const StickerOverride: React.FC = () => {
 };
 
 const VideoOverride: React.FC = () => {
-  const hideVideo = useAdminStore(useCallback((s) => s.hideVideo, []));
-  const setVideoOverride = useAdminStore(
+  const hideVideo = useGlobalAdminStore(useCallback((s) => s.hideVideo, []));
+  const setVideoOverride = useGlobalAdminStore(
     useCallback((s) => s.setHideVideo, []),
   );
   return (
     <div
       className={classnames(
-        "padded:s-2 whiteFill clickable contrastFill:hover",
+        "padded:s-2 whiteFill clickable greenFill:hover border ",
       )}
       onClick={() => setVideoOverride(!hideVideo)}
     >
-      {hideVideo ? "🙃 Show video" : "🫥 Hide video"}
+      {hideVideo ? "🙃 Show my video to me" : "🫥 Hide my video for me"}
     </div>
   );
 };

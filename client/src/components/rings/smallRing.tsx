@@ -1,103 +1,65 @@
 import { useRouter } from "next/router";
 import { useCallback, useMemo, } from "react";
-import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
-import { useRoomStore } from "../../stores/roomStore";
-import { NodeLink, SVGRingSeparate } from "./svg";
+import useGlobalRoomsInfoStore, { roomIDToHREF } from "../../stores/globalRoomsInfoStore";
+import { useRoomStore } from "../../stores/currentRoomStore";
+import { NodeLink } from "./svg";
+import { logError } from "../../lib/logger";
 
-interface RingProps {
-  collapsed?: boolean;
-  noNav?: boolean;
-}
-const SmallRing: React.FC<RingProps> = ({ collapsed, noNav }) => {
-  const ring = useRingStore(useCallback((s) => s.links, []));
+
+
+
+export const FooterRing: React.FC<{ isHome: boolean }> = ({ isHome }) => {
+  // Only subscribe to current room ID
   const roomID = useRoomStore(useCallback((s) => s.currentRoomID, []));
 
-  return ring && roomID ? (
-    <FooterLogo ring={ring} roomID={roomID} />
-  ) : (
-    <></>
-  );
-};
+  // Only get current room's info, not the whole ring
+  const currentRoom = useRoomStore(useCallback((s) => s.roomInfo, []));
 
-export const HomeRing: React.FC<{ }> = ({}) => {
-  const ring = useRingStore(useCallback((s) => s.links, []));
   const { push } = useRouter();
 
-  return <div className="centerh relative">
-  <div className="horizontal-stack:s-2">
-    <div
-      className="whiteFill clickable clickable:link border padded:s-3 contrastFill:hover"
-      onClick={() => {
-        const keys = Object.keys(ring);
-        if (keys.length > 0) {
-          const firstRoomID = keys[keys.length-1];
-          push(roomIDToHREF(firstRoomID));
-        }
-      }}
-    >
-      ←
-    </div>
-    <div
-      className={`border padded:s-3 center-text`}
-      style={{backgroundColor:  "var(--contrast)"}}
-    >
-      <span>home</span>
-    </div>    <div
-      className="whiteFill clickable clickable:link border padded:s-3 contrastFill:hover"
-      onClick={() => {
-        const keys = Object.keys(ring);
-        if (keys.length > 0) {
-          const firstRoomID = keys[0];
-          push(roomIDToHREF(firstRoomID));
-        }
-      }}
-    >
-      →
-    </div>
-  </div>
-</div>
-};
+  // Move rooms data access to component level with useMemo
+  const navigationData = useMemo(() => {
+    const rooms = useGlobalRoomsInfoStore.getState().rooms;
+    const keys = Object.keys(rooms);
+    const currentIndex = roomID ? keys.indexOf(roomID) : -1;
+    return { keys, currentIndex };
+  }, [roomID]);
 
-const FooterLogo: React.FC<{ ring: WebRing; roomID: string }> = ({
-  ring,
-  roomID,
-}) => {
-  const { push } = useRouter();
-  const indexSelected = useMemo(() => {
-    if (!roomID) return;
-    let i = Object.keys(ring).indexOf(roomID);
-    return i > -1 ? i : undefined;
-  }, [ring, roomID]);
-  const navStream = useCallback(
-    (n: number) => {
-      let keys = Object.keys(ring);
-      if (n == keys.length || n == -1) {
-        push("/");
-      } else {
-        n = n < 0 ? keys.length - 1 : n;
-        let nextKey = keys[n % keys.length];
-        push(roomIDToHREF(nextKey));
-      }
-    },
-    [push, ring],
-  );
+  // Simplified click handlers using memoized data
+  const handlePrevClick = useCallback(() => {
+    if (navigationData.currentIndex === 0) {
+      push("/");
+    } else {
+      push(roomIDToHREF(navigationData.keys[navigationData.currentIndex - 1]));
+    }
+  }, [navigationData, push]);
+
+  const handleNextClick = useCallback(() => {
+    if (navigationData.currentIndex === navigationData.keys.length - 1) {
+      push("/");
+    } else {
+      push(roomIDToHREF(navigationData.keys[navigationData.currentIndex + 1]));
+    }
+  }, [navigationData, push]);
+
+  if (!currentRoom || !roomID) {
+    logError("Footer failed. Room doesn't exist", [roomID]);
+    return null;
+  }
+
   return (
     <div className="centerh relative">
       <div className="horizontal-stack:s-2">
         <div
           className="whiteFill clickable clickable:link border padded:s-3 contrastFill:hover"
-          onClick={() =>
-            indexSelected !== undefined && navStream(indexSelected - 1)
-          }
+          onClick={handlePrevClick}
         >
           ←
         </div>
-        <NodeLink link={ring[roomID]} id={roomID} noNav />
+        {isHome ? <HomeNode /> : <NodeLink link={currentRoom} id={roomID} noNav />}
         <div
           className="whiteFill clickable clickable:link border padded:s-3 contrastFill:hover"
-          onClick={() =>
-            indexSelected !== undefined && navStream(indexSelected + 1)
-          }
+          onClick={handleNextClick}
         >
           →
         </div>
@@ -106,4 +68,8 @@ const FooterLogo: React.FC<{ ring: WebRing; roomID: string }> = ({
   );
 };
 
-export default SmallRing;
+const HomeNode = () => {
+  return <div className="border padded:s-3 center-text" style={{ backgroundColor: "var(--contrast)" }}>
+    <span>home</span>
+  </div>
+}

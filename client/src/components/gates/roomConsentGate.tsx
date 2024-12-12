@@ -1,15 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { logInfo } from "../../lib/logger";
-import useConsentStore from "../../stores/consentStore";
-import { useRoomStore } from "../../stores/roomStore";
+import { useRoomStore } from "../../stores/currentRoomStore";
 
-const ConsentGate: React.FC<{ roomID: string; consentURL?: string }> = ({
-  roomID,
+const ConsentGate: React.FC = ({
   children,
-  consentURL,
 }) => {
-  return consentURL ? (
+  const roomID = useRoomStore(useCallback((s) => s.roomInfo?.roomID, []));
+  const consentURL = useRoomStore(useCallback((s) => s.roomInfo?.consentURL, []));
+  return consentURL && roomID ? (
     <ConsentGateInternal roomID={roomID} consentURL={consentURL}>
       {children}
     </ConsentGateInternal>
@@ -23,19 +22,25 @@ const ConsentGateInternal: React.FC<{ roomID: string; consentURL: string }> = ({
   children,
   consentURL,
 }) => {
-  const consent = useConsentStore(useCallback((s) => s.consent, []));
-  const setConsent = useConsentStore(useCallback((s) => s.setConsent, []));
-  const [consentPassed, setConsentPassed] = useState<boolean>(false);
-  useEffect(() => {
-    if (consent.includes(roomID)) {
-      logInfo("Consent Accepted for" + roomID);
-      setConsentPassed(true);
+  const [consentPassed, setConsentPassed] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem(`consent-${roomID}`) === 'true';
     }
-  }, [consent, roomID]);
+    return false;
+  });
+
+  // Update localStorage whenever consent changes
+  useEffect(() => {
+    if (typeof window !== 'undefined' && consentPassed == true) {
+      localStorage.setItem(`consent-${roomID}`, consentPassed.toString());
+    }
+  }, [consentPassed, roomID]);
+
+  
   return consentPassed ? (
     <>{children}</>
   ) : (
-    <div className="fullBleed absolute faintWhiteFill highestLayer">
+    <div className="fullBleed absolute faintWhiteFill highestLayer" key={`content-gate-${roomID}`}>
       <div
         className="center:absolute stack padded"
         style={{ width: "80vw", height: "85vh" }}
@@ -49,8 +54,7 @@ const ConsentGateInternal: React.FC<{ roomID: string; consentURL: string }> = ({
           <div
             className="clickable padded lightFill border contrastFill contrastFill:hover"
             onClick={() => {
-              console.log("SETTING", roomID);
-              setConsent(roomID);
+              logInfo("Consent Accepted for" + roomID);
               setConsentPassed(true);
             }}
           >

@@ -54,24 +54,22 @@ const AdminStreamPanel: React.FC<{
   }
 
   return (
-    <>
+    <div className="stack:s-1">
+      <div>Stream controls</div>
       {streamType != null && (
         <>
           {/* Show back button if RTMPS or Browser was selected. */}
-          <button
-            className="padded:s-2 clickable whiteFill greenFill:hover"
+          <div
+            className="padded:s-2 clickable lightFill greenFill:hover border"
             onClick={() => setStreamType(null)}
           >
-            Back
-          </button>
+            back
+          </div>
         </>
       )}
       {streamInfo}
       {isLive || liveReady ? (
         <>
-          <br />
-          <hr />
-          <br />
           {!isLive && (
             <>
               {/* Show number of available inputs and preview of selected input */}
@@ -94,20 +92,20 @@ const AdminStreamPanel: React.FC<{
             </>
           )}
           {/* Show button to start or stop livestream */}
-          <button
+          <div
             className={classNames(
-              "padded:s-2 clickable",
+              "padded:s-2 clickable border",
               isLive ? "greenFill" : "whiteFill greenFill:hover",
             )}
             onClick={() => (isLive ? handleStopLive(call) : handleGoLive(call))}
           >
-            {isLive ? "Stop Livestream" : "Start livestream"}
-          </button>
+            {isLive ? "🚫 Stop Livestream" : "🔴 Start livestream"}
+          </div>
         </>
       ) : (
         <br />
       )}
-    </>
+    </div>
   );
 };
 
@@ -138,20 +136,20 @@ const handleGoLive = async (call: Call) => {
 // or to enable the camera and mic for browser-based streaming.
 const SelectStreamType = ({ setStreamType }: { setStreamType: any }) => {
   return (
-    <>
-      <button
-        className="padded:s-2 clickable whiteFill greenFill:hover"
-        onClick={() => setStreamType("RTMPS")}
-      >
-        Show RTMPS Info
-      </button>
-      <button
-        className="padded:s-2 clickable whiteFill greenFill:hover"
+    <div className="stack">
+      <div
+        className="padded:s-2 clickable whiteFill greenFill:hover border"
         onClick={() => setStreamType("Browser")}
       >
-        Enable browser video
-      </button>
-    </>
+        🎥 Enable camera to stream
+      </div>
+      <div
+        className="padded:s-2 clickable lightFill greenFill:hover border:gray"
+        onClick={() => setStreamType("RTMPS")}
+      >
+        or show RTMPS Info
+      </div>
+    </div>
   );
 };
 

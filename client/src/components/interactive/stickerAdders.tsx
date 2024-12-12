@@ -11,7 +11,7 @@ import {
 } from "react";
 
 import { logError } from "../../lib/logger";
-import { useAdminStore } from "../../stores/adminStore";
+import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
 import { StickerImage } from "./stickerRenderHelpers";
 
 export interface StickerAdderProps {
@@ -126,7 +126,7 @@ export const DefaultStickerAdder: React.FC<StickerAdderProps> = ({
   cdn,
   containerBounds,
 }) => {
-  const isAdmin = useAdminStore(useCallback((s) => s.isAdmin, []));
+  const isAdmin = useGlobalAdminStore(useCallback((s) => s.isAdmin, []));
   const [showStickerTypePicker, setShowStickerTypePicker] =
     useState<boolean>(false);
   const currentPosChosen = useRef<Pos>();
@@ -184,7 +184,7 @@ export const AdminOnlyStickerAdder: React.FC<StickerAdderProps> = ({
   cdn,
   containerBounds,
 }) => {
-  const isAdmin = useAdminStore(useCallback((s) => s.isAdmin, []));
+  const isAdmin = useGlobalAdminStore(useCallback((s) => s.isAdmin, []));
   if (isAdmin)
     return (
       <DefaultStickerAdder

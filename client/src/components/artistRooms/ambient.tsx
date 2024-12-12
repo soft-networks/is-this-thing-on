@@ -1,6 +1,6 @@
 import { Chat } from "../interactive/chat";
 import React from "react";
-import VideoPlayer from "../videoPlayer";
+import VideoPlayer from "../video/videoPlayer";
 
 const Ambient: React.FC = () => {
   return (

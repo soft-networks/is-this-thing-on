@@ -1,14 +1,14 @@
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
 
-import useRingStore, { roomIDToHREF } from "../../stores/ringStore";
-import { roomIsActive } from "../../stores/roomStore";
+import useGlobalRoomsInfoStore, { roomIDToHREF } from "../../stores/globalRoomsInfoStore";
+import { roomIsActive } from "../../stores/currentRoomStore";
 import useMediaQuery from "../../stores/useMediaQuery";
-import StreamGate from "../room/streamGate";
-import VideoPreview from "../videoPreview";
+import StreamGate from "../gates/streamGate";
+import VideoPreview from "../video/videoPreview";
 
 const DomRing = () => {
-  const ring = useRingStore(useCallback((s) => s.links, []));
+  const ring = useGlobalRoomsInfoStore(useCallback((s) => s.rooms, []));
   const isMobile = useMediaQuery();
   const domElements = useMemo(() => {
     const numKeys = Object.keys(ring).length;
@@ -34,7 +34,7 @@ const DomRing = () => {
 };
 
 const NodeElement: React.FC<{
-  roomInfo: RoomLinkInfo;
+  roomInfo: RoomSummary;
   offsetN: number;
   isMobile: boolean;
 }> = ({ roomInfo, offsetN, isMobile }) => {
@@ -80,7 +80,7 @@ const NodeElement: React.FC<{
   }
 };
 const OnlineElement: React.FC<{
-  roomInfo: RoomLinkInfo;
+  roomInfo: RoomSummary;
   offsetN: number;
   onClick: () => void;
 }> = ({ roomInfo, offsetN, onClick }) => {
@@ -127,7 +127,7 @@ const OnlineElement: React.FC<{
 };
 
 const OnlineElementSimple: React.FC<{
-  roomInfo: RoomLinkInfo;
+  roomInfo: RoomSummary;
   offsetN: number;
   onClick: () => void;
 }> = ({ roomInfo, offsetN, onClick }) => {
@@ -149,7 +149,7 @@ const OnlineElementSimple: React.FC<{
 };
 
 const OfflineElement: React.FC<{
-  roomInfo: RoomLinkInfo;
+  roomInfo: RoomSummary;
   offsetN: number;
   onClick: () => void;
 }> = ({ roomInfo, offsetN, onClick }) => {

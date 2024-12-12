@@ -6,7 +6,7 @@ import {
 import { Chat } from "../interactive/chat";
 import React from "react";
 import Stickers from "../interactive/stickers";
-import VideoPlayer from "../videoPlayer";
+import VideoPlayer from "../video/videoPlayer";
 
 const Maya: React.FC = () => {
   return (

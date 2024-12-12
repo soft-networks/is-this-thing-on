@@ -1,19 +1,13 @@
+import { AppProps } from "next/app";
+import Layout from "../components/layout"; // Adjust the path as necessary
 import "../styles/globals.css";
 
-import App from "next/app";
-
-import Instrumentation from "../components/Instrumentation";
-
-class MyApp extends App {
-  render() {
-    const { Component, pageProps, router } = this.props;
-    return (
-      <>
-        <Component {...pageProps}></Component>
-        <Instrumentation />
-      </>
-    );
-  }
+function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <Layout>
+      <Component {...pageProps} />
+    </Layout>
+  );
 }
 
 export default MyApp;

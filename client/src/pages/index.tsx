@@ -3,9 +3,9 @@ import { NextPage } from "next";
 import Head from "next/head";
 import React, { useCallback, useEffect } from "react";
 import { Chat } from "../components/interactive/chat";
-import Layout from "../components/room/layout";
-import { useRoomStore } from "../stores/roomStore";
-import { useUserStore } from "../stores/userStore";
+import Layout from "../components/layout";
+import { useRoomStore } from "../stores/currentRoomStore";
+import { useGlobalUserStore } from "../stores/globalUserStore";
 import { activePresenceHeartbeat, setUserPresenceHeartbeat } from "../lib/firestore";
 import useMediaQuery from "../stores/useMediaQuery";
 import DomRing from "../components/rings/domRing";
@@ -13,35 +13,18 @@ import Link from "next/link";
 
 const Index: NextPage = () => {
   const changeRoom = useRoomStore((s) => s.changeRoom);
-  const displayName = useUserStore(useCallback((s) => s.displayName, []))
   const isMobile = useMediaQuery();
-
   useEffect(() => {
     changeRoom(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-
-  useEffect(() => {
-    if (displayName) {
-      setUserPresenceHeartbeat(displayName, "home");
-    }
-    return () => {
-      // Clear the active timeout when unmounting or changing rooms
-      if (activePresenceHeartbeat) {
-        clearTimeout(activePresenceHeartbeat);
-      }
-    };
-  }, [displayName]);
-
-
   return (
-    <Layout>
+    <>
       <Head>
         <title>THING</title>
       </Head>
       {isMobile ? <IndexMobile /> : <IndexDesktop />}
-    </Layout>
+    </>
   );
 };
 

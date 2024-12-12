@@ -12,9 +12,9 @@ import {
   syncSpin,
 } from "../../../lib/firestore/custom/darlaSpinner";
 import { logError, logInfo } from "../../../lib/logger";
-import { useAdminStore } from "../../../stores/adminStore";
+import { useGlobalAdminStore } from "../../../stores/globalUserAdminStore";
 import useStickerCDNStore from "../../../stores/stickerStore";
-import { useUserStore } from "../../../stores/userStore";
+import { useGlobalUserStore } from "../../../stores/globalUserStore";
 
 const Spinner: React.FC = () => {
   const [nextTime, setNextTime] = useState<number>();
@@ -26,8 +26,8 @@ const Spinner: React.FC = () => {
   const unsub = useRef<Unsubscribe>();
 
   const stickerCDN = useStickerCDNStore(useCallback((s) => s.stickerCDN, []));
-  const activeUsername = useUserStore(useCallback((s) => s.displayName, []));
-  const isAdmin = useAdminStore(useCallback((s) => s.isAdmin, []));
+  const activeUsername = useGlobalUserStore(useCallback((s) => s.displayName, []));
+  const isAdmin = useGlobalAdminStore(useCallback((s) => s.isAdmin, []));
 
   const spinHappened = useCallback(
     (nextTime: number, nextSpinAmount: number, lastWinner: string) => {

@@ -1,10 +1,3 @@
-interface MagicPiece {
-  id: string;
-  triggerType?: any;
-  pos: { x: number; y: number };
-  asset?: string;
-  reward?: number;
-}
 
 interface SarahQuestion {
   question: string;
@@ -23,25 +16,25 @@ interface ChatMessage {
 
 interface StreamNames {
   names?: string[];
-}
+} 
 
 type STREAM_STATUS_TYPE = "active" | "disconnected" | "active-test";
 
-interface RoomLinkInfo {
+interface RoomSummary {
   roomID: string;
   roomName: string;
   roomColor: string;
   streamStatus: STREAM_STATUS_TYPE;
   streamPlaybackID?: string;
-  consentURL?: string;
   previewOverlay?: string;
 }
-type WebRing = { [key: string]: RoomLinkInfo };
+type AllRoomsSummary = { [key: string]: RoomSummary };
 
-type RoomInfo = RoomLinkInfo & {
+type CurrentRoomInfo = RoomSummary & {
+  consentURL?: string;
   streamOwner: string;
-  numOnline: number;
 };
+
 
 type Pos = [number, number];
 
@@ -68,4 +61,15 @@ interface RoomUIProps {
   style?: React.CSSProperties;
 }
 
+interface UpdateRoomProps {
+  roomName: string;
+  roomId: string;
+  roomColor: string;
+  adminUserId: string;
+}
+
+interface PresenceStats {
+  [key: string]: number;
+}
 type RtmpsDetails = { rtmpAddress: string; rtmpStreamKey: string };
+

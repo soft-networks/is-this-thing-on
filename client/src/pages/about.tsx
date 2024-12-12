@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 
 import Head from "next/head";
 import { useEffect } from "react";
-import { useRoomStore } from "../stores/roomStore";
+import { useRoomStore } from "../stores/currentRoomStore";
 import Link from 'next/link';
 
 

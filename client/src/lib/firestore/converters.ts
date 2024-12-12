@@ -6,13 +6,22 @@ export function validateRoomName(roomName: string) {
   }
   return true;
 }
-export function sanitizeRoomInfo(data: DocumentData, id: string): RoomInfo {
+
+export function sanitizeRoomSummary(data: DocumentData, id: string): RoomSummary {
+  return {
+    roomID: id,
+    roomName: data["room_name"] || id,
+    roomColor: data["room_color"] || "#FCFF54",
+    streamStatus: sanitizeStreamStatus(data["stream_status"]),
+  };
+}
+
+export function sanitizeRoomInfo(data: DocumentData, id: string): CurrentRoomInfo {
   return {
     roomID: id,
     streamPlaybackID: data["stream_playback_id"] || undefined,
     streamOwner: "bhavik",
     streamStatus: sanitizeStreamStatus(data["stream_status"]),
-    numOnline: data["num_online"] || 0,
     roomName: data["room_name"] || id,
     roomColor: data["room_color"] || "#FCFF54",
     consentURL: data["consentURL"] || undefined,

@@ -1,10 +1,10 @@
-import { roomIsActive, roomIsTest, useRoomStore } from "../stores/roomStore";
+import { roomIsActive, roomIsTest, useRoomStore } from "../../stores/currentRoomStore";
 
 import ReactPlayer from "react-player";
 import StreamPlayer from "./streamPlayer";
-import { useAdminStore } from "../stores/adminStore";
-import { useCallback } from "react";
-import useLocalMutedStore from "../stores/localMuteStore";
+import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
+import { useCallback, useState } from "react";
+
 
 interface VideoPlayerProps {
   muteOverride?: boolean;
@@ -20,7 +20,7 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
   const streamStatus = useRoomStore(
     useCallback((s) => s.roomInfo?.streamStatus, []),
   );
-  const hideVideo = useAdminStore(useCallback((s) => s.hideVideo, []));
+  const hideVideo = useGlobalAdminStore(useCallback((s) => s.hideVideo, []));
 
   return (
     <>
@@ -42,8 +42,8 @@ const VideoPlayerInternal: React.FunctionComponent<{
   muteOverride?: boolean;
   isTest?: boolean;
 }> = ({ streamPlaybackID, hideMuteButton, isTest, muteOverride }) => {
-  const mute = useLocalMutedStore(useCallback((s) => s.localMuted, []));
-  const setMuted = useLocalMutedStore(useCallback((s) => s.setLocalMuted, []));
+
+  const [mute, setMuted] = useState(false);
 
   return (
     <div className="fullBleed" key="videoPlayer" id="videoPlayer">

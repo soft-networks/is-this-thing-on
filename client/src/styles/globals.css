@@ -238,6 +238,9 @@ p {
   --textWidth: 72ch;
 }
 
+.minTextWidth {
+  min-width: 48px;
+}
 .padded {
   padding: var(--spacing);
 }
@@ -459,6 +462,10 @@ p {
   display: inline-flex;
 }
 
+.stack\:border > * + * {
+  border-top: 1px solid var(--faintWhite);
+  padding-top: var(--s0)
+}
 .stack > * + * {
   margin-block-start: var(--s0);
 }
@@ -539,6 +546,10 @@ pre {
 .border {
   border: 1px solid var(--black);
 }
+
+.border\:gray {
+  border: 1px solid var(--gray);
+}
 .border-thin {
   border: 1px solid var(--black);
 }
@@ -573,6 +584,10 @@ a:hover,
   cursor: pointer;
 }
 
+.cursor\:pointer {
+  cursor: pointer;
+}
+
 .noSelect {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -587,7 +602,6 @@ a:hover,
 }
 
 .button {
-  text-decoration: underline;
   cursor: pointer;
 }
 
@@ -681,15 +695,17 @@ a:hover,
   background: var(--black);
 }
 
+
 .contrastFill,
 .contrastFill\:hover:hover,
 .hoverTrigger:hover .contrastFill\:hover\:triggered {
+  background: yellow;
   background: var(--roomColor);
 }
 
 .greenFill,
 .greenFill\:hover:hover {
-  background: var(--greenColor);
+  background: var(--contrast);
 }
 
 .hoverTrigger:hover rect.contrastFill\:hover\:triggered {
@@ -723,7 +739,8 @@ a:hover,
 }
 
 .caption {
-  font-size: calc(0.8 * var(--s0));
+  font-size: calc(0.91 * var(--s0));
+  opacity: 0.8;
 }
 
 /* Specific */
@@ -810,6 +827,7 @@ a:hover,
   bottom: 0;
   left: 0;
   padding: var(--s-1);
+  
 }
 .chatScrollContainer {
   -webkit-overflow-scrolling: touch;
@@ -830,6 +848,7 @@ a:hover,
 }
 .chatBubble * {
   border-color: var(--chatBorderColor) !important;
+  word-break: break-word;
 }
 
 .handle {
@@ -897,11 +916,29 @@ footer .clickable:hover{
   background: var(--contrast);
 } */
 
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid var(--gray);
+}
+input[type="text"] {
+  background: none;
+  border: none;
+  outline: none;
+  padding: var(--s-1);
+  background: var(--white);
+  border: 1px solid var(--gray);
+}
+input[type="color"] {
+  border: 0;
+}
 input,
 input::placeholder {
   font-family: "Manifont Grotesk", monospace;
   font: var(--s0);
   border-radius: 0; /* Add this line */
+  
 }
 
 input:focus {

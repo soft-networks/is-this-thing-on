@@ -17,30 +17,30 @@ const ArtistRoom = ({ roomID }: { roomID: string }) => {
   }
 
   // Existing desktop version
-  if (roomID == "compromised") {
-    return <Compromised />;
-  }
-  if (roomID == "maya") {
-    return <Maya />;
-  }
-  if (roomID == "ambient") {
-    return <Ambient />;
-  }
-  if (roomID == "chrisy") {
-    return <Chris />;
-  }
-  if (roomID == "molly") {
-    return <Molly />;
-  }
-  if (roomID == "sarah") {
-    return <Sarah />;
-  }
-  if (roomID == "messydarla") {
-    return <Darla />;
-  }
-  if (roomID == "soft") {
-    return <Soft />;
-  }
+  // if (roomID == "compromised") {
+  //   return <Compromised />;
+  // }
+  // if (roomID == "maya") {
+  //   return <Maya />;
+  // }
+  // if (roomID == "ambient") {
+  //   return <Ambient />;
+  // }
+  // if (roomID == "chrisy") {
+  //   return <Chris />;
+  // }
+  // if (roomID == "molly") {
+  //   return <Molly />;
+  // }
+  // if (roomID == "sarah") {
+  //   return <Sarah />;
+  // }
+  // if (roomID == "messydarla") {
+  //   return <Darla />;
+  // }
+  // if (roomID == "soft") {
+  //   return <Soft />;
+  // }
   return <DefaultRoom />;
 };
 

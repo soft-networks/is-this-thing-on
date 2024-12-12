@@ -9,8 +9,8 @@ import React, {
   useState,
 } from "react";
 
-import { roomIDToHREF } from "../../stores/ringStore";
-import { roomIsActive, useRoomStore } from "../../stores/roomStore";
+import { roomIDToHREF } from "../../stores/globalRoomsInfoStore";
+import { roomIsActive, useRoomStore } from "../../stores/currentRoomStore";
 
 const ELLIPSE_PATH =
   "M71.25,84.27L177.31,22.66,297.1,3.07l100.91,27.55,55.04,66.55-4.58,87.99-63.6,86.7-106.07,61.62-119.79,19.59-100.91-27.55L3.06,258.97l4.58-87.99,63.61-86.7Z";
@@ -18,7 +18,7 @@ const ELLIPSE_PATH =
 const GLOBAL_ANIM_LENGTH = 100;
 
 interface SVGRingProps {
-  ring: WebRing;
+  ring: AllRoomsSummary;
   currentlySelected?: number;
   onNodeClick?: (nodeIndex: number) => void;
 }
@@ -136,7 +136,7 @@ export const SVGRingNode: React.FC<SVGRingNodeProps> = ({
 };
 
 interface NodeLinkProps {
-  link: RoomLinkInfo;
+  link: RoomSummary;
   className?: string;
   noNav?: boolean;
   id: string;
@@ -147,11 +147,15 @@ export const NodeLink: React.FC<NodeLinkProps> = ({
   noNav,
   id,
 }) => {
+
   const text = useMemo(
     () =>
       `${link.roomName} is ${link.streamStatus.includes("active") ? "on" : "off"}`,
     [link.roomName, link.streamStatus],
   );
+  if (!link) {
+    return null;
+  }
   return (
     <div
       className={`border padded:s-3 center-text ${className}`}

@@ -9,7 +9,6 @@ import {
 import create from "zustand";
 import { persist } from "zustand/middleware";
 
-import { getRoomsWhereUserISAdmin } from "../lib/firestore";
 import { app } from "../lib/firestore/init";
 
 const auth = getAuth(app);
@@ -18,7 +17,6 @@ const randomName = () => `anon-${Math.floor(Math.random() * 1000)}`;
 interface UserState {
   currentUser: User | undefined;
   displayName: string;
-  adminFor?: string[];
   signIn: (
     username: string,
     password: string,
@@ -36,7 +34,7 @@ interface UserState {
   ) => void;
 }
 
-export const useUserStore = create<UserState>()(
+export const useGlobalUserStore = create<UserState>()(
   persist(
     (set) => ({
       currentUser: undefined,
@@ -79,10 +77,6 @@ export const useUserStore = create<UserState>()(
               newUserState.displayName = user.displayName;
             }
 
-            let rooms = await getRoomsWhereUserISAdmin(user.uid);
-            if (rooms) {
-              newUserState.adminFor = rooms.map((r) => r.roomID);
-            }
             set(newUserState);
             onSignIn(true);
 
@@ -121,14 +115,13 @@ export const useUserStore = create<UserState>()(
             set((s) => ({
               currentUser: undefined,
               displayName: randomName(),
-              adminFor: undefined,
             }));
           })
           .catch((error) => {
             console.log("Error signing out", error);
             // An error happened.
           });
-      },
+      }
     }),
     { name: "auth-store" },
   ),

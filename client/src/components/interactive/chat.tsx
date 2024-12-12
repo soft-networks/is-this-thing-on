@@ -18,9 +18,8 @@ import {
   logError,
   logInfo,
 } from "../../lib/logger";
-import useRingStore from "../../stores/ringStore";
-import { useRoomStore } from "../../stores/roomStore";
-import { useUserStore } from "../../stores/userStore";
+import { useRoomStore } from "../../stores/currentRoomStore";
+import { useGlobalUserStore } from "../../stores/globalUserStore";
 import useMediaQuery from "../../stores/useMediaQuery";
 
 const DEFAULT_STYLE = (roomColor: string, globalStyle: boolean) =>
@@ -195,8 +194,7 @@ const RenderChat: React.FC<{
   lastRecalculationUpdate: number;
   alwaysShow?: boolean;
 }> = ({ chat, id, lastRecalculationUpdate, alwaysShow }) => {
-  const links = useRingStore((s) => s.links);
-  const myRoom = useMemo(() => links[chat.roomID], [links, chat]);
+
   const [myBlurPercentage, setMyBlurPercentage] = useState<number>(0);
   //Create a ref to reference the dom
   const myRef = useRef<HTMLDivElement>(null);
@@ -258,7 +256,7 @@ const ChatInput: React.FC<{
     username: string;
   }) => void;
 }> = ({ onSubmit }) => {
-  const displayName = useUserStore((state) => state.displayName);
+  const displayName = useGlobalUserStore((state) => state.displayName);
   //const numOnline = useRoomStore((state) => state.roomInfo?.numOnline);
 
   const [currentMessage, setCurrentMessage] = useState<string>("");

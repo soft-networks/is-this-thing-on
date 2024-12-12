@@ -13,8 +13,8 @@ import {
   deleteStickerInstance,
   updateStickerInstancePos,
 } from "../../lib/firestore";
-import { useAdminStore } from "../../stores/adminStore";
-import { useRoomStore } from "../../stores/roomStore";
+import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
+import { useRoomStore } from "../../stores/currentRoomStore";
 
 interface StickerRenderProps {
   sticker: Sticker;
@@ -39,7 +39,7 @@ const getStickerStyle = (pos: Pos, size?: number, zIndex?: number) => {
 };
 
 export const StickerRenderer: React.FC<StickerRenderProps> = (props) => {
-  const behaviorOverride = useAdminStore(
+  const behaviorOverride = useGlobalAdminStore(
     useCallback((s) => s.stickerBehaviorOverride, []),
   );
   const stickerToUse = useMemo(() => {
