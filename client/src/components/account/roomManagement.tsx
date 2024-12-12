@@ -131,7 +131,7 @@ const RoomForm: React.FC<{
     <form onSubmit={handleSubmit} className="stack:s1">
         <div className="stack:s-2">
           <div >Room ID</div>
-          {!room?.roomID && <div className="caption">This is a short id, without spaces, that you cannot change. eg: "soft", "sarah", "potato". It is used for your URL. eg: thing.tube/yourroomid</div>}
+          {!room?.roomID && <div className="caption">This is a short id, without spaces, that you cannot change. eg: &quot;soft&quot;, &quot;sarah&quot;, &quot;potato&quot;. It is used for your URL. eg: thing.tube/yourroomid</div>}
           {!room?.roomID ? <input
             type="text"
             id="roomId"
