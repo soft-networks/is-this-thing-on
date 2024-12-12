@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { useRoomStore } from "../stores/currentRoomStore";
 import AccountButton from "./account/accountButton";
-import { FooterRing,HomeRing } from "./rings/smallRing";
+import { FooterRing } from "./rings/smallRing";
 import { syncTotalOnline } from "../lib/firestore";
 import classNames from "classnames";
 import useMediaQuery from "../stores/useMediaQuery";
@@ -35,12 +35,12 @@ const HomeButton: React.FC = () => {
   return pathname == "/" ? (
     <Link href={"/about"} passHref>
       <div className="padded:s-3 border clickable whiteFill contrastFill:hover">
-        about
+      about
       </div>
     </Link>
   ) : (
     <Link href={"/"} passHref>
-      <div className="padded:s-3 border clickable whiteFill contrastFill:hover" style={{ height: "28px", fontSize: "14px" }}>
+      <div className="padded:s-3 border clickable whiteFill contrastFill:hover">
       home
       </div>
     </Link>
@@ -66,7 +66,7 @@ const NumOnlineTotal: React.FC = () => {
       }
     };
   }, []);
-  return <div className="padded:s-3 border whiteFill">{numOnline}</div>;
+  return <div className="padded:s-3 border whiteFill">{numOnline} on</div>;
 };
 
 export default Footer;

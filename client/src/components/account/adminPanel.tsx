@@ -25,7 +25,7 @@ const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
   return (
     <Draggable handle=".handle" nodeRef={panelRef}>
       <div
-        className="stack:s-2 grayFill relative border uiLayer showOnHoverSelfTrigger "
+        className="stack:s-2 lightFill relative border uiLayer showOnHoverSelfTrigger "
         style={{ position: "fixed", top: "var(--s3)", right: "var(--s1)" }}
         ref={panelRef}
       >
@@ -41,22 +41,24 @@ const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
           <div>...</div>
           <div>Admin Panel</div>
         </div>
-        <div className="padded:s-2 stack:s-1 monospace">
-          <StickerOverride />
-          <VideoOverride />
-          {roomName && (
-            <div
-              className={classnames(
-                "padded:s-2 whiteFill clickable contrastFill:hover",
-              )}
-              onClick={() => resetStickers(roomName)}
-            >
-              ⚠️ Reset Stickers
-            </div>
-          )}
-          <br />
-          <hr />
-          <br />
+        
+        <div className="padded:s-1 stack:s1 monospace">
+          <div className="stack:s-1">
+            <div>Room controls</div>
+            <VideoOverride />
+            {roomName && (
+              <div
+                className={classnames(
+                  "padded:s-2 whiteFill clickable greenFill:hover border",
+                )}
+                onClick={() => resetStickers(roomName)}
+              >
+                ⚠️ Reset Stickers
+              </div>
+            )}
+            <StickerOverride />
+          </div>
+          <hr/>
           {roomName && <AdminStreamPanel rtmpsDetails={rtmpsDetails} />}
         </div>
       </div>
@@ -73,8 +75,8 @@ const StickerOverride: React.FC = () => {
   );
 
   return (
-    <div className="highestLayer stack:s-2 whiteFill padded:s-2 ">
-      <div>Special Sticker Behavior</div>
+    <div className="highestLayer stack:s-2 lightFill border:gray padded:s-2 ">
+      <div>Override Sticker Behavior</div>
       <div className="horizontal-stack">
         <div className="horizontal-stack:s-2 everest">
           <label>Move</label>
@@ -113,11 +115,11 @@ const VideoOverride: React.FC = () => {
   return (
     <div
       className={classnames(
-        "padded:s-2 whiteFill clickable contrastFill:hover",
+        "padded:s-2 whiteFill clickable greenFill:hover border ",
       )}
       onClick={() => setVideoOverride(!hideVideo)}
     >
-      {hideVideo ? "🙃 Show video" : "🫥 Hide video"}
+      {hideVideo ? "🙃 Show my video to me" : "🫥 Hide my video for me"}
     </div>
   );
 };

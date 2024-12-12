@@ -16,11 +16,6 @@ const Auth: React.FC = () => {
     ) : (
       <LoginScreen key="login" />
     )}
-    <div className="padded:s-1 align-end:fixed horizontal-stack fullWidth">
-      <div className="padded:s-2 border align-end whiteFill clickable" onClick={() => router.back()}>
-        close
-      </div>
-    </div>
   </div>)
 };
 

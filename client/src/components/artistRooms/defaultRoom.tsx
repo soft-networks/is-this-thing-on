@@ -30,7 +30,7 @@ const DefaultRoomDesktopContent = ({
   <>
     <Chat key={`${roomInfo.roomID}-chat`} style={chatStyle} />
     <VideoPlayer />
-    <Stickers style={stickerStyle} StickerChooser={stickerChooser} />
+    {/* <Stickers style={stickerStyle} StickerChooser={stickerChooser} /> */}
   </>
 );
 
