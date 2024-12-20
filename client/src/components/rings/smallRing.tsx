@@ -15,39 +15,33 @@ export const FooterRing: React.FC<{ isHome: boolean }> = ({ isHome }) => {
   const currentRoom = useRoomStore(useCallback((s) => s.roomInfo, []));
 
   const { push } = useRouter();
+  const rooms = useGlobalRoomsInfoStore.getState().rooms;
+  const keys = Object.keys(rooms);
+  const currentIndex = roomID ? keys.indexOf(roomID) : -1;
 
-  // Move rooms data access to component level with useMemo
-  const navigationData = useMemo(() => {
-    const rooms = useGlobalRoomsInfoStore.getState().rooms;
-    const keys = Object.keys(rooms);
-    const currentIndex = roomID ? keys.indexOf(roomID) : -1;
-    return { keys, currentIndex };
-  }, [roomID]);
-
-  // Simplified click handlers using memoized data
-  const handlePrevClick = useCallback(() => {
+  const handlePrevClick = () => {
     if (isHome) {
-      push(roomIDToHREF(navigationData.keys[navigationData.keys.length - 1]));
+      push(roomIDToHREF(keys[keys.length - 1]));
       return;
     }
-    if (navigationData.currentIndex === 0) {
+    if (currentIndex === 0) {
       push("/");
     } else {
-      push(roomIDToHREF(navigationData.keys[navigationData.currentIndex - 1]));
+      push(roomIDToHREF(keys[currentIndex - 1]));
     }
-  }, [navigationData, push, isHome]);
+  };
 
-  const handleNextClick = useCallback(() => {
+  const handleNextClick = () => {
     if (isHome) {
-      push(roomIDToHREF(navigationData.keys[0]));
+      push(roomIDToHREF(keys[0]));
       return;
     }
-    if (navigationData.currentIndex === navigationData.keys.length - 1) {
+    if (currentIndex === keys.length - 1) {
       push("/");
     } else {
-      push(roomIDToHREF(navigationData.keys[navigationData.currentIndex + 1]));
+      push(roomIDToHREF(keys[currentIndex + 1]));
     }
-  }, [navigationData, push, isHome]);
+  };
 
   if (!isHome && (!currentRoom || !roomID)) {
     logError("Footer failed. Room doesn't exist", [roomID]);
