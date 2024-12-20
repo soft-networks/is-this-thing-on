@@ -414,6 +414,10 @@ p {
   display: flex;
   justify-content: center;
 }
+
+.align-end {
+  align-items: flex-end !important;
+}t
 .align-start {
   align-items: flex-start;
 }
@@ -1019,16 +1023,25 @@ em {
 }
 .homepageLabel {
   width: 150px;
-  height: 32px;
+  max-height: 48px;
   text-align: center;
   vertical-align: middle;
+  color: lch(from var(--bg) calc((49.44 - l) * infinity) 0 0);
+  overflow: hidden;
 }
+.homepageLabelHoverTrigger:hover .homepageLabel, .homepageLabel:hover {
+  background: var(--white) !important;
+  border: 1px solid var(--bg) !important;
+  color: var(--bg)!important;
+}
+
+
 .homepageVideo {
   width: 300px;
   height: 168.75px;
 }
 .smallElementOnEllipse {
-  offset-path: ellipse(18% 15% at center);
+  offset-path: ellipse(25% 30% at center);
   offset-rotate: 0deg;
   vertical-align: middle;
   animation: move 120s infinite linear;
@@ -1038,6 +1051,7 @@ em {
   offset-rotate: 0deg;
   animation: move 240s infinite linear;
 }
+
 
 @keyframes move {
   0% {
@@ -1094,6 +1108,7 @@ em {
     width: 80px;
     height: 48px;
   }
+
 
   .chat::before {
     content: "";

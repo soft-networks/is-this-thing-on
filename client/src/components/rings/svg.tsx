@@ -158,12 +158,11 @@ export const NodeLink: React.FC<NodeLinkProps> = ({
   }
   return (
     <div
-      className={`border padded:s-3 center-text ${className}`}
+      className={`border padded:s-3 center-text homepageLabel ${className}`}
       style={{
-        backgroundColor: link.streamStatus.includes("active")
-          ? "var(--roomColor)"
-          : "var(--gray)",
-      }}
+        backgroundColor: link.roomColor,
+        "--bg": link.roomColor,
+      } as React.CSSProperties}
     >
       {!noNav && link.streamStatus == "active" ? (
         <a href={roomIDToHREF(id)} target="_blank" rel="noreferrer">
