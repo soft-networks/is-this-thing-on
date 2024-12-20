@@ -9,6 +9,7 @@ import { syncTotalOnline } from "../lib/firestore";
 import classNames from "classnames";
 import useMediaQuery from "../stores/useMediaQuery";
 import useGlobalPresenceStore from "../stores/globalPresenceStore";
+import { AutoScanRing } from "./rings/autoScanRing";
 
 const Footer: React.FC = () => {
   const { pathname } = useRouter();
@@ -23,6 +24,7 @@ const Footer: React.FC = () => {
       <div
         className="uiLayer horizontal-stack:s-2 padded:s-1 align-end"
       >
+        <AutoScanRing />
         <HomeButton />
         <NumOnline />
         <AccountButton />
