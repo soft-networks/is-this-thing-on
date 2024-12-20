@@ -20,7 +20,6 @@ const ChangeUsername: React.FC = () => {
     );
     return (
       <div className="stack:s-2 align-start">
-        <label className="caption">new username</label>
         <input
           type="text"
           className="padded:s-1 "

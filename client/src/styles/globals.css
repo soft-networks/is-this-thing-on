@@ -222,7 +222,10 @@ p {
 
 .inline-block {
   display: inline-block;
+  align-self: flex-start;
 }
+
+
 
 .wide {
   --textWidth: 100%;
@@ -413,6 +416,9 @@ p {
 }
 .align-start {
   align-items: flex-start;
+}
+.align-start\:self {
+  align-self: flex-start;
 }
 .align-middle,
 .horizontal-stack.align-middle {
@@ -922,7 +928,7 @@ hr {
   border: 0;
   border-top: 1px solid var(--gray);
 }
-input[type="text"] {
+input[type="text"], input[type="password"], input[type="email"] {
   background: none;
   border: none;
   outline: none;
@@ -943,6 +949,10 @@ input::placeholder {
 
 input:focus {
   outline: none;
+}
+em {
+  font-style: normal;
+  background: var(--contrast);
 }
 @media screen and (min-width: 1300px) {
   .halfWidth {

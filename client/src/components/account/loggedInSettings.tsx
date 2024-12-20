@@ -11,17 +11,14 @@ const LoggedInSettings: React.FC<{ currentUser: User }> = ({ currentUser }) => {
     return (
       <div className="fullHeight stack:s1 quarterWidth centerh  padded overflowScroll">
           <div className="stack padded align-start border:gray" key="details">
-            <em> account details </em>
+            <em className="inline-block"> account details </em>
             <div> email: {currentUser.email} </div>
             <div> username: {displayName} </div>
+            <div> userid: {currentUser.uid} </div>
             <SignOut />
           </div>
           <div className="stack padded border:gray" key="username">
-            <em> change username </em>
-            <p>
-              you can change your user name - but this will only apply for future
-              chats.
-            </p>
+            <em className="inline-block"> change username </em>
             <ChangeUsername />
           </div>
         <RoomManagement uid={currentUser.uid} />
