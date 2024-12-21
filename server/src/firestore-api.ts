@@ -112,6 +112,10 @@ export const writePlaybackIDToDB = async (roomID: string, playbackID: string) =>
   return roomDoc(roomID).set({ stream_playback_id: playbackID }, { merge: true });
 }
 
+export const writeHlsPlaylistIDToDB = async (roomID: string, playlistId: string) => {
+  return roomDoc(roomID).set({ stream_hls_playlist_id: playlistId }, { merge: true });
+}
+
 export const writeRecordingToDB = async (roomID: string, recordingURL: string, recordingStartTime?: string, recordingEndTime?: string) => {
 
   // in the specific room, there is a collection called "recordings", add a new document to it with the fields.

@@ -1,11 +1,13 @@
-import { useRouter } from "next/router";
-import { useCallback, useMemo, useState } from "react";
-
-import useGlobalRoomsInfoStore, { roomIDToHREF } from "../../stores/globalRoomsInfoStore";
+import { StreamVideoClient, User } from "@stream-io/video-react-sdk";
 import { roomIsActive, roomIsArchive } from "../../stores/currentRoomStore";
-import useMediaQuery from "../../stores/useMediaQuery";
-import StreamGate from "../gates/streamGate";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import useGlobalRoomsInfoStore, {
+  roomIDToHREF,
+} from "../../stores/globalRoomsInfoStore";
+
 import VideoPreview from "../video/videoPreview";
+import useMediaQuery from "../../stores/useMediaQuery";
+import { useRouter } from "next/router";
 
 const DomRing = () => {
   const ring = useGlobalRoomsInfoStore(useCallback((s) => s.rooms, []));
@@ -63,15 +65,7 @@ const NodeElement: React.FC<{
         />
       );
     }
-    return (
-      <StreamGate
-        roomID={roomInfo.roomID}
-        streamPlaybackID={roomInfo.streamPlaybackID}
-        anonymousOnly={false}
-      >
-        {() => element}
-      </StreamGate>
-    );
+    return element;
   } else if (roomIsArchive(roomInfo)) {
     return (
       <ArchiveElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />
@@ -120,10 +114,12 @@ const OnlineElement: React.FC<{
       </div>
       <div
         className="center:absolute highestLayer border padded:s-2 homepageLabel"
-        style={{
-          backgroundColor: roomInfo.roomColor,
-          "--bg": roomInfo.roomColor,
-        } as React.CSSProperties}
+        style={
+          {
+            backgroundColor: roomInfo.roomColor,
+            "--bg": roomInfo.roomColor,
+          } as React.CSSProperties
+        }
       >
         {roomInfo.roomName} is online
       </div>
