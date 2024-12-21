@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import updateOrCreateRoom from "../../lib/firestore/updateRoom";
 import useGlobalRoomsInfoStore from "../../stores/globalRoomsInfoStore";
-import { getRoomsWhereUserISAdmin } from "../../lib/firestore/room";
 import Link from "next/link";
 import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
 

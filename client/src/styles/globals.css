@@ -244,6 +244,9 @@ p {
 .minTextWidth {
   min-width: 48px;
 }
+.minTextWidth {
+  min-width: 48px;
+}
 .padded {
   padding: var(--spacing);
 }
@@ -709,6 +712,7 @@ a:hover,
 .contrastFill,
 .contrastFill\:hover:hover,
 .hoverTrigger:hover .contrastFill\:hover\:triggered {
+  background: yellow;
   background: var(--roomColor);
   color: lch(from var(--roomColor) calc((49.44 - l) * infinity) 0 0);
 }
