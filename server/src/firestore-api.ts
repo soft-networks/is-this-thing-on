@@ -158,7 +158,7 @@ export function setupPresenceListener(allRoomNames: string[]) {
   });
 }
 
-async function cleanupOldPresence(allRoomNames: string[]) {
+async function cleanupOldPresence(allRoomNames: string[]): Promise<NodeJS.Timeout> {
   const presenceRef = firestore.collection("presence");
   const lastValidTimestamp = Date.now() - PRESENCE_LENGTH;
   let q = presenceRef.where("timestamp", "<=", lastValidTimestamp);

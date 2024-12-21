@@ -222,7 +222,10 @@ p {
 
 .inline-block {
   display: inline-block;
+  align-self: flex-start;
 }
+
+
 
 .wide {
   --textWidth: 100%;
@@ -238,6 +241,9 @@ p {
   --textWidth: 72ch;
 }
 
+.minTextWidth {
+  min-width: 48px;
+}
 .minTextWidth {
   min-width: 48px;
 }
@@ -411,8 +417,15 @@ p {
   display: flex;
   justify-content: center;
 }
+
+.align-end {
+  align-items: flex-end !important;
+}t
 .align-start {
   align-items: flex-start;
+}
+.align-start\:self {
+  align-self: flex-start;
 }
 .align-middle,
 .horizontal-stack.align-middle {
@@ -701,6 +714,7 @@ a:hover,
 .hoverTrigger:hover .contrastFill\:hover\:triggered {
   background: yellow;
   background: var(--roomColor);
+  color: lch(from var(--roomColor) calc((49.44 - l) * infinity) 0 0);
 }
 
 .greenFill,
@@ -876,6 +890,10 @@ a:hover,
 
 .chatMessage {
   background: var(--chatMessageBackground);
+  
+}
+.chatMessage * {
+  color: lch(from var(--chatMessageBackgroundColor) calc((49.44 - l) * infinity) 0 0);
 }
 
 .chatMessage .caption {
@@ -922,7 +940,7 @@ hr {
   border: 0;
   border-top: 1px solid var(--gray);
 }
-input[type="text"] {
+input[type="text"], input[type="password"], input[type="email"] {
   background: none;
   border: none;
   outline: none;
@@ -943,6 +961,10 @@ input::placeholder {
 
 input:focus {
   outline: none;
+}
+em {
+  font-style: normal;
+  background: var(--contrast);
 }
 @media screen and (min-width: 1300px) {
   .halfWidth {
@@ -1009,16 +1031,31 @@ input:focus {
 }
 .homepageLabel {
   width: 150px;
-  height: 32px;
+  max-height: 48px;
   text-align: center;
   vertical-align: middle;
+  color: lch(from var(--bg) calc((49.44 - l) * infinity) 0 0);
+  overflow: hidden;
 }
+.homepageLabelFooter {
+  width: auto;
+  max-width: 30vw;
+  height: auto;
+  max-height: 30px;
+}
+.homepageLabelHoverTrigger:hover .homepageLabel {
+  background: var(--white) !important;
+  border: 1px solid var(--bg) !important;
+  color: var(--bg)!important;
+}
+
+
 .homepageVideo {
   width: 300px;
   height: 168.75px;
 }
 .smallElementOnEllipse {
-  offset-path: ellipse(18% 15% at center);
+  offset-path: ellipse(25% 30% at center);
   offset-rotate: 0deg;
   vertical-align: middle;
   animation: move 120s infinite linear;
@@ -1028,6 +1065,7 @@ input:focus {
   offset-rotate: 0deg;
   animation: move 240s infinite linear;
 }
+
 
 @keyframes move {
   0% {
@@ -1084,6 +1122,7 @@ input:focus {
     width: 80px;
     height: 48px;
   }
+
 
   .chat::before {
     content: "";

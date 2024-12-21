@@ -88,7 +88,7 @@ const OnlineElement: React.FC<{
 
   return (
     <div
-      className="homepageVideo antiRotate largeElementOnEllipse relative clickable"
+      className="homepageVideo antiRotate smallElementOnEllipse relative clickable homepageLabelHoverTrigger"
       style={
         {
           "--animStart": offsetN + "%",
@@ -118,7 +118,8 @@ const OnlineElement: React.FC<{
         className="center:absolute highestLayer border padded:s-2 homepageLabel"
         style={{
           backgroundColor: roomInfo.roomColor,
-        }}
+          "--bg": roomInfo.roomColor,
+        } as React.CSSProperties}
       >
         {roomInfo.roomName} is online
       </div>
@@ -133,12 +134,13 @@ const OnlineElementSimple: React.FC<{
 }> = ({ roomInfo, offsetN, onClick }) => {
   return (
     <div
-      className="antiRotate homepageLabel smallElementOnEllipse padded:s-2 border whiteFill"
+      className="antiRotate homepageLabel smallElementOnEllipse padded:s-2 border whiteFill cursor:pointer"
       style={
         {
           "--animStart": offsetN + "%",
           "--animEnd": 100 + offsetN + "%",
           backgroundColor: roomInfo.roomColor,
+          "--bg": roomInfo.roomColor,
         } as React.CSSProperties
       }
       onClick={onClick}
@@ -155,12 +157,13 @@ const OfflineElement: React.FC<{
 }> = ({ roomInfo, offsetN, onClick }) => {
   return (
     <div
-      className="antiRotate homepageLabel smallElementOnEllipse padded:s-2 border whiteFill"
+      className="antiRotate homepageLabel smallElementOnEllipse padded:s-2 border whiteFill cursor:pointer"
       style={
         {
           "--animStart": offsetN + "%",
           "--animEnd": 100 + offsetN + "%",
           backgroundColor: roomInfo.roomColor,
+          "--bg": roomInfo.roomColor,
         } as React.CSSProperties
       }
       onClick={onClick}
