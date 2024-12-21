@@ -112,6 +112,16 @@ export const writePlaybackIDToDB = async (roomID: string, playbackID: string) =>
   return roomDoc(roomID).set({ stream_playback_id: playbackID }, { merge: true });
 }
 
+export const writeRecordingToDB = async (roomID: string, recordingURL: string, recordingStartTime?: string, recordingEndTime?: string) => {
+
+  // in the specific room, there is a collection called "recordings", add a new document to it with the fields.
+  return roomDoc(roomID).collection("recordings").add({
+    recording_url: recordingURL,
+    recording_start_time: recordingStartTime || null,
+    recording_end_time: recordingEndTime || null
+  });
+}
+
 export const resetMuxFirestoreRelationship = async (roomID: string) => {  
   
   let roomRef = roomDoc(roomID);
