@@ -596,11 +596,13 @@ pre {
 a:hover,
 .button:hover {
   color: var(--black);
-  cursor: pointer;
 }
 
 .cursor\:pointer {
   cursor: pointer;
+}
+.cursor\:link {
+  cursor: ne-resize;
 }
 
 .noSelect {

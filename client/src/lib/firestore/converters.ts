@@ -36,6 +36,8 @@ function sanitizeStreamStatus(data: string): STREAM_STATUS_TYPE {
     case "test":
     case "active-test":
       return "active-test";
+    case "archive":
+      return "archive";
     default:
       return "disconnected";
   }
