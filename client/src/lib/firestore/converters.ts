@@ -66,6 +66,15 @@ export function sanitizeStickerInstanceForDB(stickerInstance: StickerInstance) {
   return instance;
 }
 
+export function sanitizeRecordingFromDB(data: DocumentData) {
+  // it comes in like recording_start_time, recording_end_time, recording_url return a recording object
+  return {
+    startTime: data["recording_start_time"],
+    endTime: data["recording_end_time"],
+    url: data["recording_url"],
+  };
+}
+
 function sanitizePosition(n?: [number, number]): Pos {
   if (n == undefined) return [0, 0];
   if (n[0] <= 2) {

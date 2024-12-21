@@ -142,7 +142,9 @@ a:visited,
   cursor: -moz-grab;
   cursor: -webkit-grab;
   border: 1px dotted var(--gray);
-  pointer-events: all;
+}
+.react-draggable {
+  transition: none !important;
 }
 
 .draggable * {
@@ -244,8 +246,8 @@ p {
 .minTextWidth {
   min-width: 48px;
 }
-.minTextWidth {
-  min-width: 48px;
+.minTextWidthMedium {
+  min-width: 300px;
 }
 .padded {
   padding: var(--spacing);

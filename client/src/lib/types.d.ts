@@ -14,6 +14,13 @@ interface ChatMessage {
   roomID: string;
 }
 
+
+interface Recording {
+  id: string;
+  url: string;
+  startTime?: string;
+  endTime?: string;
+}
 interface StreamNames {
   names?: string[];
 } 
