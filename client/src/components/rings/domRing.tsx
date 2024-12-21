@@ -47,9 +47,8 @@ const NodeElement: React.FC<{
   }, [roomInfo.roomID, router]);
 
   if (roomIsActive(roomInfo)) {
-    let element;
     if (isMobile) {
-      element = (
+      return (
         <OnlineElementSimple
           roomInfo={roomInfo}
           offsetN={offsetN}
@@ -57,7 +56,7 @@ const NodeElement: React.FC<{
         />
       );
     } else {
-      element = (
+      return (
         <OnlineElement
           roomInfo={roomInfo}
           offsetN={offsetN}
@@ -65,7 +64,6 @@ const NodeElement: React.FC<{
         />
       );
     }
-    return element;
   } else if (roomIsArchive(roomInfo)) {
     return (
       <ArchiveElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />
