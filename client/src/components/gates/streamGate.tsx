@@ -42,21 +42,30 @@ const StreamGate: React.FunctionComponent<{
   //On page load, create a client which should set a streamPlaybackID in the server. If not, we will end up re-calling getClient() once it loads.
   useEffect(() => {
     logCallbackSetup(`Creating stream call for ${roomID}`);
-    getClient(roomID, useAdmin).then(([myClient, rtmpsDetails]) => {
+    let myClient: StreamVideoClient;
+
+    getClient(roomID, useAdmin).then(([client, rtmpsDetails]) => {
+      myClient = client;
       if (!streamPlaybackID) {
         return;
       }
-
       const myCall = myClient.call("livestream", streamPlaybackID);
-
       myCall
         .get()
         .then(() => {
           logInfo("Setting state for call ID " + streamPlaybackID);
-          setState({ client: myClient, call: myCall, rtmpsDetails });
+          setState({ client, call: myCall, rtmpsDetails });
         })
         .catch((e) => logError("Failed to retrieve call details", e));
     });
+    return () => {
+      // Cleanup if component unmounts during initialization
+      if (myClient) {
+        myClient.disconnectUser().catch(e => 
+          logError("Failed to disconnect client during init cleanup", e)
+        );
+      }
+    };
   }, [roomID, streamPlaybackID, useAdmin]);
 
   useEffect(() => {
@@ -76,10 +85,16 @@ const StreamGate: React.FunctionComponent<{
       });
 
     return () => {
-      logCallbackDestroyed(`Leaving stream call ${state.call.cid}`)
-      state.call.leave().catch((e) => {
-        logError("Failed to leave call", e);
-      });
+      // First leave the call
+      state.call.leave()
+        .then(() => {
+          // Then disconnect the client
+          state.client.disconnectUser();
+          logCallbackDestroyed('Successfully cleaned up call and client connections');
+        })
+        .catch((e) => {
+          logError("Failed to leave call or disconnect client", e);
+        });
     };
   }, [state]);
 
