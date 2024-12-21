@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import useGlobalRoomsInfoStore, { roomIDToHREF } from "../../stores/globalRoomsInfoStore";
-import { useRoomStore } from "../../stores/currentRoomStore";
+import { roomIsActive, useRoomStore } from "../../stores/currentRoomStore";
 
 interface AutoScanRingProps {
     intervalSeconds?: number;
@@ -11,7 +11,7 @@ interface AutoScanRingProps {
 
 export const AutoScanRing: React.FC<AutoScanRingProps> = ({
     intervalSeconds = 5,
-    onlyActiveRooms = false
+    onlyActiveRooms = true
 }) => {
     const [isScanning, setIsScanning] = useState(false);
     const [timeLeft, setTimeLeft] = useState(intervalSeconds);
@@ -24,15 +24,19 @@ export const AutoScanRing: React.FC<AutoScanRingProps> = ({
     const getAvailableRooms = useCallback(() => {
         let roomIDs = Object.keys(rooms);
         if (onlyActiveRooms) {
-            return roomIDs.filter(id => rooms[id].streamStatus.includes("active"));
+            roomIDs = roomIDs.filter(id => roomIsActive(rooms[id]));
         }
         roomIDs.unshift("home");
+        console.log("roomIDs", roomIDs);
         return roomIDs;
     }, [rooms, onlyActiveRooms]);
 
     const goToNextRoom = useCallback(() => {
         const availableRooms = getAvailableRooms();
-        
+        if (availableRooms.length === 1) {
+            setTimeLeft(intervalSeconds); // Reset timer when there's nowhere to go
+            return;
+        }
         const currentIndex = availableRooms.findIndex(id => id === routerID);
         const nextIndex = (currentIndex + 1) % availableRooms.length;
         const nextRoomId = availableRooms[nextIndex];
@@ -72,13 +76,13 @@ export const AutoScanRing: React.FC<AutoScanRingProps> = ({
     return (
         <div className="centerh relative">
             <div
-                className={`whiteFill clickable clickable:link border padded:s-3 ${isScanning ? 'contrastFill' : ''}`}
+                className={`whiteFill clickable border padded:s-3 greenFill:hover`}
                 onClick={() => setIsScanning(!isScanning)}
             >
                 {isScanning ? (
-                    <>Stop Scan <Timer timeLeft={timeLeft} /></>
+                    <>next in <Timer timeLeft={timeLeft} /></>
                 ) : (
-                    "Start Scan"
+                    "scan rooms"
                 )}
             </div>
         </div>
@@ -88,13 +92,13 @@ const Timer: React.FC<{ timeLeft: number }> = ({ timeLeft }) => {
     if (timeLeft >= 60) {
         const minutes = Math.ceil(timeLeft / 60);
         return (
-            <span className="padded:s-1">
+            <span>
                 {minutes}m
             </span>
         );
     }
     return (
-        <span className="padded:s-1">
+        <span>
             {Math.ceil(timeLeft)}s
         </span>
     );

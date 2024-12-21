@@ -43,8 +43,16 @@ const StreamGate: React.FunctionComponent<{
   useEffect(() => {
     logCallbackSetup(`Creating stream call for ${roomID}`);
     let myClient: StreamVideoClient;
+    let isActive = true; // Add flag to prevent setting state after unmount
 
     getClient(roomID, useAdmin).then(([client, rtmpsDetails]) => {
+      if (!isActive) {
+        // If component unmounted, cleanup the client
+        client.disconnectUser().catch(e => 
+          logError("Failed to disconnect client after unmount", e)
+        );
+        return;
+      }
       myClient = client;
       if (!streamPlaybackID) {
         return;
@@ -53,12 +61,16 @@ const StreamGate: React.FunctionComponent<{
       myCall
         .get()
         .then(() => {
-          logInfo("Setting state for call ID " + streamPlaybackID);
-          setState({ client, call: myCall, rtmpsDetails });
+          if (isActive) { // Only set state if component is still mounted
+            logInfo("Setting state for call ID " + streamPlaybackID);
+            setState({ client, call: myCall, rtmpsDetails });
+          }
         })
         .catch((e) => logError("Failed to retrieve call details", e));
     });
+
     return () => {
+      isActive = false; // Mark component as unmounted
       // Cleanup if component unmounts during initialization
       if (myClient) {
         myClient.disconnectUser().catch(e => 
@@ -72,19 +84,24 @@ const StreamGate: React.FunctionComponent<{
     if (!state) {
       return;
     }
+    let isActive = true; // Add flag for this effect too
+
     // Ensure camera is disabled by default on page load.
     state.call.camera.disable();
 
     state.call
       .join()
       .then(() => {
-        logInfo(`Joined call from StreamGate ${state.call.cid}`);
+        if (isActive) {
+          logInfo(`Joined call from StreamGate ${state.call.cid}`);
+        }
       })
       .catch((e) => {
         logError("Failed to join call", e);
       });
 
     return () => {
+      isActive = false;
       // First leave the call
       state.call.leave()
         .then(() => {

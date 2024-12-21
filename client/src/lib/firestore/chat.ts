@@ -27,7 +27,6 @@ export async function syncChat(
   );
 
   const unsub = onSnapshot(q, (docs) => {
-    logInfo("syncing chat");
     trace("sync-chat", () => {
       setChatList((pc) => {
         let npc = { ...pc };

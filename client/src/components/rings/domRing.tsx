@@ -44,7 +44,7 @@ const NodeElement: React.FC<{
     router.push(roomIDToHREF(roomInfo.roomID));
   }, [roomInfo.roomID, router]);
 
-  if (false &&roomIsActive(roomInfo)) {
+  if (roomIsActive(roomInfo)) {
     let element;
     if (isMobile) {
       element = (

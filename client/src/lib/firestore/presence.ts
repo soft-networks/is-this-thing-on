@@ -3,7 +3,7 @@ import { doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
 import { presenceCollection, presenceStatsDoc } from "./locations";
 import { logInfo } from "../logger";
 
-const PRESENCE_LENGTH = 5 * 1000;
+const PRESENCE_LENGTH = 10 * 1000;
 
 export let activePresenceHeartbeat: NodeJS.Timeout | undefined;
 async function setPresenceDB(userID: string, roomName: string) {

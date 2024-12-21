@@ -28,7 +28,7 @@ const ChangeUsername: React.FC = () => {
           onChange={(e) => setLocalDisplayname(e.target.value)}
         />
         <div
-          className="clickable padded:s-2 border-thin whiteFill contrastFill:hover"
+          className="clickable padded:s-2 border-thin whiteFill greenFill:hover"
           onClick={() => changeName(localDisplayname)}
         >
           change username
@@ -48,7 +48,7 @@ const ChangeUsername: React.FC = () => {
   
     return (
       <div
-        className="clickable border-thin padded:s-2 whiteFill contrastFill:hover"
+        className="clickable border-thin padded:s-2 whiteFill greenFill:hover"
         onClick={() => signOut()}
       >
         sign out

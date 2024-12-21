@@ -52,14 +52,14 @@ export const FooterRing: React.FC<{ isHome: boolean }> = ({ isHome }) => {
     <div className="centerh relative">
       <div className="horizontal-stack:s-2 align-end" style={{height: "40px", transform: "translateY(calc(var(--s0) * -1))"}}>
         <div
-          className="whiteFill clickable clickable:link border padded:s-3 contrastFill:hover"
+          className="whiteFill clickable clickable:link border padded:s-3 greenFill:hover"
           onClick={handlePrevClick}
         >
           ←
         </div>
         {isHome ? <HomeLabel /> : <RoomLabel link={currentRoom as RoomSummary} id={roomID as string} noNav />}
         <div
-          className="whiteFill clickable clickable:link border padded:s-3 contrastFill:hover"
+          className="whiteFill clickable clickable:link border padded:s-3 greenFill:hover"
           onClick={handleNextClick}
         >
           →
@@ -99,7 +99,7 @@ export const RoomLabel: React.FC<NodeLinkProps> = ({
   }
   return (
     <div
-      className={`border padded:s-3 center-text homepageLabel ${className}`}
+      className={`border padded:s-3 center-text homepageLabel homepageLabelFooter ${className}`}
       style={{
         backgroundColor: link.roomColor,
         "--bg": link.roomColor,

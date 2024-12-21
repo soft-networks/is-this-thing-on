@@ -709,8 +709,8 @@ a:hover,
 .contrastFill,
 .contrastFill\:hover:hover,
 .hoverTrigger:hover .contrastFill\:hover\:triggered {
-  background: yellow;
   background: var(--roomColor);
+  color: lch(from var(--roomColor) calc((49.44 - l) * infinity) 0 0);
 }
 
 .greenFill,
@@ -886,6 +886,10 @@ a:hover,
 
 .chatMessage {
   background: var(--chatMessageBackground);
+  
+}
+.chatMessage * {
+  color: lch(from var(--chatMessageBackgroundColor) calc((49.44 - l) * infinity) 0 0);
 }
 
 .chatMessage .caption {
@@ -1028,6 +1032,12 @@ em {
   vertical-align: middle;
   color: lch(from var(--bg) calc((49.44 - l) * infinity) 0 0);
   overflow: hidden;
+}
+.homepageLabelFooter {
+  width: auto;
+  max-width: 30vw;
+  height: auto;
+  max-height: 30px;
 }
 .homepageLabelHoverTrigger:hover .homepageLabel {
   background: var(--white) !important;
