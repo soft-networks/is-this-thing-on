@@ -6,7 +6,9 @@ import {
 } from "@stream-io/video-react-sdk";
 import classNames from "classnames";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
+import classnames from "classnames";
 
 /**
  * This panel fits into the overall AdminPanel and manages the Stream video and audio.
@@ -18,6 +20,7 @@ const AdminStreamPanel: React.FC<{
   const { useIsCallLive, useParticipants } = useCallStateHooks();
   const isLive = useIsCallLive();
   const participants = useParticipants();
+  const [expanded, setExpanded] = useState(true);
 
   const [streamType, setStreamType] = useState<"RTMPS" | "Browser" | null>(
     null,
@@ -55,8 +58,11 @@ const AdminStreamPanel: React.FC<{
 
   return (
     <div className="stack:s-1">
-      <div>Stream controls</div>
-      {streamType != null && (
+      <div className="horizontal-stack cursor:pointer greenFill inline-block" onClick={() => setExpanded(!expanded)}>
+        <div >{expanded ? "-" : "+"}</div>
+        <div>Stream controls</div>
+      </div>
+      {expanded &&streamType != null && (
         <>
           {/* Show back button if RTMPS or Browser was selected. */}
           <div
@@ -67,8 +73,8 @@ const AdminStreamPanel: React.FC<{
           </div>
         </>
       )}
-      {streamInfo}
-      {isLive || liveReady ? (
+      {expanded && streamInfo}
+      {expanded && (isLive || liveReady) && (
         <>
           {!isLive && (
             <>
@@ -101,10 +107,9 @@ const AdminStreamPanel: React.FC<{
           >
             {isLive ? "🚫 Stop Livestream" : "🔴 Start livestream"}
           </div>
+          {isLive &&  <VideoOverride/>}
         </>
-      ) : (
-        <br />
-      )}
+      ) }
     </div>
   );
 };
@@ -257,5 +262,23 @@ const BrowserStreamDetails = ({ call }: { call: Call }) => {
     </>
   );
 };
+
+const VideoOverride: React.FC = () => {
+  const hideVideo = useGlobalAdminStore(useCallback((s) => s.hideVideo, []));
+  const setVideoOverride = useGlobalAdminStore(
+    useCallback((s) => s.setHideVideo, []),
+  );
+  return (
+    <div
+      className={classnames(
+        "padded:s-2 whiteFill clickable greenFill:hover border ",
+      )}
+      onClick={() => setVideoOverride(!hideVideo)}
+    >
+      {hideVideo ? "🙃 Show my video to me" : "🫥 Hide my video for me"}
+    </div>
+  );
+};
+
 
 export default AdminStreamPanel;

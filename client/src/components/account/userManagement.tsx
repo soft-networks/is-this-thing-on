@@ -20,7 +20,6 @@ const ChangeUsername: React.FC = () => {
     );
     return (
       <div className="stack:s-2 align-start">
-        <label className="caption">new username</label>
         <input
           type="text"
           className="padded:s-1 "
@@ -29,7 +28,7 @@ const ChangeUsername: React.FC = () => {
           onChange={(e) => setLocalDisplayname(e.target.value)}
         />
         <div
-          className="clickable padded:s-2 border-thin whiteFill contrastFill:hover"
+          className="clickable padded:s-2 border-thin whiteFill greenFill:hover"
           onClick={() => changeName(localDisplayname)}
         >
           change username
@@ -49,7 +48,7 @@ const ChangeUsername: React.FC = () => {
   
     return (
       <div
-        className="clickable border-thin padded:s-2 whiteFill contrastFill:hover"
+        className="clickable border-thin padded:s-2 whiteFill greenFill:hover"
         onClick={() => signOut()}
       >
         sign out

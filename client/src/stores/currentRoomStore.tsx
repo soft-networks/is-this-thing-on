@@ -23,11 +23,10 @@ export const roomIsActive = (
   roomInfo: CurrentRoomInfo | RoomSummary | undefined | STREAM_STATUS_TYPE,
 ) => {
   if (roomIsTest(roomInfo)) {
-    console.log("TEST ROOM");
     return true;
   }
   if (typeof roomInfo == "string") {
-    
+  
     if (roomInfo && roomInfo.includes("active")) {
       return true;
     } else {
@@ -43,6 +42,19 @@ export const roomIsActive = (
   } else {
     return false;
   }
+};
+
+export const roomIsArchive = (
+  roomInfo: CurrentRoomInfo | RoomSummary | undefined | STREAM_STATUS_TYPE,
+) => {
+  if (typeof roomInfo == "string") {
+    if (roomInfo && roomInfo.includes("archive")) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  return roomInfo?.streamStatus === "archive";
 };
 
 export const roomIsTest = (

@@ -7,6 +7,7 @@ import {
   getRoom,
   getRoomIDFromStreamCallID,
   writePlaybackIDToDB,
+  writeRecordingToDB,
   writeStreamStateToDB,
 } from "./firestore-api.js";
 import { logError, logInfo, logUpdate } from "./logger.js";
@@ -86,6 +87,22 @@ export const streamUpdateWasReceived: RequestHandler = async (req, res) => {
       logUpdate("> Stream went idle");
       let roomID = await getRoomIDFromStreamCallID(callID);
       await writeStreamStateToDB(roomID, "idle");
+      return res.status(200).send("Thanks for the update :) ");
+    }
+    if (eventType == "call.recording_ready") {
+      // const callID = hook.call_cid; 
+      const livestreamID = hook.call_cid;
+      const callID = livestreamID.split(":")[1];
+      const roomID = await getRoomIDFromStreamCallID(callID);
+      console.log("recording ready for roomID: ", hook);
+      const recording = hook.call_recording;
+      if (recording) {
+        const ref = await writeRecordingToDB(roomID, recording.url, recording.start_time, recording.end_time);
+        logUpdate(`Wrote recording to DB for room ${roomID} with ref ${ref.id}`);
+      } else {
+        logError(`Recording was ready but didn't exist`);
+      }
+      
       return res.status(200).send("Thanks for the update :) ");
     }
     logInfo("> Ignored hook of " + eventType);

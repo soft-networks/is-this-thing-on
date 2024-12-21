@@ -26,6 +26,7 @@ export function sanitizeRoomInfo(data: DocumentData, id: string): CurrentRoomInf
     roomColor: data["room_color"] || "#FCFF54",
     consentURL: data["consentURL"] || undefined,
     previewOverlay: data["preview_overlay"] || undefined,
+    archiveURL: data["archive_url"] || undefined,
   };
 }
 
@@ -36,6 +37,8 @@ function sanitizeStreamStatus(data: string): STREAM_STATUS_TYPE {
     case "test":
     case "active-test":
       return "active-test";
+    case "archive":
+      return "archive";
     default:
       return "disconnected";
   }
@@ -64,6 +67,15 @@ export function sanitizeStickerInstanceForDB(stickerInstance: StickerInstance) {
     instance["text"] = stickerInstance.text;
   }
   return instance;
+}
+
+export function sanitizeRecordingFromDB(data: DocumentData) {
+  // it comes in like recording_start_time, recording_end_time, recording_url return a recording object
+  return {
+    startTime: data["recording_start_time"],
+    endTime: data["recording_end_time"],
+    url: data["recording_url"],
+  };
 }
 
 function sanitizePosition(n?: [number, number]): Pos {

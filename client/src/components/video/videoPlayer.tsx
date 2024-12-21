@@ -1,9 +1,9 @@
-import { roomIsActive, roomIsTest, useRoomStore } from "../../stores/currentRoomStore";
+import { roomIsActive, roomIsArchive, roomIsTest, useRoomStore } from "../../stores/currentRoomStore";
 
 import ReactPlayer from "react-player";
 import StreamPlayer from "./streamPlayer";
 import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 
 interface VideoPlayerProps {
@@ -17,13 +17,17 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
   const streamPlaybackID = useRoomStore(
     useCallback((s) => s.roomInfo?.streamPlaybackID, []),
   );
+
   const streamStatus = useRoomStore(
     useCallback((s) => s.roomInfo?.streamStatus, []),
   );
   const hideVideo = useGlobalAdminStore(useCallback((s) => s.hideVideo, []));
 
+
+
   return (
     <>
+      {roomIsArchive(streamStatus) && <ArchiveVideoPlayer hideMuteButton={hideMuteButton} muteOverride={muteOverride} />}
       {!hideVideo && roomIsActive(streamStatus) && (
         <VideoPlayerInternal
           streamPlaybackID={streamPlaybackID}
@@ -36,6 +40,47 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
   );
 };
 
+const ArchiveVideoPlayer: React.FunctionComponent<{ hideMuteButton?: boolean, muteOverride?: boolean }> = ({ hideMuteButton, muteOverride }) => {
+  const archiveURL = useRoomStore(
+    useCallback((s) => s.roomInfo?.archiveURL, []),
+  );
+
+  const [mute, setMuted] = useState(false);
+
+  useEffect(() => {
+    console.log("!!!! archive url", archiveURL);
+  }, [archiveURL]);
+
+  return (
+    <div className="fullBleed" key="archiveVideoPlayer" id="videoPlayer">
+       {!hideMuteButton && (
+        <div
+          className="highestLayer padded:s-2"
+          style={{ position: "fixed", left: "0px", top: "0px" }}
+        >
+          <div
+            className="border-thin whiteFill padded:s-3 clickable greenFill:hover"
+            onClick={() => setMuted(!mute)}
+          >
+            {mute ? "unmute video" : "mute video"}
+          </div>
+        </div>
+      )}
+      <div className="videoLayer videoAspectContainer">
+        <ReactPlayer
+          url={archiveURL}
+          playing={true}
+          muted={mute || muteOverride || false}
+          className="noEvents testPlayer "
+          height={"inherit"}
+          width={"inherit"}
+          loop={true}
+        />
+      </div>
+    </div>
+  )
+};
+
 const VideoPlayerInternal: React.FunctionComponent<{
   streamPlaybackID?: string;
   hideMuteButton?: boolean;
@@ -45,15 +90,16 @@ const VideoPlayerInternal: React.FunctionComponent<{
 
   const [mute, setMuted] = useState(false);
 
+
   return (
     <div className="fullBleed" key="videoPlayer" id="videoPlayer">
       {!hideMuteButton && (
         <div
-          className="highestLayer padded"
+          className="highestLayer padded:s-2"
           style={{ position: "fixed", left: "0px", top: "0px" }}
         >
           <div
-            className="border-thin whiteFill padded:s-3 clickable contrastFill:hover"
+            className="border-thin whiteFill padded:s-3 clickable greenFill:hover"
             onClick={() => setMuted(!mute)}
           >
             {mute ? "unmute video" : "mute video"}

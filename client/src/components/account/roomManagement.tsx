@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import updateOrCreateRoom from "../../lib/firestore/updateRoom";
 import useGlobalRoomsInfoStore from "../../stores/globalRoomsInfoStore";
-import { getRoomsWhereUserISAdmin } from "../../lib/firestore/room";
 import Link from "next/link";
 import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
 
@@ -24,18 +23,18 @@ const RoomManagement: React.FC<{ uid: string }> = ({ uid }) => {
   if (!isAuthenticated) {
     return (
       <div className="stack padded border:gray lightFill">
-        <em>enter password to manage rooms</em>
+        <em className="inline-block">want to create a room?</em>
         <form onSubmit={handlePasswordSubmit} className="stack:s-1">
           <input
-            type="password"
+            type="text"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="password"
+            placeholder="first..what is the best flavor of ice cream?"
             className="padded:s-1 border-thin"
           />
-          <button type="submit" className="button padded:s-1 whiteFill greenFill:hover border-thin inline">
+          <div className="button padded:s-1 whiteFill greenFill:hover border inline-block" onClick={handlePasswordSubmit}>
             Submit
-          </button>
+          </div>
         </form>
       </div>
     );
@@ -43,7 +42,7 @@ const RoomManagement: React.FC<{ uid: string }> = ({ uid }) => {
 
   return (
     <div className="padded border:gray stack lightFill">
-      <em>rooms you manage</em>
+      <em className="inline-block">rooms you manage</em>
       <CreateRoom uid={uid} />
       <UserRoomManager uid={uid} />
     </div>
@@ -57,7 +56,7 @@ const CreateRoom: React.FC<{
 
   return (
     <>
-      <div className="button padded:s-1 whiteFill greenFill:hover border-thin inline" onClick={() => setShowForm(!showForm)}>{showForm ? "Close" : "Create Room"}</div>
+      <div className="button padded:s-1 whiteFill greenFill:hover border-thin inline-block" onClick={() => setShowForm(!showForm)}>{showForm ? "Close" : "Create Room"}</div>
       {showForm && <div className="stack padded whiteFill  border-thin"><RoomForm uid={uid} onSuccess={() => setShowForm(false)} /></div>}
     </>
   );
@@ -111,6 +110,13 @@ const RoomForm: React.FC<{
   const [roomName, setRoomName] = useState(room?.roomName || "");
   const [roomId, setRoomId] = useState(room?.roomID || "");
   const [roomColor, setRoomColor] = useState(room?.roomColor || "#000000");
+  const [roomWasRecentlyUpdated, setRoomWasRecentlyUpdated] = useState(false);
+
+  useEffect(() => {
+    if (roomWasRecentlyUpdated) {
+      setTimeout(() => setRoomWasRecentlyUpdated(false), 1500);
+    }
+  }, [roomWasRecentlyUpdated]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,9 +127,12 @@ const RoomForm: React.FC<{
       adminUserId: uid
     };
     await updateOrCreateRoom(roomData);
-    setRoomName("");
-    setRoomId("");
-    setRoomColor("#000000");
+    if (!room) {
+      setRoomName("");
+      setRoomId("");
+      setRoomColor("#000000");
+    }
+    setRoomWasRecentlyUpdated(true);
     onSuccess?.();
   };
 
@@ -163,8 +172,10 @@ const RoomForm: React.FC<{
           placeholder="Room Color"
         />
       </div>
+      
       <div className="horizontal-stack">
-        <div className="padded:s-2 whiteFill border-thin greenFill:hover cursor:pointer" onClick={handleSubmit}>{room ? "Update" : "Create"} Room</div>
+        {roomWasRecentlyUpdated && <div className="padded:s-2 border:gray">Room Updated!</div>}
+        {!roomWasRecentlyUpdated && <div className="padded:s-2 whiteFill border-thin greenFill:hover cursor:pointer" onClick={handleSubmit}>{room ? "Update" : "Create"} Room</div>}
         {room && <Link href={`/${room.roomID}`} className="whiteFill greenFill:hover border-thin padded:s-2">View Room</Link>}
       </div>
     </form>

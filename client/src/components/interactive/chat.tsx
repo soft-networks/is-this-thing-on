@@ -123,7 +123,6 @@ export const Chat: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
           } as React.CSSProperties
         }
         onScroll={() => {
-          console.log("SCROLLING");
           setLastRecalculationUpdate(Date.now());
         }}
       >
@@ -159,7 +158,7 @@ export const Chat: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
               onClick={() => setFilterRoom(true)}
               style={{ borderRight: 0 }}
             >
-              {roomName ? getRoomNameForChat(roomName) : "room"} chat
+              room chat
             </div>
             <div
               className={classNames(
@@ -229,7 +228,7 @@ const RenderChat: React.FC<{
       ref={myRef}
     >
       <div
-        className="caption backgroundFill border-radius border"
+        className="caption backgroundFill border-radius border inline-block"
         style={{ top: "-17px", padding: "4px" }}
       >
         <em>{chat.username || "unknown"}</em>
