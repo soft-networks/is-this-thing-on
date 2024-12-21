@@ -10,7 +10,7 @@ interface AutoScanRingProps {
 
 
 export const AutoScanRing: React.FC<AutoScanRingProps> = ({
-    intervalSeconds = 5,
+    intervalSeconds = 900,
     onlyActiveRooms = true
 }) => {
     const [isScanning, setIsScanning] = useState(false);
@@ -33,7 +33,7 @@ export const AutoScanRing: React.FC<AutoScanRingProps> = ({
 
     const goToNextRoom = useCallback(() => {
         const availableRooms = getAvailableRooms();
-        if (availableRooms.length === 1) {
+        if (availableRooms.length === 1 && availableRooms[0] === routerID) {
             setTimeLeft(intervalSeconds); // Reset timer when there's nowhere to go
             return;
         }
