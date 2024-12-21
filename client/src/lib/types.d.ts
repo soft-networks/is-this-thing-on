@@ -33,6 +33,7 @@ interface RoomSummary {
   roomColor: string;
   streamStatus: STREAM_STATUS_TYPE;
   streamPlaybackID?: string;
+  archiveURL?: string;
   previewOverlay?: string;
 }
 type AllRoomsSummary = { [key: string]: RoomSummary };

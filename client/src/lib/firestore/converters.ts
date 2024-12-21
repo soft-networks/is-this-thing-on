@@ -26,6 +26,7 @@ export function sanitizeRoomInfo(data: DocumentData, id: string): CurrentRoomInf
     roomColor: data["room_color"] || "#FCFF54",
     consentURL: data["consentURL"] || undefined,
     previewOverlay: data["preview_overlay"] || undefined,
+    archiveURL: data["archive_url"] || undefined,
   };
 }
 

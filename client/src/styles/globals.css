@@ -1047,10 +1047,11 @@ em {
   height: auto;
   max-height: 30px;
 }
-.homepageLabelHoverTrigger:hover .homepageLabel {
-  background: var(--white) !important;
+.homepageLabelInverse {
+  background: white !important;
+  background: hsl(from var(--bg) h s calc(l + 45)) !important;
   border: 1px solid var(--bg) !important;
-  color: var(--bg)!important;
+  color: var(--black) !important;
 }
 
 

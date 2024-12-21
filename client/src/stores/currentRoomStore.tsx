@@ -44,6 +44,19 @@ export const roomIsActive = (
   }
 };
 
+export const roomIsArchive = (
+  roomInfo: CurrentRoomInfo | RoomSummary | undefined | STREAM_STATUS_TYPE,
+) => {
+  if (typeof roomInfo == "string") {
+    if (roomInfo && roomInfo.includes("archive")) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  return roomInfo?.streamStatus === "archive";
+};
+
 export const roomIsTest = (
   roomInfo: CurrentRoomInfo | RoomSummary | undefined | STREAM_STATUS_TYPE,
 ) => {

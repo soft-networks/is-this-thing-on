@@ -1,4 +1,4 @@
-import { roomIsActive, useRoomStore } from "../../stores/currentRoomStore";
+import { roomIsActive, roomIsArchive, useRoomStore } from "../../stores/currentRoomStore";
 import { useCallback, useMemo } from "react";
 
 import ConsentGate from "./roomConsentGate";
@@ -26,11 +26,11 @@ const RoomStatusGate: React.FunctionComponent = ({ children }) => {
       {roomInfo && (
         <Head>
           <title>
-            {roomInfo.roomName} is {roomIsActive(roomInfo) ? "ON" : "OFF"}
+            {roomInfo.roomName} is {roomIsActive(roomInfo) || roomIsArchive(roomInfo) ? "ON" : "OFF"}
           </title>
         </Head>
       )}
-      {roomInfo && roomIsActive(roomInfo) && (
+      {roomInfo && (roomIsActive(roomInfo) || roomIsArchive(roomInfo)) && (
         <div className="fullBleed" style={
           roomInfo.roomColor ? ({ "--roomColor": roomInfo.roomColor } as React.CSSProperties) : {}
         }>
@@ -39,7 +39,7 @@ const RoomStatusGate: React.FunctionComponent = ({ children }) => {
           </ConsentGate>
         </div>
       )}
-      {roomInfo && !roomIsActive(roomInfo) && (
+      {roomInfo && (!roomIsActive(roomInfo) && !roomIsArchive(roomInfo)) && (
         <div className="fullBleed" >
           <div className="center:absolute highestLayer">
             {" "}

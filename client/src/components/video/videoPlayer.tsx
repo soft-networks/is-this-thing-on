@@ -1,9 +1,9 @@
-import { roomIsActive, roomIsTest, useRoomStore } from "../../stores/currentRoomStore";
+import { roomIsActive, roomIsArchive, roomIsTest, useRoomStore } from "../../stores/currentRoomStore";
 
 import ReactPlayer from "react-player";
 import StreamPlayer from "./streamPlayer";
 import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 
 interface VideoPlayerProps {
@@ -17,13 +17,17 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
   const streamPlaybackID = useRoomStore(
     useCallback((s) => s.roomInfo?.streamPlaybackID, []),
   );
+
   const streamStatus = useRoomStore(
     useCallback((s) => s.roomInfo?.streamStatus, []),
   );
   const hideVideo = useGlobalAdminStore(useCallback((s) => s.hideVideo, []));
 
+
+
   return (
     <>
+      {roomIsArchive(streamStatus) && <ArchiveVideoPlayer hideMuteButton={hideMuteButton} muteOverride={muteOverride} />}
       {!hideVideo && roomIsActive(streamStatus) && (
         <VideoPlayerInternal
           streamPlaybackID={streamPlaybackID}
@@ -36,6 +40,34 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
   );
 };
 
+const ArchiveVideoPlayer: React.FunctionComponent<{ hideMuteButton?: boolean, muteOverride?: boolean }> = ({ hideMuteButton, muteOverride }) => {
+  const archiveURL = useRoomStore(
+    useCallback((s) => s.roomInfo?.archiveURL, []),
+  );
+
+  const [mute, setMuted] = useState(false);
+
+  useEffect(() => {
+    console.log("!!!! archive url", archiveURL);
+  }, [archiveURL]);
+
+  return (
+    <div className="fullBleed">
+      <div className="videoLayer videoAspectContainer">
+        <ReactPlayer
+          url={archiveURL}
+          playing={true}
+          muted={muteOverride || false}
+          className="noEvents testPlayer "
+          height={"inherit"}
+          width={"inherit"}
+          loop={true}
+        />
+      </div>
+    </div>
+  )
+};
+
 const VideoPlayerInternal: React.FunctionComponent<{
   streamPlaybackID?: string;
   hideMuteButton?: boolean;
@@ -44,6 +76,7 @@ const VideoPlayerInternal: React.FunctionComponent<{
 }> = ({ streamPlaybackID, hideMuteButton, isTest, muteOverride }) => {
 
   const [mute, setMuted] = useState(false);
+
 
   return (
     <div className="fullBleed" key="videoPlayer" id="videoPlayer">

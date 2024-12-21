@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import useGlobalRoomsInfoStore, { roomIDToHREF } from "../../stores/globalRoomsInfoStore";
-import { roomIsActive, useRoomStore } from "../../stores/currentRoomStore";
+import { roomIsActive, roomIsArchive, useRoomStore } from "../../stores/currentRoomStore";
 
 interface AutoScanRingProps {
     intervalSeconds?: number;
@@ -24,7 +24,7 @@ export const AutoScanRing: React.FC<AutoScanRingProps> = ({
     const getAvailableRooms = useCallback(() => {
         let roomIDs = Object.keys(rooms);
         if (onlyActiveRooms) {
-            roomIDs = roomIDs.filter(id => roomIsActive(rooms[id]));
+            roomIDs = roomIDs.filter(id => roomIsActive(rooms[id]) || roomIsArchive(rooms[id]));
         }
         roomIDs.unshift("home");
         console.log("roomIDs", roomIDs);

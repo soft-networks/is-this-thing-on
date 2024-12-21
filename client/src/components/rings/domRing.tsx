@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
 
 import useGlobalRoomsInfoStore, { roomIDToHREF } from "../../stores/globalRoomsInfoStore";
-import { roomIsActive } from "../../stores/currentRoomStore";
+import { roomIsActive, roomIsArchive } from "../../stores/currentRoomStore";
 import useMediaQuery from "../../stores/useMediaQuery";
 import StreamGate from "../gates/streamGate";
 import VideoPreview from "../video/videoPreview";
@@ -63,7 +63,6 @@ const NodeElement: React.FC<{
         />
       );
     }
-
     return (
       <StreamGate
         roomID={roomInfo.roomID}
@@ -73,12 +72,17 @@ const NodeElement: React.FC<{
         {() => element}
       </StreamGate>
     );
+  } else if (roomIsArchive(roomInfo)) {
+    return (
+      <ArchiveElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />
+    );
   } else {
     return (
       <OfflineElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />
     );
   }
 };
+
 const OnlineElement: React.FC<{
   roomInfo: RoomSummary;
   offsetN: number;
@@ -123,6 +127,28 @@ const OnlineElement: React.FC<{
       >
         {roomInfo.roomName} is online
       </div>
+    </div>
+  );
+};
+
+const ArchiveElement: React.FC<{
+  roomInfo: RoomSummary;
+  offsetN: number;
+  onClick: () => void;
+}> = ({ roomInfo, offsetN, onClick }) => {
+  return (
+    <div
+      className="antiRotate homepageLabel homepageLabelInverse smallElementOnEllipse padded:s-2 border whiteFill cursor:pointer"
+      style={
+        {
+          "--animStart": offsetN + "%",
+          "--animEnd": 100 + offsetN + "%",
+          "--bg": roomInfo.roomColor,
+        } as React.CSSProperties
+      }
+      onClick={onClick}
+    >
+      {roomInfo.roomName} is looping
     </div>
   );
 };
