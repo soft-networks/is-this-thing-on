@@ -13,7 +13,11 @@ export function onRecordingsUpdate(
     const recordings = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...sanitizeRecordingFromDB(doc.data())
-    }));
+    }))
+    .sort((a, b) => {
+      if (!a.endTime || !b.endTime) return 0;
+      return new Date(b.endTime).getTime() - new Date(a.endTime).getTime();
+    });
     onRecordingsDidUpdate(recordings);
   });
 }
