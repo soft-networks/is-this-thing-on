@@ -52,12 +52,25 @@ const ArchiveVideoPlayer: React.FunctionComponent<{ hideMuteButton?: boolean, mu
   }, [archiveURL]);
 
   return (
-    <div className="fullBleed">
+    <div className="fullBleed" key="archiveVideoPlayer" id="videoPlayer">
+       {!hideMuteButton && (
+        <div
+          className="highestLayer padded:s-2"
+          style={{ position: "fixed", left: "0px", top: "0px" }}
+        >
+          <div
+            className="border-thin whiteFill padded:s-3 clickable greenFill:hover"
+            onClick={() => setMuted(!mute)}
+          >
+            {mute ? "unmute video" : "mute video"}
+          </div>
+        </div>
+      )}
       <div className="videoLayer videoAspectContainer">
         <ReactPlayer
           url={archiveURL}
           playing={true}
-          muted={muteOverride || false}
+          muted={mute || muteOverride || false}
           className="noEvents testPlayer "
           height={"inherit"}
           width={"inherit"}

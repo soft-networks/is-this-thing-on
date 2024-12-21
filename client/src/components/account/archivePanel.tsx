@@ -148,11 +148,13 @@ const ViewArchive: React.FC<{ roomID: string }> = ({ roomID }) => {
         };
     }, [roomID]);
     if (recordings.length == 0) return <div>No recordings found</div>;
-    return <div className="stack:s-2">
+    return <div className="stack:s-2" >
         <div>Recordings</div>
-        {recordings.map((recording, index) => (
-            <div>{index + 1}. <a href={recording.url} target="_blank" className="underline cursor:link" rel="noopener noreferrer">{formatTimeRange(recording.startTime, recording.endTime)}</a></div>
-        ))}
+        <div className="stack:s-2 padded:s-2 faintWhiteFill" style={{maxHeight: "200px", overflowY: "auto"}}>
+            {recordings.map((recording, index) => (
+                <div key={`recording-${index}`}>{index + 1}. <a href={recording.url} target="_blank" className="underline cursor:link" rel="noopener noreferrer">{formatTimeRange(recording.startTime, recording.endTime)}</a></div>
+            ))}
+        </div>
     </div>;
 };
 
