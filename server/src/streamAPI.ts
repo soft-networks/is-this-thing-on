@@ -117,7 +117,7 @@ export const streamUpdateWasReceived: RequestHandler = async (req, res) => {
         await writeHlsPlaylistIDToDB(roomID, playlist_url);
         logUpdate(`Wrote HLS playlist to DB for room ${roomID}`);
       } else {
-        logError(`HLS Playlist ID was started but didn't exist`);
+        logError(`HLS Playlist was started but didn't exist`);
       }
       
       return res.status(200).send("Thanks for the update :) ");

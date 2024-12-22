@@ -1,13 +1,12 @@
-import { StreamVideoClient, User } from "@stream-io/video-react-sdk";
+import { useRouter } from "next/router";
+import { useCallback, useMemo, useState } from "react";
+
 import { roomIsActive, roomIsArchive } from "../../stores/currentRoomStore";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import useGlobalRoomsInfoStore, {
   roomIDToHREF,
 } from "../../stores/globalRoomsInfoStore";
-
-import VideoPreview from "../video/videoPreview";
 import useMediaQuery from "../../stores/useMediaQuery";
-import { useRouter } from "next/router";
+import VideoPreview from "../video/videoPreview";
 
 const DomRing = () => {
   const ring = useGlobalRoomsInfoStore(useCallback((s) => s.rooms, []));
