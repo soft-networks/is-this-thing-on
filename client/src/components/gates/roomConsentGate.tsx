@@ -52,7 +52,7 @@ const ConsentGateInternal: React.FC<{ roomID: string; consentURL: string }> = ({
         />
         <div className="horizontal-stack ">
           <div
-            className="clickable padded lightFill border contrastFill contrastFill:hover"
+            className="clickable padded lightFill border contrastFill greenFill:hover"
             onClick={() => {
               logInfo("Consent Accepted for" + roomID);
               setConsentPassed(true);

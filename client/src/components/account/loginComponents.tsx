@@ -5,28 +5,15 @@ import { useGlobalUserStore } from "../../stores/globalUserStore";
 
 const LoginScreen: React.FC = () => {
   return (
+    <div className="fullBleed padded overflowScroll">
     <div className="stack:s2 padded quarterWidth centerh">
-      <div className="stack ">
-        <p>
-          <em> welcome to is this THING on? </em>
-        </p>
-        <p>
-          you can view streams, chat and leave reactions without an account. if
-          you want a username or for your data to be tied to an identity, you
-          can login below.
-        </p>
-        <p>
-          please note that we are currently in Season 1 - in which all data is
-          being stored in central servers run by Google, Amazon et all. there is
-          also a central administrator (Bhavik!) who can view all your data,
-          edit it, remove any chats, and so on. if you have any questions please{" "}
-          <a href="mailto:hello@softnet.works" target="_blank" rel="noreferrer">
-            reach out to him directly
-          </a>
-        </p>
+      <div>
+          welcome to is this THING on? <br/>
+          sign in or sign up below to chat with a username or create a room.
       </div>
       <SignUp />
       <SignIn />
+    </div>
     </div>
   );
 };
@@ -68,12 +55,16 @@ const SignUp: React.FC = () => {
   };
 
   return (
-    <div className="stack padded  border-thin">
+    <form 
+      className="stack padded border:gray faintWhiteFill"
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}
+    >
       <div>
         <em>sign up</em>
       </div>
-      <div className="stack:s-2">
-        <label className="caption">email</label>
         <input
           value={emailValue}
           placeholder="email"
@@ -82,10 +73,6 @@ const SignUp: React.FC = () => {
           name="email"
           onChange={(e) => setEmailValue(e.target.value)}
         />
-      </div>
-
-      <div className="stack:s-2">
-        <label className="caption">password</label>
         <input
           value={passwordValue}
           placeholder="password"
@@ -94,23 +81,19 @@ const SignUp: React.FC = () => {
           name="password"
           onChange={(e) => setPasswordValue(e.target.value)}
         />
-      </div>
-      <div className="stack:s-2">
-        <label className="caption">username for chat</label>
         <input
           value={usernameValue}
-          placeholder="username"
+          placeholder="username (can change later)"
           type="text"
           className="padded"
           name="username"
           onChange={(e) => setUsernameValue(e.target.value)}
         />
-      </div>
-      <div onClick={() => onSubmit()} className="clickable">
+      <div className="padded:s-1 whiteFill border greenFill:hover clickable cursor:pointer inline-block" onClick={() => onSubmit()}>
         create account
       </div>
       <div className="red">{error}</div>
-    </div>
+    </form>
   );
 };
 
@@ -139,7 +122,13 @@ const SignIn: React.FC = () => {
   };
 
   return (
-    <div className="stack border-thin padded ">
+    <form 
+      className="stack border:gray padded faintWhiteFill"
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}
+    >
       <div>
         <em> sign in </em>
       </div>
@@ -157,11 +146,11 @@ const SignIn: React.FC = () => {
         className="padded"
         onChange={(e) => setPasswordValue(e.target.value)}
       />
-      <div onClick={() => onSubmit()} className="clickable">
+      <div onClick={() => onSubmit()} className="padded:s-1 whiteFill border greenFill:hover clickable cursor:pointer inline-block">
         sign in
       </div>
       <div className="red">{error}</div>
-    </div>
+    </form>
   );
 };
 

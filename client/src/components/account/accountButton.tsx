@@ -18,7 +18,7 @@ const AccountButton: React.FunctionComponent = () => {
   return pathname !== "/account" ? (
     <Link href="/account" passHref>
       <div
-        className={"whiteFill border contrastFill:hover padded:s-3 clickable clickable:link"}
+        className={"whiteFill border greenFill:hover padded:s-3 clickable clickable:link"}
         suppressHydrationWarning
       >
         {currentUser
@@ -30,7 +30,7 @@ const AccountButton: React.FunctionComponent = () => {
   ) : (
     <div className="horizontal-stack">
       <div
-        className="whiteFill border contrastFill:hover padded:s-3 clickable clickable:link"
+        className="whiteFill border greenFill:hover padded:s-3 clickable clickable:link"
         onClick={() => back()}
       >
         close

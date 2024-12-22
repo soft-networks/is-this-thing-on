@@ -23,11 +23,10 @@ export const roomIsActive = (
   roomInfo: CurrentRoomInfo | RoomSummary | undefined | STREAM_STATUS_TYPE,
 ) => {
   if (roomIsTest(roomInfo)) {
-    console.log("TEST ROOM");
     return true;
   }
   if (typeof roomInfo == "string") {
-    
+  
     if (roomInfo && roomInfo.includes("active")) {
       return true;
     } else {
