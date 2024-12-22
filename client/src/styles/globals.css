@@ -229,6 +229,8 @@ p {
 
 
 
+
+
 .wide {
   --textWidth: 100%;
 }
@@ -422,9 +424,13 @@ p {
 
 .align-end {
   align-items: flex-end !important;
-}t
+}
+
 .align-start {
   align-items: flex-start;
+}
+.align-start\:self {
+  align-self: flex-start;
 }
 .align-start\:self {
   align-self: flex-start;
@@ -719,6 +725,7 @@ a:hover,
   background: yellow;
   background: var(--roomColor);
   color: lch(from var(--roomColor) calc((49.44 - l) * infinity) 0 0);
+  color: lch(from var(--roomColor) calc((49.44 - l) * infinity) 0 0);
 }
 
 .greenFill,
@@ -965,6 +972,10 @@ input::placeholder {
 
 input:focus {
   outline: none;
+}
+em {
+  font-style: normal;
+  background: var(--contrast);
 }
 em {
   font-style: normal;

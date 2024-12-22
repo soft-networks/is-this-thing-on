@@ -220,7 +220,7 @@ const RenderChat: React.FC<{
 
   return (
     <div
-      className="stack:noGap fullWidth align-start relative chatBubble"
+      className="stack:noGap fullWidth align-start relative chatBubble inline-block"
       style={{
         marginBlockStart: "var(--s-2)",
         opacity: alwaysShow ? 1 : myBlurPercentage,
@@ -231,11 +231,11 @@ const RenderChat: React.FC<{
         className="caption backgroundFill border-radius border inline-block"
         style={{ top: "-17px", padding: "4px" }}
       >
-        <em>{chat.username || "unknown"}</em>
+        {chat.username || "unknown"}
       </div>
       <div
         key={id}
-        className="padded:s-2 chatMessage border-radius relative align-start border "
+        className="padded:s-2 chatMessage border-radius relative inline-block border "
         style={{
           background: "var(--chatMessageBackgroundColor)",
           color: "var(--chatMessageColor)",
