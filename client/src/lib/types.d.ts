@@ -14,11 +14,18 @@ interface ChatMessage {
   roomID: string;
 }
 
+
+interface Recording {
+  id: string;
+  url: string;
+  startTime?: string;
+  endTime?: string;
+}
 interface StreamNames {
   names?: string[];
 } 
 
-type STREAM_STATUS_TYPE = "active" | "disconnected" | "active-test";
+type STREAM_STATUS_TYPE = "active" | "disconnected" | "active-test" | "archive";
 
 interface RoomSummary {
   roomID: string;
@@ -26,6 +33,7 @@ interface RoomSummary {
   roomColor: string;
   streamStatus: STREAM_STATUS_TYPE;
   streamPlaybackID?: string;
+  archiveURL?: string;
   previewOverlay?: string;
 }
 type AllRoomsSummary = { [key: string]: RoomSummary };

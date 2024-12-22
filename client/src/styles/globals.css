@@ -142,7 +142,9 @@ a:visited,
   cursor: -moz-grab;
   cursor: -webkit-grab;
   border: 1px dotted var(--gray);
-  pointer-events: all;
+}
+.react-draggable {
+  transition: none !important;
 }
 
 .draggable * {
@@ -227,6 +229,8 @@ p {
 
 
 
+
+
 .wide {
   --textWidth: 100%;
 }
@@ -244,8 +248,8 @@ p {
 .minTextWidth {
   min-width: 48px;
 }
-.minTextWidth {
-  min-width: 48px;
+.minTextWidthMedium {
+  min-width: 300px;
 }
 .padded {
   padding: var(--spacing);
@@ -420,9 +424,13 @@ p {
 
 .align-end {
   align-items: flex-end !important;
-}t
+}
+
 .align-start {
   align-items: flex-start;
+}
+.align-start\:self {
+  align-self: flex-start;
 }
 .align-start\:self {
   align-self: flex-start;
@@ -594,11 +602,13 @@ pre {
 a:hover,
 .button:hover {
   color: var(--black);
-  cursor: pointer;
 }
 
 .cursor\:pointer {
   cursor: pointer;
+}
+.cursor\:link {
+  cursor: ne-resize;
 }
 
 .noSelect {
@@ -714,6 +724,7 @@ a:hover,
 .hoverTrigger:hover .contrastFill\:hover\:triggered {
   background: yellow;
   background: var(--roomColor);
+  color: lch(from var(--roomColor) calc((49.44 - l) * infinity) 0 0);
   color: lch(from var(--roomColor) calc((49.44 - l) * infinity) 0 0);
 }
 
@@ -966,6 +977,10 @@ em {
   font-style: normal;
   background: var(--contrast);
 }
+em {
+  font-style: normal;
+  background: var(--contrast);
+}
 @media screen and (min-width: 1300px) {
   .halfWidth {
     max-inline-size: min(80%, 1200px);
@@ -1043,10 +1058,11 @@ em {
   height: auto;
   max-height: 30px;
 }
-.homepageLabelHoverTrigger:hover .homepageLabel {
-  background: var(--white) !important;
+.homepageLabelInverse {
+  background: white !important;
+  background: hsl(from var(--bg) h s calc(l + 45)) !important;
   border: 1px solid var(--bg) !important;
-  color: var(--bg)!important;
+  color: var(--black) !important;
 }
 
 

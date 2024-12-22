@@ -35,6 +35,12 @@ export function darlaSpinnerDoc() {
 export function statsCollection() {
   return collection(db, "stats");
 }
+
+export function recordingsCollection(roomDoc: DocumentReference) {
+  return collection(roomDoc, "recordings");
+}
+
+
 export function stickerCDNCollection(roomDoc: DocumentReference) {
   return collection(roomDoc, "sticker_cdn");
 }
@@ -64,3 +70,4 @@ export function presenceCollection() {
 export function presenceStatsDoc() {
   return doc(db, "stats", "presence");
 }
+

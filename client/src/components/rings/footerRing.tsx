@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useCallback, useMemo, } from "react";
 import useGlobalRoomsInfoStore, { roomIDToHREF } from "../../stores/globalRoomsInfoStore";
-import { useRoomStore } from "../../stores/currentRoomStore";
+import { roomIsArchive, useRoomStore } from "../../stores/currentRoomStore";
 import { logError } from "../../lib/logger";
 
 
@@ -89,9 +89,13 @@ export const RoomLabel: React.FC<NodeLinkProps> = ({
   id,
 }) => {
 
+  const getStatusText = (status: string) => {
+    if (status.includes("active")) return "on";
+    if (status === "archive") return "looping";
+    return "off";
+  };
   const text = useMemo(
-    () =>
-      `${link.roomName} is ${link.streamStatus.includes("active") ? "on" : "off"}`,
+    () => `${link.roomName} is ${getStatusText(link.streamStatus)}`,
     [link.roomName, link.streamStatus],
   );
   if (!link) {
@@ -99,9 +103,10 @@ export const RoomLabel: React.FC<NodeLinkProps> = ({
   }
   return (
     <div
-      className={`border padded:s-3 center-text homepageLabel homepageLabelFooter ${className}`}
+      className={`border padded:s-3 center-text homepageLabelFooter ${roomIsArchive(link) ? "homepageLabelInverse" : "homepageLabel"}`}
       style={{
         backgroundColor: link.roomColor,
+
         "--bg": link.roomColor,
       } as React.CSSProperties}
     >

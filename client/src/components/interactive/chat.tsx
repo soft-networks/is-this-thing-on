@@ -228,7 +228,7 @@ const RenderChat: React.FC<{
       ref={myRef}
     >
       <div
-        className="caption backgroundFill border-radius border  inline-block"
+        className="caption backgroundFill border-radius border inline-block"
         style={{ top: "-17px", padding: "4px" }}
       >
         {chat.username || "unknown"}
