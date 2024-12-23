@@ -27,8 +27,8 @@ const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
   return (
     <Draggable handle=".handle" nodeRef={panelRef}>
       <div
-        className="stack:s-2 lightFill relative border uiLayer minTextWidthMedium mars"
-        style={{ position: "fixed", top: "var(--s3)", right: "var(--s1)" }}
+        className="stack:s-2 lightFill relative border uiLayerF minTextWidthMedium mars"
+        style={{ position: "fixed", top: "var(--s3)", right: "var(--s1)", maxHeight: "calc(70vh)", overflowY: "auto" }}
         ref={panelRef}
       >
         <div

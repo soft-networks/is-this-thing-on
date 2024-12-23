@@ -11,7 +11,7 @@ import React, {
   useState,
 } from "react";
 
-import { addChatMessageDB, syncChat } from "../../lib/firestore";
+import { addChatMessageDB, deleteChatMessageDB, syncChat } from "../../lib/firestore";
 import {
   logCallbackDestroyed,
   logCallbackSetup,
@@ -21,6 +21,7 @@ import {
 import { useRoomStore } from "../../stores/currentRoomStore";
 import { useGlobalUserStore } from "../../stores/globalUserStore";
 import useMediaQuery from "../../stores/useMediaQuery";
+import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
 
 const DEFAULT_STYLE = (roomColor: string, globalStyle: boolean) =>
   ({
@@ -198,7 +199,7 @@ const RenderChat: React.FC<{
   //Create a ref to reference the dom
   const myRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery();
-
+  const isAdmin = useGlobalAdminStore((state) => state.isAdmin);
   useEffect(() => {
     if (myRef.current) {
       const y = myRef.current.getBoundingClientRect().top;
@@ -227,11 +228,16 @@ const RenderChat: React.FC<{
       }}
       ref={myRef}
     >
-      <div
-        className="caption backgroundFill border-radius border inline-block"
-        style={{ top: "-17px", padding: "4px" }}
-      >
-        {chat.username || "unknown"}
+      <div className="horizontal-stack:s-2">
+        <div
+          className="caption backgroundFill border-radius border inline-block"
+          style={{ top: "-17px", padding: "4px" }}
+        >
+          {chat.username || "unknown"}
+        </div>
+        {isAdmin && <div className="caption whiteFill greenFill:hover border cursor:pointer" style={{ padding: "4px" }} onClick={() => deleteChatMessageDB(id)}>
+          delete
+        </div>}
       </div>
       <div
         key={id}
