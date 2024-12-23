@@ -7,6 +7,7 @@ import useGlobalRoomsInfoStore, {
 } from "../../stores/globalRoomsInfoStore";
 import useMediaQuery from "../../stores/useMediaQuery";
 import VideoPreview from "../video/videoPreview";
+import ReactPlayer from "react-player";
 
 const DomRing = () => {
   const ring = useGlobalRoomsInfoStore(useCallback((s) => s.rooms, []));
@@ -131,17 +132,38 @@ const ArchiveElement: React.FC<{
 }> = ({ roomInfo, offsetN, onClick }) => {
   return (
     <div
-      className="antiRotate homepageLabel homepageLabelInverse largeElementOnEllipse padded:s-2 border whiteFill cursor:pointer"
+      className="homepageVideo antiRotate largeElementOnEllipse relative clickable homepageLabelHoverTrigger"
       style={
         {
           "--animStart": offsetN + "%",
           "--animEnd": 100 + offsetN + "%",
-          "--bg": roomInfo.roomColor,
         } as React.CSSProperties
       }
       onClick={onClick}
     >
-      {roomInfo.roomName} is looping
+      <div className="homepageVideo noOverflow border hideOnMobile">
+        <ReactPlayer
+          url={roomInfo.archiveURL}
+          playing={true}
+          loop={true}
+          muted={true}
+          playsinline={true}
+          width="100%"
+          height="100%"
+          className="fullBleed absoluteOrigin noEvents noSelect"
+        />
+      </div>
+      <div
+        className="center:absolute highestLayer border padded:s-2 homepageLabel homepageLabelInverse"
+        style={
+          {
+            backgroundColor: roomInfo.roomColor,
+            "--bg": roomInfo.roomColor,
+          } as React.CSSProperties
+        }
+      >
+        {roomInfo.roomName} is looping
+      </div>
     </div>
   );
 };
