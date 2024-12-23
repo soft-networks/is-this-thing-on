@@ -1,4 +1,3 @@
-
 interface SarahQuestion {
   question: string;
   status?: "ACCEPTED";
@@ -14,7 +13,6 @@ interface ChatMessage {
   roomID: string;
 }
 
-
 interface Recording {
   id: string;
   url: string;
@@ -23,7 +21,7 @@ interface Recording {
 }
 interface StreamNames {
   names?: string[];
-} 
+}
 
 type STREAM_STATUS_TYPE = "active" | "disconnected" | "active-test" | "archive";
 
@@ -33,6 +31,7 @@ interface RoomSummary {
   roomColor: string;
   streamStatus: STREAM_STATUS_TYPE;
   streamPlaybackID?: string;
+  streamHlsPlaylistID?: string;
   archiveURL?: string;
   previewOverlay?: string;
 }
@@ -42,7 +41,6 @@ type CurrentRoomInfo = RoomSummary & {
   consentURL?: string;
   streamOwner: string;
 };
-
 
 type Pos = [number, number];
 
@@ -80,4 +78,3 @@ interface PresenceStats {
   [key: string]: number;
 }
 type RtmpsDetails = { rtmpAddress: string; rtmpStreamKey: string };
-

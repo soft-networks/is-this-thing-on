@@ -227,10 +227,6 @@ p {
   align-self: flex-start;
 }
 
-
-
-
-
 .wide {
   --textWidth: 100%;
 }
@@ -425,12 +421,8 @@ p {
 .align-end {
   align-items: flex-end !important;
 }
-
 .align-start {
   align-items: flex-start;
-}
-.align-start\:self {
-  align-self: flex-start;
 }
 .align-start\:self {
   align-self: flex-start;
@@ -485,7 +477,7 @@ p {
 
 .stack\:border > * + * {
   border-top: 1px solid var(--faintWhite);
-  padding-top: var(--s0)
+  padding-top: var(--s0);
 }
 .stack > * + * {
   margin-block-start: var(--s0);
@@ -718,13 +710,11 @@ a:hover,
   background: var(--black);
 }
 
-
 .contrastFill,
 .contrastFill\:hover:hover,
 .hoverTrigger:hover .contrastFill\:hover\:triggered {
   background: yellow;
   background: var(--roomColor);
-  color: lch(from var(--roomColor) calc((49.44 - l) * infinity) 0 0);
   color: lch(from var(--roomColor) calc((49.44 - l) * infinity) 0 0);
 }
 
@@ -852,7 +842,6 @@ a:hover,
   bottom: 0;
   left: 0;
   padding: var(--s-1);
-  
 }
 .chatScrollContainer {
   -webkit-overflow-scrolling: touch;
@@ -901,10 +890,11 @@ a:hover,
 
 .chatMessage {
   background: var(--chatMessageBackground);
-  
 }
 .chatMessage * {
-  color: lch(from var(--chatMessageBackgroundColor) calc((49.44 - l) * infinity) 0 0);
+  color: lch(
+    from var(--chatMessageBackgroundColor) calc((49.44 - l) * infinity) 0 0
+  );
 }
 
 .chatMessage .caption {
@@ -951,7 +941,9 @@ hr {
   border: 0;
   border-top: 1px solid var(--gray);
 }
-input[type="text"], input[type="password"], input[type="email"] {
+input[type="text"],
+input[type="password"],
+input[type="email"] {
   background: none;
   border: none;
   outline: none;
@@ -967,15 +959,10 @@ input::placeholder {
   font-family: "Manifont Grotesk", monospace;
   font: var(--s0);
   border-radius: 0; /* Add this line */
-  
 }
 
 input:focus {
   outline: none;
-}
-em {
-  font-style: normal;
-  background: var(--contrast);
 }
 em {
   font-style: normal;
@@ -1065,7 +1052,6 @@ em {
   color: var(--black) !important;
 }
 
-
 .homepageVideo {
   width: 300px;
   height: 168.75px;
@@ -1081,7 +1067,6 @@ em {
   offset-rotate: 0deg;
   animation: move 240s infinite linear;
 }
-
 
 @keyframes move {
   0% {
@@ -1138,7 +1123,6 @@ em {
     width: 80px;
     height: 48px;
   }
-
 
   .chat::before {
     content: "";

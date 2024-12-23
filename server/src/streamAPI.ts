@@ -6,6 +6,7 @@ import {
   connectStreamRoomDB,
   getRoom,
   getRoomIDFromStreamCallID,
+  writeHlsPlaylistIDToDB,
   writePlaybackIDToDB,
   writeRecordingToDB,
   writeStreamStateToDB,
@@ -101,6 +102,22 @@ export const streamUpdateWasReceived: RequestHandler = async (req, res) => {
         logUpdate(`Wrote recording to DB for room ${roomID} with ref ${ref.id}`);
       } else {
         logError(`Recording was ready but didn't exist`);
+      }
+      
+      return res.status(200).send("Thanks for the update :) ");
+    }
+    if (eventType == "call.hls_broadcasting_started") {
+        const livestreamID = hook.call_cid;
+      const callID = livestreamID.split(":")[1];
+      const roomID = await getRoomIDFromStreamCallID(callID);
+      console.log("HLS recording started for roomID: ", hook);
+
+      const playlist_url = hook.hls_playlist_url;
+      if (playlist_url) {
+        await writeHlsPlaylistIDToDB(roomID, playlist_url);
+        logUpdate(`Wrote HLS playlist to DB for room ${roomID}`);
+      } else {
+        logError(`HLS Playlist was started but didn't exist`);
       }
       
       return res.status(200).send("Thanks for the update :) ");

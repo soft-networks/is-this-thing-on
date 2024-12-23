@@ -7,7 +7,10 @@ export function validateRoomName(roomName: string) {
   return true;
 }
 
-export function sanitizeRoomSummary(data: DocumentData, id: string): RoomSummary {
+export function sanitizeRoomSummary(
+  data: DocumentData,
+  id: string,
+): RoomSummary {
   return {
     roomID: id,
     roomName: data["room_name"] || id,
@@ -16,10 +19,14 @@ export function sanitizeRoomSummary(data: DocumentData, id: string): RoomSummary
   };
 }
 
-export function sanitizeRoomInfo(data: DocumentData, id: string): CurrentRoomInfo {
+export function sanitizeRoomInfo(
+  data: DocumentData,
+  id: string,
+): CurrentRoomInfo {
   return {
     roomID: id,
     streamPlaybackID: data["stream_playback_id"] || undefined,
+    streamHlsPlaylistID: data["stream_hls_playlist_id"] || undefined,
     streamOwner: "bhavik",
     streamStatus: sanitizeStreamStatus(data["stream_status"]),
     roomName: data["room_name"] || id,
