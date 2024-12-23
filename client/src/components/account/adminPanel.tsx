@@ -27,7 +27,7 @@ const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
   return (
     <Draggable handle=".handle" nodeRef={panelRef}>
       <div
-        className="stack:s-2 lightFill relative border faintWhiteFill uiLayer showOnHoverSelfTrigger minTextWidthMedium "
+        className="stack:s-2 lightFill relative border uiLayer minTextWidthMedium mars"
         style={{ position: "fixed", top: "var(--s3)", right: "var(--s1)" }}
         ref={panelRef}
       >

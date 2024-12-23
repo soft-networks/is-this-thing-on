@@ -43,7 +43,7 @@ const RoomStatusGate: React.FunctionComponent = ({ children }) => {
         <div className="fullBleed" >
           <div className="center:absolute highestLayer">
             {" "}
-            offline... for now (archive here)
+            offline for now
           </div>
         </div>
       )}

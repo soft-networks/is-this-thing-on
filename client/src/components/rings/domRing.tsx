@@ -83,7 +83,7 @@ const OnlineElement: React.FC<{
 
   return (
     <div
-      className="homepageVideo antiRotate smallElementOnEllipse relative clickable homepageLabelHoverTrigger"
+      className="homepageVideo antiRotate largeElementOnEllipse relative clickable homepageLabelHoverTrigger"
       style={
         {
           "--animStart": offsetN + "%",
@@ -131,7 +131,7 @@ const ArchiveElement: React.FC<{
 }> = ({ roomInfo, offsetN, onClick }) => {
   return (
     <div
-      className="antiRotate homepageLabel homepageLabelInverse smallElementOnEllipse padded:s-2 border whiteFill cursor:pointer"
+      className="antiRotate homepageLabel homepageLabelInverse largeElementOnEllipse padded:s-2 border whiteFill cursor:pointer"
       style={
         {
           "--animStart": offsetN + "%",

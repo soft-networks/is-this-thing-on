@@ -30,6 +30,7 @@ const Layout: React.FunctionComponent<{
 
 
   return (
+    <ClickGate>
     <div
       className={classnames("fullScreen lightFill relative noOverflow", { "stack:noGap": isMobile })}
       key={`layout-${isMobile}`}
@@ -37,7 +38,6 @@ const Layout: React.FunctionComponent<{
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </Head>
-      <ClickGate>
         <GlobalRoomsSummaryProvider>
           <GlobalUserAdminProvider>
             <GlobalPresenceGate>
@@ -46,9 +46,9 @@ const Layout: React.FunctionComponent<{
             </GlobalPresenceGate>
           </GlobalUserAdminProvider>
         </GlobalRoomsSummaryProvider>
-      </ClickGate>
       <Instrumentation />
     </div>
+    </ClickGate>
   );
 };
 

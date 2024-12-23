@@ -50,7 +50,7 @@ export const FooterRing: React.FC<{ isHome: boolean }> = ({ isHome }) => {
 
   return (
     <div className="centerh relative">
-      <div className="horizontal-stack:s-2 align-end" style={{height: "40px", transform: "translateY(calc(var(--s0) * -1))"}}>
+      <div className="horizontal-stack:s-2 align-end">
         <div
           className="whiteFill clickable clickable:link border padded:s-3 greenFill:hover"
           onClick={handlePrevClick}

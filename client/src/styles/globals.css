@@ -413,6 +413,10 @@ p {
   z-index: 99999;
 }
 
+.mars {
+  z-index: 100000;
+}
+
 .align\:center {
   display: flex;
   justify-content: center;
@@ -1026,10 +1030,10 @@ em {
   position: absolute;
   top: 0;
   left: 0;
-  transform: rotate(-30deg);
+  transform: rotate(-20deg);
 }
 .antiRotate {
-  transform: rotate(30deg);
+  transform: rotate(20deg);
 }
 .homepageLabel {
   width: 150px;
@@ -1053,19 +1057,20 @@ em {
 }
 
 .homepageVideo {
-  width: 300px;
-  height: 168.75px;
+  --width: 250px;
+  width: var(--width);
+  height: calc(var(--width) * 9 / 16); /* 16:9 aspect ratio */
 }
 .smallElementOnEllipse {
-  offset-path: ellipse(25% 30% at center);
+  offset-path: ellipse(22% 25% at center);
   offset-rotate: 0deg;
   vertical-align: middle;
   animation: move 120s infinite linear;
 }
 .largeElementOnEllipse {
-  offset-path: ellipse(30% 35% at center);
+  offset-path: ellipse(35% 40% at center);
   offset-rotate: 0deg;
-  animation: move 240s infinite linear;
+  animation: move 180s infinite linear;
 }
 
 @keyframes move {
