@@ -12,6 +12,10 @@ import useMediaQuery  from '../../stores/useMediaQuery';
 const ArtistRoom = ({ roomID }: { roomID: string }) => {
   const isMobile = useMediaQuery();
 
+  if (roomID == "molly") {
+    return <Molly />;
+  }
+  
   if (isMobile) {
     return <DefaultRoom />;
   }
@@ -29,9 +33,7 @@ const ArtistRoom = ({ roomID }: { roomID: string }) => {
   // if (roomID == "chrisy") {
   //   return <Chris />;
   // }
-  // if (roomID == "molly") {
-  //   return <Molly />;
-  // }
+
   // if (roomID == "sarah") {
   //   return <Sarah />;
   // }
