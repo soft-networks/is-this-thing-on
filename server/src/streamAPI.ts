@@ -6,6 +6,7 @@ import {
   connectStreamRoomDB,
   getRoom,
   getRoomIDFromStreamCallID,
+  getRoomStatusFromDB,
   writeHlsPlaylistIDToDB,
   writePlaybackIDToDB,
   writeRecordingToDB,
@@ -28,6 +29,8 @@ function getErrorMessage(error: unknown) {
   if (error instanceof Error) return error.message;
   return String(error);
 }
+
+const manualRoomIDs = ["exonomo", "grass", "coffee", "ideas", "references"];
 
 // Update the streamUpdateWasReceived function
 export const streamUpdateWasReceived: RequestHandler = async (req, res) => {
@@ -79,6 +82,11 @@ export const streamUpdateWasReceived: RequestHandler = async (req, res) => {
       logInfo(`Received ${eventType} for call ${callID}`);
       logUpdate("> Stream went idle");
       let roomID = await getRoomIDFromStreamCallID(callID);
+      let roomStatus = await getRoomStatusFromDB(roomID);
+      if (roomStatus == "archive" || manualRoomIDs.includes(roomID)) {
+        logInfo(`Room ${roomID} is in archive / manual, ignoring idle event`);
+        return res.status(200).send("Thanks for the update :) ");
+      }
       await writeStreamStateToDB(roomID, "idle");
       return res.status(200).send("Thanks for the update :) ");
     }

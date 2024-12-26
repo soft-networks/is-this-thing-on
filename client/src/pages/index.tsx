@@ -40,6 +40,7 @@ const IndexDesktop = () => {
           <CenterText />
         </div>
       </div>
+      {/* Comment out the line below to remove the chat */}
       <Chat key="index-chat" />
     </div>
   );
@@ -63,11 +64,8 @@ const IndexMobile = () => {
 
 const CenterText = () => (
   <>
-    next stream: dec 29
-    <Link href="https://docs.google.com/forms/d/e/1FAIpQLSdfDAp4BTtW1RZKcfJX3xArCa3cVEJTpMQgd7fz0M5c5_yLlg/viewform?usp=sf_link" className="underline">
-    <br/>
-      stream nothing with us?
-    </Link>
+    NO-THING <br />
+    dec 29 for 24h
   </>
 )
 

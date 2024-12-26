@@ -143,6 +143,7 @@ a:visited,
   cursor: -webkit-grab;
   border: 1px dotted var(--gray);
 }
+
 .react-draggable {
   transition: none !important;
 }
@@ -219,7 +220,7 @@ iframe body {
 
 p {
   max-inline-size: var(--textWidth);
-  line-height: 1.2;
+  line-height: 1.4;
 }
 
 .inline-block {
@@ -232,13 +233,14 @@ p {
 }
 
 .narrow {
-  --textWidth: 32ch;
+  --textWidth: 60ch;
   width: var(--textWidth);
   max-width: 100%;
 }
 
 .medium {
   --textWidth: 72ch;
+  max-width: 100%;
 }
 
 .minTextWidth {
@@ -411,6 +413,10 @@ p {
 .everest,
 .everest * {
   z-index: 99999;
+}
+
+.mars {
+  z-index: 100000;
 }
 
 .align\:center {
@@ -610,6 +616,7 @@ a:hover,
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  
 }
 
 .uppercase {
@@ -1026,10 +1033,10 @@ em {
   position: absolute;
   top: 0;
   left: 0;
-  transform: rotate(-30deg);
+  transform: rotate(-20deg);
 }
 .antiRotate {
-  transform: rotate(30deg);
+  transform: rotate(20deg);
 }
 .homepageLabel {
   width: 150px;
@@ -1053,19 +1060,20 @@ em {
 }
 
 .homepageVideo {
-  width: 300px;
-  height: 168.75px;
+  --width: 250px;
+  width: var(--width);
+  height: calc(var(--width) * 9 / 16); /* 16:9 aspect ratio */
 }
 .smallElementOnEllipse {
-  offset-path: ellipse(25% 30% at center);
+  offset-path: ellipse(22% 25% at center);
   offset-rotate: 0deg;
   vertical-align: middle;
   animation: move 120s infinite linear;
 }
 .largeElementOnEllipse {
-  offset-path: ellipse(30% 35% at center);
+  offset-path: ellipse(35% 40% at center);
   offset-rotate: 0deg;
-  animation: move 240s infinite linear;
+  animation: move 180s infinite linear;
 }
 
 @keyframes move {
@@ -1121,7 +1129,7 @@ em {
 
   .homepageLabel {
     width: 80px;
-    height: 48px;
+    max-height: 80px;
   }
 
   .chat::before {
@@ -1140,6 +1148,9 @@ em {
       rgba(236, 236, 236, 0) 70%,
       rgba(236, 236, 236, 1) 100%
     );
+  }
+  .narrow, .medium, .textWidth {
+    width: 100%;
   }
 }
 @media screen and (min-width: 801px) {

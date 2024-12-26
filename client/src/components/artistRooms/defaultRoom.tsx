@@ -17,6 +17,7 @@ const DefaultRoomMobileContent = ({
   roomInfo,
 }: RoomViewProps & { roomInfo: any }) => (
   <div className="fullBleed stack">
+    {/* Comment out the line below to remove the chat */}
     <Chat key={`${roomInfo.roomID}-chat`} style={chatStyle} />
   </div>
 );
@@ -28,6 +29,7 @@ const DefaultRoomDesktopContent = ({
   roomInfo,
 }: RoomViewProps & { roomInfo: any }) => (
   <>
+    {/* Comment out the line below to remove the chat */}
     <Chat key={`${roomInfo.roomID}-chat`} style={chatStyle} />
     <VideoPlayer />
     {/* <Stickers style={stickerStyle} StickerChooser={stickerChooser} /> */}

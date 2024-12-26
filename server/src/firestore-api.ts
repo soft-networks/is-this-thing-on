@@ -104,6 +104,13 @@ export const getRoomIDFromMUXID = async (muxID: string) => {
   return muxData['room_id'];
 }
 
+export const getRoomStatusFromDB = async (roomID: string) => {
+  let roomRef = roomDoc(roomID);
+  let room = await roomRef.get();
+  let roomData = room.data();
+  return roomData?.['stream_status'];
+}
+
 export const writeStreamStateToDB = async (roomID: string, streamStatus: string) => {
   return roomDoc(roomID).set({ stream_status: streamStatus }, { merge: true });
 }

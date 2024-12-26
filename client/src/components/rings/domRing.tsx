@@ -7,6 +7,8 @@ import useGlobalRoomsInfoStore, {
 } from "../../stores/globalRoomsInfoStore";
 import useMediaQuery from "../../stores/useMediaQuery";
 import VideoPreview from "../video/videoPreview";
+import ReactPlayer from "react-player";
+import { CoffeePreview } from "../artistRooms/coffee";
 
 const DomRing = () => {
   const ring = useGlobalRoomsInfoStore(useCallback((s) => s.rooms, []));
@@ -33,6 +35,7 @@ const DomRing = () => {
     </div>
   );
 };
+
 
 const NodeElement: React.FC<{
   roomInfo: RoomSummary;
@@ -83,7 +86,7 @@ const OnlineElement: React.FC<{
 
   return (
     <div
-      className="homepageVideo antiRotate smallElementOnEllipse relative clickable homepageLabelHoverTrigger"
+      className="homepageVideo antiRotate largeElementOnEllipse relative clickable homepageLabelHoverTrigger"
       style={
         {
           "--animStart": offsetN + "%",
@@ -131,17 +134,37 @@ const ArchiveElement: React.FC<{
 }> = ({ roomInfo, offsetN, onClick }) => {
   return (
     <div
-      className="antiRotate homepageLabel homepageLabelInverse smallElementOnEllipse padded:s-2 border whiteFill cursor:pointer"
+      className="homepageVideo antiRotate largeElementOnEllipse relative clickable homepageLabelHoverTrigger"
       style={
         {
           "--animStart": offsetN + "%",
           "--animEnd": 100 + offsetN + "%",
-          "--bg": roomInfo.roomColor,
         } as React.CSSProperties
       }
       onClick={onClick}
     >
-      {roomInfo.roomName} is looping
+      <div className="homepageVideo noOverflow border hideOnMobile">
+        <ReactPlayer
+          url={roomInfo.archiveURL}
+          playing={true}
+          muted={true}
+          className="noEvents"
+          width={"302px"}
+          height={"169px"}
+          style={{ margin: "-1px" }}
+        />
+      </div>
+      <div
+        className="center:absolute highestLayer border padded:s-2 homepageLabel homepageLabelInverse"
+        style={
+          {
+            backgroundColor: roomInfo.roomColor,
+            "--bg": roomInfo.roomColor,
+          } as React.CSSProperties
+        }
+      >
+        {roomInfo.roomName} is looping
+      </div>
     </div>
   );
 };
@@ -164,7 +187,7 @@ const OnlineElementSimple: React.FC<{
       }
       onClick={onClick}
     >
-      {roomInfo.roomName} is online
+      {roomInfo.roomName} is on
     </div>
   );
 };
@@ -187,7 +210,7 @@ const OfflineElement: React.FC<{
       }
       onClick={onClick}
     >
-      {roomInfo.roomName} is offline
+      {roomInfo.roomName} is off
     </div>
   );
 };

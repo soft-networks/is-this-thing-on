@@ -4,8 +4,29 @@ import ReactPlayer from "react-player";
 import StreamPlayer from "./streamPlayer";
 import { generateStreamLink } from "../../lib/server-api";
 import { logVideo } from "../../lib/logger";
+import { CoffeePreview } from "../artistRooms/coffee";
+import { GrassPreview } from "../artistRooms/grass";
+import { ExonomoPreview } from "../artistRooms/exonomo";
 
 const VideoPreview: React.FC<{
+  iLink: RoomSummary;
+  localMuted: boolean;
+  isTest: boolean;
+}> = ({ iLink, localMuted, isTest }) => {
+
+  if (iLink.roomID == "coffee") {
+    return <CoffeePreview />;
+  }
+  if (iLink.roomID == "grass") {
+    return <GrassPreview />;
+  }
+  if (iLink.roomID == "exonomo") {
+    return <ExonomoPreview />;
+  }
+  return <VideoPreviewInternal iLink={iLink} localMuted={localMuted} isTest={isTest} />;
+};
+
+const VideoPreviewInternal: React.FC<{
   iLink: RoomSummary;
   localMuted: boolean;
   isTest: boolean;

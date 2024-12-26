@@ -14,16 +14,15 @@ const GlobalUserAdminProvider: React.FC = ({children}) => {
 
   const refreshAdminFor = useCallback(async () => {
     if (!userID) return;
-    console.log("refreshing adminFor....");
     let rooms = await getRoomsWhereUserISAdmin(userID);
     if (rooms) {
-      setAdminFor(rooms.map((r) => r.roomID));
+      setAdminFor(rooms);
     }
   }, [userID, setAdminFor]);
 
   useEffect(() => {
     refreshAdminFor();
-  }, [refreshAdminFor]);
+  }, []);
 
   useEffect(() => {
     refreshAdminFor();

@@ -1,5 +1,7 @@
 import {
   addDoc,
+  deleteDoc,
+  doc,
   limit,
   onSnapshot,
   orderBy,
@@ -55,4 +57,9 @@ export async function addChatMessageDB(chat: ChatMessage) {
     const chats = chatCollection();
     return addDoc(chats, chat);
   });
+}
+
+export async function deleteChatMessageDB(chatID: string) {
+  const chats = chatCollection();
+  return deleteDoc(doc(chats, chatID));
 }
