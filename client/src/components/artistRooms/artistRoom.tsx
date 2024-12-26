@@ -10,6 +10,7 @@ import Soft from "./soft";
 import useMediaQuery  from '../../stores/useMediaQuery';
 import Coffee from "./coffee";
 import Grass from "./grass";
+import Exonomo from "./exonomo";
 
 const ArtistRoom = ({ roomID }: { roomID: string }) => {
   const isMobile = useMediaQuery();
@@ -22,6 +23,9 @@ const ArtistRoom = ({ roomID }: { roomID: string }) => {
   }
   if (roomID == "molly") {
     return <Molly />;
+  }
+  if (roomID == "exonomo") {
+    return <Exonomo />;
   }
 
   if (isMobile) {

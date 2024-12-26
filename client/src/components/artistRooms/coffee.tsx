@@ -22,12 +22,7 @@ const Coffee: React.FC = () => {
                 />
             </Draggable>
             <div
-                style={{ 
-                  backgroundImage: "url('https://storage.googleapis.com/is-this-thing-on/misc/university-of-cambridge.png')",
-                  backgroundSize: "cover",
-                  backgroundPosition: "top left"
-                }}
-                className="fullBleed videoLayer noEvents noSelect coverBG"
+                className="lightFill fullBleed videoLayer noEvents noSelect coverBG"
                 draggable={false}
             />
             <Chat key="chat" />

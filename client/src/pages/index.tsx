@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+  /* eslint-disable @next/next/no-img-element */
 import { NextPage } from "next";
 import Head from "next/head";
 import React, { useCallback, useEffect } from "react";
@@ -40,6 +40,7 @@ const IndexDesktop = () => {
           <CenterText />
         </div>
       </div>
+      {/* Comment out the line below to remove the chat */}
       <Chat key="index-chat" />
     </div>
   );
