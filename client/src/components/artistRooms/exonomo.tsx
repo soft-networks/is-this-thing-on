@@ -12,7 +12,7 @@ const Exonomo: React.FC = () => {
         <main
             className="fullBleed noOverflow relative"
             style={
-                { background: "pink", "--stickerSize": "10%" } as React.CSSProperties
+                { "--stickerSize": "10%" } as React.CSSProperties
             }
         >
             <Chat key="chat" />
@@ -25,7 +25,7 @@ const Exonomo: React.FC = () => {
                 />
             </Draggable>
             <div className="fullBleed videoLayer">
-                <ReactPlayer url="https://www.dropbox.com/s/pyjs9fswrlq5r2w/room2-1_edited.m4v?dl=1#t=00:35:00" className="fullBleed videoLayer" width="100%" height="auto"  controls={true} autoPlay={true} muted={true}/>
+                <ReactPlayer url="https://www.dropbox.com/s/pyjs9fswrlq5r2w/room2-1_edited.m4v?dl=1" className="fullBleed videoLayer" width="100%" height="auto"  controls={true} autoPlay={true} muted={true}/>
             </div>
             {/* <iframe src="https://idpw.org/bedroom/" className="fullBleed videoLayer" style={{ border: "none" }} /> */}
         </main>

@@ -36,6 +36,7 @@ const DomRing = () => {
   );
 };
 
+
 const NodeElement: React.FC<{
   roomInfo: RoomSummary;
   offsetN: number;

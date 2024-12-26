@@ -220,7 +220,7 @@ iframe body {
 
 p {
   max-inline-size: var(--textWidth);
-  line-height: 1.2;
+  line-height: 1.4;
 }
 
 .inline-block {
@@ -233,13 +233,14 @@ p {
 }
 
 .narrow {
-  --textWidth: 32ch;
+  --textWidth: 60ch;
   width: var(--textWidth);
   max-width: 100%;
 }
 
 .medium {
   --textWidth: 72ch;
+  max-width: 100%;
 }
 
 .minTextWidth {
@@ -1147,6 +1148,9 @@ em {
       rgba(236, 236, 236, 0) 70%,
       rgba(236, 236, 236, 1) 100%
     );
+  }
+  .narrow, .medium, .textWidth {
+    width: 100%;
   }
 }
 @media screen and (min-width: 801px) {

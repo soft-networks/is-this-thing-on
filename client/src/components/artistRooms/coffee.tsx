@@ -33,13 +33,12 @@ const Coffee: React.FC = () => {
 
 export const CoffeePreview = () => {
     return (
-        <div className="fullBleed">
+        <div className="fullBleed faintWhiteFill">
             <img src="https://storage.googleapis.com/is-this-thing-on/misc/trojan-room-coffee-pot.gif" 
-                style={{ position: "absolute", top: "var(--s0)", left: "var(--s0)", width: "10%", height: "auto" }} 
+                style={{ position: "absolute", top: "var(--s0)", left: "var(--s0)", width: "20%", height: "auto" }} 
                 className="stickerLayer "
                 draggable={false}
             />
-            <img src="https://storage.googleapis.com/is-this-thing-on/misc/university-of-cambridge.png" className="fullBleed" alt="University of Cambridge" />
 
         </div>
     );

@@ -1,4 +1,4 @@
-  /* eslint-disable @next/next/no-img-element */
+/* eslint-disable @next/next/no-img-element */
 import { NextPage } from "next";
 import Head from "next/head";
 import React, { useCallback, useEffect } from "react";
@@ -64,11 +64,8 @@ const IndexMobile = () => {
 
 const CenterText = () => (
   <>
-    next stream: dec 29
-    <Link href="https://docs.google.com/forms/d/e/1FAIpQLSdfDAp4BTtW1RZKcfJX3xArCa3cVEJTpMQgd7fz0M5c5_yLlg/viewform?usp=sf_link" className="underline">
-    <br/>
-      stream nothing with us?
-    </Link>
+    NO-THING <br />
+    dec 29 for 24h
   </>
 )
 
