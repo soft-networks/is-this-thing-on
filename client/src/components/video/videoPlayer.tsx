@@ -67,6 +67,7 @@ const ArchiveVideoPlayer: React.FunctionComponent<{ hideMuteButton?: boolean, mu
         </div>
       )}
       <div className="videoLayer videoAspectContainer">
+        <div className="videoAspectElement">
         <ReactPlayer
           url={archiveURL}
           playing={true}
@@ -76,6 +77,7 @@ const ArchiveVideoPlayer: React.FunctionComponent<{ hideMuteButton?: boolean, mu
           width={"inherit"}
           loop={true}
         />
+        </div>
       </div>
     </div>
   )

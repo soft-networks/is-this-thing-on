@@ -147,12 +147,11 @@ const ArchiveElement: React.FC<{
         <ReactPlayer
           url={roomInfo.archiveURL}
           playing={true}
-          loop={true}
           muted={true}
-          playsinline={true}
-          width="100%"
-          height="100%"
-          className="fullBleed absoluteOrigin noEvents noSelect"
+          className="noEvents"
+          width={"302px"}
+          height={"169px"}
+          style={{ margin: "-1px" }}
         />
       </div>
       <div
