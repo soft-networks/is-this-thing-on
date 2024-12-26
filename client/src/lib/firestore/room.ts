@@ -25,7 +25,7 @@ export async function syncRoomInfoDB(
   return unsub;
 }
 
-export async function getRoomsWhereUserISAdmin(userID: string) {
+export async function getRoomsWhereUserISAdmin(userID: string): Promise<string[] | undefined> {
   const q = query(
     roomsCollection(),
     where("admins", "array-contains", userID),
@@ -35,13 +35,15 @@ export async function getRoomsWhereUserISAdmin(userID: string) {
   let numResults = querySnapshot.size;
 
   if (numResults == 0) {
+    // console.log("getRoomsWhereUserISAdmin returned 0 results");
     return undefined;
   }
 
-  let roomInfo: CurrentRoomInfo[] = [];
+  let roomInfo: string[] = [];
   querySnapshot.forEach((doc) =>
-    roomInfo.push(sanitizeRoomInfo(doc.data(), doc.id)),
+    roomInfo.push(doc.id),
   );
+  // console.log("getRoomsWhereUserISAdmin returned ", roomInfo);
   return roomInfo;
 }
 export async function getRoomAdmins(roomID: string) {

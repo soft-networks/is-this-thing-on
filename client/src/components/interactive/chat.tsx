@@ -227,6 +227,7 @@ const RenderChat: React.FC<{
         opacity: alwaysShow ? 1 : myBlurPercentage,
       }}
       ref={myRef}
+      key={id + "chat-" + isAdmin}
     >
       <div className="horizontal-stack:s-2">
         <div
