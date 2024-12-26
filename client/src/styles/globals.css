@@ -143,6 +143,7 @@ a:visited,
   cursor: -webkit-grab;
   border: 1px dotted var(--gray);
 }
+
 .react-draggable {
   transition: none !important;
 }
@@ -614,6 +615,7 @@ a:hover,
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  
 }
 
 .uppercase {
@@ -1126,7 +1128,7 @@ em {
 
   .homepageLabel {
     width: 80px;
-    height: 48px;
+    max-height: 80px;
   }
 
   .chat::before {

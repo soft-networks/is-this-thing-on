@@ -8,6 +8,7 @@ import useGlobalRoomsInfoStore, {
 import useMediaQuery from "../../stores/useMediaQuery";
 import VideoPreview from "../video/videoPreview";
 import ReactPlayer from "react-player";
+import { CoffeePreview } from "../artistRooms/coffee";
 
 const DomRing = () => {
   const ring = useGlobalRoomsInfoStore(useCallback((s) => s.rooms, []));
@@ -186,7 +187,7 @@ const OnlineElementSimple: React.FC<{
       }
       onClick={onClick}
     >
-      {roomInfo.roomName} is online
+      {roomInfo.roomName} is on
     </div>
   );
 };
@@ -209,7 +210,7 @@ const OfflineElement: React.FC<{
       }
       onClick={onClick}
     >
-      {roomInfo.roomName} is offline
+      {roomInfo.roomName} is off
     </div>
   );
 };

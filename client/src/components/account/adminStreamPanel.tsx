@@ -206,6 +206,7 @@ const BrowserStreamDetails = ({ call }: { call: Call }) => {
   }, []);
 
   useEffect(() => {
+    
     Promise.all([cam.enable(), mic.enable()]).then(() => {
       call.get();
     });

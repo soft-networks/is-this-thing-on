@@ -8,14 +8,22 @@ import Molly from "./molly";
 import Sarah from "./sarah";
 import Soft from "./soft";
 import useMediaQuery  from '../../stores/useMediaQuery';
+import Coffee from "./coffee";
+import Grass from "./grass";
 
 const ArtistRoom = ({ roomID }: { roomID: string }) => {
   const isMobile = useMediaQuery();
 
+  if (roomID == "coffee") {
+    return <Coffee />;
+  }
+  if (roomID == "grass") {
+    return <Grass />;
+  }
   if (roomID == "molly") {
     return <Molly />;
   }
-  
+
   if (isMobile) {
     return <DefaultRoom />;
   }
