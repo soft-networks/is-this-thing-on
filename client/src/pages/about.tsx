@@ -32,7 +32,7 @@ const About: NextPage = () => {
        <p>
          <Link href="/"className="underline">
            thing.tube
-         </Link> is an experimental livestreaming platform for artists, founded by the collective "is this thing on?"
+         </Link> is an experimental livestreaming platform for artists, founded by the collective &quot;is this thing on?&quot;
          (<a href="https://christopherclary.com/"className="underline">Christopher Clary</a>, <a href="https://sarahrothberg.com/"className="underline">Sarah Rothberg</a>, <a href="https://mollysoda.exposed/"className="underline">Molly Soda</a>, and <a href="https://softnet.works/"className="underline">Bhavik Singh</a>).
        </p>
 

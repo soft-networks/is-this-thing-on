@@ -28,7 +28,7 @@ const ClickGate: React.FunctionComponent = ({ children }) => {
           <p>at 3pm and 11pm ET, we will have a chat party. <br/>come back then for a busier thing or hang out whenever for a lot of nothing
           </p>
           <p>
-            THING.tube features a universal chat where you can talk across rooms, and each room has it's own chat. please be nice. if you're being a jerk or a troll, we will probably kick you out. also, some streams are NSFW, so view at your own discretion.
+            THING.tube features a universal chat where you can talk across rooms, and each room has its own chat. please be nice. if you&apos;re being a jerk or a troll, we will probably kick you out. also, some streams are NSFW, so view at your own discretion.
           </p>
         </div>
 
