@@ -150,9 +150,8 @@ export const resetMuxFirestoreRelationship = async (roomID: string) => {
   });
 }
 
-
 /**  */
-export function setupPresenceListener(allRoomNames: string[]) {
+export function setupPresenceListener() {
   const presenceRef = firestore.collection("presence");
 
   // Set up a listener for changes in the presence collection
@@ -163,7 +162,7 @@ export function setupPresenceListener(allRoomNames: string[]) {
       if (process.env.LOG_DEBUG) {
         console.log(`${change.doc.id} ${change.type} for room ${data.prev_room_id} -> ${data.room_id} at ${data.timestamp}`);
       }
-      
+
       if (change.type == "modified" && data.prev_room_id === data.room_id) {
         // The user did not change rooms, no need to recalculate anything.
         return rooms;
@@ -180,12 +179,12 @@ export function setupPresenceListener(allRoomNames: string[]) {
   
     const updatedRooms = [...updatedRoomsSet];
 
-    if (process.env.LOG_DEBUG) {
-      console.log(`  Updating ${updatedRooms.length} rooms: ${updatedRooms}`);
-    }
-
     if (updatedRooms.length == 0) {
       return;
+    }
+
+    if (process.env.LOG_DEBUG) {
+      console.log(`  Updating ${updatedRooms.length} rooms: ${updatedRooms}`);
     }
 
     const currentlyOnline = await Promise.all(updatedRooms.map(async (streamName) => {
@@ -207,7 +206,7 @@ export function setupPresenceListener(allRoomNames: string[]) {
   });
 }
 
-async function cleanupOldPresence(allRoomNames: string[]): Promise<NodeJS.Timeout> {
+async function cleanupOldPresence(): Promise<NodeJS.Timeout> {
   const presenceRef = firestore.collection("presence");
   const lastValidTimestamp = Date.now() - PRESENCE_LENGTH;
   let q = presenceRef.where("timestamp", "<=", lastValidTimestamp);
@@ -215,7 +214,7 @@ async function cleanupOldPresence(allRoomNames: string[]): Promise<NodeJS.Timeou
   querySnapshot.forEach((doc) => {
     doc.ref.delete();
   });
-  return setTimeout(() => cleanupOldPresence(allRoomNames), PRESENCE_CLEANUP_FREQUENCY);
+  return setTimeout(() => cleanupOldPresence(), PRESENCE_CLEANUP_FREQUENCY);
 }
 
 async function setTransaction(id: string, status: string) {
@@ -224,32 +223,12 @@ async function setTransaction(id: string, status: string) {
 
 export async function presenceProcessor() {
   let collectionRef = firestore.collection("rooms");
-  let currentListener: (() => void) | null = null;
-  let currentCleanup: Promise<NodeJS.Timeout> | null = null;
   
   // Initial setup
   let docs = await collectionRef.listDocuments();
   let docNames: string[] = ["home"];
   docs.forEach((d) => docNames.push(d.id));
   
-  currentListener = setupPresenceListener(docNames);
-  currentCleanup = cleanupOldPresence(docNames);
-
-  // Listen for changes to rooms collection
-  collectionRef.onSnapshot(async () => {
-    // Get updated room list
-    let updatedDocs = await collectionRef.listDocuments();
-    let updatedDocNames: string[] = ["home"]; 
-    updatedDocs.forEach((d) => updatedDocNames.push(d.id));
-
-    // Clean up existing listener before setting up new one
-    if (currentListener) {
-      currentListener();
-    }
-    if (currentCleanup) {
-      clearTimeout(await currentCleanup);
-    }
-    currentListener = setupPresenceListener(updatedDocNames);
-    currentCleanup = cleanupOldPresence(updatedDocNames);
-  });
+  setupPresenceListener();
+  cleanupOldPresence();
 }
