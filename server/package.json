@@ -10,7 +10,8 @@
     "prod": "npm run build && node build/server.js",
     "dev": "tsc -w & nodemon --watch build build/server.js",
     "deploy": "flyctl deploy",
-    "tunnel": "ssh -R istomux.lhr.rocks:80:localhost:4000 localhost.run"
+    "tunnel": "ssh -R istomux.lhr.rocks:80:localhost:4000 localhost.run",
+    "configure-recordings": "node bin/configureRecordingStorage.js"
   },
   "keywords": [],
   "author": "",
