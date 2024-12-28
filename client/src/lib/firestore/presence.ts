@@ -1,8 +1,8 @@
-import { doc, getDoc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
 
-import { logInfo } from "../logger";
 import { presenceCollection, presenceStatsDoc } from "./locations";
 
+// Make sure to update firestore-api.ts if you update this.
 const PRESENCE_LENGTH = 10 * 1000;
 
 export let activePresenceHeartbeat: NodeJS.Timeout | undefined;

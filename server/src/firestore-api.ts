@@ -184,6 +184,10 @@ export function setupPresenceListener(allRoomNames: string[]) {
       console.log(`  Updating ${updatedRooms.length} rooms: ${updatedRooms}`);
     }
 
+    if (updatedRooms.length == 0) {
+      return;
+    }
+
     const currentlyOnline = await Promise.all(updatedRooms.map(async (streamName) => {
       const lastValidTimestamp = Date.now() - PRESENCE_LENGTH;
       const qResult = await presenceRef.where("room_id", "==", streamName).where("timestamp", ">=", lastValidTimestamp).count().get();
@@ -194,12 +198,12 @@ export function setupPresenceListener(allRoomNames: string[]) {
     // Calculate the total number of people online across all rooms
     const lastValidTimestamp = Date.now() - PRESENCE_LENGTH;
     const totalOnline = (await presenceRef.where("timestamp", ">=", lastValidTimestamp).count().get()).data().count;
+    currentlyOnline.push({roomID: "home", numOnline: totalOnline});
 
     // Store the full presence data in a single document
-    await firestore.collection("stats").doc("presence").update({
-      ...Object.fromEntries(currentlyOnline.map(({roomID, numOnline}) => [roomID, numOnline])),
-      home: totalOnline
-    });
+    await firestore.collection("stats").doc("presence").update(
+      Object.fromEntries(currentlyOnline.map(({roomID, numOnline}) => [roomID, numOnline])),
+    );
   });
 }
 
