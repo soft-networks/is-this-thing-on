@@ -7,7 +7,7 @@
 //
 // WHY:
 // By default, Stream offers their own storage and CDN, which should theoretically store videos up to 1-2 weeks.
-// In practice, the CDN link expiration only lasts a day.
+// In practice, the CDN link expires after a day.
 //
 // NOTE:
 // Stream webhooks for call.recording_ready will have an invalid stream-io-cdn URL and must be manually
