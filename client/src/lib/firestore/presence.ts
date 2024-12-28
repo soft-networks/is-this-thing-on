@@ -1,19 +1,27 @@
-import { doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 
-import { presenceCollection, presenceStatsDoc } from "./locations";
 import { logInfo } from "../logger";
+import { presenceCollection, presenceStatsDoc } from "./locations";
 
 const PRESENCE_LENGTH = 10 * 1000;
 
 export let activePresenceHeartbeat: NodeJS.Timeout | undefined;
+export let currentRoomName: string | undefined;
+
 async function setPresenceDB(userID: string, roomName: string) {
   const newpresence = doc(presenceCollection(), userID);
   await setDoc(newpresence, {
+    prev_room_id: currentRoomName || "",
     room_id: roomName,
     timestamp: Date.now(),
   });
+
+  currentRoomName = roomName;
 }
-export async function setUserPresenceHeartbeat(userID: string, roomName: string) {
+export async function setUserPresenceHeartbeat(
+  userID: string,
+  roomName: string,
+) {
   //return;
   if (activePresenceHeartbeat) {
     clearTimeout(activePresenceHeartbeat);
@@ -25,9 +33,11 @@ export async function setUserPresenceHeartbeat(userID: string, roomName: string)
     PRESENCE_LENGTH,
   );
 }
-export async function syncPresence(onPresenceUpdate: (presenceStats: PresenceStats) => void){
+export async function syncPresence(
+  onPresenceUpdate: (presenceStats: PresenceStats) => void,
+) {
   return onSnapshot(presenceStatsDoc(), (snapshot) => {
-    const presenceStatsData = snapshot.data() as PresenceStats; 
+    const presenceStatsData = snapshot.data() as PresenceStats;
     if (presenceStatsData) {
       onPresenceUpdate(presenceStatsData);
     }

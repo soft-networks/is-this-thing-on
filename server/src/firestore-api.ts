@@ -3,9 +3,11 @@ import { logError, logInfo, logUpdate, logWarning } from './logger.js';
 
 import { firestore } from './firebase-init.js';
 
-const PRESENCE_LENGTH =  5 * 1000;
+// Presence length should be a little larger than the client-side length in client/src/lib/firestore/presence.ts.
+// This prevents us from removing and then re-adding a presence if the heartbeat is slightly delayed.
+//
+const PRESENCE_LENGTH =  12 * 1000;
 const PRESENCE_CLEANUP_FREQUENCY = 10 * 1000;
-
 
 //Helpers
 function roomDoc(roomID: string) {
@@ -155,20 +157,46 @@ export function setupPresenceListener(allRoomNames: string[]) {
 
   // Set up a listener for changes in the presence collection
   return presenceRef.onSnapshot(async (snapshot) => {
-    const currentlyOnline = await Promise.all(allRoomNames.map(async (streamName) => {
+    const changes = snapshot.docChanges().map((change) => {
+      const d = {user: change.doc.id, type: change.type, data: change.doc.data()};
+      console.log(`${d.user} ${d.type} for room ${d.data.prev_room_id} -> ${d.data.room_id} at ${d.data.timestamp}`);
+      return change.doc.data().room_id;
+    });
+    
+    const updatedRoomsSet = snapshot.docChanges().reduce((rooms: Set<string>, change) => {
+      const data = change.doc.data();
+      
+      if (change.type == "modified" && data.prev_room_id === data.room_id) {
+        // The user did not change rooms, no need to recalculate anything.
+        return rooms;
+      }
+
+      if (data.prev_room_id && data.prev_room_id !== data.room_id) {
+        rooms.add(data.prev_room_id);
+      }
+
+      rooms.add(data.room_id);
+      return rooms;
+    }, new Set<string>())
+  
+    const updatedRooms = [...updatedRoomsSet];
+    console.log(`  Updating ${updatedRooms.length} rooms: ${updatedRooms}`);
+
+    const currentlyOnline = await Promise.all(updatedRooms.map(async (streamName) => {
       const lastValidTimestamp = Date.now() - PRESENCE_LENGTH;
-      let q = presenceRef.where("room_id", "==", streamName).where("timestamp", ">=", lastValidTimestamp);
-      const querySnapshot = await q.get();
-      let numResults = querySnapshot.size;
+      const qResult = await presenceRef.where("room_id", "==", streamName).where("timestamp", ">=", lastValidTimestamp).count().get();
+      const numResults = qResult.data().count;
       return {roomID: streamName, numOnline: numResults}
     }));
+    
     // Calculate the total number of people online across all rooms
-    const totalOnline = currentlyOnline.reduce((sum, { numOnline }) => sum + numOnline, 0);
-    currentlyOnline.push({roomID: "home", numOnline: totalOnline});
+    const lastValidTimestamp = Date.now() - PRESENCE_LENGTH;
+    const totalOnline = (await presenceRef.where("timestamp", ">=", lastValidTimestamp).count().get()).data().count;
 
     // Store the full presence data in a single document
-    await firestore.collection("stats").doc("presence").set({ 
-      ...Object.fromEntries(currentlyOnline.map(({roomID, numOnline}) => [roomID, numOnline]))
+    await firestore.collection("stats").doc("presence").update({
+      ...Object.fromEntries(currentlyOnline.map(({roomID, numOnline}) => [roomID, numOnline])),
+      home: totalOnline
     });
 
     // Update a separate document in Firestore with the total online count
