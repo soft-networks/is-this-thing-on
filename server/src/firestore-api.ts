@@ -157,14 +157,12 @@ export function setupPresenceListener(allRoomNames: string[]) {
 
   // Set up a listener for changes in the presence collection
   return presenceRef.onSnapshot(async (snapshot) => {
-    const changes = snapshot.docChanges().map((change) => {
-      const d = {user: change.doc.id, type: change.type, data: change.doc.data()};
-      console.log(`${d.user} ${d.type} for room ${d.data.prev_room_id} -> ${d.data.room_id} at ${d.data.timestamp}`);
-      return change.doc.data().room_id;
-    });
-    
     const updatedRoomsSet = snapshot.docChanges().reduce((rooms: Set<string>, change) => {
       const data = change.doc.data();
+
+      if (process.env.LOG_DEBUG) {
+        console.log(`${change.doc.id} ${change.type} for room ${data.prev_room_id} -> ${data.room_id} at ${data.timestamp}`);
+      }
       
       if (change.type == "modified" && data.prev_room_id === data.room_id) {
         // The user did not change rooms, no need to recalculate anything.
@@ -172,6 +170,7 @@ export function setupPresenceListener(allRoomNames: string[]) {
       }
 
       if (data.prev_room_id && data.prev_room_id !== data.room_id) {
+        // The user changed rooms, make sure to update both the new and previous rooms.
         rooms.add(data.prev_room_id);
       }
 
@@ -180,7 +179,10 @@ export function setupPresenceListener(allRoomNames: string[]) {
     }, new Set<string>())
   
     const updatedRooms = [...updatedRoomsSet];
-    console.log(`  Updating ${updatedRooms.length} rooms: ${updatedRooms}`);
+
+    if (process.env.LOG_DEBUG) {
+      console.log(`  Updating ${updatedRooms.length} rooms: ${updatedRooms}`);
+    }
 
     const currentlyOnline = await Promise.all(updatedRooms.map(async (streamName) => {
       const lastValidTimestamp = Date.now() - PRESENCE_LENGTH;
@@ -198,12 +200,6 @@ export function setupPresenceListener(allRoomNames: string[]) {
       ...Object.fromEntries(currentlyOnline.map(({roomID, numOnline}) => [roomID, numOnline])),
       home: totalOnline
     });
-
-    // Update a separate document in Firestore with the total online count
-    // await Promise.all(currentlyOnline.map(({roomID, numOnline}) => 
-    //   roomID !== "home" &&roomDoc(roomID).set({num_online: numOnline}, {merge: true})
-    // ));
-    // await firestore.collection("stats").doc("total_online").set({ total: totalOnline }, { merge: true });
   });
 }
 
