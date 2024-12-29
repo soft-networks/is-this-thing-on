@@ -16,9 +16,13 @@ const DefaultRoomMobileContent = ({
   chatStyle,
   roomInfo,
 }: RoomViewProps & { roomInfo: any }) => (
-  <div className="fullBleed stack">
-    {/* Comment out the line below to remove the chat */}
-    <Chat key={`${roomInfo.roomID}-chat`} style={chatStyle} />
+  <div className="fullBleed stack noOverflow">
+    <div style={{ height: "40%", width: "100%", position: "relative" }}>
+      <VideoPlayer/>
+    </div>
+    <div className="flex-1 relative">
+      <Chat key={`${roomInfo.roomID}-chat`} style={chatStyle} />
+    </div>
   </div>
 );
 

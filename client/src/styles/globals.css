@@ -1123,8 +1123,7 @@ em {
   .quarterWidth {
     max-inline-size: 100%;
   }
-  .hideOnMobile,
-  video {
+  .hideOnMobile {
     display: none;
   }
 
