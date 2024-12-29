@@ -189,6 +189,7 @@ export function setupPresenceListener() {
 
     const currentlyOnline = await Promise.all(updatedRooms.filter((r) => (r)).map(async (streamName) => {
       const lastValidTimestamp = Date.now() - PRESENCE_LENGTH;
+      if (!streamName) return { roomID: streamName, numOnline: 0 }; // Add this check
       const qResult = await presenceRef.where("room_id", "==", streamName).where("timestamp", ">=", lastValidTimestamp).count().get();
       const numResults = qResult.data().count;
       return {roomID: streamName, numOnline: numResults}
