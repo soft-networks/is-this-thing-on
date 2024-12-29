@@ -9,6 +9,7 @@ import useMediaQuery from "../../stores/useMediaQuery";
 import VideoPreview from "../video/videoPreview";
 import ReactPlayer from "react-player";
 import { CoffeePreview } from "../artistRooms/coffee";
+import classNames from "classnames";
 
 const DomRing = () => {
   const ring = useGlobalRoomsInfoStore(useCallback((s) => s.rooms, []));
@@ -96,7 +97,7 @@ const OnlineElement: React.FC<{
 
   return (
     <div
-      className="homepageVideo antiRotate largeElementOnEllipse relative clickable homepageLabelHoverTrigger"
+      className={classNames("homepageVideo antiRotate largeElementOnEllipse relative clickable homepageLabelHoverTrigger", {mars: isHovering})}
       style={
         {
           "--animStart": offsetN + "%",
