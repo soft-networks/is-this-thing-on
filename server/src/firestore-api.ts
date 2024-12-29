@@ -3,9 +3,11 @@ import { logError, logInfo, logUpdate, logWarning } from './logger.js';
 
 import { firestore } from './firebase-init.js';
 
-const PRESENCE_LENGTH =  5 * 1000;
+// Presence length should be a little larger than the client-side length in client/src/lib/firestore/presence.ts.
+// This prevents us from removing and then re-adding a presence if the heartbeat is slightly delayed.
+//
+const PRESENCE_LENGTH =  12 * 1000;
 const PRESENCE_CLEANUP_FREQUENCY = 10 * 1000;
-
 
 //Helpers
 function roomDoc(roomID: string) {
@@ -148,38 +150,63 @@ export const resetMuxFirestoreRelationship = async (roomID: string) => {
   });
 }
 
-
 /**  */
-export function setupPresenceListener(allRoomNames: string[]) {
+export function setupPresenceListener() {
   const presenceRef = firestore.collection("presence");
 
   // Set up a listener for changes in the presence collection
   return presenceRef.onSnapshot(async (snapshot) => {
-    const currentlyOnline = await Promise.all(allRoomNames.map(async (streamName) => {
+    const updatedRoomsSet = snapshot.docChanges().reduce((rooms: Set<string>, change) => {
+      const data = change.doc.data();
+
+      if (process.env.LOG_DEBUG) {
+        console.log(`${change.doc.id} ${change.type} for room ${data.prev_room_id} -> ${data.room_id} at ${data.timestamp}`);
+      }
+
+      if (change.type == "modified" && data.prev_room_id === data.room_id) {
+        // The user did not change rooms, no need to recalculate anything.
+        return rooms;
+      }
+
+      if (data.prev_room_id && data.prev_room_id !== data.room_id) {
+        // The user changed rooms, make sure to update both the new and previous rooms.
+        rooms.add(data.prev_room_id);
+      }
+
+      rooms.add(data.room_id);
+      return rooms;
+    }, new Set<string>())
+  
+    const updatedRooms = [...updatedRoomsSet];
+
+    if (updatedRooms.length == 0) {
+      return;
+    }
+
+    if (process.env.LOG_DEBUG) {
+      console.log(`  Updating ${updatedRooms.length} rooms: ${updatedRooms}`);
+    }
+
+    const currentlyOnline = await Promise.all(updatedRooms.map(async (streamName) => {
       const lastValidTimestamp = Date.now() - PRESENCE_LENGTH;
-      let q = presenceRef.where("room_id", "==", streamName).where("timestamp", ">=", lastValidTimestamp);
-      const querySnapshot = await q.get();
-      let numResults = querySnapshot.size;
+      const qResult = await presenceRef.where("room_id", "==", streamName).where("timestamp", ">=", lastValidTimestamp).count().get();
+      const numResults = qResult.data().count;
       return {roomID: streamName, numOnline: numResults}
     }));
+    
     // Calculate the total number of people online across all rooms
-    const totalOnline = currentlyOnline.reduce((sum, { numOnline }) => sum + numOnline, 0);
+    const lastValidTimestamp = Date.now() - PRESENCE_LENGTH;
+    const totalOnline = (await presenceRef.where("timestamp", ">=", lastValidTimestamp).count().get()).data().count;
     currentlyOnline.push({roomID: "home", numOnline: totalOnline});
 
     // Store the full presence data in a single document
-    await firestore.collection("stats").doc("presence").set({ 
-      ...Object.fromEntries(currentlyOnline.map(({roomID, numOnline}) => [roomID, numOnline]))
-    });
-
-    // Update a separate document in Firestore with the total online count
-    // await Promise.all(currentlyOnline.map(({roomID, numOnline}) => 
-    //   roomID !== "home" &&roomDoc(roomID).set({num_online: numOnline}, {merge: true})
-    // ));
-    // await firestore.collection("stats").doc("total_online").set({ total: totalOnline }, { merge: true });
+    await firestore.collection("stats").doc("presence").update(
+      Object.fromEntries(currentlyOnline.map(({roomID, numOnline}) => [roomID, numOnline])),
+    );
   });
 }
 
-async function cleanupOldPresence(allRoomNames: string[]): Promise<NodeJS.Timeout> {
+async function cleanupOldPresence(): Promise<NodeJS.Timeout> {
   const presenceRef = firestore.collection("presence");
   const lastValidTimestamp = Date.now() - PRESENCE_LENGTH;
   let q = presenceRef.where("timestamp", "<=", lastValidTimestamp);
@@ -187,7 +214,7 @@ async function cleanupOldPresence(allRoomNames: string[]): Promise<NodeJS.Timeou
   querySnapshot.forEach((doc) => {
     doc.ref.delete();
   });
-  return setTimeout(() => cleanupOldPresence(allRoomNames), PRESENCE_CLEANUP_FREQUENCY);
+  return setTimeout(() => cleanupOldPresence(), PRESENCE_CLEANUP_FREQUENCY);
 }
 
 async function setTransaction(id: string, status: string) {
@@ -196,32 +223,12 @@ async function setTransaction(id: string, status: string) {
 
 export async function presenceProcessor() {
   let collectionRef = firestore.collection("rooms");
-  let currentListener: (() => void) | null = null;
-  let currentCleanup: Promise<NodeJS.Timeout> | null = null;
   
   // Initial setup
   let docs = await collectionRef.listDocuments();
   let docNames: string[] = ["home"];
   docs.forEach((d) => docNames.push(d.id));
   
-  currentListener = setupPresenceListener(docNames);
-  currentCleanup = cleanupOldPresence(docNames);
-
-  // Listen for changes to rooms collection
-  collectionRef.onSnapshot(async () => {
-    // Get updated room list
-    let updatedDocs = await collectionRef.listDocuments();
-    let updatedDocNames: string[] = ["home"]; 
-    updatedDocs.forEach((d) => updatedDocNames.push(d.id));
-
-    // Clean up existing listener before setting up new one
-    if (currentListener) {
-      currentListener();
-    }
-    if (currentCleanup) {
-      clearTimeout(await currentCleanup);
-    }
-    currentListener = setupPresenceListener(updatedDocNames);
-    currentCleanup = cleanupOldPresence(updatedDocNames);
-  });
+  setupPresenceListener();
+  cleanupOldPresence();
 }
