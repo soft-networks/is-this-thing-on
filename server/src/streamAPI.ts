@@ -107,7 +107,7 @@ export const streamUpdateWasReceived: RequestHandler = async (req, res) => {
       const recording = hook.call_recording;
       if (recording) {
         
-        const newRecordingURL = recording.url.replace("ohio.stream-io-cdn.com/", "storage.googleapis.com/is-this-thing-on-recordings//");
+        const newRecordingURL = recording.url.replace(/(?:ohio|us-east)\.stream-io-cdn\.com\//, "storage.googleapis.com/is-this-thing-on-recordings//");
         const ref = await writeRecordingToDB(roomID, newRecordingURL, recording.start_time, recording.end_time);
         logUpdate(`Wrote recording to DB for room ${roomID} with ref ${ref.id}`);
       } else {
