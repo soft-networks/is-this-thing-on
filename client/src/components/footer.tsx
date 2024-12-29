@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
       <div
         className="uiLayer horizontal-stack:s-2 padded:s-2 align-end"
       >
-        <AutoScanRing />
+        {!isMobile && <AutoScanRing />}
         <HomeButton />
       </div>
     </footer>
