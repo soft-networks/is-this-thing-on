@@ -48,32 +48,42 @@ const NodeElement: React.FC<{
     router.push(roomIDToHREF(roomInfo.roomID));
   }, [roomInfo.roomID, router]);
 
-  if (roomIsActive(roomInfo)) {
-    if (isMobile) {
-      return (
-        <OnlineElementSimple
-          roomInfo={roomInfo}
-          offsetN={offsetN}
-          onClick={onClick}
-        />
-      );
-    } else {
-      return (
-        <OnlineElement
-          roomInfo={roomInfo}
-          offsetN={offsetN}
-          onClick={onClick}
-        />
-      );
-    }
-  } else if (roomIsArchive(roomInfo)) {
-    return (
-      <ArchiveElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />
-    );
+  if (isMobile) {
+    return <NodeElementMobile roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />;
   } else {
-    return (
-      <OfflineElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />
-    );
+    return <NodeElementDesktop roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />;
+  }
+};
+
+const NodeElementDesktop: React.FC<{
+  roomInfo: RoomSummary;
+  offsetN: number;
+  onClick: () => void;
+}> = ({ roomInfo, offsetN, onClick }) => {
+  if (roomIsActive(roomInfo)) {
+    return <OnlineElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />;
+  } else if (roomIsArchive(roomInfo)) {
+    return <ArchiveElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />;
+  } else {
+    return <OfflineElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />;
+  }
+};
+
+const NodeElementMobile: React.FC<{
+  roomInfo: RoomSummary;
+  offsetN: number;
+  onClick: () => void;
+}> = ({ roomInfo, offsetN, onClick }) => {
+
+  if (roomIsActive(roomInfo)) {
+    return <OnlineElementSimple roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />;
+  } else if (roomIsArchive(roomInfo)) {
+    return <ArchiveElementSimple roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />;
+  } else {
+    return <div className="smallElementOnEllipse border videoLayer" style={{
+      backgroundColor: roomInfo.roomColor, width: "12px", height: "12px", borderRadius: "50%", "--animStart": offsetN + "%",
+      "--animEnd": 100 + offsetN + "%",
+    } as React.CSSProperties}></div>
   }
 };
 
@@ -176,7 +186,7 @@ const OnlineElementSimple: React.FC<{
 }> = ({ roomInfo, offsetN, onClick }) => {
   return (
     <div
-      className="antiRotate homepageLabel smallElementOnEllipse padded:s-2 border whiteFill cursor:pointer"
+      className="antiRotate homepageLabel largeElementOnEllipse padded:s-2 border whiteFill cursor:pointer relative stickerLayer"
       style={
         {
           "--animStart": offsetN + "%",
@@ -191,6 +201,30 @@ const OnlineElementSimple: React.FC<{
     </div>
   );
 };
+
+const ArchiveElementSimple: React.FC<{
+  roomInfo: RoomSummary;
+  offsetN: number;
+  onClick: () => void;
+}> = ({ roomInfo, offsetN, onClick }) => {
+  return (
+    <div
+      className="antiRotate homepageLabel largeElementOnEllipse padded:s-2 border whiteFill cursor:pointer relative stickerLayer homepageLabelInverse"
+      style={
+        {
+          "--animStart": offsetN + "%",
+          "--animEnd": 100 + offsetN + "%",
+          backgroundColor: roomInfo.roomColor,
+          "--bg": roomInfo.roomColor,
+        } as React.CSSProperties
+      }
+      onClick={onClick}
+    >
+      {roomInfo.roomName} is looping
+    </div>
+  );
+};
+
 
 const OfflineElement: React.FC<{
   roomInfo: RoomSummary;

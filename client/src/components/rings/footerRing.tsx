@@ -15,11 +15,17 @@ export const FooterRing: React.FC<{ isHome: boolean }> = ({ isHome }) => {
   const currentRoom = useRoomStore(useCallback((s) => s.roomInfo, []));
 
   const { push } = useRouter();
-  const rooms = useGlobalRoomsInfoStore.getState().rooms;
-  const keys = Object.keys(rooms);
-  const currentIndex = roomID ? keys.indexOf(roomID) : -1;
+
+  function getCurrentState() {
+    const rooms = useGlobalRoomsInfoStore.getState().rooms;
+    const keys = Object.keys(rooms);
+    const currentIndex = roomID ? keys.indexOf(roomID) : -1;
+    return { keys, currentIndex };
+  }
+ 
 
   const handlePrevClick = () => {
+    const { keys, currentIndex } = getCurrentState();
     if (isHome) {
       push(roomIDToHREF(keys[keys.length - 1]));
       return;
@@ -32,6 +38,7 @@ export const FooterRing: React.FC<{ isHome: boolean }> = ({ isHome }) => {
   };
 
   const handleNextClick = () => {
+    const { keys, currentIndex } = getCurrentState();
     if (isHome) {
       push(roomIDToHREF(keys[0]));
       return;

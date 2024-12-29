@@ -981,7 +981,8 @@ em {
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
+
   ::root {
     --textWidth: 60vw;
   }
@@ -1122,14 +1123,27 @@ em {
   .quarterWidth {
     max-inline-size: 100%;
   }
-  .hideOnMobile,
-  video {
+  .hideOnMobile {
     display: none;
   }
 
   .homepageLabel {
-    width: 80px;
-    max-height: 80px;
+    max-width: 72px;
+    height: auto;
+    font-size: 12px;
+    max-height: 72px;
+  }
+  .homepageLabelFooter {
+    width: auto;
+    max-width: 75vw;
+    max-height: 28px;
+    font-size: 16px;
+  }
+  .smallElementOnEllipse {
+    offset-path: ellipse(20% 20% at center);
+    offset-rotate: 0deg;
+    vertical-align: middle;
+    animation: move 120s infinite linear;
   }
 
   .chat::before {
