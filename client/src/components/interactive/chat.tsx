@@ -49,6 +49,11 @@ const getRoomNameForChat = (roomName: string) => {
 };
 
 export const Chat: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
+}) => {
+  return (<div className="inline-block highestLayer" style={{position: "absolute", bottom: "var(--s-1)", left: "var(--s-1)"}}><div className="contrastFill border padded:s-2 border-radius highestLayer">chat is gone...for now!</div></div>)
+}
+
+export const ChatInternal: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
   className,
   style = {},
   whiteText,
