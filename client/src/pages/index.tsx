@@ -64,8 +64,8 @@ const IndexMobile = () => {
 
 const CenterText = () => (
   <>
-    NO-THING <br />
-    dec 29 for 24h
+    NO-THING ended.<br />
+    enjoy the archive
   </>
 )
 
