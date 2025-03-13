@@ -58,6 +58,24 @@ const StreamGate: React.FunctionComponent<{
         return;
       }
       const myCall = myClient.call("livestream", streamPlaybackID);
+
+      if (useAdmin) {
+        try {
+          // On platforms that support it, vp9 should noticeably improve video performance and quality.
+          // https://getstream.io/blog/vp9-enhanced/
+          //
+          // Note that the client is smart enough to know which browsers are better off ignoring the preference and _not_ using vp9:
+          // https://github.com/GetStream/stream-video-js/pull/1434/files#diff-540455c9dc2f7f24d930eede0cd3689beb1fcd804d566c6e422a13b4c5affb30R103-R111
+          //
+          myCall.updatePublishOptions({
+            preferredCodec: "vp9",
+            forceSingleCodec: true,
+          });
+        } catch (e) {
+          logError("Tried and failed to update preferred codec to vp9: " + e);
+        }
+      }
+
       myCall
         .get()
         .then(() => {
