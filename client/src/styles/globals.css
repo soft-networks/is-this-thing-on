@@ -290,6 +290,9 @@ p {
 .noOverflowX {
   overflow: hidden;
 }
+.noOverflowY {
+  overflow: hidden;
+}
 
 .overflowScroll {
   overflow: scroll;
@@ -396,6 +399,9 @@ p {
 }
 .videoLayer {
   z-index: 0;
+}
+.videoInteractiveLayer {
+  z-index: 1;
 }
 .stickerLayer {
   z-index: 10;
@@ -572,6 +578,10 @@ pre {
 .border-thin {
   border: 1px solid var(--black);
 }
+.border-top {
+  border-top: 1px solid var(--black);
+}
+
 
 .border-bottom {
   border-bottom: 1px solid var(--black);
@@ -671,6 +681,7 @@ a:hover,
   opacity: 1;
   scale: 1.4;
 }
+
 .opacity\:hover {
   opacity: 0.3;
 }
@@ -684,6 +695,9 @@ a:hover,
 }
 .scale\:hover:hover {
   scale: 1.2;
+}
+.mobileAdder .scale\:hover:hover {
+  scale: 1 !important;
 }
 
 .whiteFill {
@@ -725,6 +739,11 @@ a:hover,
   color: lch(from var(--roomColor) calc((49.44 - l) * infinity) 0 0);
 }
 
+.redFill {
+  background: red;
+  box-shadow: 0 1px 0 red;
+}
+
 .greenFill,
 .greenFill\:hover:hover {
   background: var(--contrast);
@@ -740,6 +759,22 @@ a:hover,
 .skrimFill {
   background: rgba(0, 0, 0, 0.5);
 }
+
+.animateOutAndAway {
+  --offset: 110%;
+  top: var(--offset);
+  animation: outAndAway 20s linear forwards;
+}
+
+@keyframes outAndAway {
+  0% {
+    top: var(--offset);
+  }
+  100% {
+    top: calc(var(--offset) * -1);
+  }
+}
+
 
 .fadeContrast {
   --fadeFrom: var(--contrast);
@@ -776,6 +811,18 @@ a:hover,
 .videoAspect {
   width: 100%;
   height: 100%;
+}
+
+.sixteenByNine {
+  width: 100vw;
+  height: 56.25vw;
+  max-height: 56.25vw;
+}
+
+.fourByThree {
+  width: 100vw;
+  height: 75vw;
+  max-height: 75vw;
 }
 
 .streamPreviewAspectElement,
@@ -1029,11 +1076,12 @@ em {
 }
 
 #rotatingEllipseContainer {
-  width: 100%;
-  height: 100%;
+  --shrinkSize: 25%;
+  width: calc(100% - var(--shrinkSize));
+  height: calc(100% - var(--shrinkSize));
   position: absolute;
-  top: 0;
-  left: 0;
+  top: calc(var(--shrinkSize) / 2);
+  left: calc(var(--shrinkSize) / 2);
   transform: rotate(-20deg);
 }
 .antiRotate {
@@ -1061,7 +1109,7 @@ em {
 }
 
 .homepageVideo {
-  --width: 250px;
+  --width: 300px;
   width: var(--width);
   height: calc(var(--width) * 9 / 16); /* 16:9 aspect ratio */
 }

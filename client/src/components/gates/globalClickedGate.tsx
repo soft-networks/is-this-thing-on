@@ -23,8 +23,8 @@ const ClickGate: React.FunctionComponent = ({ children }) => {
           WELCOME TO THING<br />
         </div>
         <div className="h3 stack">
+          <p>THING is an artist powered live streaming network.</p>
           <p>Our next performance, THING+YOU is coming to the Museum of the Moving Image (MoMI) April 12th.</p>
-          <p>In the meantime enjoy an archive of NO-THING, a 24-hour performance that took place this past Dec 29th with more than 30+ streamers.</p>
         </div>
         <div className="h1">
           <em>CLICK 2 ENTER</em>

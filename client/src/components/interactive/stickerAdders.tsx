@@ -13,6 +13,7 @@ import {
 import { logError } from "../../lib/logger";
 import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
 import { StickerImage } from "./stickerRenderHelpers";
+import useStickerCDNStore from "../../stores/stickerStore";
 
 export interface StickerAdderProps {
   addSticker: (pos: Pos, cdnID: string, scale?: number, text?: string) => void;
@@ -258,7 +259,7 @@ const DefaultChooseStickerType: React.FC<{
   typeSelected: (id?: string) => void;
   style?: React.CSSProperties;
   className?: string;
-}> = ({ cdn, typeSelected, style, className }) => {
+}> = ({ cdn, typeSelected, style, className  }) => {
   return (
     <>
       <div
@@ -267,7 +268,7 @@ const DefaultChooseStickerType: React.FC<{
         }
       >
         <div
-          className="contrastFill border contrastFill:hover padded:s-2 clickable"
+          className="contrastFill border contrastFill:hover padded:s-2 clickable noSelect"
           style={{
             position: "absolute",
             top: "calc(-1 * var(--s1))",
@@ -297,3 +298,4 @@ const DefaultChooseStickerType: React.FC<{
     </>
   );
 };
+

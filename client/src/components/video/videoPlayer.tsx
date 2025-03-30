@@ -4,6 +4,7 @@ import ReactPlayer from "react-player";
 import StreamPlayer from "./streamPlayer";
 import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
 import { useCallback, useEffect, useState } from "react";
+import { useMuseumMode } from "../../stores/useMuseumMode";
 
 
 interface VideoPlayerProps {
@@ -22,9 +23,6 @@ const VideoPlayer: React.FunctionComponent<VideoPlayerProps> = ({
     useCallback((s) => s.roomInfo?.streamStatus, []),
   );
   const hideVideo = useGlobalAdminStore(useCallback((s) => s.hideVideo, []));
-
-
-
   return (
     <>
       {roomIsArchive(streamStatus) && <ArchiveVideoPlayer hideMuteButton={hideMuteButton} muteOverride={muteOverride} />}
@@ -44,6 +42,7 @@ const ArchiveVideoPlayer: React.FunctionComponent<{ hideMuteButton?: boolean, mu
   const archiveURL = useRoomStore(
     useCallback((s) => s.roomInfo?.archiveURL, []),
   );
+
 
   const [mute, setMuted] = useState(false);
 

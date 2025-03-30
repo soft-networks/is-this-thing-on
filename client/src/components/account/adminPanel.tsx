@@ -1,4 +1,4 @@
-import { createRef, useCallback, useState } from "react";
+import { createRef, useCallback, useEffect, useState } from "react";
 
 import AdminStreamPanel from "./adminStreamPanel";
 import Draggable from "react-draggable";
@@ -23,11 +23,12 @@ const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
 }) => {
   let panelRef = createRef<HTMLDivElement>();
   const roomID = useRoomStore(useCallback((s) => s.roomInfo?.roomID, []));
+  const [closePanel, setClosePanel] = useState(false);
 
-  return (
+  return closePanel ? <div className="lightFill mars" style={{ position: "fixed", height: "12px", width: "12px", bottom: "2px", right: "2px" }} onClick={() => setClosePanel(false)}></div> :
     <Draggable handle=".handle" nodeRef={panelRef}>
       <div
-        className="stack:s-2 lightFill relative border uiLayerF minTextWidthMedium mars"
+        className="stack:noGap lightFill relative border uiLayer minTextWidthMedium mars"
         style={{ position: "fixed", top: "var(--s3)", right: "var(--s1)", maxHeight: "calc(70vh)", overflowY: "auto" }}
         ref={panelRef}
       >
@@ -45,6 +46,9 @@ const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
         </div>
 
         <div className="padded:s-1 stack:s1 monospace">
+          <div onClick={() => setClosePanel(true)} className="align-end whiteFill border padded:s-2 greenFill:hover cursor:pointer">
+            close admin panel
+          </div>
           {roomID && <StickerAdminPanel roomID={roomID} />}
           <hr />
           {roomID && <AdminStreamPanel rtmpsDetails={rtmpsDetails} />}
@@ -53,7 +57,6 @@ const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
         </div>
       </div>
     </Draggable>
-  );
 };
 
 

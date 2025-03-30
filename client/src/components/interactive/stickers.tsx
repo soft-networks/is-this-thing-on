@@ -41,9 +41,6 @@ const Stickers: React.FC<StickersProps> = ({
     useCallback((state) => state.stickerCDN, []),
   );
   const adminForIDs = useGlobalAdminStore(useCallback((s) => s.adminFor, []));
-  const displayName = useGlobalUserStore(
-    useCallback((state) => state.displayName, []),
-  );
 
   //Local
   const [stickerStyle, setStickerStyle] = useState<React.CSSProperties>();
@@ -77,12 +74,12 @@ const Stickers: React.FC<StickersProps> = ({
   };
   return roomID ? (
     <div
-      className={"fullBleed absoluteOrigin videoAspectContainer"}
+      className={"fullBleed absoluteOrigin videoAspectContainer stickerLayer"}
       style={stickerStyle}
       id="sticker-overlay"
       ref={ref}
     >
-      <div className="videoAspectElement">
+      <div className="fullBleed">
         {stickerCDN && (
           <>
             <StickerChooser
