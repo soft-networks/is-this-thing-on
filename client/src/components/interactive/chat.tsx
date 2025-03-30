@@ -3,7 +3,7 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import { ChatListRegular } from "./chat/chatListRegular";
+import { ChatListRegular } from "./chat/ChatListRegular";
 import { useMuseumMode } from "../../stores/useMuseumMode";
 import { ChatListMuseum } from "./chat/ChatListMuseum";
 
