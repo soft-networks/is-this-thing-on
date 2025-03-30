@@ -64,8 +64,8 @@ const IndexMobile = () => {
 
 const CenterText = () => (
   <>
-    NO-THING ended.<br />
-    enjoy the archive
+    is this <br/>
+    thing on?
   </>
 )
 
