@@ -572,6 +572,10 @@ pre {
 .border-thin {
   border: 1px solid var(--black);
 }
+.border-top {
+  border-top: 1px solid var(--black);
+}
+
 
 .border-bottom {
   border-bottom: 1px solid var(--black);
@@ -741,6 +745,22 @@ a:hover,
   background: rgba(0, 0, 0, 0.5);
 }
 
+.animateOutAndAway {
+  --offset: 110%;
+  top: var(--offset);
+  animation: outAndAway 20s linear forwards;
+}
+
+@keyframes outAndAway {
+  0% {
+    top: var(--offset);
+  }
+  100% {
+    top: calc(var(--offset) * -1);
+  }
+}
+
+
 .fadeContrast {
   --fadeFrom: var(--contrast);
   --fadeTo: var(--light);
@@ -776,6 +796,19 @@ a:hover,
 .videoAspect {
   width: 100%;
   height: 100%;
+}
+
+.sixteenByNine {
+  width: 100vw;
+  height: 56.25vw;
+  max-height: 56.25vw;
+}
+
+.fourByThree {
+  width: 100vw;
+  height: 75vw;
+  max-height: 75vw;
+  box-shadow: 0 1px 0 red;
 }
 
 .streamPreviewAspectElement,

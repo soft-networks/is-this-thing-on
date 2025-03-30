@@ -18,6 +18,7 @@ export async function syncChat(
     React.SetStateAction<{ [key: string]: ChatMessage }>
   >,
   roomID: string,
+  timestampFilter?: number,
 ) {
   const chats = chatCollection();
 
@@ -25,8 +26,12 @@ export async function syncChat(
     chats,
     orderBy("timestamp", "desc"),
     where("roomID", "==", roomID),
-    limit(100),
+    limit(100)
   );
+
+  if (timestampFilter) {
+    q = query(q, where("timestamp", ">=", timestampFilter));
+  }
 
   const unsub = onSnapshot(q, (docs) => {
     trace("sync-chat", () => {
