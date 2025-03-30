@@ -35,13 +35,13 @@ const Layout: React.FunctionComponent<{
   return (
     <ClickGate>
       <div
-        className={classnames("fullScreen lightFill relative noOverflow")}
+        className={classnames("fullScreen lightFill relative noOverflow", { "redFill": isMusuemMode })}
         key={`layout-${isMobile}-${isMusuemMode}`}
       >
         <div className={classnames({
           "fullScreen relative": !isMusuemMode,
           "stack:noGap": isMobile || isMusuemMode,
-          "fourByThree": isMusuemMode
+          "fourByThree lightFill": isMusuemMode
         })}>
           <Head>
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />

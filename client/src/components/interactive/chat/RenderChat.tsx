@@ -21,7 +21,8 @@ export const RenderChat: React.FC<{
   lastRecalculationUpdate: number;
   alwaysShow?: boolean;
   hideControls?: boolean; 
-}> = ({ chat, id, lastRecalculationUpdate, alwaysShow, hideControls }) => {
+  forceEnableDelete?: boolean;
+}> = ({ chat, id, lastRecalculationUpdate, alwaysShow, hideControls, forceEnableDelete }) => {
 
   const [myBlurPercentage, setMyBlurPercentage] = useState<number>(0);
   //Create a ref to reference the dom
@@ -64,7 +65,7 @@ export const RenderChat: React.FC<{
         >
           {chat.username || "unknown"}
         </div>
-        {isAdmin && !hideControls && <div className="caption whiteFill greenFill:hover border cursor:pointer" style={{ padding: "4px" }} onClick={() => deleteChatMessageDB(id)}>
+        { (forceEnableDelete || (isAdmin && !hideControls)) && <div className="caption whiteFill greenFill:hover border cursor:pointer" style={{ padding: "4px" }} onClick={() => deleteChatMessageDB(id)}>
           delete
         </div>}
       </div>

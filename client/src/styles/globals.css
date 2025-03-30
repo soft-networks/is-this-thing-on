@@ -739,6 +739,11 @@ a:hover,
   color: lch(from var(--roomColor) calc((49.44 - l) * infinity) 0 0);
 }
 
+.redFill {
+  background: red;
+  box-shadow: 0 1px 0 red;
+}
+
 .greenFill,
 .greenFill\:hover:hover {
   background: var(--contrast);
@@ -818,7 +823,6 @@ a:hover,
   width: 100vw;
   height: 75vw;
   max-height: 75vw;
-  box-shadow: 0 1px 0 red;
 }
 
 .streamPreviewAspectElement,

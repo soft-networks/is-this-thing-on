@@ -22,7 +22,11 @@ export async function syncChat(
 ) {
   const chats = chatCollection();
 
-  let q = query(
+  let q = roomID === "admin" ? query(
+    chats,
+    orderBy("timestamp", "desc"),
+    limit(100)
+  ) : query(
     chats,
     orderBy("timestamp", "desc"),
     where("roomID", "==", roomID),
