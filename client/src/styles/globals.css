@@ -1076,11 +1076,12 @@ em {
 }
 
 #rotatingEllipseContainer {
-  width: 100%;
-  height: 100%;
+  --shrinkSize: 25%;
+  width: calc(100% - var(--shrinkSize));
+  height: calc(100% - var(--shrinkSize));
   position: absolute;
-  top: 0;
-  left: 0;
+  top: calc(var(--shrinkSize) / 2);
+  left: calc(var(--shrinkSize) / 2);
   transform: rotate(-20deg);
 }
 .antiRotate {
@@ -1108,7 +1109,7 @@ em {
 }
 
 .homepageVideo {
-  --width: 250px;
+  --width: 300px;
   width: var(--width);
   height: calc(var(--width) * 9 / 16); /* 16:9 aspect ratio */
 }
