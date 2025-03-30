@@ -290,6 +290,9 @@ p {
 .noOverflowX {
   overflow: hidden;
 }
+.noOverflowY {
+  overflow: hidden;
+}
 
 .overflowScroll {
   overflow: scroll;
@@ -396,6 +399,9 @@ p {
 }
 .videoLayer {
   z-index: 0;
+}
+.videoInteractiveLayer {
+  z-index: 1;
 }
 .stickerLayer {
   z-index: 10;
@@ -675,6 +681,7 @@ a:hover,
   opacity: 1;
   scale: 1.4;
 }
+
 .opacity\:hover {
   opacity: 0.3;
 }
@@ -688,6 +695,9 @@ a:hover,
 }
 .scale\:hover:hover {
   scale: 1.2;
+}
+.mobileAdder .scale\:hover:hover {
+  scale: 1 !important;
 }
 
 .whiteFill {

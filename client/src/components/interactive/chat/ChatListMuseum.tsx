@@ -35,7 +35,7 @@ export const ChatListMuseum: React.FC<RoomUIProps & { whiteText?: boolean; }> = 
         };
     }, [roomID, timeWhenLoaded.current]);
 
-    return <div className="absoluteOrigin fullBleed highestLayer h1" style={{...DEFAULT_STYLE("gray", true)} as React.CSSProperties} >
+    return <div className="absoluteOrigin fullBleed videoInteractiveLayer h1" style={{...DEFAULT_STYLE("gray", true)} as React.CSSProperties} >
         {Object.entries(chatList)
             .sort((a, b) => b[1].timestamp - a[1].timestamp)
             .map(([id, chat]) => (
