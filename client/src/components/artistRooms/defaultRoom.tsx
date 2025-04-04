@@ -54,7 +54,7 @@ const DefaultRoom = (props: RoomViewProps) => {
   return (
     <main className="fullBleed noOverflow relative">
       {roomInfo ? (
-        isMobile ? (
+        isMobile && !isMuseumMode ? (
           <DefaultRoomMobileContent {...props} roomInfo={roomInfo} />
         ) : (
           <DefaultRoomDesktopContent {...props} roomInfo={roomInfo} isMuseumMode={isMuseumMode}/>

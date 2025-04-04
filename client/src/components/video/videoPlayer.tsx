@@ -128,6 +128,7 @@ const VideoPlayerInternal: React.FunctionComponent<{
               className="noEvents testPlayer "
               height={"inherit"}
               width={"inherit"}
+              playsinline={true}
             />
           </div>
         )}
