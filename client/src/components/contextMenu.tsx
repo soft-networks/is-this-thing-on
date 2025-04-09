@@ -3,6 +3,7 @@ import { useMuseumMode } from '../stores/useMuseumMode';
 import classNames from 'classnames';
 import { useImageResizer } from '../stores/useImageResizer';
 import useScanningStore from '../stores/useScanningSTore';
+import AccountButton from './account/accountButton';
 
 export const ContextMenu: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -27,6 +28,7 @@ export const ContextMenu: React.FC = () => {
             <div className="stack narrow whiteFill border padded:s-2">
                 <MuseumModeSelector />
                 {isMuseumMode && <ImageResizer />}
+                <div className="horizontal-stack"><div>my account:</div><AccountButton /></div>
                 <div className="border cursor:pointer padded:s-2 whiteFill greenFill:hover" onClick={() => setIsOpen(false)}>close</div>
             </div>
         </div>
