@@ -23,3 +23,4 @@ export function syncTotalOnline(callback: (stats: number) => void) {
 
   return unsubscribe;
 }
+
