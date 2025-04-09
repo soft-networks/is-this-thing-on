@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import useGlobalRoomsInfoStore, { roomIDToHREF } from "../../stores/globalRoomsInfoStore";
 import { roomIsActive, roomIsArchive, useRoomStore } from "../../stores/currentRoomStore";
+import useScanningStore from "../../stores/useScanningSTore";
 
 interface AutoScanRingProps {
     intervalSeconds?: number;
@@ -10,10 +11,11 @@ interface AutoScanRingProps {
 
 
 export const AutoScanRing: React.FC<AutoScanRingProps> = ({
-    intervalSeconds = 120,
+    intervalSeconds = 5,
     onlyActiveRooms = true
 }) => {
-    const [isScanning, setIsScanning] = useState(false);
+    const isScanning = useScanningStore(useCallback((s) => s.isScanning, []));
+    const setIsScanning = useScanningStore(useCallback((s) => s.setIsScanning, []));
     const [timeLeft, setTimeLeft] = useState(intervalSeconds);
     const { push } = useRouter();
 
@@ -24,7 +26,9 @@ export const AutoScanRing: React.FC<AutoScanRingProps> = ({
     const getAvailableRooms = useCallback(() => {
         let roomIDs = Object.keys(rooms);
         if (onlyActiveRooms) {
-            roomIDs = roomIDs.filter(id => roomIsActive(rooms[id]) || roomIsArchive(rooms[id]));
+            //roomIDs = roomIDs.filter(id => roomIsActive(rooms[id]) || roomIsArchive(rooms[id]));
+            roomIDs = roomIDs.filter(id => roomIsActive(rooms[id]));
+            roomIDs = roomIDs.filter(id => id !== "you"); //remove you from the list
         }
         roomIDs.unshift("home");
         console.log("roomIDs", roomIDs);

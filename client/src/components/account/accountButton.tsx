@@ -33,7 +33,7 @@ const AccountButton: React.FunctionComponent = () => {
         className="whiteFill border greenFill:hover padded:s-3 clickable clickable:link"
         onClick={() => back()}
       >
-        close
+        go back
       </div>
     </div>
   );

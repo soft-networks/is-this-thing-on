@@ -10,6 +10,8 @@ import GlobalPresenceGate from "./gates/globalPresenceGate";
 import GlobalUserAdminProvider from "./gates/globalUserAdminStore";
 import { useMuseumMode } from '../stores/useMuseumMode';
 import MuseumFooter from './MuseumFooter';
+import { ContextMenu } from "./contextMenu";
+import { useImageResizer } from "../stores/useImageResizer";
 
 
 //TODO: Currently we have a listener for each ringNode. Can simplify, requires DB refactor.
@@ -19,6 +21,9 @@ const Layout: React.FunctionComponent<{
 }> = ({ children }) => {
   const isMobile = useMediaQuery();
   const isMusuemMode = useMuseumMode(useCallback(s => s.isMuseumMode, []));
+  const {width, height} = useImageResizer();
+
+
 
   useEffect(() => {
     const setViewportHeight = () => {
@@ -34,14 +39,16 @@ const Layout: React.FunctionComponent<{
 
   return (
     <ClickGate>
+      <ContextMenu />
       <div
         className={classnames("fullScreen lightFill relative noOverflow", { "redFill": isMusuemMode })}
         key={`layout-${isMobile}-${isMusuemMode}`}
+        style={{"--museum-width": `${width}vw`, "--museum-height": `${height}vw`} as React.CSSProperties}
       >
         <div className={classnames({
           "fullScreen relative": !isMusuemMode,
           "stack:noGap": isMobile || isMusuemMode,
-          "fourByThree lightFill": isMusuemMode
+          "fourByThree lightFill center:absolute": isMusuemMode
         })}>
           <Head>
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />

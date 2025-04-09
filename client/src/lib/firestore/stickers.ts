@@ -149,29 +149,14 @@ export async function deleteStickerInstance(
 }
 
 export async function resetStickers(roomName: string) {
-  logFirebaseUpdate("About to reset stickers for " + roomName);
-  if (roomName == "chrisy") {
-    logFirebaseUpdate("Chrisy is not allowed to reset stickers");
-    return;
-  }
-
-  if (roomName == "compromised") {
-    populateHerdimasCDN();
-  }
-  const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
+  logFirebaseUpdate("About to reset stickers for " + roomName);  const stickerInstances = stickerInstanceCollection(roomDoc(roomName));
   console.log(stickerInstances.path);
-  //const stickerInstances = st
   const querySnapshot = await getDocs(stickerInstances);
-
   console.log(querySnapshot.empty);
   querySnapshot.forEach((doc) => {
-    console.log("HELLO");
     logFirebaseUpdate("Deleting sticker instance");
     deleteDoc(doc.ref);
   });
-  if (roomName == "molly") {
-    populateMollyAllInstances();
-  }
 }
 
 ///PLEASE DONT JUDGE ME FOR THIS  :)

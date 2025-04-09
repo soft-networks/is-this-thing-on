@@ -10,10 +10,11 @@ import classNames from "classnames";
 import useMediaQuery from "../stores/useMediaQuery";
 import useGlobalPresenceStore from "../stores/globalPresenceStore";
 import { AutoScanRing } from "./rings/autoScanRing";
-
+import { useMuseumMode } from "../stores/useMuseumMode";
 const Footer: React.FC = () => {
   const { pathname } = useRouter();
   const isMobile = useMediaQuery();
+  const isProjectorMode = useMuseumMode(useCallback((state) => state.isProjectorMode, []));
   return (
     <>
     <footer className={classNames("fullWidth uiLayer horizontal-stack", { "align-end:fixed": !isMobile, "relative": isMobile })}>
@@ -26,12 +27,12 @@ const Footer: React.FC = () => {
         className="uiLayer horizontal-stack:s-2 padded:s-2 align-end"
       >
         {!isMobile && <AutoScanRing />}
-        <HomeButton />
+        {!isProjectorMode && <HomeButton />}
       </div>
     </footer>
     <div className="uiLayer horizontal-stack:s-2 padded:s-2" style={{position: "fixed", top: "0", right: "0"}}>
       <NumOnline />
-      <AccountButton />
+      {!isProjectorMode && <AccountButton />}
     </div>
     </>
   );

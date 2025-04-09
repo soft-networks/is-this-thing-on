@@ -148,12 +148,12 @@ const SelectStreamType = ({ setStreamType }: { setStreamType: any }) => {
       >
         🎥 Enable camera to stream
       </div>
-      <div
+      {/* <div
         className="padded:s-2 clickable lightFill greenFill:hover border:gray"
         onClick={() => setStreamType("RTMPS")}
       >
         or show RTMPS Info
-      </div>
+      </div> */}
     </div>
   );
 };

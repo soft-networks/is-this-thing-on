@@ -11,7 +11,21 @@ import {
 
 import { logFirebaseUpdate, logInfo } from "../logger";
 import { trace } from "../tracers";
-import { chatCollection } from "./locations";
+import { chatCollection, statsCollection } from "./locations";
+
+
+export function syncGlobalChatDisabled(callback: (isDisabled: boolean) => void) { 
+  const isGlobalChatDisabled = doc(statsCollection(), "admin");
+  const unsub = onSnapshot(isGlobalChatDisabled, (doc) => {
+    const data = doc.data();
+    if (!data || !data["chat_disabled"]) {
+      callback(false);
+    } else {
+      callback(true);
+    }
+  });
+  return unsub;
+}
 
 export async function syncChat(
   setChatList: React.Dispatch<
