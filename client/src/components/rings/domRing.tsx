@@ -170,7 +170,7 @@ const ArchiveElement: React.FC<{
         />
       </div>
       <div
-        className="center:absolute highestLayer border padded:s-2 homepageLabel homepageLabelInverse"
+        className="center:absolute highestLayer border padded:s-2 homepageLabel"
         style={
           {
             backgroundColor: roomInfo.roomColor,
