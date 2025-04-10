@@ -36,7 +36,7 @@ const IndexDesktop = () => {
     >
       <div className="fullBleed noOverflow">
         <DomRing />
-        <div className="center:absolute highestLayer center-text">
+        <div className="center:absolute highestLayer center-text faintWhite">
           <CenterText />
         </div>
       </div>
@@ -51,7 +51,7 @@ const IndexMobile = () => {
     <div className="fullBleed stack noOverflow">
       <div style={{ height: "40%", width: "100%", position: "relative" }}>
         <DomRing />
-        <div className="center:absolute highestLayer center-text">
+        <div className="center:absolute highestLayer center-text faintWhite">
           <CenterText />
         </div>
       </div>

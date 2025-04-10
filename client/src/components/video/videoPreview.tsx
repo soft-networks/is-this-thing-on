@@ -51,6 +51,7 @@ const VideoPreviewInternal: React.FC<{
       width={"302px"}
       height={"169px"}
       style={{ margin: "-1px" }}
+      playsinline={true}
     />
   );
 };

@@ -16,7 +16,8 @@
   --stackSpacing: var(--s0);
 
   --gray: rgb(175, 175, 175);
-  --light: #ececec;
+  /* --light: #ececec; */
+  --light: #5b5b5b;
   --black: rgb(10, 38, 42);
   --white: white;
   --faintWhite: rgba(255, 255, 255, 0.68);
@@ -94,6 +95,13 @@ body {
   word-break: normal;
   letter-spacing: -1px;
   line-height: 1.05;
+}
+.museumtext {
+  font-size: 28px;
+  word-break: normal;
+  letter-spacing: -1px;
+  line-height: 1.05;
+  transform: translateY(-5px);
 }
 .h1 {
   font-size: max(2.1vw, 24px);
@@ -705,6 +713,9 @@ a:hover,
   scale: 1 !important;
 }
 
+.faintWhite {
+  color: var(--white) !important;
+}
 .whiteFill {
   background: var(--white);
 }
@@ -745,8 +756,7 @@ a:hover,
 }
 
 .redFill {
-  background: red;
-  box-shadow: 0 1px 0 red;
+ background: black;
 }
 
 .greenFill,
@@ -1118,13 +1128,13 @@ em {
   width: var(--width);
   height: calc(var(--width) * 9 / 16); /* 16:9 aspect ratio */
 }
-.smallElementOnEllipse {
+/* .smallElementOnEllipse {
   offset-path: ellipse(22% 25% at center);
   offset-rotate: 0deg;
   vertical-align: middle;
   animation: move 120s infinite linear;
-}
-.largeElementOnEllipse {
+} */
+.smallElementOnEllipse, .largeElementOnEllipse {
   offset-path: ellipse(35% 40% at center);
   offset-rotate: 0deg;
   animation: move 180s infinite linear;

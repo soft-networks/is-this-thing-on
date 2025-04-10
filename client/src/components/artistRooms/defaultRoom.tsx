@@ -35,13 +35,13 @@ const DefaultRoomDesktopContent = ({
   stickerChooser,
   chatStyle,
   roomInfo,
-  isMuseumMode,
-}: RoomViewProps & { roomInfo: any, isMuseumMode: boolean }) => (
+  hideMuteButton,
+}: RoomViewProps & { roomInfo: any, hideMuteButton: boolean }) => (
   
   <>
     {/* Comment out the line below to remove the chat */}
     <Chat key={`${roomInfo.roomID}-chat`} style={chatStyle} />
-    <VideoPlayer  hideMuteButton={isMuseumMode} muteOverride={!isMuseumMode}/>
+    <VideoPlayer  hideMuteButton={hideMuteButton} />
     <Stickers style={stickerStyle} StickerChooser={stickerChooser} />
   </>
 );
@@ -49,7 +49,7 @@ const DefaultRoomDesktopContent = ({
 const DefaultRoom = (props: RoomViewProps) => {
   const isMobile = useMediaQuery();
   const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
-  const isMuseumMode = useMuseumMode(useCallback((s) => s.isMuseumMode, []));
+  const { isMuseumMode, isProjectorMode } = useMuseumMode();
 
   return (
     <main className="fullBleed noOverflow relative">
@@ -57,7 +57,7 @@ const DefaultRoom = (props: RoomViewProps) => {
         isMobile && !isMuseumMode ? (
           <DefaultRoomMobileContent {...props} roomInfo={roomInfo} />
         ) : (
-          <DefaultRoomDesktopContent {...props} roomInfo={roomInfo} isMuseumMode={isMuseumMode}/>
+          <DefaultRoomDesktopContent {...props} roomInfo={roomInfo} hideMuteButton={isMuseumMode || isProjectorMode}/>
         )
       ) : (
         <div className="centerh"> loading </div>

@@ -34,7 +34,7 @@ const MuseumFooterRoom: React.FC = () => {
     const roomStatus = useRoomStore(useCallback(s => s.roomInfo?.streamStatus, []));
     const roomID = useRoomStore(useCallback(s => s.roomInfo?.roomID, []));
     return (
-        <footer className="flex-1 contrastFill center:children border-top" style={{ '--roomColor': roomColor } as React.CSSProperties}>
+=        <footer className="flex-1 contrastFill center:children border-top" style={{ '--roomColor': roomColor } as React.CSSProperties}>
             <div className="grow-text">{roomName} is {getStatusText(roomStatus || "")}{roomID === "you" && roomStatus === "active" && <YouPromptFooter />}</div>  
         </footer>
     );

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { roomIsActive, roomIsArchive } from "../../stores/currentRoomStore";
 import useGlobalRoomsInfoStore, {
@@ -10,10 +10,13 @@ import VideoPreview from "../video/videoPreview";
 import ReactPlayer from "react-player";
 import { CoffeePreview } from "../artistRooms/coffee";
 import classNames from "classnames";
+import { useMuseumMode } from "../../stores/useMuseumMode";
 
 const DomRing = () => {
   const ring = useGlobalRoomsInfoStore(useCallback((s) => s.rooms, []));
   const isMobile = useMediaQuery();
+  const {isProjectorMode} = useMuseumMode();
+
   const domElements = useMemo(() => {
     const numKeys = Object.keys(ring).length;
     const spacePerElement = 100 / numKeys;
@@ -24,6 +27,7 @@ const DomRing = () => {
           key={key}
           offsetN={index * spacePerElement}
           isMobile={isMobile}
+          forcePlayAudio={isProjectorMode}
         />
       );
     });
@@ -42,7 +46,8 @@ const NodeElement: React.FC<{
   roomInfo: RoomSummary;
   offsetN: number;
   isMobile: boolean;
-}> = ({ roomInfo, offsetN, isMobile }) => {
+  forcePlayAudio?: boolean;
+}> = ({ roomInfo, offsetN, isMobile, forcePlayAudio }) => {
   const router = useRouter();
   const onClick = useCallback(() => {
     console.log("navigating to room", roomInfo.roomID);
@@ -52,7 +57,7 @@ const NodeElement: React.FC<{
   if (isMobile) {
     return <NodeElementMobile roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />;
   } else {
-    return <NodeElementDesktop roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />;
+    return <NodeElementDesktop roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} forcePlayAudio={forcePlayAudio} />;
   }
 };
 
@@ -60,11 +65,12 @@ const NodeElementDesktop: React.FC<{
   roomInfo: RoomSummary;
   offsetN: number;
   onClick: () => void;
-}> = ({ roomInfo, offsetN, onClick }) => {
+  forcePlayAudio?: boolean;
+}> = ({ roomInfo, offsetN, onClick, forcePlayAudio }) => {
   if (roomIsActive(roomInfo)) {
-    return <OnlineElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />;
+    return <OnlineElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} forcePlayAudio={forcePlayAudio} />;
   } else if (roomIsArchive(roomInfo)) {
-    return <ArchiveElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />;
+    return <ArchiveElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} forcePlayAudio={forcePlayAudio} />;
   } else {
     return <OfflineElement roomInfo={roomInfo} offsetN={offsetN} onClick={onClick} />;
   }
@@ -92,7 +98,8 @@ const OnlineElement: React.FC<{
   roomInfo: RoomSummary;
   offsetN: number;
   onClick: () => void;
-}> = ({ roomInfo, offsetN, onClick }) => {
+  forcePlayAudio?: boolean;  
+}> = ({ roomInfo, offsetN, onClick, forcePlayAudio }) => {
   const [isHovering, setIsHovering] = useState<boolean>(false);
 
   return (
@@ -118,7 +125,7 @@ const OnlineElement: React.FC<{
           </div>
         )}
         <VideoPreview
-          localMuted={!isHovering}
+          localMuted={!(forcePlayAudio || isHovering)}
           iLink={roomInfo}
           isTest={roomInfo.streamStatus.includes("test")}
         />
@@ -142,7 +149,8 @@ const ArchiveElement: React.FC<{
   roomInfo: RoomSummary;
   offsetN: number;
   onClick: () => void;
-}> = ({ roomInfo, offsetN, onClick }) => {
+  forcePlayAudio?: boolean;
+}> = ({ roomInfo, offsetN, onClick, forcePlayAudio }) => {
   const [isHovering, setIsHovering] = useState<boolean>(false);
 
   return (
@@ -162,11 +170,12 @@ const ArchiveElement: React.FC<{
         <ReactPlayer
           url={roomInfo.archiveURL}
           playing={true}
-          muted={true}
+          muted={!(forcePlayAudio || isHovering)}
           className="noEvents"
           width={"302px"}
           height={"169px"}
           style={{ margin: "-1px" }}
+          playsinline={true}
         />
       </div>
       <div
