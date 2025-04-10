@@ -34,8 +34,13 @@ const MuseumFooterRoom: React.FC = () => {
     const roomStatus = useRoomStore(useCallback(s => s.roomInfo?.streamStatus, []));
     const roomID = useRoomStore(useCallback(s => s.roomInfo?.roomID, []));
     return (
+<<<<<<< HEAD
 =        <footer className="flex-1 contrastFill center:children border-top" style={{ '--roomColor': roomColor } as React.CSSProperties}>
             <div className="grow-text">{roomName} is {getStatusText(roomStatus || "")}{roomID === "you" && roomStatus === "active" && <YouPromptFooter />}</div>  
+=======
+        <footer className="flex-1 contrastFill center:children border-top center-text" style={{ '--roomColor': roomColor } as React.CSSProperties}>
+            <div className="museumtext">{roomName} is {getStatusText(roomStatus || "")}{roomID === "you" && roomStatus === "active" && <YouPromptFooter />}</div>  
+>>>>>>> bb0c8d3 (merge merge)
         </footer>
     );
 };
