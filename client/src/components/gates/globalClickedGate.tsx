@@ -24,7 +24,7 @@ const ClickGate: React.FunctionComponent = ({ children }) => {
         </div>
         <div className="h3 stack">
           <p>THING is an artist powered live streaming network.</p>
-          <p>Our next performance, THING+YOU is coming to the Museum of the Moving Image (MoMI) April 12th.</p>
+          <p>Our current performance, <a href = "https://movingimage.org/event/thingyou/"  className="underline" >THING+YOU </a> is live at the Museum of the Moving Image (MoMI) through August 10. </p>
         </div>
         <div className="h1">
           <em>CLICK 2 ENTER</em>
