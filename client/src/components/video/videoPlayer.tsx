@@ -75,6 +75,7 @@ const ArchiveVideoPlayer: React.FunctionComponent<{ hideMuteButton?: boolean, mu
           height={"inherit"}
           width={"inherit"}
           loop={true}
+          playsinline={true}
         />
         </div>
       </div>
