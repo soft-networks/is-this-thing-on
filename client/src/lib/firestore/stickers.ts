@@ -184,7 +184,7 @@ export async function populateGlobalStickerCDN() {
     }
   }
   // Now copy this CDN into the rooms: molly, chrisy and soft
-  const rooms = ["soft", "chrisy", "molly", "sarah"];
+  const rooms = ["soft", "chrisy", "molly", "sarah", "you"];
   for (const room of rooms) {
     const roomDocRef = roomDoc(room);
     const dbStickerCDN = stickerCDNCollection(roomDocRef);
