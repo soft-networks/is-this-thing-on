@@ -1,8 +1,14 @@
+import { useEffect } from 'react';
+import { populateGlobalStickerCDN } from '../../lib/firestore/stickers';
 import { useMuseumMode } from '../../stores/useMuseumMode';
 
 const MomiAdmin = () => {
   const { isMuseumMode, enableMuseumMode, disableMuseumMode } = useMuseumMode();
 
+  useEffect(() => {
+    populateGlobalStickerCDN();
+  }, []);
+  
   return (
     <div className="padded stack fullWidth">
       <h1>PLINTH MODE?</h1>

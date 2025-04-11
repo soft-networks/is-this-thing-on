@@ -16,8 +16,8 @@
   --stackSpacing: var(--s0);
 
   --gray: rgb(175, 175, 175);
-  /* --light: #ececec; */
-  --light: #5b5b5b;
+  --light: #ececec;
+  /* --light: #5b5b5b; */
   --black: rgb(10, 38, 42);
   --white: white;
   --faintWhite: rgba(255, 255, 255, 0.68);

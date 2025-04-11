@@ -3,13 +3,11 @@ import { NextPage } from "next";
 import Head from "next/head";
 import React, { useCallback, useEffect } from "react";
 import { Chat } from "../components/interactive/chat";
-import Layout from "../components/layout";
 import { useRoomStore } from "../stores/currentRoomStore";
-import { useGlobalUserStore } from "../stores/globalUserStore";
-import { activePresenceHeartbeat, setUserPresenceHeartbeat } from "../lib/firestore";
 import useMediaQuery from "../stores/useMediaQuery";
 import DomRing from "../components/rings/domRing";
-import Link from "next/link";
+import { useMuseumMode } from "../stores/useMuseumMode";
+import classNames from "classnames";
 
 const Index: NextPage = () => {
   const changeRoom = useRoomStore((s) => s.changeRoom);
@@ -28,7 +26,8 @@ const Index: NextPage = () => {
   );
 };
 
-const IndexDesktop = () => {
+const IndexDesktop: React.FC = () => {
+  const isProjectorMode = useMuseumMode(useCallback(s => s.isProjectorMode, []));
   return (
     <div
       className="fullBleed lightFill  relative stack backgroundFIll"
@@ -36,7 +35,7 @@ const IndexDesktop = () => {
     >
       <div className="fullBleed noOverflow">
         <DomRing />
-        <div className="center:absolute highestLayer center-text faintWhite">
+        <div className={classNames("center:absolute highestLayer center-text", { "faintWhite": isProjectorMode })}>
           <CenterText />
         </div>
       </div>
@@ -51,7 +50,7 @@ const IndexMobile = () => {
     <div className="fullBleed stack noOverflow">
       <div style={{ height: "40%", width: "100%", position: "relative" }}>
         <DomRing />
-        <div className="center:absolute highestLayer center-text faintWhite">
+        <div className="center:absolute highestLayer center-text">
           <CenterText />
         </div>
       </div>

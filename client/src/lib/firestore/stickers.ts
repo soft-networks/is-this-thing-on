@@ -161,6 +161,40 @@ export async function resetStickers(roomName: string) {
 
 ///PLEASE DONT JUDGE ME FOR THIS  :)
 
+export async function populateGlobalStickerCDN() {
+  
+  const stickerCDN = {
+    "dolphins": {
+      url: "https://storage.googleapis.com/is-this-thing-on/globalstickers/474216_d8a17.gif"
+    }, 
+    "rainbow": {
+      url: "https://storage.googleapis.com/is-this-thing-on/globalstickers/tumblr_o22cvpElFs1v69vbyo1_75sq.gif"
+    }, "rose": {
+      url: "https://storage.googleapis.com/is-this-thing-on/globalstickers/picgifs-roses-0131147.gif"
+    }, "slug": {
+      url: "https://storage.googleapis.com/is-this-thing-on/globalstickers/tumblr_o9tu2tkTum1uajvwdo1_250.gif"
+    }, "spider": {
+      url: "https://storage.googleapis.com/is-this-thing-on/globalstickers/379725_e2954.gif"
+    }, "stars": {
+      url: "https://storage.googleapis.com/is-this-thing-on/globalstickers/5622cce2067d7b6891fca6e7.gif",
+    }, "sun": {
+      url: "https://storage.googleapis.com/is-this-thing-on/globalstickers/tumblr_oukm0aPJDg1wpgn2yo1_100.gif", 
+    }, "tomato": {
+      url: "https://storage.googleapis.com/is-this-thing-on/globalstickers/1657288194_48282_gif-url.gif"
+    }
+  }
+  // Now copy this CDN into the rooms: molly, chrisy and soft
+  const rooms = ["soft", "chrisy", "molly", "sarah", "you"];
+  for (const room of rooms) {
+    const roomDocRef = roomDoc(room);
+    const dbStickerCDN = stickerCDNCollection(roomDocRef);
+    //write sticker cdn to the room 
+    for (const [key, value] of Object.entries(stickerCDN)) {
+      const assetDoc = doc(dbStickerCDN, key);
+      setDoc(assetDoc, value);
+    }
+  }
+}
 export async function populateHerdimasCDN() {
   //Delete all CDN stickers for herdimas
   const stickerCDN = stickerCDNCollection(roomDoc("compromised"));
