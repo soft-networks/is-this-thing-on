@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 import ReactPlayer from "react-player";
 import StreamPlayer from "./streamPlayer";
@@ -38,22 +38,49 @@ const VideoPreviewInternal: React.FC<{
     return iLink.streamHlsPlaylistID;
   }, [iLink.streamHlsPlaylistID, isTest]);
 
+
+  
+
   useEffect(() => {
     if (streamLink) logVideo(iLink.roomName, streamLink);
   }, [iLink.roomName, streamLink]);
 
-  return (
-    <ReactPlayer
+  return <ReactPlayerWrapper
       url={streamLink}
-      playing={true}
       muted={localMuted}
-      className="noEvents "
-      width={"302px"}
-      height={"169px"}
-      style={{ margin: "-1px" }}
-      playsinline={true}
-    />
-  );
+    /> 
 };
+
+export const ReactPlayerWrapper: React.FC<{
+  url?: string;
+  muted: boolean;
+  seek?: boolean;
+}> = ({ url,  muted, seek}) => {
+
+  const ref = useRef<ReactPlayer>(null);
+  
+  return (
+  <ReactPlayer
+    url={url}
+    playing={true}
+    muted={muted}
+    className="noEvents "
+    width={"302px"}
+    height={"169px"}
+    style={{ margin: "-1px" }}
+    playsinline={true}
+    ref={ref}
+    loop={true}
+    onReady={() => {
+      if (seek) {
+        // calculate the current minute of the hour and figure out what the % of that is in terms of the hour
+        const currentMinute = new Date().getMinutes();
+        const percent = currentMinute / 60;
+        ref.current?.seekTo(percent);
+      }
+    }}
+  />)
+}
+
 
 export default VideoPreview;
