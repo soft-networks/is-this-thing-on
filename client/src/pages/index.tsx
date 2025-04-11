@@ -50,7 +50,7 @@ const IndexMobile = () => {
     <div className="fullBleed stack noOverflow">
       <div style={{ height: "40%", width: "100%", position: "relative" }}>
         <DomRing />
-        <div className="center:absolute highestLayer center-text faintWhite">
+        <div className="center:absolute highestLayer center-text">
           <CenterText />
         </div>
       </div>

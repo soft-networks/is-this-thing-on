@@ -12,6 +12,7 @@ import {
 import { logFirebaseUpdate, logInfo } from "../logger";
 import { trace } from "../tracers";
 import { chatCollection, statsCollection } from "./locations";
+import db from "./init";
 
 
 export function syncGlobalChatDisabled(callback: (isDisabled: boolean) => void) { 
@@ -86,3 +87,5 @@ export async function deleteChatMessageDB(chatID: string) {
   const chats = chatCollection();
   return deleteDoc(doc(chats, chatID));
 }
+
+
