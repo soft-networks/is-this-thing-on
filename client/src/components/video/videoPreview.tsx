@@ -71,7 +71,7 @@ export const ReactPlayerWrapper: React.FC<{
     playsinline={true}
     ref={ref}
     loop={true}
-    onReady={() => {
+    onPlay={() => {
       if (seek) {
         // calculate the current minute of the hour and figure out what the % of that is in terms of the hour
         const currentMinute = new Date().getMinutes();
