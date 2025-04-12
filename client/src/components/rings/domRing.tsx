@@ -6,7 +6,7 @@ import useGlobalRoomsInfoStore, {
   roomIDToHREF,
 } from "../../stores/globalRoomsInfoStore";
 import useMediaQuery from "../../stores/useMediaQuery";
-import VideoPreview from "../video/videoPreview";
+import VideoPreview, { ReactPlayerWrapper } from "../video/videoPreview";
 import ReactPlayer from "react-player";
 import { CoffeePreview } from "../artistRooms/coffee";
 import classNames from "classnames";
@@ -167,15 +167,10 @@ const ArchiveElement: React.FC<{
       onClick={onClick}
     >
       <div className="homepageVideo noOverflow border hideOnMobile">
-        <ReactPlayer
+        <ReactPlayerWrapper
           url={roomInfo.archiveURL}
-          playing={true}
-          muted={!(forcePlayAudio || isHovering)}
-          className="noEvents"
-          width={"302px"}
-          height={"169px"}
-          style={{ margin: "-1px" }}
-          playsinline={true}
+          muted={!(forcePlayAudio || isHovering) || roomInfo.roomID === "you"}
+          seek={true}
         />
       </div>
       <div

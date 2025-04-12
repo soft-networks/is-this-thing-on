@@ -42,7 +42,7 @@ const Layout: React.FunctionComponent<{
     <ClickGate>
       <ContextMenu />
       <div
-        className={classnames("fullScreen lightFill relative noOverflow", { "redFill": isMusuemMode })}
+        className={classnames("fullScreen lightFill relative noOverflow", { "redFill museumMode": isMusuemMode })}
         key={`layout-${isMobile}-${isMusuemMode}`}
         style={{
           "--museum-width": `${width}vw`, 
