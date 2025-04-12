@@ -169,7 +169,7 @@ const ArchiveElement: React.FC<{
       <div className="homepageVideo noOverflow border hideOnMobile">
         <ReactPlayerWrapper
           url={roomInfo.archiveURL}
-          muted={!(forcePlayAudio || isHovering)}
+          muted={!(forcePlayAudio || isHovering) || roomInfo.roomID === "you"}
           seek={true}
         />
       </div>

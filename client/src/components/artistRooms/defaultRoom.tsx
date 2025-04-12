@@ -20,7 +20,7 @@ const DefaultRoomMobileContent = ({
 }: RoomViewProps & { roomInfo: any }) => (
   <div className="fullBleed stack:noGap noOverflow">
     <div style={{ height: "40%", width: "100%", position: "relative" }}>
-      <VideoPlayer/>
+      <VideoPlayer muteOverride={roomInfo.roomID === "you"}/>
       <Stickers StickerChooser={EmptyChooser}/>
     </div>
     <MobileStickerAdder />
@@ -41,7 +41,7 @@ const DefaultRoomDesktopContent = ({
   <>
     {/* Comment out the line below to remove the chat */}
     <Chat key={`${roomInfo.roomID}-chat`} style={chatStyle} />
-    <VideoPlayer  hideMuteButton={hideMuteButton} />
+    <VideoPlayer  hideMuteButton={hideMuteButton} muteOverride={roomInfo.roomID === "you"} />
     <Stickers style={stickerStyle} StickerChooser={stickerChooser} />
   </>
 );

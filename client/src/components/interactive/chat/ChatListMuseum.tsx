@@ -4,6 +4,7 @@ import { syncChat } from "../../../lib/firestore";
 import { useRoomStore } from "../../../stores/currentRoomStore";
 import { RenderChat } from "./RenderChat";
 import { DEFAULT_STYLE } from "./utils";
+import classNames from "classnames";
 
 const OLD_CHAT_DELAY = 0 * 60 * 1000; // 10 minutes in milliseconds
 
@@ -35,11 +36,11 @@ export const ChatListMuseum: React.FC<RoomUIProps & { whiteText?: boolean; }> = 
         };
     }, [roomID, timeWhenLoaded.current]);
 
-    return <div className="absoluteOrigin fullBleed videoInteractiveLayer h1" style={{...DEFAULT_STYLE("gray", true)} as React.CSSProperties} >
+    return <div className="absoluteOrigin fullBleed videoInteractiveLayer" style={{...DEFAULT_STYLE("gray", true)} as React.CSSProperties} >
         {Object.entries(chatList)
             .sort((a, b) => b[1].timestamp - a[1].timestamp)
             .map(([id, chat]) => (
-                <FloatingChatContainer key={`chatcontainer-${id}`}  >
+                <FloatingChatContainer key={`chatcontainer-${id}`} className={classNames({"h1": chat.message.length < 50})} >
                     <RenderChat
                         id={id}
                         chat={chat}
@@ -53,10 +54,10 @@ export const ChatListMuseum: React.FC<RoomUIProps & { whiteText?: boolean; }> = 
     </div>;
 };
 
-const FloatingChatContainer: React.FC = ({children}) => {
+const FloatingChatContainer: React.FC<{className?: string}> = ({children, className}) => {
 
-    const startPos = useRef<number>(Math.random());
-    return <div className="absoluteOrigin animateOutAndAway" style={{left: `${startPos.current * 100}%`, transform: "translate(-50%, -50%)"}} >
-            {children}
+    const startPos = useRef<number>(Math.random() * 0.6 + 0.2);
+    return <div className={`absoluteOrigin animateOutAndAway narrow ${className}`} style={{left: `${startPos.current * 100}%`, transform: "translate(-50%, -50%)"}} >
+         {children}
     </div>
 }
