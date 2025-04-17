@@ -49,7 +49,7 @@ const StreamPlayer: React.FunctionComponent<VideoPlayerProps> = ({
         <ParticipantView
           participant={liveParticipants[liveParticipants.length - 1]}
           muteAudio={muted}
-          className={`noEvents stream-player ${fullscreen ? "videoAspectElement" : "streamPreviewAspectElement"}`}
+          className={`noEvents stream-player ${fullscreen ? "videoAspectElement" : "streamPreviewAspectElement"} safari-video-fix`}
           
         />
       </>

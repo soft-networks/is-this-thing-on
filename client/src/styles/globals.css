@@ -1239,3 +1239,63 @@ em {
 }
 @media screen and (min-width: 801px) {
 }
+/* Safari video fixes */
+.safari-video-fix video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  perspective: 1000;
+}
+
+.safari-video-fix video::-webkit-media-controls {
+  display: none !important;
+}
+
+.safari-video-fix video::-webkit-media-controls-enclosure {
+  display: none !important;
+}
+
+.safari-video-fix video::-webkit-media-controls-panel {
+  display: none !important;
+}
+
+.safari-video-fix video::-webkit-media-controls-play-button {
+  display: none !important;
+}
+
+.safari-video-fix video::-webkit-media-controls-timeline {
+  display: none !important;
+}
+
+.safari-video-fix video::-webkit-media-controls-current-time-display {
+  display: none !important;
+}
+
+.safari-video-fix video::-webkit-media-controls-time-remaining-display {
+  display: none !important;
+}
+
+.safari-video-fix video::-webkit-media-controls-timeline-container {
+  display: none !important;
+}
+
+.safari-video-fix video::-webkit-media-controls-mute-button {
+  display: none !important;
+}
+
+.safari-video-fix video::-webkit-media-controls-toggle-closed-captions-button {
+  display: none !important;
+}
+
+.safari-video-fix video::-webkit-media-controls-volume-slider {
+  display: none !important;
+}
+
+.safari-video-fix video::-webkit-media-controls-fullscreen-button {
+  display: none !important;
+}
