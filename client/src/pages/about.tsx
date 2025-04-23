@@ -58,7 +58,7 @@ const About: NextPage = () => {
             <b><em>TY:</em></b>
           </p>
           <p>
-            We'd like to thank the following performers for being part of past THINGs: Chia Amisola, Herdimas Anggara, bonita buzzkill (Taylor Torres), baphomette, peter burr, Darla DeVour, Spencer Chang, Brian Clifton, Jessie Edelstein, Sloane Frederick, Kiki Gree, Heheheheheheheheheheheheheheherdimas., Claire Hentschker, Matthew Flores, Mr. Grass, helen lin, Maya Man, Lau Mota, Mark Ramos, Alan Worm, Roaslie Yu, Kennie Zhou, Karla Zurita, and many more who wish to remain anonymous. A special thank you to our developers Bhavik Singh, Mark Ramos, and Kevin Yeh.
+            We&apos;d like to thank the following performers for being part of past THINGs: Chia Amisola, Herdimas Anggara, bonita buzzkill (Taylor Torres), baphomette, peter burr, Darla DeVour, Spencer Chang, Brian Clifton, Jessie Edelstein, Sloane Frederick, Kiki Gree, Heheheheheheheheheheheheheheherdimas., Claire Hentschker, Matthew Flores, Mr. Grass, helen lin, Maya Man, Lau Mota, Mark Ramos, Alan Worm, Roaslie Yu, Kennie Zhou, Karla Zurita, and many more who wish to remain anonymous. A special thank you to our developers Bhavik Singh, Mark Ramos, and Kevin Yeh.
           </p>
           <Link href="/aboutNothing" className="underline">Read about more about one of our past performances: NO-THING</Link>
         </div>
