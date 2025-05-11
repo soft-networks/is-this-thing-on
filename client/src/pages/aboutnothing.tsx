@@ -14,12 +14,12 @@ const AboutNothing: NextPage = () => {
   }, []);
 
   return (
-    <div className="whiteFill fullBleed overflowScroll">
+    <div className="whiteFill fullBleed overflowScroll padded">
       <Head>
         <title>about NO-THING</title>
       </Head>
-      <div className="absolute left-1/2 -translate-x-1/2 highestLayer medium stack:s2 padded">
-      <div className="stack:s-1">
+      <div className="highestLayer medium stack:s3 padded centerh">
+      <div className="stack">
           <p>
             <b><em>NO-THING:</em></b>
           </p>
@@ -40,7 +40,7 @@ const AboutNothing: NextPage = () => {
           </p>
         </div>
 
-        <div className="stack:s-1">
+        <div className="stack">
           <p>
             <b><em>SELECTED STREAMS:</em></b>
           </p>
