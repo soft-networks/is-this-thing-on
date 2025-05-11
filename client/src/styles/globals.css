@@ -230,7 +230,7 @@ iframe body {
 
 p {
   max-inline-size: var(--textWidth);
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .inline-block {
@@ -390,11 +390,20 @@ p {
   justify-content: center;
   align-items: center;
 }
+.centerh\:children {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .center\:absolute {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.centerh {
+  margin: 0 auto;
 }
 .centerh\:absolute {
   position: absolute;
@@ -529,6 +538,10 @@ p {
 
 .stack\:s2 > * + * {
   margin-block-start: var(--s2);
+}
+
+.stack\:s3 > * + * {
+  margin-block-start: var(--s3);
 }
 
 .horizontal-stack,
