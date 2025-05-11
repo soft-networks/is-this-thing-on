@@ -11,8 +11,8 @@ const RoomManagement: React.FC<{ uid: string }> = ({ uid }) => {
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simple client-side password check
-    if (password.toLocaleLowerCase() === "vanilla") { // You can change this password
+    // Check password against environment variable
+    if (password.toLocaleLowerCase() === process.env.NEXT_PUBLIC_ROOM_CREATION_PASSWORD) {
       setIsAuthenticated(true);
     } else {
       alert("Incorrect password");
