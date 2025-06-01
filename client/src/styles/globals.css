@@ -841,10 +841,19 @@ a:hover,
   height: 100%;
 }
 
+
+
 .sixteenByNine {
   width: var(--museum-width);
   height: calc(var(--museum-width) * 9 / 16);
   max-height: calc(var(--museum-width) * 9 / 16);
+}
+
+.museumMode .sixteenByNine {
+  width: var(--museum-width);
+  height: calc(var(--museum-width) * 9 / 16);
+  max-height: 100vh;
+  flex: 1;
 }
 
 .fourByThree {
@@ -865,12 +874,6 @@ a:hover,
   transform: translate(-50%, -50%); /* % of current element */
 }
 
-.museumMode .videoAspectElement {
-  width: 100% !important; 
-  height: 100% !important;
-  min-width: 100% !important;
-  min-height: 100% !important;
-}
 
 .videoAspectElement,
 .videoAspectElement > .testPlayer {

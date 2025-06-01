@@ -5,6 +5,7 @@ import {
 } from "../lib/firestore";
 import { useRoomStore } from "../stores/currentRoomStore";
 import { useGlobalUserStore } from "../stores/globalUserStore";
+import { useGlobalAdminStore } from "../stores/globalUserAdminStore";
 import AdminPanel from "./account/adminPanel";
 import ArtistRoom from "./artistRooms/artistRoom";
 import RoomStatusGate from "./gates/roomStatusGate";
@@ -18,6 +19,10 @@ const Room: React.FC<{ roomID: string }> = ({
   const roomPlaybackId = useRoomStore(
     useCallback((s) => s.roomInfo?.streamPlaybackID, []),
   );
+  const roomInfo = useRoomStore(
+    useCallback((s) => s.roomInfo, []),
+  );
+  const isAdmin = useGlobalAdminStore(useCallback((s) => s.isAdmin, []));
   const displayName = useGlobalUserStore(useCallback((s) => s.displayName, []));
   useEffect(() => {
     if (displayName && roomID) {
@@ -35,6 +40,7 @@ const Room: React.FC<{ roomID: string }> = ({
     <RoomExistsGate id={roomID as string}>
       <RoomProvider roomID={roomID}>
         <StreamGate
+          key={!isAdmin ? `${roomID}-${roomInfo?.streamStatus}` : roomID}
           roomID={roomID}
           streamPlaybackID={roomPlaybackId}
           anonymousOnly={false}
