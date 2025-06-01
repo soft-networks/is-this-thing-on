@@ -11,7 +11,7 @@ interface AutoScanRingProps {
 
 
 export const AutoScanRing: React.FC<AutoScanRingProps> = ({
-    intervalSeconds = 5,
+    intervalSeconds = 5 * 60,
     onlyActiveRooms = true
 }) => {
     const isScanning = useScanningStore(useCallback((s) => s.isScanning, []));

@@ -21,6 +21,7 @@ const Layout: React.FunctionComponent<{
 }> = ({ children }) => {
   const isMobile = useMediaQuery();
   const isMusuemMode = useMuseumMode(useCallback(s => s.isMuseumMode, []));
+  const isProjectorMode = useMuseumMode(useCallback(s => s.isProjectorMode, []));
   const {width, height} = useImageResizer();
 
 
@@ -41,9 +42,13 @@ const Layout: React.FunctionComponent<{
     <ClickGate>
       <ContextMenu />
       <div
-        className={classnames("fullScreen lightFill relative noOverflow", { "redFill": isMusuemMode })}
+        className={classnames("fullScreen lightFill relative noOverflow", { "redFill museumMode": isMusuemMode })}
         key={`layout-${isMobile}-${isMusuemMode}`}
-        style={{"--museum-width": `${width}vw`, "--museum-height": `${height}vw`} as React.CSSProperties}
+        style={{
+          "--museum-width": `${width}vw`, 
+          "--museum-height": `${height}vw`,
+          ...(isProjectorMode && {"--light": "#5b5b5b"})
+        } as React.CSSProperties}
       >
         <div className={classnames({
           "fullScreen relative": !isMusuemMode,

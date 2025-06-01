@@ -58,6 +58,18 @@ const StreamGate: React.FunctionComponent<{
         return;
       }
       const myCall = myClient.call("livestream", streamPlaybackID);
+
+      if (useAdmin) {
+        try {
+          // For Safari compatibility, we'll use h264 as the preferred codec
+          myCall.updatePublishOptions({
+            preferredCodec: "h264"
+          });
+        } catch (e) {
+          logError("Tried and failed to update video codec settings: " + e);
+        }
+      }
+
       myCall
         .get()
         .then(() => {
