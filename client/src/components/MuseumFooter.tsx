@@ -34,8 +34,8 @@ const MuseumFooterRoom: React.FC = () => {
     const roomStatus = useRoomStore(useCallback(s => s.roomInfo?.streamStatus, []));
     const roomID = useRoomStore(useCallback(s => s.roomInfo?.roomID, []));
     return (
-        <footer className="flex-1 contrastFill center:children border-top center-text" style={{ '--roomColor': roomColor } as React.CSSProperties}>
-            <div className="museumtext">{roomName} is {getStatusText(roomStatus || "")}{roomID === "you" && roomStatus === "active" && <YouPromptFooter />}</div>  
+        <footer className="flex-1 contrastFill center:children border-top center-text" style={{ '--roomColor': roomColor, minHeight: "120px", maxHeight: "120px" } as React.CSSProperties}>
+            <div className="museumtext">{roomID === "you" && roomStatus === "active" ? <YouPromptFooter /> : `${roomName} is ${getStatusText(roomStatus || "")}`}</div>  
             </footer>
     );
 };
@@ -60,7 +60,7 @@ const YouPromptFooter: React.FC = () => {
             clearInterval(interval);
         };
     }, [youPrompts.length]);
-    return  youPrompts[promptIndex] ? <span>, {youPrompts[promptIndex]}</span> : null;
+    return  youPrompts[promptIndex] ? <span>you, {youPrompts[promptIndex]}</span> : <span>you is online</span>;
     
 };
 export default MuseumFooter; 

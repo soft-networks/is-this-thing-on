@@ -841,6 +841,13 @@ a:hover,
   height: 100%;
 }
 
+.museumMode .sixteenByNine {
+  width: var(--museum-width);
+  height: calc(var(--museum-width) * 9 / 16);
+  max-height: 100vh;
+  flex: 1;
+}
+
 .sixteenByNine {
   width: var(--museum-width);
   height: calc(var(--museum-width) * 9 / 16);
