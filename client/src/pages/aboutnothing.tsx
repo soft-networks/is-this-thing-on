@@ -19,21 +19,21 @@ const AboutNothing: NextPage = () => {
         <title>about NO-THING</title>
       </Head>
       <div className="absolute left-1/2 -translate-x-1/2 highestLayer medium stack:s2 padded">
-      <div className="stack:s-1">
+        <div className="stack:s-1">
           <p>
             <b><em>NO-THING:</em></b>
           </p>
           <p>
-            On December 29, 2024, <em>NO-THING</em> unfolded as a 24-hour livestream exploring the theme of nothingness—set during what they called the &quot;nothing period of the year,&quot; between Christmas and the New Year.
+            On December 29, 2024, <em>NO-THING</em> is this THING on? preseted a 24-hour livestream on the theme of NOTHING.
           </p>
           <p>
-            The event placed contemporary livestreaming practices in dialogue with a broader history of the medium, referencing and resurrecting early examples that emphasized duration and ambient presence, such as <em>The Trojan Room Coffee Machine</em>, the first livestream; <em>Watching Grass Grow</em>, the quiet feed of a suburban front lawn; and <em>Exonemo&apos;s The Internet Bedroom</em>, a 90+ person virtual sleepover.
+            <em>NO-THING</em> featured more than 40 participants, including friends, randos, and figures from the early days of livestreaming, whose streams focused primarily on NOTHING as activity.
           </p>
           <p>
-            <em>NO-THING</em> featured more than 50 participants, including both emerging artists and figures from the early days of livestreaming, whose streams focused primarily on absence as activity.
+            NO-THING also early examples of ambient streams including  <em>The Trojan Room Coffee Machine</em>, the first livestream; <em>Watching Grass Grow</em>, the quiet feed of a suburban front lawn; and <em>Exonemo&apos;s The Internet Bedroom</em>, a 90+ person virtual sleepover.
           </p>
           <p>
-            The piece was installed at Nguyen Wahed on the Lower East Side, where monitors were placed on milk crates in the windows of the gallery, otherwise shuttered for the holiday season.
+            The streams were physically installed at Nguyen Wahed on the Lower East Side, on monitors on milk crates in the windows of the gallery (while it was closed).
           </p>
           <p>
             <b>NO-THING streamers included:</b> Alan Worm (Age of Empires 2 Bear Cam), anya mind (anya tv), baphomette (😈), Brian Clifton (brian), Char Stiles (taking turns being the no thing), Claire Hentschker (NOTHINGBUTADS), Claire Jervert (Bina48), Daniel Shiffman (shiffman), Em Sieler (emsieler), emily d&apos;achiardi (sneaky-felix), exonemo (Internet Bedroom), Heheheheheheheheheheheheheheherdimas., helen lin (helen), Jessie Edelstein (jessie01000101), Karla Zurita (karla/backyard), Kennie Zhou (ken y0u sea m33), Kiana Fernandez (kiana), Kiki Green (scorpiojawn), Lau Mota (L444U), Matthew Flores (maaaaaaaaaatt), Mark Ramos (waitforit), Morry Kolman (WTTDOTM), Mister Grass (Watching Grass Grow), OK Books (loveheart), peter burr (void), Quentin Stafford-Fraser (Trojan Room Coffee Pot), Rosalie Yu (KiddieRide), Sloane Frederick (🦋🪰🦋), Spencer Chang (🟧🟦🟩🟪 🔛💻), Taylor Torres (bonita buzzkill / bonita ·͙⁺˚*•̩̩͙✩), and many more who wish to remain anonymous.
@@ -86,6 +86,24 @@ const AboutNothing: NextPage = () => {
           <p>
             <a href="https://emsieler.com" className="underline">Em Sieler</a> em sieler danced around her bedroom with her face + body blurred live
           </p>
+          <p>
+            <a href="https://www.clairesophie.com/" className="underline">Bhavik Sigh</a> streamed [NOTHINGBUTADS] cycled through live cam footage of billboards.
+          </p>
+          <p>
+            <a href="http://mollysoda.exposed/" className="underline">Molly Soda</a> let viewers drop images into a folder to be printed out.
+            .
+          </p>
+          <p>
+            <a href="https://softnet.works/" className="underline">Bhavik Sigh</a> streamed coding THING in real-time.
+          </p>
+          <p>
+            <a href="https://christopherclary.com/" className="underline">Christopher Clary</a> streamed in two rooms, The Chrisy Show Season 1 and 2, live streamed BRB and coming-up signage without even coming back online.
+          </p>
+          <p>
+            <a href="https://sarahrothberg.com/" className="underline">Sarah Rothberg</a> streamed a NO CONCEPT stream making it up as they went along and a google doc for ideas people came up with but didn&apos;t do.
+          </p>
+
+
         </div>
 
         <div className="stack:s-1">

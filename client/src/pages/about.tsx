@@ -49,7 +49,7 @@ const About: NextPage = () => {
             <Link href="/" className="underline">
               thing.tube
             </Link>{" "}
-            is installed IRL and online at <a href="https://movingimage.org/" className="underline">MoMI</a> in Queens, NY from April 12 - August 10, and will feature an on-site performance by its core members June 7. <a href="https://movingimage.org/event/thingyou/" className="underline">More info here!</a> 
+            is installed IRL and online at <a href="https://movingimage.org/" className="underline">MoMI</a> in Queens, NY from April 12 - August 10, and an on-site performance by its core members June 7. <a href="https://movingimage.org/event/thingyou/" className="underline">More info here!</a>
           </p>
         </div>
 
@@ -60,6 +60,14 @@ const About: NextPage = () => {
           <p>
             We&apos;d like to thank the following performers for being part of past THINGs: Chia Amisola, Herdimas Anggara, bonita buzzkill (Taylor Torres), baphomette, peter burr, Darla DeVour, Spencer Chang, Brian Clifton, Jessie Edelstein, Sloane Frederick, Kiki Gree, Heheheheheheheheheheheheheheherdimas., Claire Hentschker, Matthew Flores, Mr. Grass, helen lin, Maya Man, Lau Mota, Mark Ramos, Alan Worm, Roaslie Yu, Kennie Zhou, Karla Zurita, and many more who wish to remain anonymous. A special thank you to our developers Bhavik Singh, Mark Ramos, and Kevin Yeh.
           </p>
+          <p>
+            <p>
+              Thank you also to supporting institutions:{" "}
+              <a href="https://www.newinc.org/" className="underline" target="_blank" rel="noopener noreferrer">NEW INC</a>,{" "}
+              <a href="https://grayarea.org/cchange/" className="underline" target="_blank" rel="noopener noreferrer">C/Change (via Gray Area!)</a>,{" "}
+              <a href="https://onx.studio/" className="underline" target="_blank" rel="noopener noreferrer">Onassis ONX Studio</a>, and{" "}
+              <a href="https://getstream.io/" className="underline" target="_blank" rel="noopener noreferrer">Stream</a>.
+            </p>          </p>
           <Link href="/aboutnothing" className="underline">Read about more about one of our past performances: NO-THING</Link>
         </div>
       </div>
