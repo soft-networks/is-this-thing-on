@@ -86,6 +86,22 @@ const AboutNothing: NextPage = () => {
           <p>
             <a href="https://emsieler.com" className="underline">Em Sieler</a> em sieler danced around her bedroom with her face + body blurred live
           </p>
+          <p>
+            <a href="https://www.clairesophie.com/" className="underline">CLaire Sophie</a> streamed [NOTHINGBUTADS] cycled through live cam footage of billboards.
+          </p>
+          <p>
+            <a href="http://mollysoda.exposed/" className="underline">Molly Soda</a> let viewers drop images into a folder to be printed out.
+            .
+          </p>
+          <p>
+            <a href="https://softnet.works/" className="underline">Bhavik Singh</a> streamed "logstream" - a 24 live stream of backend logs.
+          </p>
+          <p>
+            <a href="https://christopherclary.com/" className="underline">Christopher Clary</a> streamed in two rooms, The Chrisy Show Season 1 and 2, live streamed BRB and coming-up signage without even coming back online.
+          </p>
+          <p>
+            <a href="https://sarahrothberg.com/" className="underline">Sarah Rothberg</a> streamed a NO CONCEPT stream making it up as they went along and a google doc for ideas people came up with but didn&apos;t do.
+          </p>
         </div>
 
         <div className="stack:s-1">
