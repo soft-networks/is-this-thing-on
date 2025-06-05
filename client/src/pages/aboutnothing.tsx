@@ -94,7 +94,7 @@ const AboutNothing: NextPage = () => {
             .
           </p>
           <p>
-            <a href="https://softnet.works/" className="underline">Bhavik Singh</a> streamed "logstream" - a 24 live stream of backend logs.
+            <a href="https://softnet.works/" className="underline">Bhavik Singh</a> streamed &apos;logstream&apos; - a 24 hour live stream of backend logs.
           </p>
           <p>
             <a href="https://christopherclary.com/" className="underline">Christopher Clary</a> streamed in two rooms, The Chrisy Show Season 1 and 2, live streamed BRB and coming-up signage without even coming back online.
