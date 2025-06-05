@@ -21,7 +21,7 @@ const AboutNothing: NextPage = () => {
       <div className="highestLayer medium stack:s3 padded centerh">
       <div className="stack">
           <p>
-            <b><em>NO-THING:</em></b>
+            <b><em>NO-THING: </em></b>
           </p>
           <p>
             On December 29, 2024, <em>NO-THING</em> unfolded as a 24-hour livestream exploring the theme of nothingness—set during what they called the &quot;nothing period of the year,&quot; between Christmas and the New Year.
