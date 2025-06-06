@@ -35,16 +35,42 @@ export async function syncAllRoomsChat(
   timestampFilter?: number,
 ) {
   const chats = chatCollection();
-  let q = query(chats, orderBy("timestamp", "desc"), limit(100));
+
+  let q =  query(
+    chats,
+    orderBy("timestamp", "desc"),
+    limit(100)
+  )
+
   if (timestampFilter) {
     q = query(q, where("timestamp", ">=", timestampFilter));
   }
+
   const unsub = onSnapshot(q, (docs) => {
-    docs.docChanges().forEach((change) => {
-      let chat = change.doc;
-      setChatList((pc) => ({ ...pc, [chat.id]: chat.data() as ChatMessage }));
+    trace("sync-chat", () => {
+      setChatList((pc) => {
+        let npc = { ...pc };
+        docs.docChanges().forEach((change) => {
+          let chat = change.doc;
+          const chatData = change.doc.data() as ChatMessage;
+          if (change.type === "added") {
+            if (!chatData.username?.includes("Bot")) {
+              logFirebaseUpdate("ChatMessage added");
+              npc[chat.id] = chatData;
+            }
+          }
+          if (change.type === "modified") {
+          }
+          if (change.type === "removed") {
+            logFirebaseUpdate("ChatMessage removed");
+            delete npc[chat.id];
+          }
+        });
+        return npc;
+      });
     });
   });
+
   return unsub;
 }
 export async function syncChat(

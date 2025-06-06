@@ -23,24 +23,12 @@ export const ChatListMuseum: React.FC<RoomUIProps & { whiteText?: boolean; }> = 
     useEffect(() => {
         console.log(chatList);
     }, [chatList]);
-
-    const filterAndSetChatList: React.Dispatch<React.SetStateAction<{ [key: string]: ChatMessage }>> = (value) => {
-        const newValue = typeof value === 'function' ? value(chatList) : value;
-        let filteredChatList = { ...newValue };
-        Object.keys(filteredChatList).forEach((key) => {
-            if (filteredChatList[key].username.toLowerCase().includes("bot")) {
-                delete filteredChatList[key];
-            }
-        });
-        setChatList(filteredChatList);
-    }
-
     useEffect(() => {
         async function setupDB() {
             if (unsubRef.current !== undefined) {
                 unsubRef.current();
             }
-            unsubRef.current = await syncAllRoomsChat(filterAndSetChatList, Date.now());
+            unsubRef.current = await syncAllRoomsChat(setChatList, Date.now());
         }
         setupDB();
         return () => {
