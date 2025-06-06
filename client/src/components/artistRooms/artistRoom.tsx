@@ -21,6 +21,9 @@ const ArtistRoom = ({ roomID }: { roomID: string }) => {
   if (roomID == "grass") {
     return <Grass />;
   }
+  if (roomID == "molly") {
+    return <Molly />;
+  }
   if (roomID == "exonomo") {
     return <Exonomo />;
   }

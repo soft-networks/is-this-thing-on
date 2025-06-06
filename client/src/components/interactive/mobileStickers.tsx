@@ -28,12 +28,13 @@ const MobileStickerTypeChooser: React.FC<{
   cdn: StickerCDN;
   typeSelected: (id?: string) => void;
 }> = ({ cdn, typeSelected}) => {
-  return <div className="horizontal-stack:noGap padded:s-1 overflowScroll noOverflowY  ">
+  return <div className="horizontal-stack:s-1 padded:s-1 overflowScroll noOverflowY  ">
     {Object.keys(cdn).map((k) => (
       <div
         key={`choosesticker-${k}`}
         onClick={(e) => typeSelected(k)}
-        style={{ width: "5ch"}}
+        style={{ width: "15ch", backgroundColor: "rgba(255, 255, 255, 0.5)"}}
+        className="padded:s-2 border-radius border"
       > <StickerImage url={cdn[k].imageURL} /></div>
     ))}
   </div>

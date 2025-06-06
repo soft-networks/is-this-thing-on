@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Unsubscribe } from "firebase/firestore";
-import { syncChat } from "../../../lib/firestore";
+import { syncAllRoomsChat } from "../../../lib/firestore";
 import { useRoomStore } from "../../../stores/currentRoomStore";
 import { RenderChat } from "./RenderChat";
 import { DEFAULT_STYLE } from "./utils";
 import classNames from "classnames";
+import useGlobalRoomsInfoStore from "../../../stores/globalRoomsInfoStore";
 
 const OLD_CHAT_DELAY = 0 * 60 * 1000; // 10 minutes in milliseconds
 
@@ -17,18 +18,17 @@ export const ChatListMuseum: React.FC<RoomUIProps & { whiteText?: boolean; }> = 
     let [chatList, setChatList] = useState<{ [key: string]: ChatMessage; }>({});
     let roomID = useRoomStore((state) => state.currentRoomID);
     let unsubRef = useRef<Unsubscribe>();
-    let roomColor = useRoomStore((state) => state.roomInfo?.roomColor);
+    let rooms = useGlobalRoomsInfoStore((state) => state.rooms);
 
     useEffect(() => {
         console.log(chatList);
     }, [chatList]);
-
     useEffect(() => {
         async function setupDB() {
             if (unsubRef.current !== undefined) {
                 unsubRef.current();
             }
-            unsubRef.current = await syncChat(setChatList, roomID || "home", Date.now());
+            unsubRef.current = await syncAllRoomsChat(setChatList, Date.now());
         }
         setupDB();
         return () => {
@@ -36,11 +36,11 @@ export const ChatListMuseum: React.FC<RoomUIProps & { whiteText?: boolean; }> = 
         };
     }, [roomID, timeWhenLoaded.current]);
 
-    return <div className="absoluteOrigin fullBleed videoInteractiveLayer" style={{...DEFAULT_STYLE("gray", true)} as React.CSSProperties} >
+    return <div className="absoluteOrigin fullBleed everest" style={{...DEFAULT_STYLE("gray", true)} as React.CSSProperties} >
         {Object.entries(chatList)
             .sort((a, b) => b[1].timestamp - a[1].timestamp)
             .map(([id, chat]) => (
-                <FloatingChatContainer key={`chatcontainer-${id}`} className={classNames({"h1": chat.message.length < 50})} >
+                <FloatingChatContainer key={`chatcontainer-${id}`} className={classNames({"h0": chat.message.length < 50, "h1": chat.message.length > 30})} roomColor={rooms[chat.roomID]?.roomColor || "white"} >
                     <RenderChat
                         id={id}
                         chat={chat}
@@ -54,10 +54,10 @@ export const ChatListMuseum: React.FC<RoomUIProps & { whiteText?: boolean; }> = 
     </div>;
 };
 
-const FloatingChatContainer: React.FC<{className?: string}> = ({children, className}) => {
+const FloatingChatContainer: React.FC<{className?: string, roomColor?: string}> = ({children, className, roomColor}) => {
 
-    const startPos = useRef<number>(Math.random() * 0.6 + 0.2);
-    return <div className={`absoluteOrigin animateOutAndAway narrow ${className}`} style={{left: `${startPos.current * 100}%`, transform: "translate(-50%, -50%)"}} >
+    const startPos = useRef<number>(Math.random() * 0.4 + 0.4);
+    return <div className={`absoluteOrigin animateOutAndAway ${className}`} style={{left: `${startPos.current * 100}%`, transform: "translate(-50%, -50%)", maxWidth: "25vvw", "--chatMessageBackgroundColor": roomColor} as React.CSSProperties} >
          {children}
     </div>
 }

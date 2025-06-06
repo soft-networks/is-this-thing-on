@@ -24,19 +24,16 @@ const AboutNothing: NextPage = () => {
             <b><em>NO-THING:</em></b>
           </p>
           <p>
-            On December 29, 2024, <em>NO-THING</em> unfolded as a 24-hour livestream exploring the theme of nothingness—set during what they called the &quot;nothing period of the year,&quot; between Christmas and the New Year.
+            On December 29, 2024, <em>NO-THING</em> is this THING on? presented a 24-hour livestream on the theme of NOTHING.
           </p>
           <p>
-            The event placed contemporary livestreaming practices in dialogue with a broader history of the medium, referencing and resurrecting early examples that emphasized duration and ambient presence, such as <em>The Trojan Room Coffee Machine</em>, the first livestream; <em>Watching Grass Grow</em>, the quiet feed of a suburban front lawn; and <em>Exonemo&apos;s The Internet Bedroom</em>, a 90+ person virtual sleepover.
+            <em>NO-THING</em> featured more than 40 participants, including friends, randos, and figures from the early days of livestreaming, whose streams focused primarily on NOTHING as activity.
           </p>
           <p>
-            <em>NO-THING</em> featured more than 50 participants, including both emerging artists and figures from the early days of livestreaming, whose streams focused primarily on absence as activity.
+            NO-THING also early examples of ambient streams including  <em>The Trojan Room Coffee Machine</em>, the first livestream; <em>Watching Grass Grow</em>, the quiet feed of a suburban front lawn; and <em>Exonemo&apos;s The Internet Bedroom</em>, a 90+ person virtual sleepover.
           </p>
           <p>
-            The piece was installed at Nguyen Wahed on the Lower East Side, where monitors were placed on milk crates in the windows of the gallery, otherwise shuttered for the holiday season.
-          </p>
-          <p>
-            <b>NO-THING streamers included:</b> Alan Worm (Age of Empires 2 Bear Cam), anya mind (anya tv), baphomette (😈), Brian Clifton (brian), Char Stiles (taking turns being the no thing), Claire Hentschker (NOTHINGBUTADS), Claire Jervert (Bina48), Daniel Shiffman (shiffman), Em Sieler (emsieler), emily d&apos;achiardi (sneaky-felix), exonemo (Internet Bedroom), Heheheheheheheheheheheheheheherdimas., helen lin (helen), Jessie Edelstein (jessie01000101), Karla Zurita (karla/backyard), Kennie Zhou (ken y0u sea m33), Kiana Fernandez (kiana), Kiki Green (scorpiojawn), Lau Mota (L444U), Matthew Flores (maaaaaaaaaatt), Mark Ramos (waitforit), Morry Kolman (WTTDOTM), Mister Grass (Watching Grass Grow), OK Books (loveheart), peter burr (void), Quentin Stafford-Fraser (Trojan Room Coffee Pot), Rosalie Yu (KiddieRide), Sloane Frederick (🦋🪰🦋), Spencer Chang (🟧🟦🟩🟪 🔛💻), Taylor Torres (bonita buzzkill / bonita ·͙⁺˚*•̩̩͙✩), and many more who wish to remain anonymous.
+            The streams were physically installed at Nguyen Wahed on the Lower East Side, on monitors on milk crates in the windows of the gallery (while it was closed).
           </p>
         </div>
 
@@ -48,7 +45,7 @@ const AboutNothing: NextPage = () => {
             <a href="https://www.clairesophie.com/" className="underline">Claire Hentschker</a> stream [NOTHINGBUTADS] cycled through live cam footage of billboards.
           </p>
           <p>
-            <a href="https://wttdotm.com/" className="underline">Morry</a> Kolman’s stream [WTTDOTM] displayed feeds of NYC traffic cameras alongside a computer colorfully displaying his SSN and facing the wrong way.
+            <a href="https://wttdotm.com/" className="underline">Morry</a> Kolman&apos;s stream [WTTDOTM] displayed feeds of NYC traffic cameras alongside a computer colorfully displaying his SSN and facing the wrong way.
           </p>
           <p>
             <a href="https://baphomette.hotglue.me/" className="underline">Sav / baphomette</a> Rotting in 144p
@@ -66,7 +63,7 @@ const AboutNothing: NextPage = () => {
             <a href="https://sneaky-felix.com" className="underline">emily d&apos;achiardi / sneaky-felix</a> emily d&apos;achiardi&apos;s stream [sneaky-felix] rotated a live &quot;in and out&quot; list for 2024 built from user comments.
           </p>
           <p>
-            <a href="https://shortiecountry.squarespace.com" className="underline">Sloane Frederick</a> sloane’s stream read poems by don marquis
+            <a href="https://shortiecountry.squarespace.com" className="underline">Sloane Frederick</a> sloane&apos;s stream read poems by don marquis
           </p>
           <p>
             <a href="https://clairejervert.com" className="underline">Claire Jervert</a> Claire Jevert presented a 24-hour live feed of the VR avatar of humanoid robot Bina48; the avatar was alert, fully connected to the actual robot&apos;s AI, and continuously stared at the viewer, blinking occasionally.
@@ -75,7 +72,7 @@ const AboutNothing: NextPage = () => {
             <a href="https://www.watching-grass-grow.com" className="underline">Mister Grass</a> LIVE WEBCAM of Watching Grass Grow since 2005!
           </p>
           <p>
-            <a href="https://instagram.com/scorpiojawn" className="underline">Kiki Green / scorpiojawn</a> Kiki’s stream [Scorpiojawn] showed an unproductive day in her art studio.
+            <a href="https://instagram.com/scorpiojawn" className="underline">Kiki Green / scorpiojawn</a> Kiki&apos;s stream [Scorpiojawn] showed an unproductive day in her art studio.
           </p>
           <p>
             <a href="https://kianafernandez.com" className="underline">kiana</a> Kiana Fernandez&apos;s stream [kianafer] showcased her parent&apos;s YouTube history, often Filipino lifestyle and food vlogs from the Philippines.
@@ -94,7 +91,7 @@ const AboutNothing: NextPage = () => {
             .
           </p>
           <p>
-            <a href="https://softnet.works/" className="underline">Bhavik Singh</a> streamed &apos;logstream&apos; - a 24 hour live stream of backend logs.
+            <a href="https://softnet.works/" className="underline">Bhavik Singh</a> streamed [logstream] - a stream of logs from THING.tube&apos;s backend.
           </p>
           <p>
             <a href="https://christopherclary.com/" className="underline">Christopher Clary</a> streamed in two rooms, The Chrisy Show Season 1 and 2, live streamed BRB and coming-up signage without even coming back online.
