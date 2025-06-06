@@ -28,6 +28,25 @@ export function syncGlobalChatDisabled(callback: (isDisabled: boolean) => void) 
   return unsub;
 }
 
+export async function syncAllRoomsChat(
+  setChatList: React.Dispatch<
+    React.SetStateAction<{ [key: string]: ChatMessage }>
+  >,
+  timestampFilter?: number,
+) {
+  const chats = chatCollection();
+  let q = query(chats, orderBy("timestamp", "desc"), limit(100));
+  if (timestampFilter) {
+    q = query(q, where("timestamp", ">=", timestampFilter));
+  }
+  const unsub = onSnapshot(q, (docs) => {
+    docs.docChanges().forEach((change) => {
+      let chat = change.doc;
+      setChatList((pc) => ({ ...pc, [chat.id]: chat.data() as ChatMessage }));
+    });
+  });
+  return unsub;
+}
 export async function syncChat(
   setChatList: React.Dispatch<
     React.SetStateAction<{ [key: string]: ChatMessage }>
