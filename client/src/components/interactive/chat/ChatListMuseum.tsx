@@ -28,7 +28,8 @@ export const ChatListMuseum: React.FC<RoomUIProps & { whiteText?: boolean; }> = 
             if (unsubRef.current !== undefined) {
                 unsubRef.current();
             }
-            unsubRef.current = await syncAllRoomsChat(setChatList, Date.now());
+            const filterBots = roomID != "chrisy";
+            unsubRef.current = await syncAllRoomsChat(setChatList, Date.now(), filterBots);
         }
         setupDB();
         return () => {
@@ -36,7 +37,7 @@ export const ChatListMuseum: React.FC<RoomUIProps & { whiteText?: boolean; }> = 
         };
     }, [roomID, timeWhenLoaded.current]);
 
-    return <div className="absoluteOrigin fullBleed everest" style={{...DEFAULT_STYLE("gray", true)} as React.CSSProperties} >
+    return <div className="absoluteOrigin fullBleed interactiveStickerLayer noEvents" style={{...DEFAULT_STYLE("gray", true)} as React.CSSProperties} >
         {Object.entries(chatList)
             .sort((a, b) => b[1].timestamp - a[1].timestamp)
             .map(([id, chat]) => (
