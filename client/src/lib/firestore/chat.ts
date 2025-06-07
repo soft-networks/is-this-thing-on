@@ -33,6 +33,7 @@ export async function syncAllRoomsChat(
     React.SetStateAction<{ [key: string]: ChatMessage }>
   >,
   timestampFilter?: number,
+  filterBots?: boolean,
 ) {
   const chats = chatCollection();
 
@@ -54,7 +55,7 @@ export async function syncAllRoomsChat(
           let chat = change.doc;
           const chatData = change.doc.data() as ChatMessage;
           if (change.type === "added") {
-            if (!chatData.username?.includes("Bot")) {
+            if (!filterBots || !chatData.username?.includes("Bot")) {
               logFirebaseUpdate("ChatMessage added");
               npc[chat.id] = chatData;
             }
