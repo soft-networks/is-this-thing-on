@@ -86,7 +86,7 @@ const ArchiveFooterRing: React.FC<{ isHome: boolean }> = ({ isHome }) => {
             className="border padded:s-3 center-text"
             style={{ backgroundColor: "var(--contrast)" }}
           >
-            <span>home</span>
+            <span>{archiveInfo?.name} archive</span>
           </div>
         ) : currentRoom ? (
           <div
@@ -118,7 +118,7 @@ const ArchiveHomeButton: React.FC = () => {
   return currentRoomID ? (
     <Link href={`/archive/${archiveID}`} passHref>
       <div className="padded:s-3 border clickable whiteFill greenFill:hover">
-        archive: {archiveInfo?.name}
+        home
       </div>
     </Link>
   ) : (

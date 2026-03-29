@@ -39,7 +39,7 @@ const Landing: NextPage = () => {
         </div>
         <Link href="/learnmore">
           <div className="border narrow  padded:s1 stack:s2 cursor:pointer greenFill:hover">
-            <div className="h2">about</div>
+            <div className="h2">more info?</div>
           </div>
         </Link>
       </div>
