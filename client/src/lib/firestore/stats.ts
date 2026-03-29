@@ -7,6 +7,21 @@ interface TotalOnline {
 }
 
 
+export function syncLiveDescription(callback: (info: { description: string | null; moreInfoURL: string | null }) => void) {
+  const adminDoc = doc(statsCollection(), "admin");
+  return onSnapshot(adminDoc, (docSnapshot) => {
+    if (docSnapshot.exists()) {
+      const data = docSnapshot.data();
+      callback({
+        description: data.live_description || null,
+        moreInfoURL: data.live_more_info || null,
+      });
+    } else {
+      callback({ description: null, moreInfoURL: null });
+    }
+  });
+}
+
 export function syncTotalOnline(callback: (stats: number) => void) {
   const totalOnline = doc(statsCollection(), "total_online");
 

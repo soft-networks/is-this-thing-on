@@ -1,7 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import { NextPage } from "next";
 import Head from "next/head";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { syncLiveDescription } from "../../lib/firestore/stats";
 import { Chat } from "../../components/interactive/chat";
 import { useRoomStore } from "../../stores/currentRoomStore";
 import useMediaQuery from "../../stores/useMediaQuery";
@@ -61,12 +62,31 @@ const IndexMobile = () => {
   );
 };
 
-const CenterText = () => (
-  <>
-    is this <br/>
-    thing on?
-  </>
-)
+const CenterText = () => {
+  const [liveDescription, setLiveDescription] = useState<string | null>(null);
+  const [moreInfoURL, setMoreInfoURL] = useState<string | null>(null);
+
+  useEffect(() => {
+    const unsub = syncLiveDescription((info) => {
+      setLiveDescription(info.description);
+      setMoreInfoURL(info.moreInfoURL);
+    });
+    return () => unsub();
+  }, []);
+
+  return (
+    <>
+      {liveDescription ? liveDescription : <>is this <br/> thing on?</>}
+      {moreInfoURL && (
+        <div>
+          <a href={moreInfoURL} target="_blank" rel="noopener noreferrer" className="underline">
+            more info?
+          </a>
+        </div>
+      )}
+    </>
+  );
+}
 
 
 export default LiveIndex;

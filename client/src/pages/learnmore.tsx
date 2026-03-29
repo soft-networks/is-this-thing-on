@@ -36,7 +36,7 @@ const About: NextPage = () => {
             thing.tube is both a performance platform and a form of <i>software development as performance art</i>: we develop it to fit our own creative desires and with questions in mind about online platforms and the current context of livestreaming and the web. It is always changing. Right now on thing.tube, streamers make their own customizable rooms, which are connected by a webring and a universal chat. We typically do group stream performances and announce them here and on our <a href="https://www.instagram.com/thing.tube/" className="underline">IG</a>.
           </p>
           <p>
-            Our code is open source and archived on our <a href="https://github.com/soft-networks/is-this-thing-on" className="underline">github</a>. For the full history of our project, feel free to explore our public archive on <a href="https://drive.google.com/embeddedfolderview?id=1kQnnvjLfiySUOoV8foHPa2sKUNVrGeZm#grid" className="underline">google drive</a>.
+            Our code is open source and archived on our <a href="https://github.com/soft-networks/is-this-thing-on" className="underline">github</a>. For the full history of our project, feel free to explore our <Link href="/" className="underline">past performances</Link> or our public archive on <a href="https://drive.google.com/embeddedfolderview?id=1kQnnvjLfiySUOoV8foHPa2sKUNVrGeZm#grid" className="underline">google drive</a>.
           </p>
         </div>
 
@@ -63,7 +63,7 @@ const About: NextPage = () => {
               <a href="https://nguyenwahed.com/" className="underline" target="_blank" rel="noopener noreferrer">Nguyen Wahed</a>,{" "}
             <a href="https://grayarea.org/cchange/" className="underline" target="_blank" rel="noopener noreferrer">C/Change</a> (via <a href="https://grayarea.co/" className="underline" target="_blank" rel="noopener noreferrer">Gray Area</a>!),{" "}
             <a href="https://onx.studio/" className="underline" target="_blank" rel="noopener noreferrer">Onassis ONX Studio</a>, and{" "}
-            <a href="https://getstream.io/" className="underline" target="_blank" rel="noopener noreferrer">Stream</a>.
+            <a href="https://getstream.io/" className="underline" target="_blank" rel="noopener noreferrer">Stream</a>. A special thank you to our developers Bhavik Singh, Mark Ramos, Sarah Rothberg, and Kevin Yeh.
             You someday? Help us$!
           </p>
         </div>
