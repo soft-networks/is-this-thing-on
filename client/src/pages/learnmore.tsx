@@ -4,10 +4,6 @@ import Head from "next/head";
 import { useEffect } from "react";
 import { useRoomStore } from "../stores/currentRoomStore";
 import Link from "next/link";
-import dynamic from "next/dynamic";
-
-const ArchiveViewer = dynamic(() => import("../components/archive/archiveViewer"), { ssr: false });
-
 const About: NextPage = () => {
   const changeRoom = useRoomStore((s) => s.changeRoom);
 
@@ -21,7 +17,7 @@ const About: NextPage = () => {
       <Head>
         <title>about THING</title>
       </Head>
-      <div className="center:absolute highestLayer medium stack:s2 padded">
+      <div className="medium stack:s2 padded" style={{ margin: "0 auto", paddingTop: "var(--s5)", maxWidth: "72ch" }}>
         <div className="stack:s-1">
           <p>
             <b><em>ABOUT:</em></b>
@@ -46,13 +42,13 @@ const About: NextPage = () => {
 
         <div className="stack:s-1">
           <p>
-            <b><em>UP NOW:</em></b>
+            <b><em>JOIN US:</em></b>
           </p>
           <p>
             <Link href="/live" className="underline">
               thing.tube
             </Link>{" "}
-            is installed IRL and online at <a href="https://movingimage.org/" className="underline">MoMI</a> in Queens, NY from April 12 - August 10, and an on-site performance by its core members June 7. <a href="https://movingimage.org/event/thingyou/" className="underline">More info here!</a>
+            is open to your curatorial concepts! if you have an idea for a way to use thing.tube: <a href="https://docs.google.com/forms/d/e/1FAIpQLSeKxPh6fgDhPJ_meOqQeTBDqJiEzooKrdV7W-u4Jswsh3VjtA/viewform?usp=publish-editor" className="underline">share your idea here!</a> 
           </p>
         </div>
 
@@ -61,18 +57,15 @@ const About: NextPage = () => {
             <b><em>TY:</em></b>
           </p>
           <p>
-            We&apos;d like to thank the following performers for being part of past THINGs: Chia Amisola, Herdimas Anggara, bonita buzzkill (Taylor Torres), baphomette, peter burr, Darla DeVour, Spencer Chang, Brian Clifton, Jessie Edelstein, Sloane Frederick, Kiki Gree, Heheheheheheheheheheheheheheherdimas., Claire Hentschker, Matthew Flores, Mr. Grass, helen lin, Maya Man, Lau Mota, Mark Ramos, Alan Worm, Roaslie Yu, Kennie Zhou, Karla Zurita, and many more who wish to remain anonymous. A special thank you to our developers Bhavik Singh, Mark Ramos, and Kevin Yeh.
+            Thank you to supporting institutions:{" "}
+            <a href="https://www.newinc.org/" className="underline" target="_blank" rel="noopener noreferrer">NEW INC</a>,{" "}
+            <a href="https://movingimage.org/" className="underline" target="_blank" rel="noopener noreferrer">Museum of Moving Image</a>,{" "}
+              <a href="https://nguyenwahed.com/" className="underline" target="_blank" rel="noopener noreferrer">Nguyen Wahed</a>,{" "}
+            <a href="https://grayarea.org/cchange/" className="underline" target="_blank" rel="noopener noreferrer">C/Change</a> (via <a href="https://grayarea.co/" className="underline" target="_blank" rel="noopener noreferrer">Gray Area</a>!),{" "}
+            <a href="https://onx.studio/" className="underline" target="_blank" rel="noopener noreferrer">Onassis ONX Studio</a>, and{" "}
+            <a href="https://getstream.io/" className="underline" target="_blank" rel="noopener noreferrer">Stream</a>.
+            You someday? Help us$!
           </p>
-          <p>
-            <p>
-              Thank you also to supporting institutions:{" "}
-              <a href="https://www.newinc.org/" className="underline" target="_blank" rel="noopener noreferrer">NEW INC</a>,{" "}
-              <a href="https://grayarea.org/cchange/" className="underline" target="_blank" rel="noopener noreferrer">C/Change (via Gray Area!)</a>,{" "}
-              <a href="https://onx.studio/" className="underline" target="_blank" rel="noopener noreferrer">Onassis ONX Studio</a>, and{" "}
-              <a href="https://getstream.io/" className="underline" target="_blank" rel="noopener noreferrer">Stream</a>.
-            </p>
-          </p>
-          <Link href="/aboutnothing" className="underline">Read about more about one of our past performances: NO-THING</Link>
         </div>
         <Link href="/"><div className="border padded greenFill:hover ">
           Home
