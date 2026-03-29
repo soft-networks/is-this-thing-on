@@ -83,6 +83,7 @@ interface ArchiveInfo {
   archiveID: string;
   name: string;
   description: string;
+  moreURL?: string;
 }
 
 interface ArchiveRoomInfo {

@@ -39,6 +39,7 @@ export function syncArchiveInfo(
       archiveID: snapshot.id,
       name: data.name || "",
       description: data.description || "",
+      moreURL: data.more_url || undefined,
     });
   });
 }

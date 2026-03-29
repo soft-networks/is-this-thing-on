@@ -75,7 +75,18 @@ const ArchiveHomeMobile = () => {
 const ArchiveCenterText = () => {
   const archiveInfo = useArchiveStore(useCallback((s) => s.archiveInfo, []));
   if (!archiveInfo) return null;
-  return <>{archiveInfo.description}</>;
+  return (
+    <>
+      {archiveInfo.description}
+      {archiveInfo.moreURL && (
+        <div>
+          <a href={archiveInfo.moreURL} target="_blank" rel="noopener noreferrer" className="underline">
+            more info?
+          </a>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default ArchiveIndex;
