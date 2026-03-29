@@ -11,7 +11,7 @@ const ArchiveViewer = dynamic(
 
 const Landing: NextPage = () => {
   return (
-    <div className="fullBleed relative" style={{ backgroundColor: "#d3d3d3" }}>
+    <div className="fullBleed relative" style={{ backgroundColor: "#ececec" }}>
       <Head>
         <title>THING</title>
       </Head>
