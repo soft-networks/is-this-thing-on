@@ -71,3 +71,10 @@ export function presenceStatsDoc() {
   return doc(db, "stats", "presence");
 }
 
+export function archiveDoc(archiveID: string) {
+  return doc(db, "archives", archiveID);
+}
+export function archiveRoomsCollection(archiveID: string) {
+  return collection(doc(db, "archives", archiveID), "rooms");
+}
+

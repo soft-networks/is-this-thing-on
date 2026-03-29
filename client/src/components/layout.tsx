@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import ClickGate from "./gates/globalClickedGate";
+
 import Footer from "./footer";
 import useMediaQuery from "../stores/useMediaQuery";
 import classnames from "classnames";
@@ -39,7 +39,7 @@ const Layout: React.FunctionComponent<{
 
 
   return (
-    <ClickGate>
+    <>
       <ContextMenu />
       <div
         className={classnames("fullScreen lightFill relative noOverflow", { "redFill museumMode": isMusuemMode })}
@@ -69,7 +69,7 @@ const Layout: React.FunctionComponent<{
           <Instrumentation />
         </div>
       </div>
-    </ClickGate>
+    </>
   );
 };
 

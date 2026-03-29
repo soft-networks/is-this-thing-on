@@ -22,7 +22,7 @@ export const ChatListRegular: React.FC<RoomUIProps & { whiteText?: boolean; }> =
   let roomName = useRoomStore((state) => state.roomInfo?.roomName);
   const { pathname } = useRouter();
   let unsubRef = useRef<Unsubscribe>();
-  let [filterRoom, setFilterRoom] = useState<boolean>(pathname !== "/");
+  let [filterRoom, setFilterRoom] = useState<boolean>(pathname !== "/live");
   let [lastRecalculationUpdate, setLastRecalculationUpdate] = useState<number>(
     Date.now()
   );

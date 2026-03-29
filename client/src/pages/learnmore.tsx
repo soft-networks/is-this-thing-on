@@ -4,6 +4,9 @@ import Head from "next/head";
 import { useEffect } from "react";
 import { useRoomStore } from "../stores/currentRoomStore";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const ArchiveViewer = dynamic(() => import("../components/archive/archiveViewer"), { ssr: false });
 
 const About: NextPage = () => {
   const changeRoom = useRoomStore((s) => s.changeRoom);
@@ -24,7 +27,7 @@ const About: NextPage = () => {
             <b><em>ABOUT:</em></b>
           </p>
           <p>
-            <Link href="/" className="underline">
+            <Link href="/live" className="underline">
               thing.tube
             </Link>{" "}
             is a livestreaming network for artists, founded by the collective <em>is this thing on?</em> (
@@ -46,7 +49,7 @@ const About: NextPage = () => {
             <b><em>UP NOW:</em></b>
           </p>
           <p>
-            <Link href="/" className="underline">
+            <Link href="/live" className="underline">
               thing.tube
             </Link>{" "}
             is installed IRL and online at <a href="https://movingimage.org/" className="underline">MoMI</a> in Queens, NY from April 12 - August 10, and an on-site performance by its core members June 7. <a href="https://movingimage.org/event/thingyou/" className="underline">More info here!</a>
@@ -71,6 +74,9 @@ const About: NextPage = () => {
           </p>
           <Link href="/aboutnothing" className="underline">Read about more about one of our past performances: NO-THING</Link>
         </div>
+        <Link href="/"><div className="border padded greenFill:hover ">
+          Home
+        </div></Link>
       </div>
     </div>
   );

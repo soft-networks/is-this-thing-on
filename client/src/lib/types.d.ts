@@ -78,3 +78,19 @@ interface PresenceStats {
   [key: string]: number;
 }
 type RtmpsDetails = { rtmpAddress: string; rtmpStreamKey: string };
+
+interface ArchiveInfo {
+  archiveID: string;
+  name: string;
+  description: string;
+  moreURL?: string;
+}
+
+interface ArchiveRoomInfo {
+  roomID: string;
+  roomName: string;
+  roomColor: string;
+  archiveURL: string;
+}
+
+type AllArchiveRooms = { [key: string]: ArchiveRoomInfo };

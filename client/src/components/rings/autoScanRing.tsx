@@ -45,7 +45,7 @@ export const AutoScanRing: React.FC<AutoScanRingProps> = ({
         const nextIndex = (currentIndex + 1) % availableRooms.length;
         const nextRoomId = availableRooms[nextIndex];
         if (nextRoomId === "home") {
-            push("/");
+            push("/live");
         } else {
             push(roomIDToHREF(nextRoomId));
         }

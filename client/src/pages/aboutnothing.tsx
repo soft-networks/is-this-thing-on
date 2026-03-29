@@ -103,7 +103,7 @@ const AboutNothing: NextPage = () => {
 
         <div className="stack:s-1">
           <p>
-            <Link href="/" className="underline">← back to thing.tube</Link>
+            <Link href="/live" className="underline">← back to thing.tube</Link>
           </p>
         </div>
       </div>
