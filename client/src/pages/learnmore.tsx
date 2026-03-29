@@ -63,7 +63,7 @@ const About: NextPage = () => {
               <a href="https://nguyenwahed.com/" className="underline" target="_blank" rel="noopener noreferrer">Nguyen Wahed</a>,{" "}
             <a href="https://grayarea.org/cchange/" className="underline" target="_blank" rel="noopener noreferrer">C/Change</a> (via <a href="https://grayarea.co/" className="underline" target="_blank" rel="noopener noreferrer">Gray Area</a>!),{" "}
             <a href="https://onx.studio/" className="underline" target="_blank" rel="noopener noreferrer">Onassis ONX Studio</a>, and{" "}
-            <a href="https://getstream.io/" className="underline" target="_blank" rel="noopener noreferrer">Stream</a>.
+            <a href="https://getstream.io/" className="underline" target="_blank" rel="noopener noreferrer">Stream</a>. A special thank you to our developers Bhavik Singh, Mark Ramos, Sarah Rothberg, and Kevin Yeh.
             You someday? Help us$!
           </p>
         </div>
