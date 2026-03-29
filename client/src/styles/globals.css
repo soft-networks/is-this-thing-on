@@ -111,6 +111,10 @@ body {
   font-size: max(2.1vw, 24px);
   letter-spacing: -1px;
 }
+.h2 {
+  font-size: max(1.5vw, 24px);
+  letter-spacing: -1px;
+}
 .h3 {
   font-size: var(--s1);
 }

@@ -52,7 +52,7 @@ const useGlobalRoomsInfoStore = create<GlobalRoomsInfo>((set) => ({
 }));
 
 export const roomIDToHREF = (id: string) => {
-  return `/${slugify(id)}`;
+  return `/live/${slugify(id)}`;
 };
 
 export default useGlobalRoomsInfoStore;

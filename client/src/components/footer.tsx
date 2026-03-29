@@ -15,13 +15,17 @@ const Footer: React.FC = () => {
   const { pathname } = useRouter();
   const isMobile = useMediaQuery();
   const isProjectorMode = useMuseumMode(useCallback((state) => state.isProjectorMode, []));
+  const isLivePage = pathname.startsWith("/live");
+
+  if (!isLivePage) return null;
+
   return (
     <>
     <footer className={classNames("fullWidth uiLayer horizontal-stack", { "align-end:fixed": !isMobile, "relative": isMobile })}>
       <div className={classNames("uiLayer padded:s-2 overflowVisible", {
         "centerh:absolute": !isMobile
       })}>
-         <FooterRing isHome={pathname == "/"}/>
+         <FooterRing isHome={pathname == "/live"}/>
       </div>
       <div
         className="uiLayer horizontal-stack:s-2 padded:s-2 align-end"
@@ -40,14 +44,14 @@ const Footer: React.FC = () => {
 
 const HomeButton: React.FC = () => {
   const { pathname, back } = useRouter();
-  return pathname == "/" ? (
-    <Link href={"/about"} passHref>
+  return pathname == "/live" ? (
+    <Link href={"/"} passHref>
       <div className="padded:s-3 border clickable whiteFill greenFill:hover">
-      about
+      /
       </div>
     </Link>
   ) : (
-    <Link href={"/"} passHref>
+    <Link href={"/live"} passHref>
       <div className="padded:s-3 border clickable whiteFill greenFill:hover">
       home
       </div>

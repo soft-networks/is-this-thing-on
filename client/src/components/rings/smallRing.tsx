@@ -28,7 +28,7 @@ export const FooterRing: React.FC<{ isHome: boolean }> = ({ isHome }) => {
   // Simplified click handlers using memoized data
   const handlePrevClick = useCallback(() => {
     if (navigationData.currentIndex === 0) {
-      push("/");
+      push("/live");
     } else {
       push(roomIDToHREF(navigationData.keys[navigationData.currentIndex - 1]));
     }
@@ -36,7 +36,7 @@ export const FooterRing: React.FC<{ isHome: boolean }> = ({ isHome }) => {
 
   const handleNextClick = useCallback(() => {
     if (navigationData.currentIndex === navigationData.keys.length - 1) {
-      push("/");
+      push("/live");
     } else {
       push(roomIDToHREF(navigationData.keys[navigationData.currentIndex + 1]));
     }

@@ -118,13 +118,13 @@ const ArchiveHomeButton: React.FC = () => {
   return currentRoomID ? (
     <Link href={`/archive/${archiveID}`} passHref>
       <div className="padded:s-3 border clickable whiteFill greenFill:hover">
-        home
+        archive: {archiveInfo?.name}
       </div>
     </Link>
   ) : (
-    <Link href="/about" passHref>
+    <Link href="/" passHref>
       <div className="padded:s-3 border clickable whiteFill greenFill:hover">
-        about
+        /
       </div>
     </Link>
   );

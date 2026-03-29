@@ -1,8 +1,29 @@
-import { onSnapshot, query } from "firebase/firestore";
+import { collection, onSnapshot, query } from "firebase/firestore";
 import { archiveDoc, archiveRoomsCollection } from "./locations";
+import db from "./init";
 
 /**
- * Sync archive info from Firestore. Stub for v0 — not wired up yet.
+ * Sync all archives from Firestore (for listing).
+ */
+export function syncAllArchives(
+  callback: (archives: ArchiveInfo[]) => void,
+) {
+  return onSnapshot(query(collection(db, "archives")), (snapshot) => {
+    const archives: ArchiveInfo[] = [];
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      archives.push({
+        archiveID: doc.id,
+        name: data.name || "",
+        description: data.description || "",
+      });
+    });
+    callback(archives);
+  });
+}
+
+/**
+ * Sync archive info from Firestore.
  */
 export function syncArchiveInfo(
   archiveID: string,

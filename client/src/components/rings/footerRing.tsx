@@ -31,7 +31,7 @@ export const FooterRing: React.FC<{ isHome: boolean }> = ({ isHome }) => {
       return;
     }
     if (currentIndex === 0) {
-      push("/");
+      push("/live");
     } else {
       push(roomIDToHREF(keys[currentIndex - 1]));
     }
@@ -44,7 +44,7 @@ export const FooterRing: React.FC<{ isHome: boolean }> = ({ isHome }) => {
       return;
     }
     if (currentIndex === keys.length - 1) {
-      push("/");
+      push("/live");
     } else {
       push(roomIDToHREF(keys[currentIndex + 1]));
     }

@@ -13,7 +13,7 @@ const getStatusText = (status: string) => {
 
 const MuseumFooter: React.FC = () => {
     const { pathname, back } = useRouter();
-    return pathname == "/" || pathname.includes("admin") ? (
+    return pathname == "/live" || pathname.includes("admin") ? (
         <MuseumFooterStatic />
     ) : (
         <MuseumFooterRoom />
