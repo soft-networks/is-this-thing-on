@@ -11,7 +11,7 @@ const ArchiveViewer = dynamic(
 
 const Landing: NextPage = () => {
   return (
-    <div className="fullBleed contrastFill relative">
+    <div className="fullBleed relative" style={{ backgroundColor: "#ececec" }}>
       <Head>
         <title>THING</title>
       </Head>
@@ -20,9 +20,9 @@ const Landing: NextPage = () => {
         className="center:absolute uiLayer center-text stack:s2"
       >
         <Link href="/live">
-          <div className="border narrow  padded:s1 stack:s2 cursor:pointer greenFill:hover">
+          <div className="border narrow whiteFill padded:s1 stack:s2 cursor:pointer greenFill:hover">
             <div className="h1">
-              WELCOME TO THING
+              WELCOME TO THING.TUBE
               <br />
             </div>
             <div className="h1 stack">
@@ -33,12 +33,12 @@ const Landing: NextPage = () => {
             </div>
           </div>
         </Link>
-        <div className="border narrow  padded:s1 stack:s-1">
+        <div className="border narrow whiteFill padded:s1 stack:s-1">
           <div className="h2">view past performances:</div>
           <ArchiveViewer />
         </div>
         <Link href="/learnmore">
-          <div className="border narrow  padded:s1 stack:s2 cursor:pointer greenFill:hover">
+          <div className="border narrow whiteFill padded:s1 stack:s2 cursor:pointer greenFill:hover">
             <div className="h2">more info?</div>
           </div>
         </Link>
