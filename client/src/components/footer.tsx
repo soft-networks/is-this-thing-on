@@ -31,6 +31,7 @@ const Footer: React.FC = () => {
         className="uiLayer horizontal-stack:s-2 padded:s-2 align-end"
       >
         {!isMobile && <AutoScanRing />}
+        {!isProjectorMode && <AboutButton />}
         {!isProjectorMode && <HomeButton />}
       </div>
     </footer>
@@ -39,6 +40,16 @@ const Footer: React.FC = () => {
       {!isProjectorMode && <AccountButton />}
     </div>
     </>
+  );
+};
+
+const AboutButton: React.FC = () => {
+  return (
+    <a href="https://thing.tube/learnmore">
+      <div className="padded:s-3 border clickable whiteFill greenFill:hover">
+      about
+      </div>
+    </a>
   );
 };
 
