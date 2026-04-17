@@ -40,6 +40,8 @@ type AllRoomsSummary = { [key: string]: RoomSummary };
 type CurrentRoomInfo = RoomSummary & {
   consentURL?: string;
   streamOwner: string;
+  description?: string;
+  moreURL?: string;
 };
 
 type Pos = [number, number];

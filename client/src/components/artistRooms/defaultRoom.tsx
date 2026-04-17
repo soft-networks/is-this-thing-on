@@ -62,6 +62,20 @@ const DefaultRoom = (props: RoomViewProps) => {
       ) : (
         <div className="centerh"> loading </div>
       )}
+      {roomInfo?.description && (
+        <div className="center:absolute highestLayer center-text" style={{ pointerEvents: "none" }}>
+          <div style={{ pointerEvents: "auto" }}>
+            {roomInfo.description}
+            {roomInfo.moreURL && (
+              <div>
+                <a href={roomInfo.moreURL} target="_blank" rel="noopener noreferrer" className="underline">
+                  more info?
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 };

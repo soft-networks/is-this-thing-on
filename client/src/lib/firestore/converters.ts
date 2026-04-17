@@ -34,6 +34,8 @@ export function sanitizeRoomInfo(
     consentURL: data["consentURL"] || undefined,
     previewOverlay: data["preview_overlay"] || undefined,
     archiveURL: data["archive_url"] || undefined,
+    description: data["description"] || undefined,
+    moreURL: data["more_url"] || undefined,
   };
 }
 
