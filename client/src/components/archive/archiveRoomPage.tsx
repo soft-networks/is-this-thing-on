@@ -36,7 +36,7 @@ const ArchiveRoomPage: React.FC<{ roomID: string }> = ({ roomID }) => {
   }
 
   return (
-    <main className="fullBleed noOverflow relative">
+    <main className="fullBleed noOverflow relative" style={{ "--roomColor": room.roomColor } as React.CSSProperties}>
       {isMobile ? (
         <ArchiveRoomMobile room={room} />
       ) : (
