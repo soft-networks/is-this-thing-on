@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import useArchiveStore, { archiveRoomToSummary } from "../../stores/archiveStore";
 import useMediaQuery from "../../stores/useMediaQuery";
@@ -7,9 +7,20 @@ import classNames from "classnames";
 
 const ArchiveFooter: React.FC = () => {
   const isMobile = useMediaQuery();
-  const archiveInfo = useArchiveStore(useCallback((s) => s.archiveInfo, []));
   const currentRoomID = useArchiveStore(useCallback((s) => s.currentRoomID, []));
+  const rooms = useArchiveStore(useCallback((s) => s.rooms, []));
+  const archiveInfo = useArchiveStore(useCallback((s) => s.archiveInfo, []));
+  const { push } = useRouter();
   const isHome = !currentRoomID;
+  const archiveID = archiveInfo?.archiveID || "";
+
+  const handleNextClick = () => {
+    const keys = Object.keys(rooms);
+    const currentIndex = currentRoomID ? keys.indexOf(currentRoomID) : -1;
+    if (isHome) { push(`/archive/${archiveID}/${keys[0]}`); return; }
+    if (currentIndex === keys.length - 1) { push(`/archive/${archiveID}`); }
+    else { push(`/archive/${archiveID}/${keys[currentIndex + 1]}`); }
+  };
 
   return (
     <>
@@ -27,6 +38,10 @@ const ArchiveFooter: React.FC = () => {
           <ArchiveFooterRing isHome={isHome} />
         </div>
         <div className="uiLayer horizontal-stack:s-2 padded:s-2 align-end">
+          {!isMobile && !isHome && <ArchiveScanButton onNext={handleNextClick} />}
+          <a href="/learnmore">
+            <div className="padded:s-3 border clickable whiteFill greenFill:hover">about</div>
+          </a>
           <ArchiveHomeButton />
         </div>
       </footer>
@@ -106,6 +121,29 @@ const ArchiveFooterRing: React.FC<{ isHome: boolean }> = ({ isHome }) => {
           →
         </div>
       </div>
+    </div>
+  );
+};
+
+const SCAN_INTERVAL = 30;
+
+const ArchiveScanButton: React.FC<{ onNext: () => void }> = ({ onNext }) => {
+  const [isScanning, setIsScanning] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(SCAN_INTERVAL);
+
+  useEffect(() => {
+    if (!isScanning) { setTimeLeft(SCAN_INTERVAL); return; }
+    const interval = setInterval(onNext, SCAN_INTERVAL * 1000);
+    const countdown = setInterval(() => setTimeLeft((t) => Math.max(0, t - 0.1)), 100);
+    return () => { clearInterval(interval); clearInterval(countdown); };
+  }, [isScanning, onNext]);
+
+  return (
+    <div
+      className="whiteFill clickable border padded:s-3 greenFill:hover"
+      onClick={() => setIsScanning((s) => !s)}
+    >
+      {isScanning ? `next in ${Math.ceil(timeLeft)}s` : "scan"}
     </div>
   );
 };
