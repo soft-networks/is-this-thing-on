@@ -64,6 +64,11 @@ export const RenderChat: React.FC<{
           style={{ top: "-17px", padding: "4px" }}
         >
           {chat.username || "unknown"}
+          {chat.timestamp && (
+            <div style={{ fontSize: "0.65em", opacity: 0.6, lineHeight: 1 }}>
+              {new Date(chat.timestamp).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false }).replace(/\//g, "-")} {new Date(chat.timestamp).toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" }).replace(/\//g, "-")}
+            </div>
+          )}
         </div>
         { (forceEnableDelete || (isAdmin && !hideControls)) && <div className="caption whiteFill greenFill:hover border cursor:pointer" style={{ padding: "4px" }} onClick={() => deleteChatMessageDB(id)}>
           delete
