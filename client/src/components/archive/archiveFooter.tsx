@@ -39,9 +39,9 @@ const ArchiveFooter: React.FC = () => {
         </div>
         <div className="uiLayer horizontal-stack:s-2 padded:s-2 align-end">
           {!isMobile && !isHome && <ArchiveScanButton onNext={handleNextClick} />}
-          <a href="/learnmore">
+          <Link href="/learnmore" passHref>
             <div className="padded:s-3 border clickable whiteFill greenFill:hover">about</div>
-          </a>
+          </Link>
           <ArchiveHomeButton />
         </div>
       </footer>
