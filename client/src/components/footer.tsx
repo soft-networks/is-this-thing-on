@@ -73,10 +73,10 @@ const HomeButton: React.FC = () => {
 };
 
 const AdminPanelReopenButton: React.FC = () => {
-  const isAdmin = useGlobalAdminStore(useCallback((s) => s.isAdmin, []));
+  const adminForIDs = useGlobalAdminStore(useCallback((s) => s.adminFor, []));
   const adminPanelOpen = useGlobalAdminStore(useCallback((s) => s.adminPanelOpen, []));
   const setAdminPanelOpen = useGlobalAdminStore(useCallback((s) => s.setAdminPanelOpen, []));
-  if (!isAdmin || adminPanelOpen) return null;
+  if (adminForIDs.length === 0 || adminPanelOpen) return null;
   return (
     <div className="mars border-thin whiteFill padded:s-3 cursor:pointer greenFill:hover" onClick={() => setAdminPanelOpen(true)}>
       admin panel

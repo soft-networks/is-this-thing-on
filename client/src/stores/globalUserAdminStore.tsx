@@ -39,6 +39,6 @@ export const useGlobalAdminStore = create<AdminStore>((set) => ({
   setAdminFor: (adminFor: string[]) => {
     set({ adminFor: adminFor });
   },
-  adminPanelOpen: true,
+  adminPanelOpen: false,
   setAdminPanelOpen: (open: boolean) => set({ adminPanelOpen: open }),
 }));
