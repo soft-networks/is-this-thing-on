@@ -36,6 +36,7 @@ export function sanitizeRoomInfo(
     archiveURL: data["archive_url"] || undefined,
     description: data["description"] || undefined,
     moreURL: data["more_url"] || undefined,
+    chatDisabled: data["chat_disabled"] || false,
   };
 }
 

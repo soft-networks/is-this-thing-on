@@ -25,7 +25,7 @@ const DefaultRoomMobileContent = ({
     </div>
     <MobileStickerAdder />
     <div className="flex-1 relative">
-      <Chat key={`${roomInfo.roomID}-chat`} style={chatStyle} />
+      <Chat key={`${roomInfo.roomID}-chat`} style={chatStyle} disabled={roomInfo.chatDisabled} />
     </div>
   </div>
 );
@@ -40,7 +40,7 @@ const DefaultRoomDesktopContent = ({
   
   <>
     {/* Comment out the line below to remove the chat */}
-    <Chat key={`${roomInfo.roomID}-chat`} style={chatStyle} />
+    <Chat key={`${roomInfo.roomID}-chat`} style={chatStyle} disabled={roomInfo.chatDisabled} />
     <VideoPlayer  hideMuteButton={hideMuteButton} muteOverride={roomInfo.roomID === "you"} />
     <Stickers style={stickerStyle} StickerChooser={stickerChooser} />
   </>

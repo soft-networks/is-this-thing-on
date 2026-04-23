@@ -1,13 +1,14 @@
-import { createRef, useCallback, useEffect, useState } from "react";
+import { createRef, useCallback, useState } from "react";
 
 import AdminStreamPanel from "./adminStreamPanel";
 import Draggable from "react-draggable";
 import classnames from "classnames";
-import { resetStickers } from "../../lib/firestore";
 import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
 import { useRoomStore } from "../../stores/currentRoomStore";
 import StickerAdminPanel from "./adminStickerPanel";
 import ArchivePanel from "./archivePanel";
+import { doc, updateDoc } from "firebase/firestore";
+import db from "../../lib/firestore/init";
 
 const AdminPanel = ({
   rtmpsDetails,
@@ -23,13 +24,14 @@ const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
 }) => {
   let panelRef = createRef<HTMLDivElement>();
   const roomID = useRoomStore(useCallback((s) => s.roomInfo?.roomID, []));
-  const [closePanel, setClosePanel] = useState(false);
+  const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
+  const adminPanelOpen = useGlobalAdminStore(useCallback((s) => s.adminPanelOpen, []));
+  const setAdminPanelOpen = useGlobalAdminStore(useCallback((s) => s.setAdminPanelOpen, []));
 
-  return <>
-    {closePanel && <div className="mars" style={{ background: "none", position: "fixed", height: "12px", width: "12px", bottom: "2px", right: "2px" }} onClick={() => setClosePanel(false)}></div> }
+  return (
     <Draggable handle=".handle" nodeRef={panelRef}>
       <div
-        className={classnames("stack:noGap lightFill relative border uiLayer minTextWidthMedium mars", { "hide": closePanel })}
+        className={classnames("stack:noGap lightFill relative border uiLayer minTextWidthMedium mars", { "hide": !adminPanelOpen })}
         style={{ position: "fixed", top: "var(--s3)", right: "var(--s1)", maxHeight: "calc(70vh)", overflowY: "auto" }}
         ref={panelRef}
       >
@@ -47,17 +49,43 @@ const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
         </div>
 
         <div className="padded:s-1 stack:s1 monospace">
-          <div onClick={() => setClosePanel(true)} className="align-end whiteFill border padded:s-3 greenFill:hover cursor:pointer">
+          <div onClick={() => setAdminPanelOpen(false)} className="align-end whiteFill border padded:s-3 greenFill:hover cursor:pointer">
             close admin panel
           </div>
+          {roomID && <LiveChatToggle roomID={roomID} chatDisabled={roomInfo?.chatDisabled} />}
           {roomID && <AdminStreamPanel rtmpsDetails={rtmpsDetails} />}
           {roomID && roomID !== "you" && <ArchivePanel roomID={roomID} />}
           {roomID && <StickerAdminPanel roomID={roomID} />}
-
         </div>
       </div>
-    </Draggable></>
+    </Draggable>
+  );
 };
 
+const LiveChatToggle: React.FC<{ roomID: string; chatDisabled?: boolean }> = ({ roomID, chatDisabled }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  const toggle = async () => {
+    const roomRef = doc(db, "rooms", roomID);
+    await updateDoc(roomRef, { chat_disabled: !chatDisabled });
+  };
+
+  return (
+    <div className="stack:s-1">
+      <div className="horizontal-stack cursor:pointer greenFill inline-block" onClick={() => setExpanded(!expanded)}>
+        <div>{expanded ? "-" : "+"}</div>
+        <div>Chat controls</div>
+      </div>
+      {expanded && (
+        <div
+          className="whiteFill border padded:s-3 cursor:pointer greenFill:hover"
+          onClick={toggle}
+        >
+          {chatDisabled ? "enable chat" : "disable chat"}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default AdminPanel;

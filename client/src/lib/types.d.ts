@@ -42,6 +42,7 @@ type CurrentRoomInfo = RoomSummary & {
   streamOwner: string;
   description?: string;
   moreURL?: string;
+  chatDisabled?: boolean;
 };
 
 type Pos = [number, number];
