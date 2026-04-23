@@ -22,7 +22,7 @@ const GlobalUserAdminProvider: React.FC = ({children}) => {
 
   useEffect(() => {
     refreshAdminFor();
-  }, []);
+  }, [userID]);
 
   useEffect(() => {
     refreshAdminFor();

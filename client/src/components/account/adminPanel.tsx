@@ -15,7 +15,9 @@ const AdminPanel = ({
 }: {
   rtmpsDetails: RtmpsDetails | null;
 }) => {
-  const isAdmin = useGlobalAdminStore(useCallback((s) => s.isAdmin, []));
+  const adminForIDs = useGlobalAdminStore(useCallback((s) => s.adminFor, []));
+  const roomID = useRoomStore(useCallback((s) => s.currentRoomID, []));
+  const isAdmin = !!(roomID && adminForIDs.includes(roomID));
   return isAdmin ? <AdminPanelInternal rtmpsDetails={rtmpsDetails} /> : null;
 };
 
