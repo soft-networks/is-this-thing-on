@@ -57,6 +57,7 @@ interface Sticker {
   imageURL: string;
   noGift: string;
   size?: number;
+  active?: boolean;
 }
 interface StickerInstance {
   position: Pos;

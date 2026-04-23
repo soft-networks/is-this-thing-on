@@ -118,5 +118,6 @@ export function sanitizeStickerCDNFromDB(sticker: any, id: string): Sticker {
     imageURL: sticker["url"],
     noGift: sticker["noGift"],
     size: sticker["size"] || undefined,
+    active: sticker["active"] !== false,
   };
 }

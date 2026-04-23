@@ -1,6 +1,6 @@
+import { Unsubscribe } from "firebase/firestore";
 import create from "zustand";
-
-import { getStickerCDN } from "../lib/firestore";
+import { syncStickerCDN } from "../lib/firestore/stickers";
 
 interface StickerStoreState {
   changeRoomStickers: (roomID: string) => void;
@@ -8,14 +8,16 @@ interface StickerStoreState {
   stickerCDN?: { [key: string]: Sticker };
 }
 
+let unsub: Unsubscribe | undefined;
+
 const useStickerCDNStore = create<StickerStoreState>((set) => ({
   changeRoomStickers: (roomID: string) => {
-    getStickerCDN(roomID, (c) => {
-      set({ stickerCDN: c });
-    });
+    if (unsub) unsub();
+    unsub = syncStickerCDN(roomID, (c) => set({ stickerCDN: c }));
   },
   stickerCDN: undefined,
   unmountRoomStickers: () => {
+    if (unsub) { unsub(); unsub = undefined; }
     set({ stickerCDN: undefined });
   },
 }));

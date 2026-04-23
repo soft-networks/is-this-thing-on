@@ -65,14 +65,14 @@ const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
 
 const AutoClearPanel: React.FC<{ roomID: string; autoClearEnabled?: boolean; autoClearSeconds?: number }> = ({ roomID, autoClearEnabled, autoClearSeconds }) => {
   const [expanded, setExpanded] = useState(false);
-  const [minutes, setMinutes] = useState(autoClearSeconds ? String(Math.round(autoClearSeconds / 60)) : "5");
+  const [seconds, setSeconds] = useState(autoClearSeconds ? String(autoClearSeconds) : "60");
   const [saved, setSaved] = useState(false);
 
   const handleSave = async () => {
     const roomRef = doc(db, "rooms", roomID);
     await updateDoc(roomRef, {
       auto_clear_enabled: true,
-      auto_clear_seconds: parseFloat(minutes) * 60,
+      auto_clear_seconds: Math.max(1, parseFloat(seconds)),
     });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -87,21 +87,21 @@ const AutoClearPanel: React.FC<{ roomID: string; autoClearEnabled?: boolean; aut
     <div className="stack:s-1">
       <div className="horizontal-stack cursor:pointer greenFill inline-block" onClick={() => setExpanded(!expanded)}>
         <div>{expanded ? "-" : "+"}</div>
-        <div>Auto-clear stickers {autoClearEnabled ? `(on — ${Math.round((autoClearSeconds || 0) / 60)}m)` : "(off)"}</div>
+        <div>Auto-clear stickers {autoClearEnabled ? `(on — ${autoClearSeconds}s)` : "(off)"}</div>
       </div>
       {expanded && (
         <div className="stack:s-1">
           <div className="horizontal-stack:s-1">
             <input
               className="border padded:s-3 monospace"
-              style={{ width: "4em", fontSize: "0.85em" }}
+              style={{ width: "10em", fontSize: "0.85em" }}
               type="number"
-              min="0.1"
-              step="0.5"
-              value={minutes}
-              onChange={(e) => { setMinutes(e.target.value); setSaved(false); }}
+              min="1"
+              step="1"
+              value={seconds}
+              onChange={(e) => { setSeconds(e.target.value); setSaved(false); }}
             />
-            <div className="padded:s-3">minutes</div>
+            <div className="padded:s-3">seconds</div>
           </div>
           <div className="whiteFill border padded:s-3 cursor:pointer greenFill:hover" onClick={handleSave}>
             {saved ? "saved!" : "enable + save"}
