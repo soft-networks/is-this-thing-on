@@ -1,4 +1,4 @@
-import { createRef, useCallback, useState } from "react";
+import { createRef, useCallback, useState, Component, ReactNode } from "react";
 
 import AdminStreamPanel from "./adminStreamPanel";
 import Draggable from "react-draggable";
@@ -56,7 +56,7 @@ const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
           </div>
           {roomID && <AdminStreamPanel rtmpsDetails={rtmpsDetails} />}
           {roomID && <LiveChatToggle roomID={roomID} chatDisabled={roomInfo?.chatDisabled} />}
-          {roomID && roomID !== "you" && <ArchivePanel roomID={roomID} />}
+          {roomID && roomID !== "you" && <StreamErrorBoundary><ArchivePanel roomID={roomID} /></StreamErrorBoundary>}
           {roomID && <StickerAdminPanel roomID={roomID} />}
           {roomID && <AutoClearPanel roomID={roomID} autoClearEnabled={roomInfo?.autoClearEnabled} autoClearSeconds={roomInfo?.autoClearSeconds} />}
         </div>
@@ -64,6 +64,17 @@ const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
     </Draggable>
   );
 };
+
+class StreamErrorBoundary extends Component<{ children: ReactNode }, { error: boolean }> {
+  state = { error: false };
+  componentDidCatch() { this.setState({ error: true }); }
+  static getDerivedStateFromError() { return { error: true }; }
+  render() {
+    return this.state.error
+      ? <div className="padded:s-3" style={{ opacity: 0.5 }}>loop controls unavailable (stream error)</div>
+      : this.props.children;
+  }
+}
 
 const AutoClearPanel: React.FC<{ roomID: string; autoClearEnabled?: boolean; autoClearSeconds?: number }> = ({ roomID, autoClearEnabled, autoClearSeconds }) => {
   const [expanded, setExpanded] = useState(false);
