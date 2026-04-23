@@ -12,7 +12,7 @@ import React, {
 
 import {
   addStickerInstance,
-  resetStickers,
+  deleteStickerInstance,
   syncStickerInstances,
 } from "../../lib/firestore";
 import {
@@ -23,7 +23,6 @@ import {
 } from "../../lib/logger";
 import { useRoomStore } from "../../stores/currentRoomStore";
 import useStickerCDNStore from "../../stores/stickerStore";
-import { useGlobalUserStore } from "../../stores/globalUserStore";
 import { DefaultStickerAdder, StickerAdderProps } from "./stickerAdders";
 import { StickerRenderer } from "./stickerRenderHelpers";
 import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
@@ -35,18 +34,15 @@ interface StickersProps {
 const Stickers: React.FC<StickersProps> = ({
   StickerChooser = DefaultStickerAdder,
 }) => {
-  //Stores
   const roomID = useRoomStore(useCallback((state) => state.currentRoomID, []));
   const stickerCDN = useStickerCDNStore(
     useCallback((state) => state.stickerCDN, []),
   );
   const adminForIDs = useGlobalAdminStore(useCallback((s) => s.adminFor, []));
-
-  //Local
-  const [stickerStyle, setStickerStyle] = useState<React.CSSProperties>();
+  const autoClearEnabled = useRoomStore(useCallback((s) => s.roomInfo?.autoClearEnabled, []));
+  const autoClearSeconds = useRoomStore(useCallback((s) => s.roomInfo?.autoClearSeconds, []));
   const [ref, bounds] = useMeasure({ scroll: true });
 
-  //TOOD: Abstract this into the user store. Can do in room.tsx or artist room (whever you put the cdn).
   const isAdmin = useMemo(() => {
     if (adminForIDs && roomID && adminForIDs.includes(roomID)) {
       logFirebaseUpdate("You are Admin for this room");
@@ -75,7 +71,6 @@ const Stickers: React.FC<StickersProps> = ({
   return roomID ? (
     <div
       className={"fullBleed absoluteOrigin videoAspectContainer stickerLayer"}
-      style={stickerStyle}
       id="sticker-overlay"
       ref={ref}
     >
@@ -92,6 +87,9 @@ const Stickers: React.FC<StickersProps> = ({
               key={`${roomID}-sssi`}
               cdn={stickerCDN}
               containerBounds={bounds}
+              isAdmin={!!isAdmin}
+              autoClearEnabled={!!autoClearEnabled}
+              autoClearSeconds={autoClearSeconds}
             />
           </>
         )}
@@ -104,8 +102,11 @@ const ServerStickers: React.FC<{
   roomID: string;
   cdn: StickerCDN;
   containerBounds: RectReadOnly;
-}> = ({ roomID, cdn, containerBounds }) => {
-  let [serverSideStickerInstances, setServerSideStickerInstances] = useState<{
+  isAdmin: boolean;
+  autoClearEnabled: boolean;
+  autoClearSeconds?: number;
+}> = ({ roomID, cdn, containerBounds, isAdmin, autoClearEnabled, autoClearSeconds }) => {
+  const [serverSideStickerInstances, setServerSideStickerInstances] = useState<{
     [key: string]: StickerInstance;
   }>({});
   const unsub = useRef<Unsubscribe>();
@@ -123,10 +124,28 @@ const ServerStickers: React.FC<{
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  //TODO URGENT: BEST PRACTICES FOR RENDERING A DICTIONARY LIKE THIS (don't re-render everything??)
+  // Admin cleanup interval: delete expired stickers from Firestore
+  useEffect(() => {
+    if (!isAdmin || !autoClearEnabled || !autoClearSeconds) return;
+    const interval = setInterval(() => {
+      const cutoff = Date.now() - autoClearSeconds * 1000;
+      Object.entries(serverSideStickerInstances).forEach(([id, sticker]) => {
+        if (sticker.timestamp && sticker.timestamp < cutoff) {
+          deleteStickerInstance(roomID, id);
+        }
+      });
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isAdmin, autoClearEnabled, autoClearSeconds, roomID, serverSideStickerInstances]);
+
+  const cutoff = autoClearEnabled && autoClearSeconds
+    ? Date.now() - autoClearSeconds * 1000
+    : null;
+
   return (
     <>
       {Object.entries(serverSideStickerInstances).map(([id, stickerInstance]) => {
+        if (cutoff && stickerInstance.timestamp && stickerInstance.timestamp < cutoff) return null;
         return (
           cdn[stickerInstance.cdnID] && (
             <StickerRenderer

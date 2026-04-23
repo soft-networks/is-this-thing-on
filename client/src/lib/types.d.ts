@@ -43,6 +43,8 @@ type CurrentRoomInfo = RoomSummary & {
   description?: string;
   moreURL?: string;
   chatDisabled?: boolean;
+  autoClearEnabled?: boolean;
+  autoClearSeconds?: number;
 };
 
 type Pos = [number, number];
