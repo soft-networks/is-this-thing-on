@@ -191,7 +191,12 @@ const getOrCreateCall = async (roomId: string) => {
   if (!callId) {
     [callId, callDetails] = await generateNewStreamCall(roomId);
   } else {
-    callDetails = await client.video.call("livestream", callId).get();
+    try {
+      callDetails = await client.video.call("livestream", callId).get();
+    } catch (e) {
+      // Call no longer exists on Stream — create a fresh one
+      [callId, callDetails] = await generateNewStreamCall(roomId);
+    }
   }
 
   // Set expiration to 36 hours

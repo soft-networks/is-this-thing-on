@@ -1,4 +1,4 @@
-import { collection, onSnapshot, query } from "firebase/firestore";
+import { collection, doc, onSnapshot, query, updateDoc } from "firebase/firestore";
 import { archiveDoc, archiveRoomsCollection } from "./locations";
 import db from "./init";
 
@@ -51,7 +51,7 @@ export function syncArchiveRooms(
   archiveID: string,
   callback: (rooms: AllArchiveRooms) => void,
 ) {
-  return onSnapshot(query(archiveRoomsCollection(archiveID)), (snapshot) => {
+  return onSnapshot(query(archiveRoomsCollection(archiveID)), { includeMetadataChanges: false }, (snapshot) => {
     const rooms: AllArchiveRooms = {};
     snapshot.forEach((doc) => {
       const data = doc.data();
@@ -60,8 +60,15 @@ export function syncArchiveRooms(
         roomName: data.room_name || "",
         roomColor: data.room_color || "#FCFF54",
         archiveURL: data.archive_url || "",
+        chatDisabled: data.chat_disabled || false,
+        admins: data.admins || [],
       };
     });
     callback(rooms);
   });
+}
+
+export function setArchiveRoomChatDisabled(archiveID: string, roomID: string, disabled: boolean) {
+  const roomRef = doc(archiveRoomsCollection(archiveID), roomID);
+  return updateDoc(roomRef, { chat_disabled: disabled });
 }

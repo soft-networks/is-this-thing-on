@@ -10,8 +10,7 @@ import { useMuseumMode } from "../../stores/useMuseumMode";
 import { ChatListMuseum } from "./chat/ChatListMuseum";
 import { syncGlobalChatDisabled } from "../../lib/firestore";
 
-export const Chat: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
-}) => {
+export const Chat: React.FC<RoomUIProps & { whiteText?: boolean; disabled?: boolean }> = ({ disabled }) => {
 
   const [isGlobalChatDisabled, setIsGlobalChatDisabled] = useState(false);
   useEffect(() => {
@@ -21,7 +20,7 @@ export const Chat: React.FC<RoomUIProps & { whiteText?: boolean }> = ({
 
   const isMuseumMode = useMuseumMode(useCallback((state) => state.isMuseumMode, []));
   const isProjectorMode = useMuseumMode(useCallback((state) => state.isProjectorMode, []));
-  if (isGlobalChatDisabled == true) {
+  if (isGlobalChatDisabled || disabled) {
     return (isMuseumMode || isProjectorMode ? null : <div className="inline-block highestLayer" style={{ position: "absolute", bottom: "var(--s-1)", left: "var(--s-1)" }}><div className="contrastFill border padded:s-2 border-radius highestLayer">chat is gone...for now!</div></div>)
   } else if (isMuseumMode || isProjectorMode) {
     return <ChatListMuseum />
