@@ -40,6 +40,11 @@ type AllRoomsSummary = { [key: string]: RoomSummary };
 type CurrentRoomInfo = RoomSummary & {
   consentURL?: string;
   streamOwner: string;
+  description?: string;
+  moreURL?: string;
+  chatDisabled?: boolean;
+  autoClearEnabled?: boolean;
+  autoClearSeconds?: number;
 };
 
 type Pos = [number, number];
@@ -52,6 +57,7 @@ interface Sticker {
   imageURL: string;
   noGift: string;
   size?: number;
+  active?: boolean;
 }
 interface StickerInstance {
   position: Pos;
@@ -91,6 +97,8 @@ interface ArchiveRoomInfo {
   roomName: string;
   roomColor: string;
   archiveURL: string;
+  chatDisabled?: boolean;
+  admins?: string[];
 }
 
 type AllArchiveRooms = { [key: string]: ArchiveRoomInfo };

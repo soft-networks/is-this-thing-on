@@ -14,7 +14,7 @@ export function syncLiveDescription(callback: (info: { description: string | nul
       const data = docSnapshot.data();
       callback({
         description: data.live_description || null,
-        moreInfoURL: data.live_more_info || null,
+        moreInfoURL: data.more_url || null,
       });
     } else {
       callback({ description: null, moreInfoURL: null });

@@ -11,6 +11,7 @@ import useMediaQuery from "../stores/useMediaQuery";
 import useGlobalPresenceStore from "../stores/globalPresenceStore";
 import { AutoScanRing } from "./rings/autoScanRing";
 import { useMuseumMode } from "../stores/useMuseumMode";
+import { useGlobalAdminStore } from "../stores/globalUserAdminStore";
 const Footer: React.FC = () => {
   const { pathname } = useRouter();
   const isMobile = useMediaQuery();
@@ -36,6 +37,7 @@ const Footer: React.FC = () => {
       </div>
     </footer>
     <div className="uiLayer horizontal-stack:s-2 padded:s-2" style={{position: "fixed", top: "0", right: "0"}}>
+      <AdminPanelReopenButton />
       <NumOnline />
       {!isProjectorMode && <AccountButton />}
     </div>
@@ -67,6 +69,18 @@ const HomeButton: React.FC = () => {
       home
       </div>
     </Link>
+  );
+};
+
+const AdminPanelReopenButton: React.FC = () => {
+  const adminForIDs = useGlobalAdminStore(useCallback((s) => s.adminFor, []));
+  const adminPanelOpen = useGlobalAdminStore(useCallback((s) => s.adminPanelOpen, []));
+  const setAdminPanelOpen = useGlobalAdminStore(useCallback((s) => s.setAdminPanelOpen, []));
+  if (adminForIDs.length === 0 || adminPanelOpen) return null;
+  return (
+    <div className="mars border-thin whiteFill padded:s-3 cursor:pointer greenFill:hover" onClick={() => setAdminPanelOpen(true)}>
+      admin panel
+    </div>
   );
 };
 

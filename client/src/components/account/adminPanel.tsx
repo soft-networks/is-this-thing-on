@@ -1,20 +1,23 @@
-import { createRef, useCallback, useEffect, useState } from "react";
+import { createRef, useCallback, useState, Component, ReactNode } from "react";
 
 import AdminStreamPanel from "./adminStreamPanel";
 import Draggable from "react-draggable";
 import classnames from "classnames";
-import { resetStickers } from "../../lib/firestore";
 import { useGlobalAdminStore } from "../../stores/globalUserAdminStore";
 import { useRoomStore } from "../../stores/currentRoomStore";
 import StickerAdminPanel from "./adminStickerPanel";
 import ArchivePanel from "./archivePanel";
+import { doc, updateDoc } from "firebase/firestore";
+import db from "../../lib/firestore/init";
 
 const AdminPanel = ({
   rtmpsDetails,
 }: {
   rtmpsDetails: RtmpsDetails | null;
 }) => {
-  const isAdmin = useGlobalAdminStore(useCallback((s) => s.isAdmin, []));
+  const adminForIDs = useGlobalAdminStore(useCallback((s) => s.adminFor, []));
+  const roomID = useRoomStore(useCallback((s) => s.currentRoomID, []));
+  const isAdmin = !!(roomID && adminForIDs.includes(roomID));
   return isAdmin ? <AdminPanelInternal rtmpsDetails={rtmpsDetails} /> : null;
 };
 
@@ -23,13 +26,14 @@ const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
 }) => {
   let panelRef = createRef<HTMLDivElement>();
   const roomID = useRoomStore(useCallback((s) => s.roomInfo?.roomID, []));
-  const [closePanel, setClosePanel] = useState(false);
+  const roomInfo = useRoomStore(useCallback((s) => s.roomInfo, []));
+  const adminPanelOpen = useGlobalAdminStore(useCallback((s) => s.adminPanelOpen, []));
+  const setAdminPanelOpen = useGlobalAdminStore(useCallback((s) => s.setAdminPanelOpen, []));
 
-  return <>
-    {closePanel && <div className="mars" style={{ background: "none", position: "fixed", height: "12px", width: "12px", bottom: "2px", right: "2px" }} onClick={() => setClosePanel(false)}></div> }
+  return (
     <Draggable handle=".handle" nodeRef={panelRef}>
       <div
-        className={classnames("stack:noGap lightFill relative border uiLayer minTextWidthMedium mars", { "hide": closePanel })}
+        className={classnames("stack:noGap lightFill relative border uiLayer minTextWidthMedium mars", { "hide": !adminPanelOpen })}
         style={{ position: "fixed", top: "var(--s3)", right: "var(--s1)", maxHeight: "calc(70vh)", overflowY: "auto" }}
         ref={panelRef}
       >
@@ -47,17 +51,109 @@ const AdminPanelInternal: React.FC<{ rtmpsDetails: RtmpsDetails | null }> = ({
         </div>
 
         <div className="padded:s-1 stack:s1 monospace">
-          <div onClick={() => setClosePanel(true)} className="align-end whiteFill border padded:s-3 greenFill:hover cursor:pointer">
+          <div onClick={() => setAdminPanelOpen(false)} className="align-end whiteFill border padded:s-3 greenFill:hover cursor:pointer">
             close admin panel
           </div>
           {roomID && <AdminStreamPanel rtmpsDetails={rtmpsDetails} />}
-          {roomID && roomID !== "you" && <ArchivePanel roomID={roomID} />}
+          {roomID && <LiveChatToggle roomID={roomID} chatDisabled={roomInfo?.chatDisabled} />}
+          {roomID && roomID !== "you" && <StreamErrorBoundary><ArchivePanel roomID={roomID} /></StreamErrorBoundary>}
           {roomID && <StickerAdminPanel roomID={roomID} />}
-
+          {roomID && <AutoClearPanel roomID={roomID} autoClearEnabled={roomInfo?.autoClearEnabled} autoClearSeconds={roomInfo?.autoClearSeconds} />}
         </div>
       </div>
-    </Draggable></>
+    </Draggable>
+  );
 };
 
+class StreamErrorBoundary extends Component<{ children: ReactNode }, { error: boolean }> {
+  state = { error: false };
+  componentDidCatch() { this.setState({ error: true }); }
+  static getDerivedStateFromError() { return { error: true }; }
+  render() {
+    return this.state.error
+      ? <div className="padded:s-3" style={{ opacity: 0.5 }}>loop controls unavailable (stream error)</div>
+      : this.props.children;
+  }
+}
+
+const AutoClearPanel: React.FC<{ roomID: string; autoClearEnabled?: boolean; autoClearSeconds?: number }> = ({ roomID, autoClearEnabled, autoClearSeconds }) => {
+  const [expanded, setExpanded] = useState(false);
+  const [seconds, setSeconds] = useState(autoClearSeconds ? String(autoClearSeconds) : "60");
+  const [saved, setSaved] = useState(false);
+
+  const handleSave = async () => {
+    const roomRef = doc(db, "rooms", roomID);
+    await updateDoc(roomRef, {
+      auto_clear_enabled: true,
+      auto_clear_seconds: Math.max(1, parseFloat(seconds)),
+    });
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
+
+  const handleDisable = async () => {
+    const roomRef = doc(db, "rooms", roomID);
+    await updateDoc(roomRef, { auto_clear_enabled: false });
+  };
+
+  return (
+    <div className="stack:s-1">
+      <div className="horizontal-stack cursor:pointer greenFill inline-block" onClick={() => setExpanded(!expanded)}>
+        <div>{expanded ? "-" : "+"}</div>
+        <div>Auto-clear stickers {autoClearEnabled ? `(on — ${autoClearSeconds}s)` : "(off)"}</div>
+      </div>
+      {expanded && (
+        <div className="stack:s-1">
+          <div className="horizontal-stack:s-1">
+            <input
+              className="border padded:s-3 monospace"
+              style={{ width: "10em", fontSize: "0.85em" }}
+              type="number"
+              min="1"
+              step="1"
+              value={seconds}
+              onChange={(e) => { setSeconds(e.target.value); setSaved(false); }}
+            />
+            <div className="padded:s-3">seconds</div>
+          </div>
+          <div className="whiteFill border padded:s-3 cursor:pointer greenFill:hover" onClick={handleSave}>
+            {saved ? "saved!" : "enable + save"}
+          </div>
+          {autoClearEnabled && (
+            <div className="whiteFill border padded:s-3 cursor:pointer greenFill:hover" onClick={handleDisable}>
+              disable auto-clear
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const LiveChatToggle: React.FC<{ roomID: string; chatDisabled?: boolean }> = ({ roomID, chatDisabled }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  const toggle = async () => {
+    const roomRef = doc(db, "rooms", roomID);
+    await updateDoc(roomRef, { chat_disabled: !chatDisabled });
+  };
+
+  return (
+    <div className="stack:s-1">
+      <div className="horizontal-stack cursor:pointer greenFill inline-block" onClick={() => setExpanded(!expanded)}>
+        <div>{expanded ? "-" : "+"}</div>
+        <div>Chat controls</div>
+      </div>
+      {expanded && (
+        <div
+          className="whiteFill border padded:s-3 cursor:pointer greenFill:hover"
+          onClick={toggle}
+        >
+          {chatDisabled ? "enable chat" : "disable chat"}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default AdminPanel;

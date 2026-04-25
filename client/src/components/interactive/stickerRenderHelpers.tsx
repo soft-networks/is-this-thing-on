@@ -26,7 +26,7 @@ interface StickerRenderProps {
 }
 
 const getStickerWidth = (size?: number) => {
-  return size ? `${size * 100}%` : "var(--stickerSize)";
+  return "75px";
 };
 
 const getStickerStyle = (pos: Pos, size?: number, zIndex?: number) => {

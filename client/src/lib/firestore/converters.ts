@@ -34,6 +34,11 @@ export function sanitizeRoomInfo(
     consentURL: data["consentURL"] || undefined,
     previewOverlay: data["preview_overlay"] || undefined,
     archiveURL: data["archive_url"] || undefined,
+    description: data["description"] || undefined,
+    moreURL: data["more_url"] || undefined,
+    chatDisabled: data["chat_disabled"] || false,
+    autoClearEnabled: data["auto_clear_enabled"] || false,
+    autoClearSeconds: data["auto_clear_seconds"] || undefined,
   };
 }
 
@@ -113,5 +118,6 @@ export function sanitizeStickerCDNFromDB(sticker: any, id: string): Sticker {
     imageURL: sticker["url"],
     noGift: sticker["noGift"],
     size: sticker["size"] || undefined,
+    active: sticker["active"] !== false,
   };
 }

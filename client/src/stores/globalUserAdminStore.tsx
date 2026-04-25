@@ -9,6 +9,8 @@ interface AdminStore {
   stickerBehaviorOverride: BEHAVIOR_TYPES | undefined;
   setStickerBehaviorOverride: (behavior: BEHAVIOR_TYPES | undefined) => void;
   setAdminFor: (adminFor: string[]) => void;
+  adminPanelOpen: boolean;
+  setAdminPanelOpen: (open: boolean) => void;
 }
 
 export const useGlobalAdminStore = create<AdminStore>((set) => ({
@@ -37,4 +39,6 @@ export const useGlobalAdminStore = create<AdminStore>((set) => ({
   setAdminFor: (adminFor: string[]) => {
     set({ adminFor: adminFor });
   },
+  adminPanelOpen: false,
+  setAdminPanelOpen: (open: boolean) => set({ adminPanelOpen: open }),
 }));

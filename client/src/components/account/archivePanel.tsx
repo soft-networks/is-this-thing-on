@@ -11,7 +11,7 @@ const ArchivePanel: React.FC<{ roomID: string }> = ({ roomID }) => {
         <div className="stack:s-1">
             <div className="horizontal-stack cursor:pointer greenFill inline-block" onClick={() => setExpanded(!expanded)}>
                 <div>{expanded ? "-" : "+"}</div>
-                <div>Recording controls</div>
+                <div>Set video to loop for loop mode</div>
             </div>
             {expanded && (
                 <div className="stack">
@@ -43,13 +43,13 @@ const SetArchiveURL: React.FC<{ roomID: string }> = ({ roomID }) => {
 
     return (
         <div className="stack:s-2">
-            <div>Set archive</div>
+            <div>Set loop url</div>
             <div className="horizontal-stack:s-1">
-                <input 
+                <input
                     type="text"
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
-                    placeholder="Enter archive url"
+                    placeholder="Enter loop url"
                     className="minTextWidthMedium"
                 />
                 <div 
@@ -91,16 +91,16 @@ const ActivateArchive: React.FC<{ roomID: string }> = ({ roomID }) => {
     }, [isArchiveMode]);
 
     if (isCallLive) {
-        return <div>Cannot activate archive mode, call is currently live</div>;
+        return <div>Cannot activate looping — call is currently live</div>;
     }
     if (!archiveUrl) {
-        return <div>Cannot activate archive mode, without valid archive URL</div>;
+        return <div>Cannot activate looping — no loop URL set</div>;
     }
 
     return (
         <div className="stack:s-2">
-            <div><a href={archiveUrl} target="_blank" rel="noopener noreferrer" className="underline cursor:link">✔︎ archive url set</a></div>
-            <div 
+            <div><a href={archiveUrl} target="_blank" rel="noopener noreferrer" className="underline cursor:link">✔︎ loop url set</a></div>
+            <div
                 className={classnames(
                     "padded:s-2 whiteFill clickable greenFill:hover border inline-block",
                     {"greenFill": isArchiveMode}
@@ -109,7 +109,7 @@ const ActivateArchive: React.FC<{ roomID: string }> = ({ roomID }) => {
                     toggleArchiveMode(roomID, !isArchiveMode);
                 }}
             >
-                {isArchiveMode ? "Deactivate" : "Activate"} Archive Mode
+                {isArchiveMode ? "Deactivate" : "Activate"} Looping
             </div>
         </div>
     );

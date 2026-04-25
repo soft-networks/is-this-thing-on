@@ -5,6 +5,7 @@ import {
   getDocs,
   onSnapshot,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 
 import { logFirebaseUpdate } from "../logger";
@@ -24,6 +25,54 @@ import {
   stickerInstanceDoc,
 } from "./locations";
 
+export function syncStickerCDN(
+  roomName: string,
+  setStickerCDN: (cdn: { [key: string]: Sticker }) => void,
+) {
+  if (!validateRoomName(roomName)) return;
+  const dbStickerCDN = stickerCDNCollection(roomDoc(roomName));
+  const unsub = onSnapshot(dbStickerCDN, (snapshot) => {
+    const cdn: { [key: string]: Sticker } = {};
+    snapshot.forEach((d) => {
+      const sticker = sanitizeStickerCDNFromDB(d.data(), d.id);
+      if (sticker.active !== false) cdn[d.id] = sticker;
+    });
+    logFirebaseUpdate(`Sticker CDN for ${roomName} updated`, [cdn]);
+    setStickerCDN(cdn);
+  });
+  return unsub;
+}
+
+export function syncStickerCDNAll(
+  roomName: string,
+  setStickerCDN: (cdn: { [key: string]: Sticker }) => void,
+) {
+  if (!validateRoomName(roomName)) return;
+  const dbStickerCDN = stickerCDNCollection(roomDoc(roomName));
+  return onSnapshot(dbStickerCDN, (snapshot) => {
+    const cdn: { [key: string]: Sticker } = {};
+    snapshot.forEach((d) => {
+      cdn[d.id] = sanitizeStickerCDNFromDB(d.data(), d.id);
+    });
+    setStickerCDN(cdn);
+  });
+}
+
+export async function addStickerToCDN(roomName: string, url: string) {
+  const dbStickerCDN = stickerCDNCollection(roomDoc(roomName));
+  return addDoc(dbStickerCDN, { url, active: true });
+}
+
+export async function deleteStickerFromCDN(roomName: string, stickerID: string) {
+  const cdnDoc = doc(stickerCDNCollection(roomDoc(roomName)), stickerID);
+  return deleteDoc(cdnDoc);
+}
+
+export async function setStickerCDNActive(roomName: string, stickerID: string, active: boolean) {
+  const cdnDoc = doc(stickerCDNCollection(roomDoc(roomName)), stickerID);
+  return updateDoc(cdnDoc, { active });
+}
+
 export async function getStickerCDN(
   roomName: string,
   initStickerCDN: (cdn: { [key: string]: Sticker }) => void,
@@ -35,7 +84,6 @@ export async function getStickerCDN(
   const querySnapshot = await getDocs(dbStickerCDN);
   const cdn: { [key: string]: Sticker } = {};
   querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
     const sticker = sanitizeStickerCDNFromDB(doc.data(), doc.id);
     cdn[doc.id] = sticker;
   });
